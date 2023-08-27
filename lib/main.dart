@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
+import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/states/states.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Task Managing Application',
+        theme: LightTheme.theme,
         home: BlocProvider(
           create: (context) => NavigationBloc(),
           child: const AppFlow(),

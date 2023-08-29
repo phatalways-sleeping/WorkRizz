@@ -16,10 +16,10 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthenticationRepository>(
-          create: (context) => const AuthenticationRepository(),
+          create: (context) => AuthenticationRepository.instance,
         ),
         RepositoryProvider<StorageRepository>(
-          create: (context) => const StorageRepository(),
+          create: (context) => StorageRepository.instance,
         ),
       ],
       child: MaterialApp(

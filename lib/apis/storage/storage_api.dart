@@ -3,51 +3,51 @@ import 'dart:async';
 sealed class StorageAPI {
   const StorageAPI();
 
-  FutureOr<void> findTask();
+  Future<void> findTask();
 
-  FutureOr<void> findUser();
+  Future<void> findUser();
 
-  FutureOr<void> findProject();
+  Future<void> findProject();
 
-  FutureOr<void> findTeam();
+  Future<void> findTeam();
 
-  FutureOr<void> findComment();
+  Future<void> findComment();
 }
 
 final class LocalStorageAPI extends StorageAPI {
   const LocalStorageAPI();
 
   @override
-  FutureOr<void> findTask() {}
+  Future<void> findTask() async {}
 
   @override
-  FutureOr<void> findUser() {}
+  Future<void> findUser() async {}
 
   @override
-  FutureOr<void> findProject() {}
+  Future<void> findProject() async {}
 
   @override
-  FutureOr<void> findTeam() {}
+  Future<void> findTeam() async {}
 
   @override
-  FutureOr<void> findComment() {}
+  Future<void> findComment() async {}
 }
 
 final class CloudFirestoreStorageAPI extends StorageAPI {
   const CloudFirestoreStorageAPI();
 
   @override
-  FutureOr<void> findTask() {}
+  Future<void> findTask() async {}
 
   @override
-  FutureOr<void> findUser() {}
+  Future<void> findUser() async {}
 
   @override
-  FutureOr<void> findProject() {}
+  Future<void> findProject() async {}
 
   @override
-  FutureOr<void> findTeam() {}
+  Future<void> findTeam() async {}
 
   @override
-  FutureOr<void> findComment() {}
+  Future<void> findComment() async {}
 }

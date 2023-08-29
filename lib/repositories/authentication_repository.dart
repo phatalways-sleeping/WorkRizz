@@ -1,9 +1,10 @@
 import 'dart:async';
-
 import 'package:task_managing_application/apis/apis.dart';
 
 class AuthenticationRepository {
-  const AuthenticationRepository();
+  const AuthenticationRepository._();
+
+  static const AuthenticationRepository instance = AuthenticationRepository._();
 
   final AuthenticationAPI api = const EmailPasswordAuthenticationAPI();
 

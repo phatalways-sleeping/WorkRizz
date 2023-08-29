@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -20,66 +22,66 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToDashboard>(_onNavigateToDashboard);
   }
 
-  FutureOr<void> _onNavigateToSplash(
+  Future<void> _onNavigateToSplash(
     NavigateToSplash event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const Splash());
   }
 
-  FutureOr<void> _onNavigateToLogin(
+  Future<void> _onNavigateToLogin(
     NavigateToLogin event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const Login());
   }
 
-  FutureOr<void> _onNavigateToSignUp(
+  Future<void> _onNavigateToSignUp(
     NavigateToSignUp event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const SignUp());
   }
 
-  FutureOr<void> _onNavigateToForgotPassword(
+  Future<void> _onNavigateToForgotPassword(
     NavigateToForgotPassword event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const ForgotPassword());
   }
 
-  FutureOr<void> _onNavigateToChangePassword(
+  Future<void> _onNavigateToChangePassword(
     NavigateToChangePassword event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const ChangePassword());
   }
 
-  FutureOr<void> _onNavigateToHome(
+  Future<void> _onNavigateToHome(
     NavigateToHome event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const Home());
   }
 
-  FutureOr<void> _onNavigateToProfile(
+  Future<void> _onNavigateToProfile(
     NavigateToProfile event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const Profile());
   }
 
-  FutureOr<void> _onNavigateToSettings(
+  Future<void> _onNavigateToSettings(
     NavigateToSettings event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const Settings());
   }
 
-  FutureOr<void> _onNavigateToDashboard(
+  Future<void> _onNavigateToDashboard(
     NavigateToDashboard event,
     Emitter<NavigationState> emit,
-  ) {
+  ) async {
     emit(const Dashboard());
   }
 }

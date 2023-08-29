@@ -3,63 +3,63 @@ import 'dart:async';
 sealed class AuthenticationAPI {
   const AuthenticationAPI();
 
-  FutureOr<void> login(String email, String password);
+  Future<void> login(String email, String password);
 
-  FutureOr<void> signUp(String email, String password);
+  Future<void> signUp(String email, String password);
 
-  FutureOr<void> forgotPassword(String email);
+  Future<void> forgotPassword(String email);
 
-  FutureOr<void> changePassword(
+  Future<void> changePassword(
     String email,
     String oldPassword,
     String newPassword,
   );
 
-  FutureOr<void> logout();
+  Future<void> logout();
 }
 
 final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
   const EmailPasswordAuthenticationAPI();
 
   @override
-  FutureOr<void> login(String email, String password) {}
+  Future<void> login(String email, String password) async {}
 
   @override
-  FutureOr<void> signUp(String email, String password) {}
+  Future<void> signUp(String email, String password) async {}
 
   @override
-  FutureOr<void> forgotPassword(String email) {}
+  Future<void> forgotPassword(String email) async {}
 
   @override
-  FutureOr<void> changePassword(
+  Future<void> changePassword(
     String email,
     String oldPassword,
     String newPassword,
-  ) {}
+  ) async {}
 
   @override
-  FutureOr<void> logout() {}
+  Future<void> logout() async {}
 }
 
 final class GoogleAuthenticationAPI extends AuthenticationAPI {
   const GoogleAuthenticationAPI();
 
   @override
-  FutureOr<void> login(String email, String password) {}
+  Future<void> login(String email, String password) async {}
 
   @override
-  FutureOr<void> signUp(String email, String password) {}
+  Future<void> signUp(String email, String password) async {}
 
   @override
-  FutureOr<void> forgotPassword(String email) {}
+  Future<void> forgotPassword(String email) async {}
 
   @override
-  FutureOr<void> changePassword(
+  Future<void> changePassword(
     String email,
     String oldPassword,
     String newPassword,
-  ) {}
+  ) async {}
 
   @override
-  FutureOr<void> logout() {}
+  Future<void> logout() async {}
 }

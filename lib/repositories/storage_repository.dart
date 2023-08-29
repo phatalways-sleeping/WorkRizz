@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:task_managing_application/apis/apis.dart';
 
 final class StorageRepository {
-  const StorageRepository();
+  const StorageRepository._();
+
+  static const StorageRepository instance = StorageRepository._();
+
   final StorageAPI api = const CloudFirestoreStorageAPI();
 
   FutureOr<void> findTask() {

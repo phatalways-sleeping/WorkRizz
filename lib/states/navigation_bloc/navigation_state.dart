@@ -8,8 +8,16 @@ sealed class NavigationState extends Equatable {
   List<Object> get props => [];
 }
 
-final class Splash extends NavigationState {
-  const Splash();
+final class Assistant extends NavigationState {
+  const Assistant();
+}
+
+final class ProjectsList extends NavigationState {
+  const ProjectsList();
+}
+
+final class TestComponents extends NavigationState {
+  const TestComponents();
 }
 
 final class Login extends NavigationState {

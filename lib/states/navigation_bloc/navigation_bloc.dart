@@ -10,23 +10,25 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc() : super(const Splash()) {
-    on<NavigateToSplash>(_onNavigateToSplash);
+  NavigationBloc() : super(const TestComponents()) {
+    on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToLogin>(_onNavigateToLogin);
     on<NavigateToSignUp>(_onNavigateToSignUp);
     on<NavigateToForgotPassword>(_onNavigateToForgotPassword);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
+    on<NavigateToProjectsList>(_onNavigateToProjectsList);
+    on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
     on<NavigateToDashboard>(_onNavigateToDashboard);
   }
 
-  Future<void> _onNavigateToSplash(
-    NavigateToSplash event,
+  Future<void> _onNavigateToTestComponents(
+    NavigateToTestComponents event,
     Emitter<NavigationState> emit,
   ) async {
-    emit(const Splash());
+    emit(const TestComponents());
   }
 
   Future<void> _onNavigateToLogin(
@@ -83,5 +85,19 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) async {
     emit(const Dashboard());
+  }
+
+  Future<void> _onNavigateToProjectsList(
+    NavigateToProjectsList event,
+    Emitter<NavigationState> emit,
+  ) async {
+    emit(const ProjectsList());
+  }
+
+  Future<void> _onNavigateToAssistant(
+    NavigateToAssistant event,
+    Emitter<NavigationState> emit,
+  ) async {
+    emit(const Assistant());
   }
 }

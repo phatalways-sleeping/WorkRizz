@@ -8,8 +8,8 @@ sealed class NavigationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class NavigateToSplash extends NavigationEvent {
-  const NavigateToSplash();
+final class NavigateToTestComponents extends NavigationEvent {
+  const NavigateToTestComponents();
 }
 
 final class NavigateToLogin extends NavigationEvent {
@@ -44,3 +44,10 @@ final class NavigateToDashboard extends NavigationEvent {
   const NavigateToDashboard();
 }
 
+final class NavigateToProjectsList extends NavigationEvent {
+  const NavigateToProjectsList();
+}
+
+final class NavigateToAssistant extends NavigationEvent {
+  const NavigateToAssistant();
+}

@@ -19,7 +19,9 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
     tasks:
         (json['tasks'] as List<dynamic>?)?.map((e) => e as String).toList() ??
             [],
-    tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+    tags: (json['tags'] as List<dynamic>?)
+            ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
+            .toList() ??
         [],
     startDate: const DateTimeSerializer().fromJson(json['startDate'] as String),
     endDate: const DateTimeSerializer().fromJson(json['endDate'] as String),
@@ -41,7 +43,7 @@ Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
           const DocumentReferenceSerializer().toJson(instance.reference),
       'id': instance.id,
       'name': instance.name,
-      'tags': instance.tags,
+      'tags': instance.tags.map((e) => e.toJson()).toList(),
       'startDate': const DateTimeSerializer().toJson(instance.startDate),
       'endDate': const DateTimeSerializer().toJson(instance.endDate),
       'tasks': instance.tasks,

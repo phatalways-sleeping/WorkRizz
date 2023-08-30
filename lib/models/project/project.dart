@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_managing_application/models/base/base.dart';
 import 'package:task_managing_application/models/json_converters/json_converters.dart';
+import 'package:task_managing_application/models/tag/tag.dart';
 
 part 'project.g.dart';
 
@@ -44,7 +45,7 @@ class Project extends Base {
   @JsonKey(required: true)
   final String name;
   @JsonKey(defaultValue: [])
-  final List<String> tags;
+  final List<Tag> tags;
   @JsonKey(required: true)
   final DateTime startDate;
   @JsonKey(required: true)
@@ -78,7 +79,7 @@ class Project extends Base {
     DocumentReference? reference,
     String? id,
     String? name,
-    List<String>? tags,
+    List<Tag>? tags,
     DateTime? startDate,
     DateTime? endDate,
     List<String>? tasks,

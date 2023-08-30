@@ -12,16 +12,8 @@ final class NavigateToTestComponents extends NavigationEvent {
   const NavigateToTestComponents();
 }
 
-final class NavigateToLogin extends NavigationEvent {
-  const NavigateToLogin();
-}
-
-final class NavigateToSignUp extends NavigationEvent {
-  const NavigateToSignUp();
-}
-
-final class NavigateToForgotPassword extends NavigationEvent {
-  const NavigateToForgotPassword();
+final class NavigateToAuthentication extends NavigationEvent {
+  const NavigateToAuthentication();
 }
 
 final class NavigateToChangePassword extends NavigationEvent {

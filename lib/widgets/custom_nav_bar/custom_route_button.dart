@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
 
-class CustomRouteButton extends StatelessWidget {
+class CustomRouteButton extends StatefulWidget {
   const CustomRouteButton({
     super.key,
     required this.icon,
@@ -19,46 +19,52 @@ class CustomRouteButton extends StatelessWidget {
   final void Function(BuildContext context) onPressed;
 
   @override
+  State<CustomRouteButton> createState() => _CustomRouteButtonState();
+}
+
+class _CustomRouteButtonState extends State<CustomRouteButton> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        right: 10.0,
-      ),
+      padding:
+          EdgeInsets.only(right: context.mediaQuery.size.width * RATIO_PADDING),
       child: ElevatedButton(
-        onPressed: () => onPressed(context),
+        onPressed: () => widget.onPressed(context),
         style: ButtonStyle(
           animationDuration: const Duration(milliseconds: 0),
           alignment: Alignment.center,
           visualDensity: VisualDensity.compact,
           tapTargetSize: MaterialTapTargetSize.padded,
           splashFactory: InkRipple.splashFactory,
-          elevation: MaterialStatePropertyAll(chosen ? 8.0 : 0.0),
+          elevation: MaterialStatePropertyAll(widget.chosen ? 8.0 : 0.0),
           backgroundColor: MaterialStatePropertyAll(
-            chosen ? Colors.black : Colors.transparent,
+            widget.chosen ? Colors.black : Colors.transparent,
           ),
           foregroundColor: MaterialStatePropertyAll(
-            chosen ? Colors.black : Colors.transparent,
+            widget.chosen ? Colors.black : Colors.transparent,
           ),
           fixedSize: MaterialStatePropertyAll(
-            chosen ? const Size(120.0, BOTTOM_NAVIGATION_BAR) : const Size(25.0, BOTTOM_NAVIGATION_BAR),
+            widget.chosen
+                ? const Size(120.0, BOTTOM_NAVIGATION_BAR)
+                : const Size(25.0, BOTTOM_NAVIGATION_BAR),
           ),
-          padding: const MaterialStatePropertyAll(
+          padding: MaterialStatePropertyAll(
             EdgeInsets.symmetric(
-              vertical: 5.0,
-              horizontal: 8.0,
+              vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.5,
+              horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.4,
             ),
           ),
           iconColor: MaterialStatePropertyAll(
-            chosen ? context.colorScheme.background : Colors.black,
+            widget.chosen ? context.colorScheme.background : Colors.black,
           ),
-          iconSize: MaterialStatePropertyAll(size),
+          iconSize: MaterialStatePropertyAll(widget.size),
           side: MaterialStatePropertyAll(
             BorderSide(
-              style: chosen ? BorderStyle.solid : BorderStyle.none,
+              style: widget.chosen ? BorderStyle.solid : BorderStyle.none,
             ),
           ),
           shape: MaterialStatePropertyAll(
-            chosen
+            widget.chosen
                 ? RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   )
@@ -71,25 +77,25 @@ class CustomRouteButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.string(
-              icon,
-              width: size,
-              height: size,
+              widget.icon,
+              width: widget.size,
+              height: widget.size,
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                chosen ? Colors.white : Colors.black,
+                widget.chosen ? Colors.white : Colors.black,
                 BlendMode.srcATop,
               ),
             ),
-            if (chosen) ...[
+            if (widget.chosen) ...[
               const SizedBox(
                 width: 6.0,
               ),
               DefaultTextStyle.merge(
                 style: context.textTheme.bodyMedium!.copyWith(fontSize: 15.0),
                 child: Text(
-                  route,
+                  widget.route,
                   style: TextStyle(
-                    color: chosen ? Colors.white : Colors.black,
+                    color: widget.chosen ? Colors.white : Colors.black,
                   ),
                 ),
               )

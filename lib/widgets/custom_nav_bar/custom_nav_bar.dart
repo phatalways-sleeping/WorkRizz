@@ -4,7 +4,7 @@ import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/custom_nav_bar/custom_route_button.dart';
 import 'package:task_managing_application/widgets/widgets.dart';
 
-class CustomNavigationBar extends StatelessWidget {
+class CustomNavigationBar extends StatefulWidget {
   const CustomNavigationBar({
     super.key,
     this.hideRouteButtons = false,
@@ -13,13 +13,18 @@ class CustomNavigationBar extends StatelessWidget {
   final bool hideRouteButtons;
 
   @override
+  State<CustomNavigationBar> createState() => _CustomNavigationBarState();
+}
+
+class _CustomNavigationBarState extends State<CustomNavigationBar> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: context.mediaQuery.size.width * 2 / 3,
-      margin: const EdgeInsets.only(
-        bottom: 10.0,
-        left: 17.0,
-        right: 17.0,
+      margin: EdgeInsets.only(
+        bottom: context.mediaQuery.size.height * RATIO_MARGIN * 0.4,
+        left: context.mediaQuery.size.width * RATIO_MARGIN,
+        right: context.mediaQuery.size.width * RATIO_MARGIN,
       ),
       decoration: BoxDecoration(
         color: Colors.transparent,
@@ -35,7 +40,7 @@ class CustomNavigationBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (!hideRouteButtons) ...[
+              if (!widget.hideRouteButtons) ...[
                 CustomRouteButton(
                   icon: SvgAssets.home,
                   onPressed: (context) => context

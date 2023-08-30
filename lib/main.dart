@@ -51,22 +51,28 @@ class AppFlow extends StatelessWidget {
         if (state is TestComponents)
           const MaterialPage(
             child: BaseScreen(
-              child: 
-            //   CustomItemWidget(
-            //     firstChild: CheckboxWidget(),
-            //     isFixed: true,
-            //     name: 'Design UI',
-            //     subtext: '10pt',
-            //     secondChild: Icon(Icons.add,
-            //   ),
-            // ProjectTag(color: PINK, name: "Online")
-            TaskTag(color: PINK, name: "2")
+              child:
+                  //   CustomItemWidget(
+                  //     firstChild: CheckboxWidget(),
+                  //     isFixed: true,
+                  //     name: 'Design UI',
+                  //     subtext: '10pt',
+                  //     secondChild: Icon(Icons.add,
+                  //   ),
+                  // ProjectTag(color: PINK, name: "Online")
+                  Center(
+                child: TaskTag(
+                  color: PINK,
+                  name: "2",
+                ),
+              ),
             ),
           ),
         if (state is Authentication)
           MaterialPage(
               child: BlocProvider(
-            create: (context) => AuthenticationBloc(context.read<ApplicationRepository>()),
+            create: (context) =>
+                AuthenticationBloc(context.read<ApplicationRepository>()),
             child: const AuthenticationScreen(),
           )),
         if (state is ChangePassword)

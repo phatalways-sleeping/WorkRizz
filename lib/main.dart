@@ -4,6 +4,8 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/states.dart';
+import 'package:task_managing_application/widgets/custom_item_widget/checkbox.dart';
+import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -52,11 +54,15 @@ class AppFlow extends StatelessWidget {
         if (state is TestComponents)
           const MaterialPage(
             child: BaseScreen(
-              child: SizedBox(
-                height: 700,
-                width: double.infinity,
+              child: CustomItemWidget(
+                firstChild: CheckboxWidget(),
+                isFixed: true,
+                name: 'Design UI',
+                subtext: '10pt',
+                secondChild: Icon(Icons.add,
               ),
             ),
+          )
           ),
         if (state is Login)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/widgets/custom_item_widget/checkbox.dart';
 
 class CustomItemWidget extends StatefulWidget {
   const CustomItemWidget(

@@ -2,7 +2,7 @@ part of 'authentication_bloc.dart';
 
 sealed class AuthenticationState extends Equatable {
   const AuthenticationState();
-  
+
   @override
   List<Object> get props => [];
 }
@@ -19,15 +19,18 @@ sealed class AuthenticationProgessingState extends AuthenticationState {
   const AuthenticationProgessingState();
 }
 
-final class AuthenticationBySignUpProgressingState extends AuthenticationProgessingState {
+final class AuthenticationBySignUpProgressingState
+    extends AuthenticationProgessingState {
   const AuthenticationBySignUpProgressingState();
 }
 
-final class AuthenticationBySignInProgressingState extends AuthenticationProgessingState {
+final class AuthenticationBySignInProgressingState
+    extends AuthenticationProgessingState {
   const AuthenticationBySignInProgressingState();
 }
 
-final class ForgetPasswordProgressingState extends AuthenticationProgessingState {
+final class ForgetPasswordProgressingState
+    extends AuthenticationProgessingState {
   const ForgetPasswordProgressingState();
 }
 
@@ -44,11 +47,13 @@ sealed class FailureAuthenticationState extends AuthenticationState {
   List<Object> get props => [...super.props, message];
 }
 
-final class FailureAuthenticationBySigninState extends FailureAuthenticationState {
+final class FailureAuthenticationBySigninState
+    extends FailureAuthenticationState {
   const FailureAuthenticationBySigninState(String message) : super(message);
 }
 
-final class FailureAuthenticationBySignupState extends FailureAuthenticationState {
+final class FailureAuthenticationBySignupState
+    extends FailureAuthenticationState {
   const FailureAuthenticationBySignupState(String message) : super(message);
 }
 
@@ -62,4 +67,8 @@ final class ForgetPasswordState extends AuthenticationState {
 
 final class FailureForgetPasswordState extends FailureAuthenticationState {
   const FailureForgetPasswordState(super.message);
+}
+
+final class SuccessfullySendResetEmail extends AuthenticationState {
+  const SuccessfullySendResetEmail();
 }

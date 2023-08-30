@@ -6,14 +6,16 @@ import 'package:task_managing_application/states/authentication_bloc/authenticat
 class CustomInputField extends StatelessWidget {
   const CustomInputField({
     super.key,
-    required this.title,
+    required this.label,
+    this.hintText = '',
     required this.controller,
     required this.keyboardType,
     this.textAlign = TextAlign.justify,
     this.obscureText = false,
   });
 
-  final String title;
+  final String label;
+  final String hintText;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final TextAlign textAlign;
@@ -32,7 +34,14 @@ class CustomInputField extends StatelessWidget {
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
-        hintText: title,
+        labelText: label,
+        hintText: hintText,
+        labelStyle: context.textTheme.bodyMedium!.copyWith(
+          color: context.colorScheme.onSurface,
+        ),
+        hintStyle: context.textTheme.bodyMedium!.copyWith(
+          color: context.colorScheme.onSurface,
+        ),
         contentPadding: EdgeInsets.symmetric(
           vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.4,
           horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.4,
@@ -132,13 +141,14 @@ class AuthenticatedButton extends StatelessWidget {
             ),
           ),
           onPressed: () => onPressed(context),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: context.colorScheme.background,
-              fontFamily: 'Nunito',
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
+          child: DefaultTextStyle.merge(
+            style: context.textTheme.bodyLarge,
+            child: Text(
+              text,
+              style: TextStyle(
+                color: context.colorScheme.onBackground,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         );

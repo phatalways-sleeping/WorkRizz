@@ -49,7 +49,7 @@ class _SignUpContainerState extends State<SignUpContainer>
       sizeFactor: _animation,
       child: Container(
         width: double.infinity,
-        height: context.mediaQuery.size.height * 0.5,
+        height: context.mediaQuery.size.height * 0.52,
         padding: EdgeInsets.only(
           top: context.mediaQuery.size.height * RATIO_PADDING * 0.3,
           left: context.mediaQuery.size.width * RATIO_PADDING,
@@ -69,16 +69,42 @@ class _SignUpContainerState extends State<SignUpContainer>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            DefaultTextStyle.merge(
-              style: context.textTheme.bodyLarge,
-              child: Text(
-                'Sign Up',
-                style: TextStyle(
-                  color: context.colorScheme.onSurface,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () => context.read<AuthenticationBloc>().add(
+                        const LoginEvent(),
+                      ),
+                  style: const ButtonStyle(
+                    animationDuration: Duration(milliseconds: 100),
+                    visualDensity: VisualDensity.comfortable,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    alignment: Alignment.center,
+                  ),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 20.0,
+                  ),
                 ),
-              ),
+                const Spacer(
+                  flex: 2,
+                ),
+                DefaultTextStyle.merge(
+                  style: context.textTheme.bodyLarge,
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      color: context.colorScheme.onSurface,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const Spacer(
+                  flex: 3,
+                ),
+              ],
             ),
             SizedBox(
               height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
@@ -90,7 +116,17 @@ class _SignUpContainerState extends State<SignUpContainer>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomInputField(
-                    title: 'Email',
+                    label: 'Username',
+                    hintText: 'Enter your username',
+                    controller: usernameController,
+                    keyboardType: TextInputType.text,
+                  ),
+                  SizedBox(
+                    height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
+                  ),
+                  CustomInputField(
+                    label: 'Email',
+                    hintText: 'What is your email?',
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -98,7 +134,8 @@ class _SignUpContainerState extends State<SignUpContainer>
                     height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
                   ),
                   CustomInputField(
-                    title: 'Password',
+                    label: 'Password',
+                    hintText: 'A password must has at least 7 characters',
                     controller: passwordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: true,
@@ -107,18 +144,11 @@ class _SignUpContainerState extends State<SignUpContainer>
                     height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
                   ),
                   CustomInputField(
-                    title: 'Confirm Password',
+                    label: 'Confirm Password',
+                    hintText: '',
                     controller: confirmPasswordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: true,
-                  ),
-                  SizedBox(
-                    height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
-                  ),
-                  CustomInputField(
-                    title: 'Username',
-                    controller: usernameController,
-                    keyboardType: TextInputType.text,
                   ),
                 ],
               ),
@@ -149,60 +179,13 @@ class _SignUpContainerState extends State<SignUpContainer>
               },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
+              padding: EdgeInsets.symmetric(
+                vertical: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => context.read<AuthenticationBloc>().add(
-                          const LoginEvent(),
-                        ),
-                    style: ButtonStyle(
-                      animationDuration: const Duration(milliseconds: 100),
-                      visualDensity: VisualDensity.comfortable,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      padding: const MaterialStatePropertyAll(
-                        EdgeInsets.all(10.0),
-                      ),
-                      overlayColor: MaterialStatePropertyAll(
-                        context.colorScheme.primary.withOpacity(0.3),
-                      ),
-                      shape: MaterialStatePropertyAll(
-                        CircleBorder(
-                          side: BorderSide(
-                            color: context.colorScheme.primary,
-                            width: 1.0,
-                          ),
-                        ),
-                      ),
-                      backgroundColor: MaterialStatePropertyAll(
-                        context.colorScheme.primary,
-                      ),
-                      alignment: Alignment.center,
-                    ),
-                    child: SizedBox(
-                      child: Icon(
-                        Icons.navigate_before_rounded,
-                        size: 35.0,
-                        color: context.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                      builder: (context, state) {
-                    if (state is! AuthenticationProgessingState) {
-                      return const SizedBox.shrink();
-                    }
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: context.colorScheme.primary,
-                      ),
-                    );
-                  }),
-                  Expanded(
-                    child: AuthenticatedButton(
+              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+                  if (state is! AuthenticationProgessingState) {
+                    return AuthenticatedButton(
                       onPressed: (context) {
                         context.read<AuthenticationBloc>().add(
                               RequestSignupEvent(
@@ -216,9 +199,18 @@ class _SignUpContainerState extends State<SignUpContainer>
                         confirmPasswordController.clear();
                       },
                       text: 'Create new account',
+                    );
+                  }
+                  return Center(
+                    child: SizedBox(
+                      width: context.mediaQuery.size.width * 0.1,
+                      height: context.mediaQuery.size.width * 0.1,
+                      child: CircularProgressIndicator(
+                        color: context.colorScheme.primary,
+                      ),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
             const Spacer(),

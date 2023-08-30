@@ -28,6 +28,7 @@ class AuthenticationBloc
 
   Future<void> _requestForgetPassword(event, emit) async {
     try {
+      emit(const SuccessfullySendResetEmail());
       emit(const ForgetPasswordProgressingState());
 
       if (event.email.isEmpty) {
@@ -39,7 +40,7 @@ class AuthenticationBloc
       }
       await _applicationRepository
           .forgotPassword(event.email)
-          .then((progress) => emit(const AuthenticationBySignInState()));
+          .then((progress) => emit(const SuccessfullySendResetEmail()));
     } on AuthenticateException catch (e) {
       emit(FailureForgetPasswordState(e.message));
     } finally {

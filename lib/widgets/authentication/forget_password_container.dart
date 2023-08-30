@@ -43,84 +43,107 @@ class _ForgetPasswordContainerState extends State<ForgetPasswordContainer>
       sizeFactor: _animation,
       child: Container(
         width: double.infinity,
-        height: 360.0,
-        padding: const EdgeInsets.only(
-          top: 20,
-          left: 10.0,
-          right: 10.0,
+        height: context.mediaQuery.size.height * 0.3,
+        padding: EdgeInsets.only(
+          top: context.mediaQuery.size.height * RATIO_PADDING * 0.3,
+          left: context.mediaQuery.size.width * RATIO_PADDING,
+          right: context.mediaQuery.size.width * RATIO_PADDING,
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40.0),
-            topRight: Radius.circular(40.0),
+        decoration: ShapeDecoration(
+          color: context.colorScheme.onPrimary,
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(width: 1.5),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
           ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Enjoy the new experience',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () => context.read<AuthenticationBloc>().add(
+                        const LoginEvent(),
+                      ),
+                  style: const ButtonStyle(
+                    animationDuration: Duration(milliseconds: 100),
+                    visualDensity: VisualDensity.comfortable,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    alignment: Alignment.center,
+                  ),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 20.0,
+                  ),
+                ),
+                const Spacer(
+                  flex: 2,
+                ),
+                DefaultTextStyle.merge(
+                  style: context.textTheme.bodyLarge,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Manage your work ',
+                          style: TextStyle(
+                            color: context.colorScheme.onSecondary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'effortlessly',
+                          style: TextStyle(
+                            color: context.colorScheme.secondary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const Spacer(
+                  flex: 3,
+                ),
+              ],
             ),
-            Text(
-              'of chatting with global friends',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Connect with people around the world for free',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 18,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            const SizedBox(
-              height: 15,
+            SizedBox(
+              height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
             ),
             Form(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomInputField(
-                    title: 'Email',
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                ],
+              child: CustomInputField(
+                label: 'Email',
+                hintText: 'This email will receive reset password notification',
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
               ),
             ),
             BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
                 if (state is FailureForgetPasswordState) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      (context.read<AuthenticationBloc>().state
-                              as FailureForgetPasswordState)
-                          .message,
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontFamily: 'Montserrat',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                    padding: EdgeInsets.only(
+                      top: context.mediaQuery.size.height * RATIO_PADDING * 0.2,
+                    ),
+                    child: DefaultTextStyle.merge(
+                      style: context.textTheme.bodyMedium,
+                      child: Text(
+                        (context.read<AuthenticationBloc>().state
+                                as FailureForgetPasswordState)
+                            .message,
+                        style: TextStyle(
+                          color: context.colorScheme.error,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   );
@@ -129,73 +152,50 @@ class _ForgetPasswordContainerState extends State<ForgetPasswordContainer>
               },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 15.0,
+              padding: EdgeInsets.symmetric(
+                vertical: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => context.read<AuthenticationBloc>().add(
-                          const LoginEvent(),
-                        ),
-                    style: ButtonStyle(
-                      animationDuration: const Duration(milliseconds: 100),
-                      visualDensity: VisualDensity.comfortable,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      padding: const MaterialStatePropertyAll(
-                        EdgeInsets.all(10.0),
-                      ),
-                      overlayColor: MaterialStatePropertyAll(
-                        context.colorScheme.primary.withOpacity(0.3),
-                      ),
-                      shape: MaterialStatePropertyAll(
-                        CircleBorder(
-                          side: BorderSide(
-                            color: context.colorScheme.primary,
-                            width: 1.0,
-                          ),
-                        ),
-                      ),
-                      backgroundColor: MaterialStatePropertyAll(
-                        context.colorScheme.primary,
-                      ),
-                      alignment: Alignment.center,
-                    ),
+              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+                  if (state is! ForgetPasswordProgressingState) {
+                    return AuthenticatedButton(
+                      onPressed: (contetx) {
+                        context.read<AuthenticationBloc>().add(
+                              RequestForgetPasswordEvent(
+                                email: emailController.text,
+                              ),
+                            );
+                        emailController.clear();
+                      },
+                      text: 'Send Email',
+                    );
+                  }
+                  return Center(
                     child: SizedBox(
-                      child: Icon(
-                        Icons.navigate_before_rounded,
-                        size: 35.0,
+                      width: context.mediaQuery.size.width * 0.1,
+                      height: context.mediaQuery.size.width * 0.1,
+                      child: CircularProgressIndicator(
                         color: context.colorScheme.primary,
                       ),
                     ),
-                  ),
-                  AuthenticatedButton(
-                    onPressed: (contetx) {
-                      context.read<AuthenticationBloc>().add(
-                            RequestForgetPasswordEvent(
-                              email: emailController.text,
-                            ),
-                          );
-                      emailController.clear();
-                    },
-                    text: 'Send Email',
-                  )
-                ],
+                  );
+                },
               ),
             ),
             const Spacer(),
-            Text(
-              'Developed by slimreaper',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+            DefaultTextStyle.merge(
+              style: context.textTheme.bodyMedium,
+              child: Text(
+                'Developed by PVB',
+                style: TextStyle(
+                  color: context.colorScheme.onSurface,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: context.mediaQuery.size.height * RATIO_MARGIN * 0.2,
             ),
           ],
         ),

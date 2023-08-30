@@ -99,7 +99,7 @@ class _LoginContainerState extends State<LoginContainer>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomInputField(
-                    title: 'Email',
+                    label: 'Email',
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -107,7 +107,7 @@ class _LoginContainerState extends State<LoginContainer>
                     height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
                   ),
                   CustomInputField(
-                    title: 'Password',
+                    label: 'Password',
                     controller: passwordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: true,

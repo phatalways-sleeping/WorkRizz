@@ -43,55 +43,54 @@ class _LoginContainerState extends State<LoginContainer>
       sizeFactor: _animation,
       child: Container(
         width: double.infinity,
-        height: 480.0,
-        padding: const EdgeInsets.only(
-          top: 20,
-          left: 10.0,
-          right: 10.0,
+        height: context.mediaQuery.size.height * 0.38,
+        padding: EdgeInsets.only(
+          top: context.mediaQuery.size.height * RATIO_PADDING * 0.3,
+          left: context.mediaQuery.size.width * RATIO_PADDING,
+          right: context.mediaQuery.size.width * RATIO_PADDING,
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40.0),
-            topRight: Radius.circular(40.0),
+        decoration: ShapeDecoration(
+          color: context.colorScheme.onPrimary,
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(width: 1.5),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
           ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Enjoy the new experience',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
+            DefaultTextStyle.merge(
+              style: context.textTheme.bodyLarge,
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Manage your work ',
+                      style: TextStyle(
+                        color: context.colorScheme.onSecondary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'effortlessly',
+                      style: TextStyle(
+                        color: context.colorScheme.secondary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-            Text(
-              'of chatting with global friends',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Connect with people around the world for free',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 18,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            const SizedBox(
-              height: 15,
+            SizedBox(
+              height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
             ),
             Form(
               child: Column(
@@ -104,14 +103,18 @@ class _LoginContainerState extends State<LoginContainer>
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
+                  ),
                   CustomInputField(
                     title: 'Password',
                     controller: passwordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: true,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: context.mediaQuery.size.height * RATIO_MARGIN * 0.2,
+                  ),
                   BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (context, state) {
                       return Row(
@@ -147,16 +150,20 @@ class _LoginContainerState extends State<LoginContainer>
               builder: (context, state) {
                 if (state is FailureAuthenticationBySigninState) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      (context.read<AuthenticationBloc>().state
-                              as FailureAuthenticationBySigninState)
-                          .message,
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontFamily: 'Montserrat',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                    padding: EdgeInsets.only(
+                      top: context.mediaQuery.size.height * RATIO_PADDING * 0.2,
+                    ),
+                    child: DefaultTextStyle.merge(
+                      style: context.textTheme.bodyMedium,
+                      child: Text(
+                        (context.read<AuthenticationBloc>().state
+                                as FailureAuthenticationBySigninState)
+                            .message,
+                        style: TextStyle(
+                          color: context.colorScheme.error,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   );
@@ -168,8 +175,9 @@ class _LoginContainerState extends State<LoginContainer>
               builder: (context, state) {
                 if (state is AuthenticationBySignInProgressingState) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15.0,
+                    padding: EdgeInsets.symmetric(
+                      vertical:
+                          context.mediaQuery.size.height * RATIO_PADDING * 0.2,
                     ),
                     child: CircularProgressIndicator(
                       color: context.colorScheme.primary,
@@ -180,8 +188,8 @@ class _LoginContainerState extends State<LoginContainer>
               },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 15.0,
+              padding: EdgeInsets.symmetric(
+                vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.3,
               ),
               child: AuthenticatedButton(
                 onPressed: (context) {
@@ -191,24 +199,26 @@ class _LoginContainerState extends State<LoginContainer>
                           password: passwordController.text,
                         ),
                       );
-                  emailController.clear();
+
                   passwordController.clear();
                 },
-                text: 'Sign in',
+                text: 'Get Started',
               ),
             ),
             const Spacer(),
-            Text(
-              'Developed by slimreaper',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+            DefaultTextStyle.merge(
+              style: context.textTheme.bodyMedium,
+              child: Text(
+                'Developed by PVB',
+                style: TextStyle(
+                  color: context.colorScheme.onSurface,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: context.mediaQuery.size.height * RATIO_MARGIN * 0.2,
             ),
           ],
         ),

@@ -49,34 +49,39 @@ class _SignUpContainerState extends State<SignUpContainer>
       sizeFactor: _animation,
       child: Container(
         width: double.infinity,
-        height: 520.0,
-        padding: const EdgeInsets.only(
-          top: 20,
-          left: 10.0,
-          right: 10.0,
+        height: context.mediaQuery.size.height * 0.5,
+        padding: EdgeInsets.only(
+          top: context.mediaQuery.size.height * RATIO_PADDING * 0.3,
+          left: context.mediaQuery.size.width * RATIO_PADDING,
+          right: context.mediaQuery.size.width * RATIO_PADDING,
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40.0),
-            topRight: Radius.circular(40.0),
+        decoration: ShapeDecoration(
+          color: context.colorScheme.onPrimary,
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(width: 1.5),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
           ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Sign Up',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
+            DefaultTextStyle.merge(
+              style: context.textTheme.bodyLarge,
+              child: Text(
+                'Sign Up',
+                style: TextStyle(
+                  color: context.colorScheme.onSurface,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-            const SizedBox(
-              height: 15,
+            SizedBox(
+              height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
             ),
             Form(
               child: Column(
@@ -89,21 +94,27 @@ class _SignUpContainerState extends State<SignUpContainer>
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
+                  ),
                   CustomInputField(
                     title: 'Password',
                     controller: passwordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: true,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
+                  ),
                   CustomInputField(
                     title: 'Confirm Password',
                     controller: confirmPasswordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: true,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: context.mediaQuery.size.height * RATIO_MARGIN * 0.3,
+                  ),
                   CustomInputField(
                     title: 'Username',
                     controller: usernameController,
@@ -116,16 +127,20 @@ class _SignUpContainerState extends State<SignUpContainer>
               builder: (context, state) {
                 if (state is FailureAuthenticationBySignupState) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      (context.read<AuthenticationBloc>().state
-                              as FailureAuthenticationBySignupState)
-                          .message,
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontFamily: 'Montserrat',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                    padding: EdgeInsets.only(
+                      top: context.mediaQuery.size.height * RATIO_PADDING * 0.2,
+                    ),
+                    child: DefaultTextStyle.merge(
+                      style: context.textTheme.bodyMedium,
+                      child: Text(
+                        (context.read<AuthenticationBloc>().state
+                                as FailureAuthenticationBySignupState)
+                            .message,
+                        style: TextStyle(
+                          color: context.colorScheme.error,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   );
@@ -176,11 +191,10 @@ class _SignUpContainerState extends State<SignUpContainer>
                     ),
                   ),
                   BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                      builder: (contetx, state) {
+                      builder: (context, state) {
                     if (state is! AuthenticationProgessingState) {
                       return const SizedBox.shrink();
                     }
-
                     return Center(
                       child: CircularProgressIndicator(
                         color: context.colorScheme.primary,
@@ -198,10 +212,8 @@ class _SignUpContainerState extends State<SignUpContainer>
                                 confirmPassword: confirmPasswordController.text,
                               ),
                             );
-                        emailController.clear();
                         passwordController.clear();
                         confirmPasswordController.clear();
-                        usernameController.clear();
                       },
                       text: 'Create new account',
                     ),
@@ -210,17 +222,19 @@ class _SignUpContainerState extends State<SignUpContainer>
               ),
             ),
             const Spacer(),
-            Text(
-              'Developed by slimreaper',
-              style: TextStyle(
-                color: context.colorScheme.primary,
-                fontFamily: 'Nunito',
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+            DefaultTextStyle.merge(
+              style: context.textTheme.bodyMedium,
+              child: Text(
+                'Developed by PVB',
+                style: TextStyle(
+                  color: context.colorScheme.onSurface,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: context.mediaQuery.size.height * RATIO_MARGIN * 0.2,
             ),
           ],
         ),

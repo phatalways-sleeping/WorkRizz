@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
 
-
 class CustomInputField extends StatelessWidget {
   const CustomInputField({
     super.key,
@@ -27,28 +26,33 @@ class CustomInputField extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: obscureText,
       textAlign: textAlign,
-      style: TextStyle(
-        color: context.colorScheme.primary,
-        fontFamily: 'Nunito',
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
+      style: context.textTheme.bodyMedium!.copyWith(
+        color: context.colorScheme.onSurface,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
         hintText: title,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.4,
+          horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.4,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+        border: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(
-            color: context.colorScheme.primary,
-            width: 2,
+            color: context.colorScheme.onSecondary,
+            width: 1.5,
           ),
         ),
-        focusColor: context.colorScheme.primary,
-        fillColor: context.colorScheme.primary,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: context.colorScheme.onSecondary,
+            width: 1.5,
+          ),
+        ),
+        focusColor: context.colorScheme.onSecondary,
+        fillColor: context.colorScheme.onSecondary,
       ),
     );
   }
@@ -68,35 +72,17 @@ class ClickableText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: disabled ? null : () => onPressed(context),
-      style: ButtonStyle(
-        shape: MaterialStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+    return InkWell(
+      onTap: disabled ? null : () => onPressed(context),
+      child: DefaultTextStyle.merge(
+        style: context.textTheme.bodySmall,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: context.colorScheme.onSurface,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
-        ),
-        backgroundColor: MaterialStatePropertyAll(
-          context.colorScheme.background,
-        ),
-        alignment: Alignment.center,
-        splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
-        overlayColor: MaterialStatePropertyAll(
-          context.colorScheme.primary.withOpacity(0.3),
-        ),
-        animationDuration: const Duration(
-          milliseconds: 500,
-        ),
-        visualDensity: VisualDensity.comfortable,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: context.colorScheme.primary,
-          fontFamily: 'Nunito',
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -125,17 +111,18 @@ class AuthenticatedButton extends StatelessWidget {
         return ElevatedButton(
           style: ButtonStyle(
             splashFactory: InkRipple.splashFactory,
-            shadowColor: MaterialStatePropertyAll(
-                context.colorScheme.secondary),
-            elevation: const MaterialStatePropertyAll(10.0),
-            backgroundColor:
-                MaterialStatePropertyAll(context.colorScheme.primary),
-            minimumSize: const MaterialStatePropertyAll(Size(330, 50)),
+            elevation: const MaterialStatePropertyAll(1.0),
+            backgroundColor: MaterialStatePropertyAll(
+              context.colorScheme.onSecondary,
+            ),
+            minimumSize: MaterialStatePropertyAll(
+              Size(context.mediaQuery.size.width * 0.9, 50),
+            ),
             alignment: Alignment.center,
-            padding: const MaterialStatePropertyAll(
+            padding: MaterialStatePropertyAll(
               EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
+                horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.5,
+                vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.3,
               ),
             ),
             shape: MaterialStatePropertyAll(

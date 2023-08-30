@@ -23,10 +23,10 @@ class _StartingContainerState extends State<StartingContainer> {
         left: context.mediaQuery.size.width * RATIO_PADDING,
         right: context.mediaQuery.size.width * RATIO_PADDING,
       ),
-      decoration: const ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.0),
+      decoration: ShapeDecoration(
+        color: context.colorScheme.onPrimary,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(width: 1.5),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25),
             topRight: Radius.circular(25),
@@ -39,13 +39,13 @@ class _StartingContainerState extends State<StartingContainer> {
         children: [
           DefaultTextStyle.merge(
             style: context.textTheme.bodyLarge,
-            child: const Text.rich(
+            child: Text.rich(
               TextSpan(
                 children: [
                   TextSpan(
                     text: 'Manage your work ',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: context.colorScheme.onSecondary,
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
@@ -53,7 +53,7 @@ class _StartingContainerState extends State<StartingContainer> {
                   TextSpan(
                     text: 'effortlessly',
                     style: TextStyle(
-                      color: Color(0xFF9C9AFF),
+                      color: context.colorScheme.secondary,
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
@@ -67,10 +67,10 @@ class _StartingContainerState extends State<StartingContainer> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               splashFactory: InkRipple.splashFactory,
-              shadowColor: context.colorScheme.secondary,
+              shadowColor: context.colorScheme.onSecondary,
               elevation: 2,
-              backgroundColor: Colors.black,
-              minimumSize: Size(context.mediaQuery.size.width * 0.9, 60),
+              backgroundColor: context.colorScheme.onSecondary,
+              minimumSize: Size(context.mediaQuery.size.width * 0.9, 50),
               alignment: Alignment.center,
               padding: EdgeInsets.symmetric(
                 horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.5,
@@ -83,10 +83,10 @@ class _StartingContainerState extends State<StartingContainer> {
             onPressed: () => context.read<AuthenticationBloc>().add(
                   const LoginEvent(),
                 ),
-            child: const Text(
+            child: Text(
               'Get Started',
               style: TextStyle(
-                color: Colors.white,
+                color: context.colorScheme.onBackground,
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
               ),
@@ -95,17 +95,17 @@ class _StartingContainerState extends State<StartingContainer> {
           const Spacer(),
           DefaultTextStyle.merge(
             style: context.textTheme.bodyMedium,
-            child: const Text(
+            child: Text(
               'Developed by PVB',
               style: TextStyle(
-                color: Colors.black,
+                color: context.colorScheme.onSurface,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
+          SizedBox(
+            height: context.mediaQuery.size.height * RATIO_MARGIN * 0.24,
           ),
         ],
       ),

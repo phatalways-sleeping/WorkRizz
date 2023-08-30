@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
+import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/states.dart';
 
 void main() {
@@ -48,8 +49,15 @@ class AppFlow extends StatelessWidget {
   List<Page<dynamic>> onGeneratePages(
           NavigationState state, List<Page> pages) =>
       [
-        if (state is Splash)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+        if (state is TestComponents)
+          const MaterialPage(
+            child: BaseScreen(
+              child: SizedBox(
+                height: 700,
+                width: double.infinity,
+              ),
+            ),
+          ),
         if (state is Login)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is SignUp)
@@ -59,7 +67,32 @@ class AppFlow extends StatelessWidget {
         if (state is ChangePassword)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Home)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+          const MaterialPage(
+            child: BaseScreen(
+              child: SizedBox(
+                height: 700,
+                width: double.infinity,
+              ),
+            ),
+          ),
+        if (state is ProjectsList)
+          const MaterialPage(
+            child: BaseScreen(
+              child: SizedBox(
+                height: 700,
+                width: double.infinity,
+              ),
+            ),
+          ),
+        if (state is Assistant)
+          const MaterialPage(
+            child: BaseScreen(
+              child: SizedBox(
+                height: 700,
+                width: double.infinity,
+              ),
+            ),
+          ),
         if (state is Profile)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Settings)

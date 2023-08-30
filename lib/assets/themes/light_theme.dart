@@ -9,6 +9,7 @@ mixin LightTheme {
   static const Color backgroundColor = Colors.white; // DDDDDD
   static const Color buttonColor = Color(0xFFF6BB54); // F6BB54
   static const Color errorColor = Color(0xFFFFAFAF);
+  static const Color floatingButtonColor = Color(0xFFEAB0FC);
 
   static final ThemeData theme = ThemeData(
     textTheme: TextThemeBuilder.robotoTextTheme,
@@ -20,7 +21,7 @@ mixin LightTheme {
       primary: primaryColor,
       secondary: secondaryColor,
       tertiary: tertiaryColor,
-      surface: Colors.white,
+      surface: floatingButtonColor,
       background: backgroundColor,
       error: errorColor,
       onPrimary: Colors.white,

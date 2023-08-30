@@ -18,6 +18,13 @@ sealed class AuthenticationAPI {
   Future<void> logout();
 }
 
+enum AuthenticationStatus {
+  authenticated,
+  unauthenticated,
+  logout,
+  unknown,
+}
+
 final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
   const EmailPasswordAuthenticationAPI();
 

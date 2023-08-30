@@ -10,13 +10,11 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc() : super(const TestComponents()) {
+  NavigationBloc() : super(const Authentication()) {
     on<NavigateToTestComponents>(_onNavigateToTestComponents);
-    on<NavigateToLogin>(_onNavigateToLogin);
-    on<NavigateToSignUp>(_onNavigateToSignUp);
-    on<NavigateToForgotPassword>(_onNavigateToForgotPassword);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
+    on<NavigateToAuthentication>(_navigateToAuthentication);
     on<NavigateToProjectsList>(_onNavigateToProjectsList);
     on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
@@ -29,27 +27,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) async {
     emit(const TestComponents());
-  }
-
-  Future<void> _onNavigateToLogin(
-    NavigateToLogin event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const Login());
-  }
-
-  Future<void> _onNavigateToSignUp(
-    NavigateToSignUp event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const SignUp());
-  }
-
-  Future<void> _onNavigateToForgotPassword(
-    NavigateToForgotPassword event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const ForgotPassword());
   }
 
   Future<void> _onNavigateToChangePassword(
@@ -99,5 +76,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) async {
     emit(const Assistant());
+  }
+
+  Future<void> _navigateToAuthentication(
+    NavigateToAuthentication event,
+    Emitter<NavigationState> emit,
+  ) async {
+    emit(const Authentication());
   }
 }

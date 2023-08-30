@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
+import 'package:task_managing_application/screens/authentication/authentication_screen.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
+import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 
 void main() {
@@ -14,15 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<AuthenticationRepository>(
-          create: (context) => AuthenticationRepository.instance,
-        ),
-        RepositoryProvider<StorageRepository>(
-          create: (context) => StorageRepository.instance,
-        ),
-      ],
+    return RepositoryProvider(
+      create: (context) => ApplicationRepository.repository,
       child: MaterialApp(
         title: 'Task Managing Application',
         theme: LightTheme.theme,
@@ -58,12 +53,12 @@ class AppFlow extends StatelessWidget {
               ),
             ),
           ),
-        if (state is Login)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
-        if (state is SignUp)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
-        if (state is ForgotPassword)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+        if (state is Authentication)
+          MaterialPage(
+              child: BlocProvider(
+            create: (context) => AuthenticationBloc(context.read<ApplicationRepository>()),
+            child: const AuthenticationScreen(),
+          )),
         if (state is ChangePassword)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Home)

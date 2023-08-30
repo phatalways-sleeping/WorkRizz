@@ -16,20 +16,12 @@ final class ProjectsList extends NavigationState {
   const ProjectsList();
 }
 
+final class Authentication extends NavigationState {
+  const Authentication();
+}
+
 final class TestComponents extends NavigationState {
   const TestComponents();
-}
-
-final class Login extends NavigationState {
-  const Login();
-}
-
-final class SignUp extends NavigationState {
-  const SignUp();
-}
-
-final class ForgotPassword extends NavigationState {
-  const ForgotPassword();
 }
 
 final class ChangePassword extends NavigationState {

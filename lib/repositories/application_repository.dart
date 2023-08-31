@@ -15,8 +15,16 @@ class ApplicationRepository {
     return _authenticationAPI.login(email, password);
   }
 
-  Future<void> signUp(String email, String password) {
-    return _authenticationAPI.signUp(email, password);
+  Future<void> signUp(
+    String email,
+    String password,
+    String confirmPassword,
+  ) {
+    return _authenticationAPI.signUp(
+      email,
+      password,
+      confirmPassword,
+    );
   }
 
   Future<void> forgotPassword(String email) {
@@ -28,7 +36,7 @@ class ApplicationRepository {
     String oldPassword,
     String newPassword,
   ) {
-    return _authenticationAPI.changePassword(email, oldPassword, newPassword);
+    return _authenticationAPI.changePassword(email, newPassword);
   }
 
   Future<void> logout() {

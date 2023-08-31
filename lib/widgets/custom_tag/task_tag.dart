@@ -10,7 +10,7 @@ class TaskTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 30,
+        width: name.length < 4 ? 30 : (name.length + 1) * 6.0,
         height: 20,
         decoration: BoxDecoration(
           color: color,

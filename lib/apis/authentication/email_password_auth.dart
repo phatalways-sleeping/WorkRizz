@@ -17,7 +17,15 @@ final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
     }
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) async {
+        Future<SharedPreferences> sharedPreferences =
+            SharedPreferences.getInstance();
+        await sharedPreferences.then((value) {
+          value.setBool('hasBeenAuthenticated', true);
+          value.setString('email', email);
+        });
+      });
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'user-not-found':
@@ -132,5 +140,13 @@ final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
   }
 
   @override
-  Future<void> logout() async => FirebaseAuth.instance.signOut();
+  Future<void> logout() async {
+    FirebaseAuth.instance.signOut();
+    Future<SharedPreferences> sharedPreferences =
+        SharedPreferences.getInstance();
+    await sharedPreferences.then((value) {
+      value.setBool('hasBeenAuthenticated', false);
+      value.remove('email');
+    });
+  }
 }

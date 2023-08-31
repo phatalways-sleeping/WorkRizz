@@ -69,10 +69,7 @@ class AppFlow extends StatelessWidget {
                     // ProjectTag(color: PINK, name: "Online")
                     TaskTag(color: PINK, name: "2/451")),
           ),
-        if (state is Task)
-          const MaterialPage(
-            child: TaskListScreen()
-            ),
+        if (state is TaskList) const MaterialPage(child: TaskListScreen()),
         if (state is Authentication)
           MaterialPage(
               child: BlocProvider(

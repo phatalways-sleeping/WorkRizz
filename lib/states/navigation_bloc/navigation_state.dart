@@ -44,6 +44,10 @@ final class Dashboard extends NavigationState {
   const Dashboard();
 }
 
-final class Task extends NavigationState {
-  const Task();
+final class TaskList extends NavigationState {
+  const TaskList();
+}
+
+final class SubTaskView extends NavigationState {
+  const SubTaskView();
 }

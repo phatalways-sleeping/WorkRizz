@@ -47,3 +47,7 @@ final class NavigateToAssistant extends NavigationEvent {
 final class NavigateToTask extends NavigationEvent {
   const NavigateToTask();
 }
+
+final class NavigateToSubTaskView extends NavigationEvent {
+  const NavigateToSubTaskView();
+}

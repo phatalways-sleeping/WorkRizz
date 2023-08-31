@@ -33,7 +33,7 @@ UserDataModel _$UserDataModelFromJson(Map<String, dynamic> json) {
             ?.map((e) => e as String)
             .toList() ??
         [],
-    imageUrl: json['imageUrl'] as String?,
+    imageUrl: json['imageUrl'] as String,
   );
 }
 

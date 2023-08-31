@@ -29,7 +29,7 @@ class UserDataModel extends Base {
     required this.projects,
     required this.tasks,
     required this.personalSchedules,
-    this.imageUrl,
+    required this.imageUrl,
   });
 
   factory UserDataModel.fromJson(Map<String, dynamic> json) =>
@@ -47,7 +47,7 @@ class UserDataModel extends Base {
   // This is the list of the projects id the user is in
   final List<String> projects;
   @JsonKey()
-  final String? imageUrl;
+  final String imageUrl;
   @JsonKey(defaultValue: [])
   // This is the list of the tasks id the user is assigned to
   final List<String> tasks;
@@ -67,6 +67,7 @@ class UserDataModel extends Base {
         projects,
         tasks,
         personalSchedules,
+        imageUrl,
       ];
 
   UserDataModel copyWith({
@@ -78,6 +79,7 @@ class UserDataModel extends Base {
     List<String>? projects,
     List<String>? tasks,
     List<String>? personalSchedules,
+    String? imageUrl,
   }) {
     return UserDataModel(
       reference: reference ?? this.reference,
@@ -88,6 +90,7 @@ class UserDataModel extends Base {
       projects: projects ?? this.projects,
       tasks: tasks ?? this.tasks,
       personalSchedules: personalSchedules ?? this.personalSchedules,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 }

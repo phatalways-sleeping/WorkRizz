@@ -45,17 +45,13 @@ Future<void> main() async {
           .doc(message.id)
           .set(message.toJson());
     } else if (message is ImageMessageModel) {
-      if (message is TextMessageModel) {
-        await FirebaseFirestoreConfigs.messagesCollection
-            .doc(message.id)
-            .set(message.toJson());
-      }
+      await FirebaseFirestoreConfigs.messagesCollection
+          .doc(message.id)
+          .set(message.toJson());
     } else if (message is FileMessageModel) {
-      if (message is TextMessageModel) {
-        await FirebaseFirestoreConfigs.messagesCollection
-            .doc(message.id)
-            .set(message.toJson());
-      }
+      await FirebaseFirestoreConfigs.messagesCollection
+          .doc(message.id)
+          .set(message.toJson());
     }
   }
 

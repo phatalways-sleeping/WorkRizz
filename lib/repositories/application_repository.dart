@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:task_managing_application/apis/apis.dart';
 
 class ApplicationRepository {

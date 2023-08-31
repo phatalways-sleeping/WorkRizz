@@ -13,6 +13,10 @@ sealed class AuthenticationAPI {
 
   Future<void> login(String email, String password);
 
+  Future<void> persistAuthenticationState(String email);
+
+  Future<void> clearAuthenticationState();
+
   Future<void> signUp(
     String email,
     String password,

@@ -24,4 +24,10 @@ final class GoogleAuthenticationAPI extends AuthenticationAPI {
 
   @override
   Future<void> logout() async {}
+
+  @override
+  Future<void> persistAuthenticationState(String email) async {}
+
+  @override
+  Future<void> clearAuthenticationState() async {}
 }

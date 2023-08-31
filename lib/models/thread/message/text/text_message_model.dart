@@ -14,7 +14,7 @@ part 'text_message_model.g.dart';
 @DateTimeSerializer()
 final class TextMessageModel extends MessageModel {
   const TextMessageModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required super.sender,
     required super.time,

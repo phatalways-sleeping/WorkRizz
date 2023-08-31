@@ -24,7 +24,7 @@ part 'project.g.dart';
 @DateTimeSerializer()
 class Project extends Base {
   const Project({
-    required super.reference,
+    super.reference,
     required super.id,
     required this.name,
     required this.tasks,

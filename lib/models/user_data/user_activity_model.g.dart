@@ -12,8 +12,9 @@ UserActivityModel _$UserActivityModelFromJson(Map<String, dynamic> json) {
     requiredKeys: const ['lastActive'],
   );
   return UserActivityModel(
-    reference: const DocumentReferenceSerializer()
-        .fromJson(json['reference'] as DocumentReference<Object?>),
+    reference: _$JsonConverterFromJson<DocumentReference<Object?>,
+            DocumentReference<Object?>>(
+        json['reference'], const DocumentReferenceSerializer().fromJson),
     id: json['id'] as String,
     isActive: json['isActive'] as bool? ?? false,
     lastActive:
@@ -23,9 +24,22 @@ UserActivityModel _$UserActivityModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$UserActivityModelToJson(UserActivityModel instance) =>
     <String, dynamic>{
-      'reference':
-          const DocumentReferenceSerializer().toJson(instance.reference),
+      'reference': _$JsonConverterToJson<DocumentReference<Object?>,
+              DocumentReference<Object?>>(
+          instance.reference, const DocumentReferenceSerializer().toJson),
       'id': instance.id,
       'isActive': instance.isActive,
       'lastActive': const DateTimeSerializer().toJson(instance.lastActive),
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

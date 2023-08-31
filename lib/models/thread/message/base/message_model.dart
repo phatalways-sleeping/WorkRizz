@@ -7,7 +7,7 @@ import 'package:task_managing_application/models/base/base.dart';
 //  + the date time of the message
 abstract class MessageModel extends Base {
   const MessageModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required this.sender,
     required this.time,

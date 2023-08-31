@@ -17,7 +17,7 @@ part 'user_activity_model.g.dart';
 @DateTimeSerializer()
 class UserActivityModel extends Base {
   const UserActivityModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required this.isActive,
     required this.lastActive,

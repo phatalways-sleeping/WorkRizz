@@ -26,7 +26,7 @@ part 'sub_task_model.g.dart';
 @DateTimeSerializer()
 class SubTaskModel extends Base {
   const SubTaskModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required this.name,
     required this.description,
@@ -86,6 +86,8 @@ class SubTaskModel extends Base {
       ];
 
   SubTaskModel copyWith({
+    String? id,
+    DocumentReference? reference,
     String? name,
     String? description,
     String? assignee,
@@ -99,8 +101,8 @@ class SubTaskModel extends Base {
     String? leaderComment,
   }) {
     return SubTaskModel(
-      reference: reference,
-      id: id,
+      reference: reference?? this.reference,
+      id: id?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       assignee: assignee ?? this.assignee,

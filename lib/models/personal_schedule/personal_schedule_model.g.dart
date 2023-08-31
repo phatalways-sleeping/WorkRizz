@@ -1,42 +1,36 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'task.dart';
+part of 'personal_schedule_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Task _$TaskFromJson(Map<String, dynamic> json) {
+PersonalScheduleModel _$PersonalScheduleModelFromJson(
+    Map<String, dynamic> json) {
   $checkKeys(
     json,
-    requiredKeys: const ['name', 'project'],
+    requiredKeys: const ['date', 'schedule'],
   );
-  return Task(
+  return PersonalScheduleModel(
+    id: json['id'] as String,
     reference: _$JsonConverterFromJson<DocumentReference<Object?>,
             DocumentReference<Object?>>(
         json['reference'], const DocumentReferenceSerializer().fromJson),
-    id: json['id'] as String,
-    name: json['name'] as String,
-    subTasks: (json['subTasks'] as List<dynamic>?)
-            ?.map((e) => e as String)
-            .toList() ??
-        [],
-    project: json['project'] as String,
-    points: json['points'] as int? ?? 0,
-    isCompleted: json['isCompleted'] as bool? ?? false,
+    date: const DateTimeSerializer().fromJson(json['date'] as String),
+    schedule: TimelineModel.fromJson(json['schedule'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
+Map<String, dynamic> _$PersonalScheduleModelToJson(
+        PersonalScheduleModel instance) =>
+    <String, dynamic>{
       'reference': _$JsonConverterToJson<DocumentReference<Object?>,
               DocumentReference<Object?>>(
           instance.reference, const DocumentReferenceSerializer().toJson),
       'id': instance.id,
-      'name': instance.name,
-      'subTasks': instance.subTasks,
-      'project': instance.project,
-      'points': instance.points,
-      'isCompleted': instance.isCompleted,
+      'date': const DateTimeSerializer().toJson(instance.date),
+      'schedule': instance.schedule.toJson(),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

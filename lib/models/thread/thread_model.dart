@@ -13,7 +13,7 @@ part 'thread_model.g.dart';
 @DocumentReferenceSerializer()
 class ThreadModel extends Base {
   const ThreadModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required this.messages,
   });

@@ -12,8 +12,9 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
     requiredKeys: const ['comment', 'commenter', 'date', 'replyCommentId'],
   );
   return CommentModel(
-    reference: const DocumentReferenceSerializer()
-        .fromJson(json['reference'] as DocumentReference<Object?>),
+    reference: _$JsonConverterFromJson<DocumentReference<Object?>,
+            DocumentReference<Object?>>(
+        json['reference'], const DocumentReferenceSerializer().fromJson),
     id: json['id'] as String,
     comment: json['comment'] as String,
     commenter: json['commenter'] as String,
@@ -26,8 +27,9 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
     <String, dynamic>{
-      'reference':
-          const DocumentReferenceSerializer().toJson(instance.reference),
+      'reference': _$JsonConverterToJson<DocumentReference<Object?>,
+              DocumentReference<Object?>>(
+          instance.reference, const DocumentReferenceSerializer().toJson),
       'id': instance.id,
       'comment': instance.comment,
       'commenter': instance.commenter,
@@ -36,3 +38,15 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
       'isReplied': instance.isReplied,
       'replyCommentId': instance.replyCommentId,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

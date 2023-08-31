@@ -12,8 +12,9 @@ SubTaskModel _$SubTaskModelFromJson(Map<String, dynamic> json) {
     requiredKeys: const ['name', 'assignee', 'dueDate'],
   );
   return SubTaskModel(
-    reference: const DocumentReferenceSerializer()
-        .fromJson(json['reference'] as DocumentReference<Object?>),
+    reference: _$JsonConverterFromJson<DocumentReference<Object?>,
+            DocumentReference<Object?>>(
+        json['reference'], const DocumentReferenceSerializer().fromJson),
     id: json['id'] as String,
     name: json['name'] as String,
     description: json['description'] as String? ?? '',
@@ -36,8 +37,9 @@ SubTaskModel _$SubTaskModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$SubTaskModelToJson(SubTaskModel instance) =>
     <String, dynamic>{
-      'reference':
-          const DocumentReferenceSerializer().toJson(instance.reference),
+      'reference': _$JsonConverterToJson<DocumentReference<Object?>,
+              DocumentReference<Object?>>(
+          instance.reference, const DocumentReferenceSerializer().toJson),
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
@@ -51,3 +53,15 @@ Map<String, dynamic> _$SubTaskModelToJson(SubTaskModel instance) =>
       'grade': instance.grade,
       'leaderComment': instance.leaderComment,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

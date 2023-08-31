@@ -12,8 +12,9 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
     requiredKeys: const ['name', 'startDate', 'endDate', 'leader', 'thread'],
   );
   return Project(
-    reference: const DocumentReferenceSerializer()
-        .fromJson(json['reference'] as DocumentReference<Object?>),
+    reference: _$JsonConverterFromJson<DocumentReference<Object?>,
+            DocumentReference<Object?>>(
+        json['reference'], const DocumentReferenceSerializer().fromJson),
     id: json['id'] as String,
     name: json['name'] as String,
     tasks:
@@ -39,8 +40,9 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
-      'reference':
-          const DocumentReferenceSerializer().toJson(instance.reference),
+      'reference': _$JsonConverterToJson<DocumentReference<Object?>,
+              DocumentReference<Object?>>(
+          instance.reference, const DocumentReferenceSerializer().toJson),
       'id': instance.id,
       'name': instance.name,
       'tags': instance.tags.map((e) => e.toJson()).toList(),
@@ -52,3 +54,15 @@ Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
       'mostActiveMemebers': instance.mostActiveMemebers,
       'thread': instance.thread,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

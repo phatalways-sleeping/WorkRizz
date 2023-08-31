@@ -20,7 +20,7 @@ part 'user_data_model.g.dart';
 @DocumentReferenceSerializer()
 class UserDataModel extends Base {
   const UserDataModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required this.username,
     required this.email,

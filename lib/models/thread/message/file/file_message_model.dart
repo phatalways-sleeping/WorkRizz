@@ -24,7 +24,7 @@ enum FileType {
 @DateTimeSerializer()
 class FileMessageModel extends MessageModel {
   const FileMessageModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required super.sender,
     required super.time,

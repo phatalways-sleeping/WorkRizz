@@ -20,7 +20,7 @@ part 'task.g.dart';
 @DocumentReferenceSerializer()
 class Task extends Base {
   const Task({
-    required super.reference,
+    super.reference,
     required super.id,
     required this.name,
     required this.subTasks,

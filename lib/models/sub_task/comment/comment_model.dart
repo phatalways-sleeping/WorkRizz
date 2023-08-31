@@ -19,7 +19,7 @@ part 'comment_model.g.dart';
 @DateTimeSerializer()
 class CommentModel extends Base {
   const CommentModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required this.comment,
     required this.commenter,

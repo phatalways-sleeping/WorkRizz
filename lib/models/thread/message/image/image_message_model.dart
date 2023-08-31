@@ -14,7 +14,7 @@ part 'image_message_model.g.dart';
 @DateTimeSerializer()
 final class ImageMessageModel extends MessageModel {
   const ImageMessageModel({
-    required super.reference,
+    super.reference,
     required super.id,
     required super.sender,
     required super.time,

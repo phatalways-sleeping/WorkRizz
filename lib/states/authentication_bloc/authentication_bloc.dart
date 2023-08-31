@@ -21,132 +21,67 @@ class AuthenticationBloc
     });
     on<RequestForgetPasswordEvent>(_requestForgetPassword);
     on<RequestSignupEvent>(_requestSignUp);
-    on<RequestSigninEvent>(_requestSignIn);
+    on<RequestSigninEvent>(_requestLogin);
   }
 
   final ApplicationRepository _applicationRepository;
 
-  Future<void> _requestForgetPassword(event, emit) async {
+  Future<void> _requestForgetPassword(
+    RequestForgetPasswordEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     try {
-      emit(const SuccessfullySendResetEmail());
       emit(const ForgetPasswordProgressingState());
-
-      if (event.email.isEmpty) {
-        emit(const FailureForgetPasswordState('EMAIL IS EMPTY'));
-        await Future.delayed(const Duration(seconds: 3), () {
-          emit(const ForgetPasswordState());
-        });
-        return;
-      }
       await _applicationRepository
           .forgotPassword(event.email)
           .then((progress) => emit(const SuccessfullySendResetEmail()));
     } on AuthenticateException catch (e) {
       emit(FailureForgetPasswordState(e.message));
-    } finally {
       await Future.delayed(const Duration(seconds: 3), () {
         emit(const ForgetPasswordState());
       });
     }
   }
 
-  Future<void> _requestSignIn(event, emit) async {
+  Future<void> _requestLogin(
+    RequestSigninEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     try {
       emit(const AuthenticationBySignInProgressingState());
-      if (event.email.isEmpty || event.password.isEmpty) {
-        emit(const FailureAuthenticationBySigninState(
-            'EMAIL OR PASSWORD IS EMPTY'));
-        await Future.delayed(const Duration(seconds: 3), () {
-          emit(const AuthenticationBySignInState());
-        });
-        return;
-      }
 
-      if (!event.email.contains('@') || !event.email.contains('.')) {
-        emit(const FailureAuthenticationBySigninState('EMAIL IS NOT VALID'));
-        await Future.delayed(const Duration(seconds: 3), () {
-          emit(const AuthenticationBySignInState());
-        });
-        return;
-      }
-
-      if (event.password.length < 6) {
-        emit(const FailureAuthenticationBySigninState(
-            'PASSWORD MUST BE AT LEAST 6 CHARACTERS'));
-        await Future.delayed(const Duration(seconds: 3), () {
-          emit(const AuthenticationBySignInState());
-        });
-        return;
-      }
-
-      await _applicationRepository.login(event.email, event.password).then(
-            (successfullyAuthenticated) => emit(
-              const SuccessfulAuthenticatedState(),
-            ),
-          );
+      await _applicationRepository
+          .login(
+            event.email,
+            event.password,
+          )
+          .then((successfullyAuthenticated) =>
+              emit(const SuccessfulAuthenticatedState()));
     } on AuthenticateException catch (e) {
       emit(FailureAuthenticationBySigninState(e.message));
-    } finally {
       await Future.delayed(const Duration(seconds: 3), () {
         emit(const AuthenticationBySignInState());
       });
     }
   }
 
-  Future<void> _requestSignUp(event, emit) async {
+  Future<void> _requestSignUp(
+    RequestSignupEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     try {
       emit(const AuthenticationBySignUpProgressingState());
-      if (event.email.isEmpty ||
-          event.password.isEmpty ||
-          event.username.isEmpty ||
-          event.confirmPassword.isEmpty) {
-        emit(const FailureAuthenticationBySignupState(
-            'EMAIL OR PASSWORD OR USERNAME IS EMPTY'));
-        await Future.delayed(const Duration(seconds: 2), () {
-          emit(const AuthenticationBySignUpState());
-        });
-        return;
-      }
-
-      if (!event.email.contains('@') || !event.email.contains('.')) {
-        emit(const FailureAuthenticationBySignupState('EMAIL IS NOT VALID'));
-        await Future.delayed(const Duration(seconds: 3), () {
-          emit(const AuthenticationBySignUpState());
-        });
-        return;
-      }
-
-      if (event.password != event.confirmPassword) {
-        emit(const FailureAuthenticationBySignupState(
-            'PASSWORDS ARE NOT MATCH'));
-        await Future.delayed(const Duration(seconds: 3), () {
-          emit(const AuthenticationBySignUpState());
-        });
-        return;
-      }
-
-      if (event.password.length < 6) {
-        emit(const FailureAuthenticationBySignupState(
-            'PASSWORD MUST BE AT LEAST 6 CHARACTERS'));
-        await Future.delayed(const Duration(seconds: 2), () {
-          emit(const AuthenticationBySignUpState());
-        });
-        return;
-      }
 
       await _applicationRepository
           .signUp(
             event.email,
             event.password,
+            event.confirmPassword,
           )
-          .then(
-            (successfullyAuthenticated) => emit(
-              const SuccessfulAuthenticatedState(),
-            ),
-          );
+          .then((successfullyAuthenticated) =>
+              emit(const SuccessfulAuthenticatedState()));
     } on AuthenticateException catch (e) {
       emit(FailureAuthenticationBySignupState(e.message));
-    } finally {
       await Future.delayed(const Duration(seconds: 3), () {
         emit(const AuthenticationBySignUpState());
       });

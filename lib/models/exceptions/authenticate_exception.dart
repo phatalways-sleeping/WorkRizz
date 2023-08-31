@@ -25,7 +25,15 @@ class InvalidEmailException extends AuthenticateException {
   const InvalidEmailException() : super('Your email is invalid');
 }
 
+class InvalidPasswordException extends AuthenticateException {
+  const InvalidPasswordException(super.message);
+}
+
 // Sign Up Exceptions
+class ConfirmPasswordException extends SignUpException {
+  const ConfirmPasswordException()
+      : super("Confirm password must be the same as password");
+}
 
 class EmailAlreadyInUseException extends SignUpException {
   const EmailAlreadyInUseException() : super('Your email is already in use');
@@ -56,7 +64,8 @@ class WrongPasswordException extends SignInException {
 // Reset Password Exceptions
 class AuthMissingAndroidPkgNameException extends ResetPasswordException {
   const AuthMissingAndroidPkgNameException()
-      : super('An Android package name must be provided if the Android app is required to be installed');
+      : super(
+            'An Android package name must be provided if the Android app is required to be installed');
 }
 
 class AuthMissingContinueUriException extends ResetPasswordException {
@@ -66,7 +75,8 @@ class AuthMissingContinueUriException extends ResetPasswordException {
 
 class AuthMissingIosBundleIdException extends ResetPasswordException {
   const AuthMissingIosBundleIdException()
-      : super('An iOS Bundle ID must be provided if an App Store ID is provided');
+      : super(
+            'An iOS Bundle ID must be provided if an App Store ID is provided');
 }
 
 class AuthInvalidContinueUriException extends ResetPasswordException {
@@ -76,7 +86,8 @@ class AuthInvalidContinueUriException extends ResetPasswordException {
 
 class AuthUnauthorizedContinueUriException extends ResetPasswordException {
   const AuthUnauthorizedContinueUriException()
-      : super('The domain of the continue URL is not whitelisted. Whitelist the domain in the Firebase console');
+      : super(
+            'The domain of the continue URL is not whitelisted. Whitelist the domain in the Firebase console');
 }
 
 class AuthUserNotFoundException extends ResetPasswordException {
@@ -96,3 +107,7 @@ class InvalidActionCodeException extends ResetPasswordException {
   const InvalidActionCodeException() : super('The action code is invalid');
 }
 
+// Change Password Exception
+class RequireRecentLogin extends AuthenticateException {
+  const RequireRecentLogin() : super("Requires user to be login to complete");
+}

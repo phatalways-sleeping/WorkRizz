@@ -5,10 +5,8 @@ import 'package:task_managing_application/models/models.dart' show ThreadModel;
 final class ReadThread extends Read {
   const ReadThread._() : super();
 
-  static Stream<ThreadModel> threadStreamById(String id) =>
+  static Future<void> createNewThread(ThreadModel threadModel) =>
       FirebaseFirestoreConfigs.projectThreadsCollection
-          .doc(id)
-          .snapshots()
-          .map((event) => ThreadModel.fromJson(
-              event.data() as Map<String, dynamic>));
+          .doc(threadModel.id)
+          .set(threadModel.toJson());
 }

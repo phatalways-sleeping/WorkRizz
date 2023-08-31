@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/models/exceptions/authenticate_exception.dart';
 
 part 'email_password_auth.dart';
@@ -11,6 +12,10 @@ sealed class AuthenticationAPI {
   const AuthenticationAPI();
 
   Future<void> login(String email, String password);
+
+  Future<void> persistAuthenticationState(String email);
+
+  Future<void> clearAuthenticationState();
 
   Future<void> signUp(
     String email,

@@ -10,8 +10,14 @@ import 'package:task_managing_application/widgets/custom_item_widget/checkbox_bu
 import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
 import 'package:task_managing_application/widgets/custom_tag/project_tag.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

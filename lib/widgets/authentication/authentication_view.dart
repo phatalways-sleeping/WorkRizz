@@ -45,18 +45,16 @@ class _AuthenticationViewState extends State<AuthenticationView>
       opacity: _animation,
       child: Stack(
         children: [
-          // Image.asset(
-          //   'assets/images/background.jpg',
-          //   fit: BoxFit.cover,
-          //   height: MediaQuery.of(context).size.height,
-          //   width: MediaQuery.of(context).size.width,
-          //   filterQuality: FilterQuality.high,
-          // ),
-          // Container(
-          //   height: MediaQuery.of(context).size.height,
-          //   width: MediaQuery.of(context).size.width,
-          //   color: context.colorScheme.primary.withOpacity(0.3),
-          // ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Image.asset(
+              'assets/images/background.jpg',
+              fit: BoxFit.cover,
+              height: MediaQuery.of(context).size.height * 0.9,
+              width: MediaQuery.of(context).size.width,
+              filterQuality: FilterQuality.high,
+            ),
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -69,7 +67,8 @@ class _AuthenticationViewState extends State<AuthenticationView>
                     await showDialog(
                       context: context,
                       builder: (context) => Scaffold(
-                        backgroundColor: context.colorScheme.background.withOpacity(0.7),
+                        backgroundColor:
+                            context.colorScheme.background.withOpacity(0.7),
                         body: const Align(
                           alignment: Alignment.center,
                           child: OverlayNotificationEntry(),

@@ -7,6 +7,8 @@ part 'file_message_model.g.dart';
 
 enum FileType {
   pdf,
+  txt,
+  csv,
   doc,
   xls,
   ppt,

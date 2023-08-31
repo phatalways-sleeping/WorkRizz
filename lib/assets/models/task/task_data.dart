@@ -77,3 +77,11 @@ const Task instance6 = Task(
   isCompleted: true,
 );
 
+const taskList = [
+  instance1,
+  instance2,
+  instance3,
+  instance4,
+  instance5,
+  instance6,
+];

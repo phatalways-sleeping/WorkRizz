@@ -1,11 +1,29 @@
 import 'package:task_managing_application/models/models.dart' show ThreadModel;
 
-ThreadModel thread1 = const ThreadModel(
+const thread1 = ThreadModel(
   id: '20230831-0729-8457-a023-e2fa64ce2b29',
-  messages: [],
+  messages: [
+    '20230831-1221-8a41-9240-a5f34671da42', // f_1
+    '20230831-1221-8641-9252-1a153de1ec20', // t_1
+    '20230831-1221-8941-b251-c70ed6df7013', // i_1
+    '20230831-1230-8d16-8302-abc8d05f7993', // t_5
+    '20230831-1221-8841-9251-d30a04db0387', // f_2
+    '20230831-1221-8341-a252-f6a2a815bbcc', // i_3
+    '20230831-1230-8016-9311-dfba2168913b', // t_7
+    '20230831-1230-8216-a311-460ac4f98ff3', // t_8
+  ],
 );
 
-ThreadModel thread2 = const ThreadModel(
+const thread2 = ThreadModel(
   id: '20230831-0729-8657-b022-9b5f41734dcc',
-  messages: [],
+  messages: [
+    '20230831-1221-8c41-9253-272db6cada09', // t_3
+    '20230831-1221-8241-b253-62a77253e90e', // t_2
+    '20230831-1221-8141-9253-8aa53f37360f', // t_4
+    '20230831-1230-8c16-8311-749ecc5cd09b', // t_6
+    '20230831-1221-8741-9251-b774e32523ac', // f_3
+    '20230831-1221-8341-9252-0e2d14cb8ee1', // i_2
+  ],
 );
+
+const threadList = [thread1, thread2];

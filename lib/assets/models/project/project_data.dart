@@ -50,3 +50,8 @@ final Project project2 = Project(
   ],
   thread: 'project-thread-123',
 );
+
+final projectList = [
+  project1,
+  project2,
+];

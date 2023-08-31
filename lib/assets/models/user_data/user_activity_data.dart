@@ -47,3 +47,14 @@ UserActivityModel userActivity8 = UserActivityModel(
   isActive: false,
   lastActive: DateTime(2023, 8, 30, 20, 15),
 );
+
+final userActivityList = [
+  userActivity1,
+  userActivity2,
+  userActivity3,
+  userActivity4,
+  userActivity5,
+  userActivity6,
+  userActivity7,
+  userActivity8,
+];

@@ -33,6 +33,7 @@ UserDataModel _$UserDataModelFromJson(Map<String, dynamic> json) {
             ?.map((e) => e as String)
             .toList() ??
         [],
+    imageUrl: json['imageUrl'] as String?,
   );
 }
 
@@ -45,6 +46,7 @@ Map<String, dynamic> _$UserDataModelToJson(UserDataModel instance) =>
       'username': instance.username,
       'email': instance.email,
       'projects': instance.projects,
+      'imageUrl': instance.imageUrl,
       'tasks': instance.tasks,
       'subTasks': instance.subTasks,
       'personalSchedules': instance.personalSchedules,

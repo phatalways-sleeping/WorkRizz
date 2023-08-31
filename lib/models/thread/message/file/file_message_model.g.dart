@@ -45,6 +45,8 @@ Value? _$JsonConverterFromJson<Json, Value>(
 
 const _$FileTypeEnumMap = {
   FileType.pdf: 'pdf',
+  FileType.txt: 'txt',
+  FileType.csv: 'csv',
   FileType.doc: 'doc',
   FileType.xls: 'xls',
   FileType.ppt: 'ppt',

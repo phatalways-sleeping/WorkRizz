@@ -1,21 +1,21 @@
 import 'package:task_managing_application/models/personal_schedule/time_line/time_line_model.dart';
 
-TimelineModel timeline1 = const TimelineModel(
+const timeline1 = TimelineModel(
   status: TimelineStatus.day,
 );
 
-TimelineModel timeline2 = const TimelineModel(
+const timeline2 = TimelineModel(
   status: TimelineStatus.night,
 );
 
-TimelineModel timeline3 = const TimelineModel(
+const timeline3 = TimelineModel(
   status: TimelineStatus.day,
 );
 
-TimelineModel timeline4 = const TimelineModel(
+const timeline4 = TimelineModel(
   status: TimelineStatus.night,
 );
 
-TimelineModel timeline5 = const TimelineModel(
+const timeline5 = TimelineModel(
   status: TimelineStatus.day,
 );

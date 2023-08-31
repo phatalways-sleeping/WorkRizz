@@ -37,7 +37,7 @@ class BaseScreen extends StatelessWidget {
         ),
       ),
       extendBody: true,
-      bottomNavigationBar: !hideAppBar ? const CustomNavigationBar() : null,
+      bottomNavigationBar: !hideNavigationBar ? const CustomNavigationBar() : null,
     );
   }
 }

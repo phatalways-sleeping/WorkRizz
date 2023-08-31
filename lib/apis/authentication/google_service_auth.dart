@@ -8,6 +8,7 @@ final class GoogleAuthenticationAPI extends AuthenticationAPI {
 
   @override
   Future<void> signUp(
+    String username,
     String email,
     String password,
     String confirmPassword,

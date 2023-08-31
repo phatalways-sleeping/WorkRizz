@@ -20,6 +20,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.clear();
   final loginBefore = sharedPreferences.get('hasBeenAuthenticated') as bool?;
   if (loginBefore == null) {
     ApplicationRepository.initializeRepo();

@@ -15,6 +15,6 @@ const Color PURPLE = Color(0xFF9C9AFF); // 9C9AFF
 const Color PINK = Color(0xFFEAB0FC); // 9C9AFF
 const Color GREY = Color(0xFFDDDDDD); // 9C9AFF
 const Color WHITE = Colors.white; // DDDDDD
-const Color ORAGE = Color(0xFFF6BB54); // F6BB54
+const Color ORANGE = Color(0xFFF6BB54); // F6BB54
 const Color PALE = Color(0xFFFFAFAF);
 const Color BLACK = Colors.black;

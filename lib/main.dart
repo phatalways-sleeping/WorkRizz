@@ -4,6 +4,7 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/authentication/authentication_screen.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
+import 'package:task_managing_application/screens/tasklist/tasklist_screen.dart';
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
@@ -66,8 +67,12 @@ class AppFlow extends StatelessWidget {
                     //     secondChild: Icon(Icons.add,
                     //   ),
                     // ProjectTag(color: PINK, name: "Online")
-                    TaskTag(color: PINK, name: "2/45")),
+                    TaskTag(color: PINK, name: "2/451")),
           ),
+        if (state is Task)
+          const MaterialPage(
+            child: TaskListScreen()
+            ),
         if (state is Authentication)
           MaterialPage(
               child: BlocProvider(

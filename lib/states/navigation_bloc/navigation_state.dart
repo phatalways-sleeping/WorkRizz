@@ -43,3 +43,7 @@ final class Settings extends NavigationState {
 final class Dashboard extends NavigationState {
   const Dashboard();
 }
+
+final class Task extends NavigationState {
+  const Task();
+}

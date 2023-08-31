@@ -43,3 +43,7 @@ final class NavigateToProjectsList extends NavigationEvent {
 final class NavigateToAssistant extends NavigationEvent {
   const NavigateToAssistant();
 }
+
+final class NavigateToTask extends NavigationEvent {
+  const NavigateToTask();
+}

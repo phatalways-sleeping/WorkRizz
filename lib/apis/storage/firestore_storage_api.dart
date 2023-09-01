@@ -3,440 +3,293 @@ part of 'storage_api.dart';
 final class CloudFirestoreStorageAPI extends StorageAPI {
   const CloudFirestoreStorageAPI();
 
+  // CREATE
   @override
-  Future<String> assigneeOfSubTask(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<void> createNewUser(UserDataModel userDataModel) =>
+      CreateUser.createUser(userDataModel);
   @override
-  Future<void> createNewMessage(MessageModel messageModel) {
-    throw UnimplementedError();
-  }
-
+  Future<void> createNewUserActivity(UserActivityModel userActivityModel) =>
+      CreateUserActivity.createUserActivity(userActivityModel);
+  @override
+  Future<void> createNewProject(Project project) =>
+      CreateProject.createNewProject(project);
+  @override
+  Future<void> createNewTask(Task task) => CreateTask.createTask(task);
+  @override
+  Future<void> createNewSubTask(SubTaskModel subTaskModel) =>
+      CreateSubTask.createSubTask(subTaskModel);
   @override
   Future<void> createNewPersonalSchedule(
-      PersonalScheduleModel personalScheduleModel) {
-    throw UnimplementedError();
-  }
-
+    PersonalScheduleModel personalScheduleModel,
+  ) =>
+      CreatePersonalSchedule.createNewPersonalSchedule(personalScheduleModel);
   @override
-  Future<void> createNewProject(Project project) {
-    throw UnimplementedError();
-  }
-
+  Future<void> createNewThread(ThreadModel threadModel) =>
+      CreateThread.createNewThread(threadModel);
   @override
-  Future<void> createNewSubTask(SubTaskModel subTaskModel) {
-    throw UnimplementedError();
-  }
+  Future<void> createNewMessage(MessageModel messageModel) =>
+      CreateMessage.createNewMessage(messageModel);
 
+  // READ
+  // - UserDataModel
   @override
-  Future<void> createNewTask(Task task) {
-    throw UnimplementedError();
-  }
-
+  Stream<UserDataModel> userStreamByEmailInUser(String email) =>
+      ReadUser.userStreamByEmail(email);
   @override
-  Future<void> createNewThread(ThreadModel threadModel) {
-    throw UnimplementedError();
-  }
-
+  Stream<UserDataModel> userStreamByIdInUser(String id) =>
+      ReadUser.userStreamById(id);
   @override
-  Future<void> createNewUser(UserDataModel userDataModel) {
-    throw UnimplementedError();
-  }
-
+  Stream<String> usernameOfUserByEmailInUser(String email) =>
+      ReadUser.usernameOfUserByEmail(email);
   @override
-  Future<void> createNewUserActivity(UserActivityModel userActivityModel) {
-    throw UnimplementedError();
-  }
-
+  Stream<String> usernameOfUserByIdInUser(String id) =>
+      ReadUser.usernameOfUserById(id);
   @override
-  Future<DateTime> dateSchedule(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<String> imageUrlStreamOfUserByEmailInUser(String email) =>
+      ReadUser.imageUrlStreamOfUserByEmail(email);
   @override
-  Future<void> deleteMessage(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<String> imageUrlStreamOfUserByIdInUser(String id) =>
+      ReadUser.imageUrlStreamOfUserById(id);
   @override
-  Future<void> deletePersonalSchedule(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<String> emailOfUserInUser(String id) => ReadUser.emailOfUser(id);
+  // - UserActivityModel
   @override
-  Future<void> deleteProject(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<UserActivityModel> userActivityStreamInUserActivity(String id) =>
+      ReadUserActivity.userActivityStream(id);
   @override
-  Future<void> deleteSubTask(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<bool> onlineStatusOfUserStreamInUserActivity(String id) =>
+      ReadUserActivity.onlineStatusOfUserStream(id);
   @override
-  Future<void> deleteTask(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<DateTime> lastActiveOfUserStreamInUserActivity(String id) =>
+      ReadUserActivity.lastActiveOfUserStream(id);
+  // - PersonalScheduleModel
   @override
-  Future<void> deleteThread(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<PersonalScheduleModel> personalScheduleStreamInPersonalSchedule(
+          String id) =>
+      ReadPersonalSchedule.personalScheduleStreamById(id);
   @override
-  Future<void> deleteUser(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<DateTime> dateScheduleInPersonalSchedule(String id) =>
+      ReadPersonalSchedule.dateSchedule(id);
+  // - Project
   @override
-  Future<void> deleteUserActivity(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<Project> projectStream(String id) => ReadProject.projectStream(id);
+  // - Task
   @override
-  Future<String> emailOfUser(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<String> taskNameInTask(String id) => ReadTask.taskName(id);
   @override
-  Stream<String> imageUrlStreamOfUserByEmail(String email) {
-    throw UnimplementedError();
-  }
-
+  Future<String> projectIdInTask(String id) => ReadTask.projectIdBelongTo(id);
   @override
-  Stream<String> imageUrlStreamOfUserById(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<Task> taskStream(String id) => ReadTask.taskStreamById(id);
+  // - SubTask
   @override
-  Stream<DateTime> lastActiveOfUserStream(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<String> assigneeOfSubTask(String id) =>
+      ReadSubTask.assigneeOfSubTask(id);
   @override
-  Stream<MessageModel> messageStreamById(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<String> nameOfSubTask(String id) => ReadSubTask.nameOfSubTask(id);
   @override
-  Future<String> nameOfSubTask(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<SubTaskModel> subTaskModelStream(String id) =>
+      ReadSubTask.subTaskModelStreamById(id);
+  // - ThreadModel
   @override
-  Stream<bool> onlineStatusOfUserStream(String id) {
-    throw UnimplementedError();
-  }
-
+  Stream<ThreadModel> threadStream(String id) =>
+      ReadThread.threadStreamById(id);
+  // - MessageModel
   @override
-  Stream<PersonalScheduleModel> personalScheduleStreamById(String id) {
-    throw UnimplementedError();
-  }
+  Stream<MessageModel> messageStream(String id) =>
+      ReadMessage.messageStreamById(id);
 
+  // UPDATE
+  // - UserDataModel
   @override
-  Future<String> projectIdBelongTo(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateImageUrlInUser(String id, String imageUrl) =>
+      UpdateUser.updateImageUrl(id, imageUrl);
   @override
-  Stream<Project> projectStream(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateUsernameInUser(String id, String username) =>
+      UpdateUser.updateUsername(id, username);
   @override
-  Future<void> removeAssigneesInProject(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateEmailInUser(String id, String email) =>
+      UpdateUser.updateEmail(id, email);
   @override
-  Future<void> removeCommentsInSubTask(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateProjectsInUser(String id, List<String> latestVersion) =>
+      UpdateUser.updateProjects(id, latestVersion);
   @override
-  Future<void> removeFilesInSubTask(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateTasksInUser(String id, List<String> latestVersion) =>
+      UpdateUser.updateTasks(id, latestVersion);
   @override
-  Future<void> removeMessagesInThread(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> removeMostActiveMembersInProject(
-      String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> removePersonalScheduleInUser(
-      String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> removeProjectsInUser(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> removeSubTasksInTask(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> removeSubTasksInUser(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> removeTagsInProject(String id, List<Tag> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> removeTasksInProject(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> removeTasksInUser(String id, List<String> removedItems) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<SubTaskModel> subTaskModelStreamById(String id) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<String> taskName(String id) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<Task> taskStreamById(String id) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<ThreadModel> threadStreamById(String id) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateAssigneeInSubTask(String id, String assignee) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateAssigneesInProject(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateCommentsInSubTask(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateDescriptionInSubTask(String id, String description) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateDueDateInSubTask(String id, DateTime dueDate) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateEmailInUser(String id, String email) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateEndDateInProject(String id, DateTime endDate) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateFilesInSubTask(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateGradeInSubTask(String id, int grade) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateImageUrlInUser(String id, String imageUrl) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateIsCompletedInSubTask(String id, bool isCompleted) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateIsCompletedInTask(String id, bool isCompleted) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateLeaderCommentInSubTask(String id, String leaderComment) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateLeaderInProject(String id, String leader) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateMessagesInThread(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateMostActiveMembersInProject(
-      String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateNameInProject(String id, String name) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateNameInSubTask(String id, String name) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateNameInTask(String id, String name) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateSubTasksInUser(String id, List<String> latestVersion) =>
+      UpdateUser.updateSubTasks(id, latestVersion);
   @override
   Future<void> updatePersonalScheduleInUser(
-      String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
+          String id, List<String> latestVersion) =>
+      UpdateUser.updatePersonalSchedule(id, latestVersion);
   @override
-  Future<void> updatePointsInSubTask(String id, int points) {
-    throw UnimplementedError();
-  }
-
+  Future<void> removeProjectsInUser(String id, List<String> removedItems) =>
+      UpdateUser.removeProjects(id, removedItems);
   @override
-  Future<void> updatePointsInTask(String id, int points) {
-    throw UnimplementedError();
-  }
-
+  Future<void> removeTasksInUser(String id, List<String> removedItems) =>
+      UpdateUser.removeTasks(id, removedItems);
   @override
-  Future<void> updateProgressInSubTask(String id, double progress) {
-    throw UnimplementedError();
-  }
-
+  Future<void> removeSubTasksInUser(String id, List<String> removedItems) =>
+      UpdateUser.removeSubTasks(id, removedItems);
   @override
-  Future<void> updateProjectsInUser(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateStartDateInProject(String id, DateTime startDate) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateStatusInSchedule(String id, TimelineStatus status) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateSubTaskInSubTask(String id, SubTaskModel subTaskModel) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateSubTasksInTask(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateSubTasksInUser(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateTagsInProject(String id, List<Tag> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateTaskInTask(String id, Task task) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateTasksInProject(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateTasksInUser(String id, List<String> latestVersion) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateThreadInProject(String id, String thread) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateTimelineInSchedule(
-      String id, TimelineModel timelineModel) {
-    throw UnimplementedError();
-  }
-
+  Future<void> removePersonalScheduleInUser(
+          String id, List<String> removedItems) =>
+      UpdateUser.removePersonalSchedule(id, removedItems);
+  // - UserActivityModel
   @override
   Future<void> updateUserActivity(
-      String id, bool isActive, DateTime lastActive) {
-    throw UnimplementedError();
-  }
-
+    String id,
+    bool isActive,
+    DateTime lastActive,
+  ) =>
+      UpdateUserActivity.updateUserActivity(id, isActive, lastActive);
+  // - PersonalScheduleModel
   @override
-  Future<void> updateUsernameInUser(String id, String username) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateStatusInSchedule(String id, TimelineStatus status) =>
+      UpdatePersonalSchedule.updateStatus(id, status);
   @override
-  Stream<UserActivityModel> userActivityStream(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateTimelineInSchedule(
+          String id, TimelineModel timelineModel) =>
+      UpdatePersonalSchedule.updateTimeline(id, timelineModel);
+  // - Project
   @override
-  Stream<UserDataModel> userStreamByEmail(String email) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateAssigneesInProject(
+          String id, List<String> latestVersion) =>
+      UpdateProject.updateAssignees(id, latestVersion);
   @override
-  Stream<UserDataModel> userStreamById(String id) {
-    throw UnimplementedError();
-  }
-
+  Future<void> removeAssigneesInProject(String id, List<String> removedItems) =>
+      UpdateProject.removeAssignees(id, removedItems);
   @override
-  Stream<String> usernameOfUserByEmail(String email) {
-    throw UnimplementedError();
-  }
-
+  Future<void> updateStartDateInProject(String id, DateTime startDate) =>
+      UpdateProject.updateStartDate(id, startDate);
   @override
-  Stream<String> usernameOfUserById(String id) {
-    throw UnimplementedError();
-  }
+  Future<void> updateEndDateInProject(String id, DateTime endDate) =>
+      UpdateProject.updateEndDate(id, endDate);
+  @override
+  Future<void> updateLeaderInProject(String id, String leader) =>
+      UpdateProject.updateLeader(id, leader);
+  @override
+  Future<void> updateMostActiveMembersInProject(
+          String id, List<String> latestVersion) =>
+      UpdateProject.updateMostActiveMembers(id, latestVersion);
+  @override
+  Future<void> removeMostActiveMembersInProject(
+          String id, List<String> removedItems) =>
+      UpdateProject.removeMostActiveMembers(id, removedItems);
+  @override
+  Future<void> updateNameInProject(String id, String name) =>
+      UpdateProject.updateName(id, name);
+  @override
+  Future<void> updateTagsInProject(String id, List<Tag> latestVersion) =>
+      UpdateProject.updateTags(id, latestVersion);
+  @override
+  Future<void> removeTagsInProject(String id, List<Tag> removedItems) =>
+      UpdateProject.removeTags(id, removedItems);
+  @override
+  Future<void> updateTasksInProject(String id, List<String> latestVersion) =>
+      UpdateProject.updateTasks(id, latestVersion);
+  @override
+  Future<void> removeTasksInProject(String id, List<String> removedItems) =>
+      UpdateProject.removeTasks(id, removedItems);
+  @override
+  Future<void> updateThreadInProject(String id, String thread) =>
+      UpdateProject.updateThread(id, thread);
+  // - Task
+  @override
+  Future<void> updateNameInTask(String id, String name) =>
+      UpdateTask.updateName(id, name);
+  @override
+  Future<void> updateIsCompletedInTask(String id, bool isCompleted) =>
+      UpdateTask.updateIsCompleted(id, isCompleted);
+  @override
+  Future<void> updatePointsInTask(String id, int points) =>
+      UpdateTask.updatePoints(id, points);
+  @override
+  Future<void> updateSubTasksInTask(String id, List<String> latestVersion) =>
+      UpdateTask.updateSubTasks(id, latestVersion);
+  @override
+  Future<void> removeSubTasksInTask(String id, List<String> removedItems) =>
+      UpdateTask.removeSubTasks(id, removedItems);
+  @override
+  Future<void> updateTaskInTask(String id, Task task) =>
+      UpdateTask.updateTask(id, task);
+  // - SubTask
+  @override
+  Future<void> updateAssigneeInSubTask(String id, String assignee) =>
+      UpdateSubTask.updateAssignee(id, assignee);
+  @override
+  Future<void> updateDescriptionInSubTask(String id, String description) =>
+      UpdateSubTask.updateDescription(id, description);
+  @override
+  Future<void> updateGradeInSubTask(String id, int grade) =>
+      UpdateSubTask.updateGrade(id, grade);
+  @override
+  Future<void> updateIsCompletedInSubTask(String id, bool isCompleted) =>
+      UpdateSubTask.updateIsCompleted(id, isCompleted);
+  @override
+  Future<void> updateLeaderCommentInSubTask(String id, String leaderComment) =>
+      UpdateSubTask.updateLeaderComment(id, leaderComment);
+  @override
+  Future<void> updateNameInSubTask(String id, String name) =>
+      UpdateSubTask.updateName(id, name);
+  @override
+  Future<void> updatePointsInSubTask(String id, int points) =>
+      UpdateSubTask.updatePoints(id, points);
+  @override
+  Future<void> updateProgressInSubTask(String id, double progress) =>
+      UpdateSubTask.updateProgress(id, progress);
+  @override
+  Future<void> updateDueDateInSubTask(String id, DateTime dueDate) =>
+      UpdateSubTask.updateDueDate(id, dueDate);
+  @override
+  Future<void> updateCommentsInSubTask(String id, List<String> latestVersion) =>
+      UpdateSubTask.updateComments(id, latestVersion);
+  @override
+  Future<void> removeCommentsInSubTask(String id, List<String> removedItems) =>
+      UpdateSubTask.removeComments(id, removedItems);
+  @override
+  Future<void> updateFilesInSubTask(String id, List<String> latestVersion) =>
+      UpdateSubTask.updateFiles(id, latestVersion);
+  @override
+  Future<void> removeFilesInSubTask(String id, List<String> removedItems) =>
+      UpdateSubTask.removeFiles(id, removedItems);
+  @override
+  Future<void> updateSubTaskInSubTask(String id, SubTaskModel subTaskModel) =>
+      UpdateSubTask.updateSubTask(id, subTaskModel);
+  // - ThreadModel
+  @override
+  Future<void> updateMessagesInThread(String id, List<String> latestVersion) =>
+      UpdateThread.updateMessages(id, latestVersion);
+  @override
+  Future<void> removeMessagesInThread(String id, List<String> removedItems) =>
+      UpdateThread.removeMessages(id, removedItems);
+  // - MessageModel
+
+  // DELETE
+  // - UserDataModel
+  @override
+  Future<void> deleteUser(String id) => DeleteUser.deleteUser(id);
+  // - UserActivityModel
+  @override
+  Future<void> deleteUserActivity(String id) =>
+      DeleteUserActivity.deleteUserActivity(id);
+  // - PersonalScheduleModel
+  @override
+  Future<void> deletePersonalSchedule(String id) =>
+      DeletePersonalSchedule.deletePersonalSchedule(id);
+  // - Project
+  @override
+  Future<void> deleteProject(String id) => DeleteProject.deleteProject(id);
+  // - Task
+  @override
+  Future<void> deleteTask(String id) => DeleteTask.deleteTask(id);
+  // - SubTask
+  @override
+  Future<void> deleteSubTask(String id) => DeleteSubTask.deleteSubTask(id);
+  // - ThreadModel
+  @override
+  Future<void> deleteThread(String id) => DeleteThread.deleteThread(id);
+  // - MessageModel
+  @override
+  Future<void> deleteMessage(String id) => DeleteMessage.deleteMessage(id);
 }

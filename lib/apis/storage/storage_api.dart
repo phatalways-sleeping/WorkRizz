@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:task_managing_application/apis/storage/crud.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
 import 'package:task_managing_application/models/personal_schedule/time_line/time_line_model.dart';
@@ -24,34 +25,35 @@ sealed class StorageAPI {
 
   // READ
   // - UserDataModel
-  Stream<UserDataModel> userStreamByEmail(String email);
-  Stream<UserDataModel> userStreamById(String id);
-  Stream<String> usernameOfUserByEmail(String email);
-  Stream<String> usernameOfUserById(String id);
-  Stream<String> imageUrlStreamOfUserByEmail(String email);
-  Stream<String> imageUrlStreamOfUserById(String id);
-  Future<String> emailOfUser(String id);
+  Stream<UserDataModel> userStreamByEmailInUser(String email);
+  Stream<UserDataModel> userStreamByIdInUser(String id);
+  Stream<String> usernameOfUserByEmailInUser(String email);
+  Stream<String> usernameOfUserByIdInUser(String id);
+  Stream<String> imageUrlStreamOfUserByEmailInUser(String email);
+  Stream<String> imageUrlStreamOfUserByIdInUser(String id);
+  Future<String> emailOfUserInUser(String id);
   // - UserActivityModel
-  Stream<UserActivityModel> userActivityStream(String id);
-  Stream<bool> onlineStatusOfUserStream(String id);
-  Stream<DateTime> lastActiveOfUserStream(String id);
+  Stream<UserActivityModel> userActivityStreamInUserActivity(String id);
+  Stream<bool> onlineStatusOfUserStreamInUserActivity(String id);
+  Stream<DateTime> lastActiveOfUserStreamInUserActivity(String id);
   // - PersonalScheduleModel
-  Stream<PersonalScheduleModel> personalScheduleStreamById(String id);
-  Future<DateTime> dateSchedule(String id);
+  Stream<PersonalScheduleModel> personalScheduleStreamInPersonalSchedule(
+      String id);
+  Future<DateTime> dateScheduleInPersonalSchedule(String id);
   // - Project
   Stream<Project> projectStream(String id);
   // - Task
-  Future<String> taskName(String id);
-  Future<String> projectIdBelongTo(String id);
-  Stream<Task> taskStreamById(String id);
+  Future<String> taskNameInTask(String id);
+  Future<String> projectIdInTask(String id);
+  Stream<Task> taskStream(String id);
   // - SubTask
   Future<String> assigneeOfSubTask(String id);
   Future<String> nameOfSubTask(String id);
-  Stream<SubTaskModel> subTaskModelStreamById(String id);
+  Stream<SubTaskModel> subTaskModelStream(String id);
   // - ThreadModel
-  Stream<ThreadModel> threadStreamById(String id);
+  Stream<ThreadModel> threadStream(String id);
   // - MessageModel
-  Stream<MessageModel> messageStreamById(String id);
+  Stream<MessageModel> messageStream(String id);
 
   // UPDATE
   // - UserDataModel

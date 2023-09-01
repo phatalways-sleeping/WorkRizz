@@ -60,11 +60,16 @@ sealed class StorageAPI {
   Future<void> updateImageUrlInUser(String id, String imageUrl);
   Future<void> updateUsernameInUser(String id, String username);
   Future<void> updateEmailInUser(String id, String email);
+  Future<void> updateLeaderProjectsInUser(String id, int leaderProjects);
+  Future<void> updateOnGoingProjectsInUser(String id, int onGoingProjects);
+  Future<void> updateCompletedProjectsInUser(String id, int completedProjects);
   Future<void> updateProjectsInUser(String id, List<String> latestVersion);
   Future<void> updateTasksInUser(String id, List<String> latestVersion);
   Future<void> updateSubTasksInUser(String id, List<String> latestVersion);
   Future<void> updatePersonalScheduleInUser(
-      String id, List<String> latestVersion);
+    String id,
+    List<String> latestVersion,
+  );
   Future<void> removeProjectsInUser(String id, List<String> removedItems);
   Future<void> removeTasksInUser(String id, List<String> removedItems);
   Future<void> removeSubTasksInUser(String id, List<String> removedItems);
@@ -82,6 +87,10 @@ sealed class StorageAPI {
   // - Project
   Future<void> updateAssigneesInProject(String id, List<String> latestVersion);
   Future<void> removeAssigneesInProject(String id, List<String> removedItems);
+  Future<void> updateTasksCompletedInProject(String id, int tasksCompleted);
+  Future<void> updateActivitiesCompletedInProject(String id, int activitiesCompleted);
+  Future<void> updateTotalActivitiesInProject(String id, int totalActivities);
+  Future<void> updateIsCompletedInProject(String id, bool isCompleted);
   Future<void> updateStartDateInProject(String id, DateTime startDate);
   Future<void> updateEndDateInProject(String id, DateTime endDate);
   Future<void> updateLeaderInProject(String id, String leader);

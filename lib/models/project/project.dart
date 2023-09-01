@@ -7,7 +7,7 @@ import 'package:task_managing_application/models/tag/tag.dart';
 part 'project.g.dart';
 
 // This is the model for the project
-// It contains 
+// It contains
 //  + the reference to the document in the firestore
 //  + the id of the document in the firestore
 //  + the name of the project
@@ -35,11 +35,15 @@ class Project extends Base {
     required this.assignees,
     required this.mostActiveMemebers,
     required this.thread,
+    this.isCompleted = false,
+    this.tasksCompleted = 0,
+    this.activitiesCompleted = 0,
+    this.totalActivities = 0,
   });
 
   factory Project.fromJson(Map<String, dynamic> json) =>
       _$ProjectFromJson(json);
-  
+
   Map<String, dynamic> toJson() => _$ProjectToJson(this);
 
   @JsonKey(required: true)
@@ -60,6 +64,14 @@ class Project extends Base {
   final List<String> mostActiveMemebers;
   @JsonKey(required: true)
   final String thread;
+  @JsonKey(defaultValue: false)
+  final bool isCompleted;
+  @JsonKey(defaultValue: 0)
+  final int tasksCompleted;
+  @JsonKey(defaultValue: 0)
+  final int activitiesCompleted;
+  @JsonKey(defaultValue: 0)
+  final int totalActivities;
 
   @override
   List<Object> get props => [
@@ -73,6 +85,10 @@ class Project extends Base {
         assignees,
         mostActiveMemebers,
         thread,
+        isCompleted,
+        totalActivities,
+        tasksCompleted,
+        activitiesCompleted,
       ];
 
   Project copyWith({
@@ -87,6 +103,10 @@ class Project extends Base {
     List<String>? assignees,
     List<String>? mostActiveMemebers,
     String? thread,
+    bool? isCompleted,
+    int? totalActivities,
+    int? tasksCompleted,
+    int? activitiesCompleted,
   }) {
     return Project(
       reference: reference ?? this.reference,
@@ -100,6 +120,10 @@ class Project extends Base {
       assignees: assignees ?? this.assignees,
       mostActiveMemebers: mostActiveMemebers ?? this.mostActiveMemebers,
       thread: thread ?? this.thread,
+      isCompleted: isCompleted ?? this.isCompleted,
+      totalActivities: totalActivities?? this.totalActivities,
+      tasksCompleted: tasksCompleted?? this.tasksCompleted,
+      activitiesCompleted: activitiesCompleted?? this.activitiesCompleted,
     );
   }
 }

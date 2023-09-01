@@ -29,6 +29,9 @@ const user1 = UserDataModel(
     '20230831-0518-8125-a912-e3d7d81fee82',
     '20230831-0518-8725-8922-9e9ecda033fe',
   ],
+  leaderProjects: 1,
+  completedProjects: 0,
+  onGoingProjects: 2,
 );
 const user2 = UserDataModel(
   id: '20230831-0517-8130-8211-a9c1dfa3e677',
@@ -55,6 +58,9 @@ const user2 = UserDataModel(
     '20230831-0518-8425-b922-14b4375c2bb5',
     '20230831-0518-8e25-b923-a3d16941e901',
   ],
+  leaderProjects: 1,
+  completedProjects: 0,
+  onGoingProjects: 2,
 );
 
 const userDataList = [user1, user2];

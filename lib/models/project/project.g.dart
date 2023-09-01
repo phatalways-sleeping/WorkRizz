@@ -36,6 +36,10 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
             .toList() ??
         [],
     thread: json['thread'] as String,
+    isCompleted: json['isCompleted'] as bool? ?? false,
+    tasksCompleted: json['tasksCompleted'] as int? ?? 0,
+    activitiesCompleted: json['activitiesCompleted'] as int? ?? 0,
+    totalActivities: json['totalActivities'] as int? ?? 0,
   );
 }
 
@@ -53,6 +57,10 @@ Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
       'assignees': instance.assignees,
       'mostActiveMemebers': instance.mostActiveMemebers,
       'thread': instance.thread,
+      'isCompleted': instance.isCompleted,
+      'tasksCompleted': instance.tasksCompleted,
+      'activitiesCompleted': instance.activitiesCompleted,
+      'totalActivities': instance.totalActivities,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

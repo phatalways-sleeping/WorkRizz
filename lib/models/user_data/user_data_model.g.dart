@@ -34,6 +34,9 @@ UserDataModel _$UserDataModelFromJson(Map<String, dynamic> json) {
             .toList() ??
         [],
     imageUrl: json['imageUrl'] as String,
+    completedProjects: json['completedProjects'] as int? ?? 0,
+    leaderProjects: json['leaderProjects'] as int? ?? 0,
+    onGoingProjects: json['onGoingProjects'] as int? ?? 0,
   );
 }
 
@@ -50,6 +53,9 @@ Map<String, dynamic> _$UserDataModelToJson(UserDataModel instance) =>
       'tasks': instance.tasks,
       'subTasks': instance.subTasks,
       'personalSchedules': instance.personalSchedules,
+      'completedProjects': instance.completedProjects,
+      'leaderProjects': instance.leaderProjects,
+      'onGoingProjects': instance.onGoingProjects,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

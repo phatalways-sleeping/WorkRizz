@@ -110,6 +110,16 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> updateEmailInUser(String id, String email) =>
       UpdateUser.updateEmail(id, email);
   @override
+  Future<void> updateLeaderProjectsInUser(String id, int leaderProjects) =>
+      UpdateUser.updateLeaderProjects(id, leaderProjects);
+  @override
+  Future<void> updateOnGoingProjectsInUser(String id, int onGoingProjects) =>
+      UpdateUser.updateOnGoingProjects(id, onGoingProjects);
+  @override
+  Future<void> updateCompletedProjectsInUser(
+          String id, int completedProjects) =>
+      UpdateUser.updateCompletedProjects(id, completedProjects);
+  @override
   Future<void> updateProjectsInUser(String id, List<String> latestVersion) =>
       UpdateUser.updateProjects(id, latestVersion);
   @override
@@ -159,6 +169,19 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> removeAssigneesInProject(String id, List<String> removedItems) =>
       UpdateProject.removeAssignees(id, removedItems);
+  @override
+  Future<void> updateTasksCompletedInProject(String id, int tasksCompleted) =>
+      UpdateProject.updateTasksCompleted(id, tasksCompleted);
+  @override
+  Future<void> updateActivitiesCompletedInProject(
+          String id, int activitiesCompleted) =>
+      UpdateProject.updateActivitiesCompleted(id, activitiesCompleted);
+  @override
+  Future<void> updateTotalActivitiesInProject(String id, int totalActivities) =>
+      UpdateProject.updateTotalActivities(id, totalActivities);
+  @override
+  Future<void> updateIsCompletedInProject(String id, bool isCompleted) =>
+      UpdateProject.updateIsCompleted(id, isCompleted);
   @override
   Future<void> updateStartDateInProject(String id, DateTime startDate) =>
       UpdateProject.updateStartDate(id, startDate);

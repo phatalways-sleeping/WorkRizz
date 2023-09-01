@@ -16,6 +16,27 @@ final class UpdateProject extends Update {
         "assignees": FieldValue.arrayRemove(removedItems),
       });
 
+  static Future<void> updateTasksCompleted(String id, int tasksCompleted) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "tasksCompleted": tasksCompleted,
+      });
+
+  static Future<void> updateActivitiesCompleted(
+          String id, int activitiesCompleted) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "activitiesCompleted": activitiesCompleted,
+      });
+
+  static Future<void> updateTotalActivities(String id, int totalActivities) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "totalActivities": totalActivities,
+      });
+
+  static Future<void> updateIsCompleted(String id, bool isCompleted) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "isCompleted": isCompleted,
+      });
+
   static Future<void> updateStartDate(String id, DateTime startDate) =>
       FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
         "startDate": startDate.toIso8601String(),

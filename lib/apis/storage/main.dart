@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
-import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
-import 'package:task_managing_application/assets/models/user_data/user_data.dart';
 import 'package:task_managing_application/firebase_options.dart';
 
 const String path = 'lib/assets/models/';

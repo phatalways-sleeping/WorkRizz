@@ -8,6 +8,7 @@ import 'package:task_managing_application/apis/apis.dart';
 import 'package:task_managing_application/assets/config/config.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
 import 'package:task_managing_application/models/models.dart';
+import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
 import 'package:uuid/v8.dart';
 
@@ -89,10 +90,19 @@ class ApplicationRepository {
     return _authenticationAPI.logout();
   }
 
-  // Projects Screen
+  // Stream
   Stream<UserDataModel> userStream(String id) =>
       _storageAPI.userStreamByIdInUser(id);
+  Stream<PersonalScheduleModel> personalScheduleStream(
+          String personalScheduleId) =>
+      _storageAPI.personalScheduleStreamInPersonalSchedule(personalScheduleId);
+  Stream<UserActivityModel> userActivityStream(String? id) =>
+      _storageAPI.userActivityStreamInUserActivity(id ?? userId);
   Stream<Project> projectStream(String id) => _storageAPI.projectStream(id);
+  Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
+  Stream<SubTaskModel> subTaskStream(String subTaskId) =>
+      _storageAPI.subTaskModelStream(subTaskId);
+  // Projects Screen
   Future<String> createNewProject({
     required String name,
     required String leader,
@@ -219,7 +229,6 @@ class ApplicationRepository {
     );
   }
 
-  Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
   Future<void> markSubTaskCompleted({
     required String projectId,
     required String subTaskId,
@@ -410,6 +419,7 @@ class ApplicationRepository {
   }) async {
     await _storageAPI.updateLeaderCommentInSubTask(subTaskId, leaderComment);
   }
+
   Future<void> createNewComment({
     required String ofWhichSubTaskId,
     required String comment,
@@ -429,16 +439,19 @@ class ApplicationRepository {
       _storageAPI.updateCommentsInSubTask(ofWhichSubTaskId, [commentModel.id]),
     ]);
   }
+
   Future<void> markCommentSolved({
     required String commentId,
   }) async {
     await _storageAPI.updateSolvedInComment(commentId, true);
   }
+
   Future<void> markCommentUnSolved({
     required String commentId,
   }) async {
     await _storageAPI.updateSolvedInComment(commentId, false);
   }
+
   Future<void> repliedToComment({
     required String repliedCommentId,
     required String replyingCommentId,
@@ -451,5 +464,4 @@ class ApplicationRepository {
   }
 
   // Task / View files
-  
 }

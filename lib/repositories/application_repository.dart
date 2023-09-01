@@ -1,9 +1,17 @@
 import 'package:task_managing_application/apis/apis.dart';
 
 class ApplicationRepository {
-  const ApplicationRepository._();
+  ApplicationRepository._({
+    this.latestAuthenticatedEmail,
+  });
 
-  static const ApplicationRepository _instance = ApplicationRepository._();
+  static void initializeRepo({String? latestAuthenticatedEmail}) {
+    _instance = ApplicationRepository._(
+      latestAuthenticatedEmail: latestAuthenticatedEmail,
+    );
+  }
+
+  static ApplicationRepository _instance = ApplicationRepository._();
 
   static ApplicationRepository get repository => _instance;
 
@@ -11,16 +19,20 @@ class ApplicationRepository {
       const EmailPasswordAuthenticationAPI();
   final StorageAPI _storageAPI = const CloudFirestoreStorageAPI();
 
+  String? latestAuthenticatedEmail;
+
   Future<void> login(String email, String password) {
     return _authenticationAPI.login(email, password);
   }
 
   Future<void> signUp(
+    String username,
     String email,
     String password,
     String confirmPassword,
   ) {
     return _authenticationAPI.signUp(
+      username,
       email,
       password,
       confirmPassword,

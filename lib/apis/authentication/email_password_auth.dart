@@ -17,7 +17,8 @@ final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
     }
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) async => persistAuthenticationState(email));
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'user-not-found':
@@ -34,6 +35,7 @@ final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
 
   @override
   Future<void> signUp(
+    String username,
     String email,
     String password,
     String confirmPassword,
@@ -53,10 +55,37 @@ final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
     }
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          )
+          .then((value) async => persistAuthenticationState(email));
+      final randomAvatar = AVATARS[Random(123).nextInt(AVATARS.length)];
+      final newUser = UserDataModel(
+        id: const UuidV8().generate(),
+        imageUrl: randomAvatar,
+        username: username,
         email: email,
-        password: password,
+        subTasks: const [],
+        projects: const [],
+        tasks: const [],
+        personalSchedules: const [],
       );
+
+      final userActivity = UserActivityModel(
+        id: newUser.id,
+        isActive: true,
+        lastActive: DateTime.now(),
+      );
+
+      await FirebaseFirestoreConfigs.usersCollection
+          .doc(newUser.id)
+          .set(newUser.toJson());
+
+      await FirebaseFirestoreConfigs.userActivitiesCollection
+          .doc(userActivity.id)
+          .set(userActivity.toJson());
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'email-already-in-use':
@@ -132,5 +161,30 @@ final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
   }
 
   @override
-  Future<void> logout() async => FirebaseAuth.instance.signOut();
+  Future<void> logout() async {
+    FirebaseAuth.instance.signOut();
+    clearAuthenticationState();
+  }
+
+  @override
+  Future<void> persistAuthenticationState(String email) async {
+    Future<SharedPreferences> sharedPreferences =
+        SharedPreferences.getInstance();
+    await sharedPreferences.then(
+      (value) {
+        value.setBool('hasBeenAuthenticated', true);
+        value.setString('email', email);
+      },
+    );
+  }
+
+  @override
+  Future<void> clearAuthenticationState() async {
+    Future<SharedPreferences> sharedPreferences =
+        SharedPreferences.getInstance();
+    await sharedPreferences.then((value) {
+      value.setBool('hasBeenAuthenticated', false);
+      value.remove('email');
+    });
+  }
 }

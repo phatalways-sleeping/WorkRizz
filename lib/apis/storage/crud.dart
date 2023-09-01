@@ -29,3 +29,7 @@ export 'package:task_managing_application/apis/storage/update/update_task.dart';
 export 'package:task_managing_application/apis/storage/update/update_thread.dart';
 export 'package:task_managing_application/apis/storage/update/update_user.dart';
 export 'package:task_managing_application/apis/storage/update/update_user_activity.dart';
+export 'package:task_managing_application/apis/storage/update/update_comment.dart';
+export 'package:task_managing_application/apis/storage/create/create_comment.dart';
+export 'package:task_managing_application/apis/storage/read/read_comment.dart';
+export 'package:task_managing_application/apis/storage/delete/delete_comment.dart';

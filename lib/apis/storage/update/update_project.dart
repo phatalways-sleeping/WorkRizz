@@ -16,20 +16,20 @@ final class UpdateProject extends Update {
         "assignees": FieldValue.arrayRemove(removedItems),
       });
 
-  static Future<void> updateTasksCompleted(String id, int tasksCompleted) =>
+  static Future<void> updateTasksCompleted(String id, int increase) =>
       FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
-        "tasksCompleted": tasksCompleted,
+        "tasksCompleted": FieldValue.increment(increase),
       });
 
   static Future<void> updateActivitiesCompleted(
-          String id, int activitiesCompleted) =>
+          String id, int increase) =>
       FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
-        "activitiesCompleted": activitiesCompleted,
+        "activitiesCompleted": FieldValue.increment(increase),
       });
 
-  static Future<void> updateTotalActivities(String id, int totalActivities) =>
+  static Future<void> updateTotalActivities(String id, int increase) =>
       FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
-        "totalActivities": totalActivities,
+        "totalActivities": FieldValue.increment(increase),
       });
 
   static Future<void> updateIsCompleted(String id, bool isCompleted) =>

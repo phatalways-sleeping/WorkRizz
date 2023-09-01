@@ -20,19 +20,19 @@ final class UpdateUser extends Update {
         "email": email,
       });
 
-  static Future<void> updateLeaderProjects(String id, int leaderProjects) =>
+  static Future<void> updateLeaderProjects(String id, int increase) =>
       FirebaseFirestoreConfigs.userActivitiesCollection.doc(id).update({
-        "leaderProjects": leaderProjects,
+        "leaderProjects": FieldValue.increment(increase),
       });
 
-  static Future<void> updateOnGoingProjects(String id, int onGoingProjects) =>
+  static Future<void> updateOnGoingProjects(String id, int increase) =>
       FirebaseFirestoreConfigs.userActivitiesCollection.doc(id).update({
-        "onGoingProjects": onGoingProjects,
+        "onGoingProjects": FieldValue.increment(increase),
       });
 
-  static Future<void> updateCompletedProjects(String id, int completedProjects) =>
+  static Future<void> updateCompletedProjects(String id, int increase) =>
       FirebaseFirestoreConfigs.userActivitiesCollection.doc(id).update({
-        "completedProjects": completedProjects,
+        "completedProjects": FieldValue.increment(increase),
       });
 
   static Future<void> updateProjects(String id, List<String> latestVersion) =>

@@ -29,6 +29,9 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> createNewMessage(MessageModel messageModel) =>
       CreateMessage.createNewMessage(messageModel);
+  @override
+  Future<void> createNewComment(CommentModel commentModel) =>
+      CreateComment.createNewComment(commentModel);
 
   // READ
   // - UserDataModel
@@ -97,7 +100,9 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Stream<MessageModel> messageStream(String id) =>
       ReadMessage.messageStreamById(id);
-
+  // - CommentModel
+  @override
+  Future<CommentModel> commentFuture(String id) => ReadComment.commentById(id);
   // UPDATE
   // - UserDataModel
   @override
@@ -288,6 +293,17 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
       UpdateThread.removeMessages(id, removedItems);
   // - MessageModel
 
+  // - CommentModel
+  @override
+  Future<void> updateSolvedInComment(String id, bool solved) =>
+      UpdateComment.updateSolvedInComment(id, solved);
+  @override
+  Future<void> updateIsRepliedInComment(String id, bool isReplied) =>
+      UpdateComment.updateIsRepliedInComment(id, isReplied);
+  @override
+  Future<void> updateReplyCommentIdInComment(
+          String id, String replyCommentId) =>
+      UpdateComment.updateReplyCommentIdInComment(id, replyCommentId);
   // DELETE
   // - UserDataModel
   @override
@@ -315,4 +331,7 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   // - MessageModel
   @override
   Future<void> deleteMessage(String id) => DeleteMessage.deleteMessage(id);
+  // - CommentModel
+  @override
+  Future<void> deleteComment(String id) => DeleteComment.deleteComment(id);
 }

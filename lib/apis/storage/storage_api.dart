@@ -22,6 +22,7 @@ sealed class StorageAPI {
   );
   Future<void> createNewThread(ThreadModel threadModel);
   Future<void> createNewMessage(MessageModel messageModel);
+  Future<void> createNewComment(CommentModel commentModel);
 
   // READ
   // - UserDataModel
@@ -54,6 +55,8 @@ sealed class StorageAPI {
   Stream<ThreadModel> threadStream(String id);
   // - MessageModel
   Stream<MessageModel> messageStream(String id);
+  // - CommentModel
+  Future<CommentModel> commentFuture(String id);
 
   // UPDATE
   // - UserDataModel
@@ -88,7 +91,8 @@ sealed class StorageAPI {
   Future<void> updateAssigneesInProject(String id, List<String> latestVersion);
   Future<void> removeAssigneesInProject(String id, List<String> removedItems);
   Future<void> updateTasksCompletedInProject(String id, int tasksCompleted);
-  Future<void> updateActivitiesCompletedInProject(String id, int activitiesCompleted);
+  Future<void> updateActivitiesCompletedInProject(
+      String id, int activitiesCompleted);
   Future<void> updateTotalActivitiesInProject(String id, int totalActivities);
   Future<void> updateIsCompletedInProject(String id, bool isCompleted);
   Future<void> updateStartDateInProject(String id, DateTime startDate);
@@ -131,6 +135,10 @@ sealed class StorageAPI {
   Future<void> removeMessagesInThread(String id, List<String> removedItems);
   // - MessageModel
 
+  // - CommentModel
+  Future<void> updateSolvedInComment(String id, bool solved);
+  Future<void> updateIsRepliedInComment(String id, bool isReplied);
+  Future<void> updateReplyCommentIdInComment(String id, String replyCommentId);
   // DELETE
   // - UserDataModel
   Future<void> deleteUser(String id);
@@ -148,4 +156,6 @@ sealed class StorageAPI {
   Future<void> deleteThread(String id);
   // - MessageModel
   Future<void> deleteMessage(String id);
+  // - CommentModel
+  Future<void> deleteComment(String id);
 }

@@ -476,4 +476,40 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
   Future<void> updateTotalActivitiesInProject(String id, int totalActivities) {
     throw UnimplementedError();
   }
+  
+  @override
+  Future<CommentModel> commentFuture(String id) {
+    // TODO: implement commentFuture
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> createNewComment(CommentModel commentModel) {
+    // TODO: implement createNewComment
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> deleteComment(String id) {
+    // TODO: implement deleteComment
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateIsRepliedInComment(String id, bool isReplied) {
+    // TODO: implement updateIsRepliedInComment
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateReplyCommentIdInComment(String id, String replyCommentId) {
+    // TODO: implement updateReplyCommentIdInComment
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateSolvedInComment(String id, bool solved) {
+    // TODO: implement updateSolvedInComment
+    throw UnimplementedError();
+  }
 }

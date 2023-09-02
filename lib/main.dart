@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
     return RepositoryProvider(
       create: (context) => ApplicationRepository.repository,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Task Managing Application',
         theme: LightTheme.theme,
         home: BlocProvider(

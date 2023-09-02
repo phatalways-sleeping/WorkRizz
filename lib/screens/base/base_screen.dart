@@ -25,6 +25,10 @@ class BaseScreen extends StatelessWidget {
               const SliverPersistentHeader(
                 pinned: true,
                 delegate: CustomHeaderBar(
+                  // atHomePage: false,
+                  // onPressed: (context) {
+
+                  // },
                   upperChild: Text('Hello Liana'),
                   bottomChild: Text('Today is Sunday'),
                 ),

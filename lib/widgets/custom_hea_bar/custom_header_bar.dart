@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
+import 'package:task_managing_application/widgets/custom_avatar_widget/avatar_widget_badge.dart';
 
 class CustomHeaderBar extends SliverPersistentHeaderDelegate {
   const CustomHeaderBar({
@@ -56,17 +56,26 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                     child: upperChild,
                   )
                 else
-                  IconButton(
-                    onPressed: () => onPressed!(context),
-                    style: const ButtonStyle(
-                      animationDuration: Duration(milliseconds: 100),
-                      visualDensity: VisualDensity.comfortable,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      alignment: Alignment.center,
+                  InkWell(
+                    onTap: () => onPressed!(context),
+                    borderRadius: BorderRadius.circular(25.0),
+                    radius: 20.0,
+                    overlayColor: MaterialStateProperty.resolveWith(
+                      (states) {
+                        if (states.isPressed) {
+                          return context.colorScheme.secondary;
+                        }
+                        return context.colorScheme.onSecondary;
+                      },
                     ),
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 25.0,
+                    splashFactory: InkRipple.splashFactory,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20.0,
+                        color: context.colorScheme.onSecondary,
+                      ),
                     ),
                   ),
                 SizedBox(
@@ -75,7 +84,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                 DefaultTextStyle.merge(
                   style: context.textTheme.displayLarge?.copyWith(
                     color: context.colorScheme.onSecondary,
-                    fontSize: 26,
+                    fontSize: 26.0,
                     fontWeight: FontWeight.w600,
                   ),
                   child: bottomChild,
@@ -83,7 +92,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
               ],
             ),
             const Spacer(),
-            CustomAvatarWidget(
+            AvatarWidgetWithBadge(
               onTap: (context) {},
             ),
           ],

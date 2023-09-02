@@ -51,6 +51,7 @@ class AppFlow extends StatelessWidget {
         if (state is TestComponents)
           const MaterialPage(
             child: BaseScreen(
+              hideAppBar: false,
               child:
                   //   CustomItemWidget(
                   //     firstChild: CheckboxWidget(),

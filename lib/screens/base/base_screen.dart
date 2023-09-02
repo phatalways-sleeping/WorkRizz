@@ -25,9 +25,8 @@ class BaseScreen extends StatelessWidget {
               const SliverPersistentHeader(
                 pinned: true,
                 delegate: CustomHeaderBar(
-                  username: 'Liana',
-                  imageUrl:
-                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                  upperChild: Text('Hello Liana'),
+                  bottomChild: Text('Today is Sunday'),
                 ),
               ),
             SliverToBoxAdapter(

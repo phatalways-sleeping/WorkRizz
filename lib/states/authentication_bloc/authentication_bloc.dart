@@ -74,6 +74,7 @@ class AuthenticationBloc
 
       await _applicationRepository
           .signUp(
+            event.username,
             event.email,
             event.password,
             event.confirmPassword,

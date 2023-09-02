@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/authentication/authentication_screen.dart';
@@ -19,21 +20,44 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.clear();
+  final loginBefore = sharedPreferences.get('hasBeenAuthenticated') as bool?;
+  if (loginBefore == null) {
+    ApplicationRepository.initializeRepo();
+  } else {
+    ApplicationRepository.initializeRepo(
+      latestAuthenticatedEmail: sharedPreferences.get('email') as String,
+    );
+  }
+  runApp(
+    MyApp(
+      applicationRepository: ApplicationRepository.repository,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({
+    super.key,
+    required this.applicationRepository,
+  });
+
+  final ApplicationRepository applicationRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => ApplicationRepository.repository,
+    return RepositoryProvider.value(
+      value: applicationRepository,
       child: MaterialApp(
         title: 'Task Managing Application',
         theme: LightTheme.theme,
         home: BlocProvider(
-          create: (context) => NavigationBloc(),
+          create: (context) => NavigationBloc(
+            applicationRepository.latestAuthenticatedEmail != null
+                ? const Home()
+                : const Authentication(),
+          ),
           child: const AppFlow(),
         ),
       ),

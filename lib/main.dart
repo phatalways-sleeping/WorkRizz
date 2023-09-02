@@ -17,7 +17,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(const MyApp());
 }
 
@@ -77,11 +77,15 @@ class AppFlow extends StatelessWidget {
                   //     secondChild: Icon(Icons.add,
                   //   ),
                   // ProjectTag(color: PINK, name: "Online")
+                  CustomScrollView(
+                slivers: [
                   Center(
-                child: TaskTag(
-                  color: PINK,
-                  name: "2",
-                ),
+                    child: TaskTag(
+                      color: PINK,
+                      name: "2",
+                    ),
+                  )
+                ],
               ),
             ),
           ),

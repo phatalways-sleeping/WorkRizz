@@ -53,11 +53,7 @@ class MyApp extends StatelessWidget {
         title: 'Task Managing Application',
         theme: LightTheme.theme,
         home: BlocProvider(
-          create: (context) => NavigationBloc(
-            applicationRepository.latestAuthenticatedEmail != null
-                ? const Home()
-                : const Authentication(),
-          ),
+          create: (context) => NavigationBloc(),
           child: const AppFlow(),
         ),
       ),

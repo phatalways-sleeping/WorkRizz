@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
     return RepositoryProvider.value(
       value: applicationRepository,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Task Managing Application',
         theme: LightTheme.theme,
         home: BlocProvider(
@@ -81,16 +82,23 @@ class AppFlow extends StatelessWidget {
         if (state is TestComponents)
           const MaterialPage(
             child: BaseScreen(
-                child:
-                    //   CustomItemWidget(
-                    //     firstChild: CheckboxWidget(),
-                    //     isFixed: true,
-                    //     name: 'Design UI',
-                    //     subtext: '10pt',
-                    //     secondChild: Icon(Icons.add,
-                    //   ),
-                    // ProjectTag(color: PINK, name: "Online")
-                    TaskTag(color: PINK, name: "2/45")),
+              hideAppBar: false,
+              child:
+                  //   CustomItemWidget(
+                  //     firstChild: CheckboxWidget(),
+                  //     isFixed: true,
+                  //     name: 'Design UI',
+                  //     subtext: '10pt',
+                  //     secondChild: Icon(Icons.add,
+                  //   ),
+                  // ProjectTag(color: PINK, name: "Online")
+                  Center(
+                child: TaskTag(
+                  color: PINK,
+                  name: "2",
+                ),
+              ),
+            ),
           ),
         if (state is Authentication)
           MaterialPage(

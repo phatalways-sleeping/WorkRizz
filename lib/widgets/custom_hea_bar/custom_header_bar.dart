@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
+import 'package:task_managing_application/widgets/custom_avatar_widget/avatar_widget_badge.dart';
 
 class CustomHeaderBar extends SliverPersistentHeaderDelegate {
   const CustomHeaderBar({
-    required this.username,
-    required this.imageUrl,
+    required this.upperChild,
+    required this.bottomChild,
     this.atHomePage = true,
     this.onPressed,
   }) : assert(atHomePage || onPressed != null);
 
-  final String username;
-  final String imageUrl;
   final bool atHomePage;
+  final Widget upperChild;
+  final Widget bottomChild;
   final void Function(BuildContext context)? onPressed;
 
   @override
@@ -41,36 +41,59 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (atHomePage)
-              DefaultTextStyle.merge(
-                style: context.textTheme.displayMedium,
-                child: Text(
-                  'Hello $username!',
-                  style: TextStyle(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                if (atHomePage)
+                  DefaultTextStyle.merge(
+                    style: context.textTheme.displayMedium?.copyWith(
+                      color: context.colorScheme.onSecondary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    child: upperChild,
+                  )
+                else
+                  InkWell(
+                    onTap: () => onPressed!(context),
+                    borderRadius: BorderRadius.circular(25.0),
+                    radius: 20.0,
+                    overlayColor: MaterialStateProperty.resolveWith(
+                      (states) {
+                        if (states.isPressed) {
+                          return context.colorScheme.secondary;
+                        }
+                        return context.colorScheme.onSecondary;
+                      },
+                    ),
+                    splashFactory: InkRipple.splashFactory,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20.0,
+                        color: context.colorScheme.onSecondary,
+                      ),
+                    ),
+                  ),
+                SizedBox(
+                  height: context.mediaQuery.size.height * RATIO_MARGIN * 0.2,
+                ),
+                DefaultTextStyle.merge(
+                  style: context.textTheme.displayLarge?.copyWith(
                     color: context.colorScheme.onSecondary,
-                    fontSize: 26,
-                    fontFamily: 'Montserrat',
+                    fontSize: 26.0,
                     fontWeight: FontWeight.w600,
                   ),
+                  child: bottomChild,
                 ),
-              )
-            else
-              IconButton(
-                onPressed: () => onPressed!(context),
-                style: const ButtonStyle(
-                  animationDuration: Duration(milliseconds: 100),
-                  visualDensity: VisualDensity.comfortable,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  alignment: Alignment.center,
-                ),
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  size: 25.0,
-                ),
-              ),
+              ],
+            ),
             const Spacer(),
-            CustomAvatarWidget(
-              imageUrl: imageUrl,
+            AvatarWidgetWithBadge(
+              onTap: (context) {},
             ),
           ],
         ),

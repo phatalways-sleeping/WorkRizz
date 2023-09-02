@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:task_managing_application/assets/extensions/build_context_extensions.dart';
+import 'package:task_managing_application/states/avatar_bloc/avatar_bloc.dart';
+import 'package:task_managing_application/states/states.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
+import 'package:task_managing_application/widgets/widgets.dart';
 
 import 'future_avatar_widget.dart';
 
@@ -23,59 +27,74 @@ class AvatarWidgetWithBadge extends StatefulWidget {
 
 class _AvatarWidgetWithBadgeState extends State<AvatarWidgetWithBadge> {
   @override
+  void initState() {
+    context.read<AvatarBloc>().add(const AvatarSubscribeToUserEvent());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Future.value(
-          "https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg",
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {}
-          if (snapshot.hasData) {
-            return StreamBuilder(
-              stream: Stream.fromIterable([1, 2, 3, 4, 5]),
-              builder: (context, snapshot1) {
-                if (snapshot1.hasError) {}
-                if (snapshot1.hasData) {
-                  return badges.Badge(
-                    position: badges.BadgePosition.topEnd(end: -4.0),
-                    badgeStyle: badges.BadgeStyle(
-                      badgeColor: context.colorScheme.error,
-                      borderRadius: BorderRadius.circular(
-                        context.mediaQuery.size.height *
-                            widget.radiusRatio *
-                            0.08,
-                      ),
-                      elevation: 4.0,
-                      padding: const EdgeInsets.all(6.0),
+    return BlocBuilder<AvatarBloc, AvatarState>(
+      builder: (context, state) {
+        if (state is AvatarInitial) {
+          return const Center(
+            child: CustomCircularProgressIndicator(
+              size: 52.0,
+            ),
+          );
+        }
+        if (state is AvatarError) {
+          return const Center(
+            child: CustomErrorIcon(),
+          );
+        }
+        return FutureBuilder(
+            future: context.read<AvatarBloc>().imageUrlFuture,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: CustomErrorIcon(),
+                );
+              }
+              if (snapshot.hasData) {
+                return badges.Badge(
+                  position: badges.BadgePosition.topEnd(end: -4.0),
+                  badgeStyle: badges.BadgeStyle(
+                    badgeColor: context.colorScheme.error,
+                    borderRadius: BorderRadius.circular(
+                      context.mediaQuery.size.height *
+                          widget.radiusRatio *
+                          0.08,
                     ),
-                    badgeAnimation: const badges.BadgeAnimation.scale(
-                      animationDuration: Duration(milliseconds: 800),
+                    elevation: 4.0,
+                    padding: const EdgeInsets.all(6.0),
+                  ),
+                  badgeAnimation: const badges.BadgeAnimation.scale(
+                    animationDuration: Duration(milliseconds: 800),
+                  ),
+                  badgeContent: DefaultTextStyle.merge(
+                    style: context.textTheme.bodySmall,
+                    child: Text(
+                      state.notifications!.length.toString(),
+                      style: widget.badgeTextStyle ??
+                          TextStyle(
+                            color: context.colorScheme.onSecondary,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w500,
+                          ),
                     ),
-                    badgeContent: DefaultTextStyle.merge(
-                      style: context.textTheme.bodySmall,
-                      child: Text(
-                        snapshot1.data!.toString(),
-                        style: widget.badgeTextStyle ??
-                            TextStyle(
-                              color: context.colorScheme.onSecondary,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ),
-                    onTap: () => widget.onTap(context),
-                    child: FutureAvatarWidget(
-                      avatarRatio: widget.avatarRatio,
-                      radiusRatio: widget.radiusRatio,
-                      imageUrl: snapshot.data!,
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            );
-          }
-          return const SizedBox.shrink();
-        });
+                  ),
+                  onTap: () => widget.onTap(context),
+                  child: FutureAvatarWidget(
+                    avatarRatio: widget.avatarRatio,
+                    radiusRatio: widget.radiusRatio,
+                    imageUrl: snapshot.data!,
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            });
+      },
+    );
   }
 }

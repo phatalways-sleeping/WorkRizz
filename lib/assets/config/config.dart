@@ -9,7 +9,7 @@ const double BORDER_WIDTH = 1;
 const double SMALL_CORNER = 7;
 const double MEDIUM_CORNER = 12;
 const double ROUND_CORNER = 35;
-const double MAX_HEIGHT_APP_BAR = 80.0;
+const double MAX_HEIGHT_APP_BAR = 60.0;
 const double MIN_HEIGHT_APP_BAR = 60.0;
 
 const Color GREEN = Color(0xFF5CD669);

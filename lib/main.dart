@@ -4,8 +4,10 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/authentication/authentication_screen.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
+import 'package:task_managing_application/screens/project/project_screen.dart';
 import 'package:task_managing_application/screens/splash/splash_screen.dart';
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
+import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
@@ -17,6 +19,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  ApplicationRepository.repository.userId = "20230831-0517-8130-8211-a9c1dfa3e677";
 
   runApp(const MyApp());
 }
@@ -108,12 +112,11 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is ProjectsList)
-          const MaterialPage(
-            child: BaseScreen(
-              child: SizedBox(
-                height: 700,
-                width: double.infinity,
-              ),
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) =>
+                  ProjectBloc(context.read<ApplicationRepository>()),
+              child: const ProjectScreen(),
             ),
           ),
         if (state is Assistant)

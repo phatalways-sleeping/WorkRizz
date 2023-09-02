@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_managing_application/assets/assets.dart';
+import 'package:task_managing_application/repositories/repositories.dart';
+import 'package:task_managing_application/states/avatar_bloc/avatar_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/avatar_widget_badge.dart';
 
 class CustomHeaderBar extends SliverPersistentHeaderDelegate {
@@ -92,8 +95,11 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
               ],
             ),
             const Spacer(),
-            AvatarWidgetWithBadge(
-              onTap: (context) {},
+            BlocProvider(
+              create: (context) => AvatarBloc(context.read<ApplicationRepository>()),
+              child: AvatarWidgetWithBadge(
+                onTap: (context) {},
+              ),
             ),
           ],
         ),

@@ -40,6 +40,6 @@ final class Settings extends NavigationState {
   const Settings();
 }
 
-final class Dashboard extends NavigationState {
-  const Dashboard();
+final class Splash extends NavigationState {
+  const Splash();
 }

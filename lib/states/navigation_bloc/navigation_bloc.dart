@@ -10,7 +10,8 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc(NavigationState initialState) : super(initialState) {
+  NavigationBloc() : super(const Splash()) {
+    on<NavigateToSplash>((event, emit) => emit(const Splash()));
     on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
@@ -19,7 +20,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
-    on<NavigateToDashboard>(_onNavigateToDashboard);
   }
 
   Future<void> _onNavigateToTestComponents(
@@ -55,13 +55,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) async {
     emit(const Settings());
-  }
-
-  Future<void> _onNavigateToDashboard(
-    NavigateToDashboard event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const Dashboard());
   }
 
   Future<void> _onNavigateToProjectsList(

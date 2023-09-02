@@ -5,11 +5,10 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/authentication/authentication_screen.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
+import 'package:task_managing_application/screens/splash/splash_screen.dart';
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
+import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
 import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
-import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
-import 'package:task_managing_application/widgets/custom_tag/project_tag.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -19,45 +18,25 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  sharedPreferences.clear();
-  final loginBefore = sharedPreferences.get('hasBeenAuthenticated') as bool?;
-  if (loginBefore == null) {
-    ApplicationRepository.initializeRepo();
-  } else {
-    ApplicationRepository.initializeRepo(
-      latestAuthenticatedEmail: sharedPreferences.get('email') as String,
-    );
-  }
-  runApp(
-    MyApp(
-      applicationRepository: ApplicationRepository.repository,
-    ),
-  );
+  
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
-    required this.applicationRepository,
   });
-
-  final ApplicationRepository applicationRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: applicationRepository,
+    return RepositoryProvider(
+      create: (context) => ApplicationRepository.repository,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Task Managing Application',
         theme: LightTheme.theme,
         home: BlocProvider(
-          create: (context) => NavigationBloc(
-            applicationRepository.latestAuthenticatedEmail != null
-                ? const Home()
-                : const Authentication(),
-          ),
+          create: (context) => NavigationBloc(),
           child: const AppFlow(),
         ),
       ),
@@ -79,6 +58,13 @@ class AppFlow extends StatelessWidget {
   List<Page<dynamic>> onGeneratePages(
           NavigationState state, List<Page> pages) =>
       [
+        if (state is Splash)
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => SplashCubit(),
+              child: const SplashScreen(),
+            ),
+          ),
         if (state is TestComponents)
           const MaterialPage(
             child: BaseScreen(
@@ -140,8 +126,6 @@ class AppFlow extends StatelessWidget {
         if (state is Profile)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Settings)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
-        if (state is Dashboard)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
       ];
 }

@@ -32,14 +32,14 @@ final class NavigateToSettings extends NavigationEvent {
   const NavigateToSettings();
 }
 
-final class NavigateToDashboard extends NavigationEvent {
-  const NavigateToDashboard();
-}
-
 final class NavigateToProjectsList extends NavigationEvent {
   const NavigateToProjectsList();
 }
 
 final class NavigateToAssistant extends NavigationEvent {
   const NavigateToAssistant();
+}
+
+final class NavigateToSplash extends NavigationEvent {
+  const NavigateToSplash();
 }

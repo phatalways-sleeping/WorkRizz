@@ -6,12 +6,10 @@ class BaseScreen extends StatefulWidget {
   const BaseScreen({
     super.key,
     required this.child,
-    this.hideAppBar = true,
     this.hideNavigationBar = false,
   });
 
   final Widget child;
-  final bool hideAppBar;
   final bool hideNavigationBar;
 
   @override

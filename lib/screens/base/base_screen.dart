@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:task_managing_application/repositories/application_repository.dart';
+import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/widgets.dart'
     show CustomNavigationBar;
 
-class BaseScreen extends StatelessWidget {
+class BaseScreen extends StatefulWidget {
   const BaseScreen({
     super.key,
     required this.child,
@@ -16,12 +18,41 @@ class BaseScreen extends StatelessWidget {
   final bool hideNavigationBar;
 
   @override
+  State<BaseScreen> createState() => _BaseScreenState();
+}
+
+class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   if (state == AppLifecycleState.resumed) {
+  //     context.read<ApplicationRepository>().updateUserActivity(true);
+  //   }
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.inactive) {
+  //     context.read<ApplicationRepository>().updateUserActivity(false);
+  //   }
+  // }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            if (!hideAppBar)
+            if (!widget.hideAppBar)
               const SliverPersistentHeader(
                 pinned: true,
                 delegate: CustomHeaderBar(
@@ -34,13 +65,14 @@ class BaseScreen extends StatelessWidget {
                 ),
               ),
             SliverToBoxAdapter(
-              child: child,
+              child: widget.child,
             ),
           ],
         ),
       ),
       extendBody: true,
-      bottomNavigationBar: !hideNavigationBar ? const CustomNavigationBar() : null,
+      bottomNavigationBar:
+          !widget.hideNavigationBar ? const CustomNavigationBar() : null,
     );
   }
 }

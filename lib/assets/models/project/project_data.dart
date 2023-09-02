@@ -19,7 +19,10 @@ final Project project1 = Project(
     '20230831-0517-8230-a202-0089f860b83a',
     '20230831-0517-8130-8211-a9c1dfa3e677'
   ],
-  thread: 'project-thread-123',
+  thread: '20230831-0729-8457-a023-e2fa64ce2b29',
+  totalActivities: 6,
+  tasksCompleted: 1,
+  activitiesCompleted: 4,
 );
 
 final Project project2 = Project(
@@ -48,7 +51,10 @@ final Project project2 = Project(
     '20230831-0517-8230-a202-0089f860b83a',
     '20230831-0517-8130-8211-a9c1dfa3e677'
   ],
-  thread: 'project-thread-123',
+  thread: '20230831-0729-8657-b022-9b5f41734dcc',
+  tasksCompleted: 1,
+  totalActivities: 5,
+  activitiesCompleted: 1,
 );
 
 final projectList = [

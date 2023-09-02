@@ -15,8 +15,8 @@ const user1 = UserDataModel(
     '20230831-0442-8b40-a159-62d06a1fb33b', // instance 11
   ],
   projects: [
-    '20230831-0447-8e41-b180-662c48acc0b9',
-    '20230831-0447-8a41-9189-1f4e72621f8d',
+    '20230831-0508-8d53-a880-b370f9865591',
+    '20230831-0508-8853-9869-082ff370d762',
   ],
   tasks: [
     '20230831-0447-8e41-b180-662c48acc0b9', // task 1
@@ -29,6 +29,9 @@ const user1 = UserDataModel(
     '20230831-0518-8125-a912-e3d7d81fee82',
     '20230831-0518-8725-8922-9e9ecda033fe',
   ],
+  leaderProjects: 1,
+  completedProjects: 0,
+  onGoingProjects: 2,
 );
 const user2 = UserDataModel(
   id: '20230831-0517-8130-8211-a9c1dfa3e677',
@@ -43,7 +46,8 @@ const user2 = UserDataModel(
     '20230831-0442-8e40-a159-3e9f946988dc', // instance 9
   ],
   projects: [
-    '20230831-0447-8841-b189-624e4164c668',
+    '20230831-0508-8d53-a880-b370f9865591',
+    '20230831-0508-8853-9869-082ff370d762',
   ],
   tasks: [
     '20230831-0447-8e41-b180-662c48acc0b9', // task 1
@@ -55,6 +59,9 @@ const user2 = UserDataModel(
     '20230831-0518-8425-b922-14b4375c2bb5',
     '20230831-0518-8e25-b923-a3d16941e901',
   ],
+  leaderProjects: 1,
+  completedProjects: 0,
+  onGoingProjects: 2,
 );
 
 const userDataList = [user1, user2];

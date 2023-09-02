@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/repositories/application_repository.dart';
-import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/widgets.dart'
     show CustomNavigationBar;
 
@@ -50,25 +47,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            if (!widget.hideAppBar)
-              const SliverPersistentHeader(
-                pinned: true,
-                delegate: CustomHeaderBar(
-                  // atHomePage: false,
-                  // onPressed: (context) {
-
-                  // },
-                  upperChild: Text('Hello Liana'),
-                  bottomChild: Text('Today is Sunday'),
-                ),
-              ),
-            SliverToBoxAdapter(
-              child: widget.child,
-            ),
-          ],
-        ),
+        child: widget.child,
       ),
       extendBody: true,
       bottomNavigationBar:

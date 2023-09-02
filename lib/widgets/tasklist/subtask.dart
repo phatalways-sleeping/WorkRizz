@@ -19,14 +19,15 @@ class SubTask extends StatelessWidget {
           child: Column(
             children: [
               CustomItemWidget(
-                      firstChild: CheckboxWidget(),
-                      isFixed: true,
-                      name: 'Design UI',
-                      subtext: '10pt',
-                      secondChild: Icon(
-                        Icons.add,
-                      )),
-                      
+                firstChild: CheckboxWidget(),
+                isFixed: true,
+                name: 'Design UI',
+                subtext: '10pt',
+                secondChild: CustomAvatarWidget(
+                    imageUrl:
+                        'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                    size: context.mediaQuery.size.width * (RATIO_MARGIN + 0.01)),
+              )
             ],
           ),
         )

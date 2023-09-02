@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/models/task/task.dart';
+import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
 import 'package:task_managing_application/widgets/custom_tag/project_tag.dart';
@@ -14,9 +15,9 @@ part 'subtask.dart';
 part 'list_tag.dart';
 
 class TaskListView extends StatelessWidget {
-  const TaskListView({super.key, required this.ava, required this.task});
+  const TaskListView({super.key, required this.imageUrl, required this.task});
 
-  final Widget ava;
+  final String imageUrl;
   final Task task;
 
   @override
@@ -35,10 +36,7 @@ class TaskListView extends StatelessWidget {
                   Text('Leader', style: context.textTheme.titleSmall),
                   SizedBox(
                       width: context.mediaQuery.size.width * RATIO_PADDING),
-                  Text(
-                    "ava1 ",
-                    style: context.textTheme.titleLarge,
-                  ),
+                  CustomAvatarWidget(imageUrl: imageUrl),
                 ],
               ),
               MiniNav()
@@ -57,17 +55,27 @@ class TaskListView extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "ava1 ",
-                        style: context.textTheme.titleLarge,
+                      CustomAvatarWidget(
+                        imageUrl:
+                            'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                        size: context.mediaQuery.size.width *
+                            (RATIO_MARGIN + 0.01),
                       ),
-                      Text(
-                        "ava1 ",
-                        style: context.textTheme.titleLarge,
+                      SizedBox(
+                          width: context.mediaQuery.size.width * 0.01),
+                      CustomAvatarWidget(
+                        imageUrl:
+                            'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                        size: context.mediaQuery.size.width *
+                            (RATIO_MARGIN + 0.01),
                       ),
-                      Text(
-                        "ava1 ",
-                        style: context.textTheme.titleLarge,
+                      SizedBox(
+                          width: context.mediaQuery.size.width * 0.01),
+                      CustomAvatarWidget(
+                        imageUrl:
+                            'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                        size: context.mediaQuery.size.width *
+                            (RATIO_MARGIN + 0.01),
                       ),
                     ],
                   ),

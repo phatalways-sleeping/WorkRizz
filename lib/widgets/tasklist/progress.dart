@@ -57,14 +57,16 @@ class Progress extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
-                    "ava1 ",
-                    style: context.textTheme.titleLarge,
-                  ),
-                  Text(
-                    "ava2 ",
-                    style: context.textTheme.titleLarge,
-                  ),
+                  CustomAvatarWidget(
+                    imageUrl:
+                        'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                    size: context.mediaQuery.size.width * (RATIO_MARGIN + 0.01)),
+                  SizedBox(
+                      width: context.mediaQuery.size.width * 0.01),
+                  CustomAvatarWidget(
+                    imageUrl:
+                        'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                    size: context.mediaQuery.size.width * (RATIO_MARGIN + 0.01)),
                 ],
               ),
               Text(

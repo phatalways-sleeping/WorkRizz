@@ -13,16 +13,19 @@ class TaskListScreen extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-              const SliverPersistentHeader(
-                pinned: true,
-                delegate: CustomHeaderBar(
-                  username: 'Liana',
+            const SliverPersistentHeader(
+              pinned: true,
+              delegate: CustomHeaderBar(
+                username: 'Liana',
+                imageUrl:
+                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: TaskListView(
                   imageUrl:
                       'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
-                ),
-              ),
-            SliverToBoxAdapter(
-              child: TaskListView(ava: Icon(Icons.person), task: instance1),
+                  task: instance1),
             ),
           ],
         ),
@@ -32,4 +35,3 @@ class TaskListScreen extends StatelessWidget {
     );
   }
 }
-

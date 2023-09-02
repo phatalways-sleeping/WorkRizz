@@ -33,6 +33,7 @@ class UserDataModel extends Base {
     this.completedProjects = 0,
     this.leaderProjects = 0,
     this.onGoingProjects = 0,
+    this.projectInvitations = const [],
   });
 
   factory UserDataModel.fromJson(Map<String, dynamic> json) =>
@@ -66,6 +67,8 @@ class UserDataModel extends Base {
   final int leaderProjects;
   @JsonKey(defaultValue: 0)
   final int onGoingProjects;
+  @JsonKey(defaultValue: [])
+  final List<String> projectInvitations;
 
   @override
   List<Object> get props => [
@@ -80,6 +83,7 @@ class UserDataModel extends Base {
         completedProjects,
         onGoingProjects,
         leaderProjects,
+        projectInvitations,
       ];
 
   UserDataModel copyWith({
@@ -91,6 +95,7 @@ class UserDataModel extends Base {
     List<String>? projects,
     List<String>? tasks,
     List<String>? personalSchedules,
+    List<String>? projectInvitations,
     String? imageUrl,
     int? completedProjects,
     int? onGoingProjects,
@@ -106,9 +111,10 @@ class UserDataModel extends Base {
       tasks: tasks ?? this.tasks,
       personalSchedules: personalSchedules ?? this.personalSchedules,
       imageUrl: imageUrl ?? this.imageUrl,
-      leaderProjects: leaderProjects?? this.leaderProjects,
-      onGoingProjects: onGoingProjects?? this.onGoingProjects,
-      completedProjects: completedProjects?? this.completedProjects,
+      leaderProjects: leaderProjects ?? this.leaderProjects,
+      onGoingProjects: onGoingProjects ?? this.onGoingProjects,
+      completedProjects: completedProjects ?? this.completedProjects,
+      projectInvitations: projectInvitations ?? this.projectInvitations,
     );
   }
 }

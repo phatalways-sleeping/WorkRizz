@@ -73,11 +73,21 @@ sealed class StorageAPI {
     String id,
     List<String> latestVersion,
   );
+  Future<void> updateProjectInvitationsInUser(
+    String id,
+    List<String> latestVersion,
+  );
   Future<void> removeProjectsInUser(String id, List<String> removedItems);
   Future<void> removeTasksInUser(String id, List<String> removedItems);
   Future<void> removeSubTasksInUser(String id, List<String> removedItems);
   Future<void> removePersonalScheduleInUser(
-      String id, List<String> removedItems);
+    String id,
+    List<String> removedItems,
+  );
+  Future<void> removeProjectInvitationsInUser(
+    String id,
+    List<String> removedItems,
+  );
   // - UserActivityModel
   Future<void> updateUserActivity(
     String id,

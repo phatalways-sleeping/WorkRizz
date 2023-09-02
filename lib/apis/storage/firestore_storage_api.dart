@@ -138,6 +138,12 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
           String id, List<String> latestVersion) =>
       UpdateUser.updatePersonalSchedule(id, latestVersion);
   @override
+  Future<void> updateProjectInvitationsInUser(
+    String id,
+    List<String> latestVersion,
+  ) =>
+      UpdateUser.updateProjectInvitations(id, latestVersion);
+  @override
   Future<void> removeProjectsInUser(String id, List<String> removedItems) =>
       UpdateUser.removeProjects(id, removedItems);
   @override
@@ -150,6 +156,12 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> removePersonalScheduleInUser(
           String id, List<String> removedItems) =>
       UpdateUser.removePersonalSchedule(id, removedItems);
+  @override
+  Future<void> removeProjectInvitationsInUser(
+    String id,
+    List<String> removedItems,
+  ) =>
+      UpdateUser.removeProjectInvitations(id, removedItems);
   // - UserActivityModel
   @override
   Future<void> updateUserActivity(

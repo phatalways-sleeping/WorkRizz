@@ -55,6 +55,11 @@ final class UpdateUser extends Update {
         "personalSchedules": FieldValue.arrayUnion(latestVersion),
       });
 
+  static Future<void> updateProjectInvitations(String id, List<String> latestVersion) =>
+      FirebaseFirestoreConfigs.userActivitiesCollection.doc(id).update({
+        "projectInvitations": FieldValue.arrayUnion(latestVersion),
+      });
+
   static Future<void> removeProjects(String id, List<String> removedItems) =>
       FirebaseFirestoreConfigs.userActivitiesCollection.doc(id).update({
         "projects": FieldValue.arrayRemove(removedItems),
@@ -73,5 +78,10 @@ final class UpdateUser extends Update {
   static Future<void> removePersonalSchedule(String id, List<String> removedItems) =>
       FirebaseFirestoreConfigs.userActivitiesCollection.doc(id).update({
         "personalSchedules": FieldValue.arrayRemove(removedItems),
+      });
+
+  static Future<void> removeProjectInvitations(String id, List<String> removedItems) =>
+      FirebaseFirestoreConfigs.userActivitiesCollection.doc(id).update({
+        "projectInvitations": FieldValue.arrayRemove(removedItems),
       });
 }

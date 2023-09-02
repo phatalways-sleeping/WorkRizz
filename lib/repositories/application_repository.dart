@@ -102,6 +102,53 @@ class ApplicationRepository {
   Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
   Stream<SubTaskModel> subTaskStream(String subTaskId) =>
       _storageAPI.subTaskModelStream(subTaskId);
+  Stream<List<String>> projectInvitationStream() => _storageAPI
+      .userStreamByIdInUser(userId)
+      .map((event) => event.projectInvitations);
+  // User Online Status
+  Future<void> updateUserActivity(bool isActive) =>
+      _storageAPI.updateUserActivity(
+        userId,
+        isActive,
+        DateTime.now(),
+      );
+  // Project Invitation
+  Future<void> acceptProjectInvitation({
+    required String ofProjectId,
+    required bool isLeader,
+  }) async {
+    await Future.wait<void>(
+      [
+        _storageAPI.removeProjectInvitationsInUser(userId, [ofProjectId]),
+        if (isLeader) ...[
+          _storageAPI.updateLeaderProjectsInUser(userId, 1),
+          _storageAPI.updateLeaderInProject(ofProjectId, userId),
+        ] else ...[
+          _storageAPI.updateOnGoingProjectsInUser(userId, 1),
+          _storageAPI.updateAssigneesInProject(ofProjectId, [userId]),
+        ]
+      ],
+    );
+  }
+
+  Future<void> rejectProjectInvitation({
+    required String ofProjectId,
+    required bool isLeader,
+  }) async {
+    await Future.wait<void>(
+      [
+        _storageAPI.removeProjectInvitationsInUser(userId, [ofProjectId]),
+        if (isLeader) ...[
+          // _storageAPI.updateLeaderProjectsInUser(userId, 1),
+          // _storageAPI.updateLeaderInProject(ofProjectId, userId),
+        ] else ...[
+          // _storageAPI.updateOnGoingProjectsInUser(userId, 1),
+          // _storageAPI.updateAssigneesInProject(ofProjectId, [userId]),
+        ]
+      ],
+    );
+  }
+
   // Projects Screen
   Future<String> createNewProject({
     required String name,
@@ -122,29 +169,31 @@ class ApplicationRepository {
       tags: tags,
       startDate: startDate,
       endDate: endDate,
-      leader: leader,
-      assignees: assignees,
+      leader: "",
+      assignees: const [],
       mostActiveMemebers: const [],
       thread: threadId,
     );
     final thread = ThreadModel(id: threadId, messages: const []);
-    await Future.wait<void>([
-      // Create project in collection
-      _storageAPI.createNewProject(project),
-      // Create thread in collection
-      _storageAPI.createNewThread(thread),
-      // Add this project id to leader and assignees' project
-      _storageAPI.updateProjectsInUser(leader, [projectId]),
-      Future<void>(
-        () {
-          for (var assignee in assignees) {
-            _storageAPI.updateProjectsInUser(assignee, [projectId]);
-          }
-        },
-      ),
-      // Archive the project setup for later usage
-      _archiveLatestProjectSetup(project),
-    ]);
+    await Future.wait<void>(
+      [
+        // Create project in collection
+        _storageAPI.createNewProject(project),
+        // Create thread in collection
+        _storageAPI.createNewThread(thread),
+        // send invitations to leader and assignees
+        _storageAPI.updateProjectInvitationsInUser(leader, [projectId]),
+        Future<void>(
+          () {
+            for (var assignee in assignees) {
+              _storageAPI.updateProjectInvitationsInUser(assignee, [projectId]);
+            }
+          },
+        ),
+        // Archive the project setup for later usage
+        _archiveLatestProjectSetup(project),
+      ],
+    );
     return projectId;
   }
 

@@ -21,6 +21,9 @@ class ProjectTagWidget extends StatelessWidget {
         horizontal: context.mediaQuery.size.width * RATIO_PADDING,
         vertical: 2.0,
       ),
+      margin: const EdgeInsets.only(
+        right: 10.0,
+      ),
       decoration: ShapeDecoration(
         color: context.colorScheme.error,
         shape: RoundedRectangleBorder(

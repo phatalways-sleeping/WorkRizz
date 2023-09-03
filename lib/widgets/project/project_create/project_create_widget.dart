@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
-import 'package:task_managing_application/widgets/authentication/components.dart';
+import 'package:task_managing_application/widgets/custom_util_components/custom_circular_progress.dart';
 import 'package:task_managing_application/widgets/project/project_create/date_input.dart';
 import 'package:task_managing_application/widgets/project/project_create/members_adder.dart';
+import 'package:task_managing_application/widgets/project/project_create/name_input.dart';
 import 'package:task_managing_application/widgets/project/project_create/tags_adder.dart';
 
 class ProjectCreateWidget extends StatefulWidget {
@@ -24,8 +25,6 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
   late final Animation<double> _animation =
       CurvedAnimation(parent: _animationController, curve: Curves.decelerate);
 
-  late final TextEditingController _titleController = TextEditingController();
-
   @override
   void initState() {
     _animationController.forward();
@@ -35,7 +34,6 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
   @override
   void dispose() {
     _animationController.dispose();
-    _titleController.dispose();
     super.dispose();
   }
 
@@ -153,11 +151,7 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
             SizedBox(
               height: context.mediaQuery.size.height * RATIO_PADDING,
             ),
-            CustomInputField(
-              label: "Title",
-              controller: _titleController,
-              keyboardType: TextInputType.text,
-            ),
+            const NameInput(),
             SizedBox(
               height: context.mediaQuery.size.height * RATIO_PADDING * 0.5,
             ),
@@ -165,17 +159,31 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
             SizedBox(
               height: context.mediaQuery.size.height * RATIO_PADDING * 0.5,
             ),
-            const Row(
+            Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DateInputWidget(
                   text: "Start date",
+                  execute: (context, input) => context
+                      .read<ProjectBloc>()
+                      .add(ProjectInputStartDate(input)),
                 ),
-                Spacer(),
-                DateInputWidget(
-                  text: "End date",
+                const Spacer(),
+                BlocSelector<ProjectBloc, ProjectState, DateTime>(
+                  selector: (state) => (state as ProjectUserCreateAndSubscribe)
+                      .newProjectSetup
+                      .startDate,
+                  builder: (context, state) {
+                    return DateInputWidget(
+                      startFrom: state,
+                      text: "End date",
+                      execute: (context, input) => context
+                          .read<ProjectBloc>()
+                          .add(ProjectInputEndDate(input)),
+                    );
+                  },
                 ),
               ],
             ),
@@ -199,34 +207,62 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
             SizedBox(
               height: context.mediaQuery.size.height * RATIO_PADDING * 0.5,
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: context.mediaQuery.size.width * 0.9,
-                padding: EdgeInsets.symmetric(
-                  vertical: context.mediaQuery.size.height * RATIO_MARGIN * 0.2,
-                ),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  color: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                alignment: Alignment.center,
-                child: DefaultTextStyle.merge(
-                  style: context.textTheme.bodyLarge,
-                  child: const Text(
-                    'Done',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
+            BlocBuilder<ProjectBloc, ProjectState>(
+              builder: (context, state) {
+                if (state is ProjectUserCreateAndSubscribeLoading) {
+                  return CustomCircularProgressIndicator(
+                    color: context.colorScheme.primary,
+                    size: 25.0,
+                  );
+                }
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ElevatedButton(
+                    onPressed: () => context.read<ProjectBloc>().add(
+                          ProjectRequestToCreate(context),
+                        ),
+                    style: ButtonStyle(
+                      padding: MaterialStatePropertyAll(
+                        EdgeInsets.symmetric(
+                          vertical: context.mediaQuery.size.height *
+                              RATIO_MARGIN *
+                              0.2,
+                        ),
+                      ),
+                      shape: MaterialStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      backgroundColor: const MaterialStatePropertyAll(
+                        Colors.black,
+                      ),
+                      overlayColor: MaterialStatePropertyAll(
+                        context.colorScheme.primary,
+                      ),
+                      alignment: Alignment.center,
+                      fixedSize: MaterialStatePropertyAll(
+                        Size(
+                          context.mediaQuery.size.width * 0.9,
+                          context.mediaQuery.size.height * 0.05,
+                        ),
+                      ),
+                    ),
+                    child: DefaultTextStyle.merge(
+                      style: context.textTheme.bodyLarge,
+                      child: const Text(
+                        'Done',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             )
           ],
         ),

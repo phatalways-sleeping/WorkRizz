@@ -109,6 +109,53 @@ final class ProjectUserCreateAndSubscribe extends ProjectUserSubscription {
       );
 }
 
+final class ProjectUserCreateAndSubscribeLoading
+    extends ProjectUserCreateAndSubscribe {
+  const ProjectUserCreateAndSubscribeLoading({
+    required super.username,
+    required super.onGoingProjectsNumber,
+    required super.leaderProjectsNumber,
+    required super.completedProjectsNumber,
+    required super.projects,
+    required super.filterStatus,
+    required super.newProjectSetup,
+  });
+
+  factory ProjectUserCreateAndSubscribeLoading.from(
+          ProjectUserCreateAndSubscribe state) =>
+      ProjectUserCreateAndSubscribeLoading(
+        username: state.username,
+        onGoingProjectsNumber: state.onGoingProjectsNumber,
+        leaderProjectsNumber: state.leaderProjectsNumber,
+        completedProjectsNumber: state.completedProjectsNumber,
+        projects: state.projects,
+        filterStatus: state.filterStatus,
+        newProjectSetup: state.newProjectSetup,
+      );
+
+  @override
+  ProjectUserCreateAndSubscribeLoading copyWith({
+    String? username,
+    int? leaderProjectsNumber,
+    int? onGoingProjectsNumber,
+    int? completedProjectsNumber,
+    List<String>? projects,
+    FilterStatus? filterStatus,
+    Project? newProjectSetup,
+  }) =>
+      ProjectUserCreateAndSubscribeLoading(
+        username: username ?? this.username,
+        onGoingProjectsNumber:
+            onGoingProjectsNumber ?? this.onGoingProjectsNumber,
+        leaderProjectsNumber: leaderProjectsNumber ?? this.leaderProjectsNumber,
+        completedProjectsNumber:
+            completedProjectsNumber ?? this.completedProjectsNumber,
+        projects: projects ?? this.projects,
+        filterStatus: filterStatus ?? this.filterStatus,
+        newProjectSetup: newProjectSetup ?? this.newProjectSetup,
+      );
+}
+
 final class ProjectError extends ProjectState {
   const ProjectError();
 }

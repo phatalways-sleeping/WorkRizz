@@ -5,11 +5,15 @@ class DateInputWidget extends StatefulWidget {
   const DateInputWidget({
     super.key,
     required this.text,
+    required this.execute,
+    this.startFrom,
     this.restorationId,
   });
 
   final String? restorationId;
   final String text;
+  final void Function(BuildContext, DateTime) execute;
+  final DateTime? startFrom;
 
   @override
   State<DateInputWidget> createState() => _DateInputWidgetState();
@@ -61,7 +65,36 @@ class _DateInputWidgetState extends State<DateInputWidget>
   void _selectDate(DateTime? newSelectedDate) {
     if (newSelectedDate != null) {
       setState(() {
-        _selectedDate.value = newSelectedDate;
+        if (widget.startFrom == null ||
+            (newSelectedDate.difference(widget.startFrom!).inDays > 0)) {
+          _selectedDate.value = newSelectedDate;
+          widget.execute(context, newSelectedDate);
+        } else if (newSelectedDate.difference(widget.startFrom!).inDays < 0) {
+          context.scaffoldMessenger.showSnackBar(
+            SnackBar(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  25.0,
+                ),
+              ),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 10.0,
+              ),
+              behavior: SnackBarBehavior.floating,
+              showCloseIcon: true,
+              closeIconColor: context.colorScheme.onSecondary,
+              backgroundColor: context.colorScheme.error,
+              content: DefaultTextStyle.merge(
+                style: context.textTheme.bodySmall,
+                child: const Text(
+                  "End date must be greater than start date!",
+                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                ),
+              ),
+            ),
+          );
+        }
       });
     }
   }

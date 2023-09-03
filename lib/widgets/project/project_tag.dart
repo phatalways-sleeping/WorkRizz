@@ -9,12 +9,16 @@ class ProjectTagButton extends StatelessWidget {
     required this.onTap,
     required this.isSelected,
     required this.suffixBackgroundColor,
+    this.height,
+    this.width,
   });
 
   final Widget title;
   final Color suffixBackgroundColor;
   final int amount;
   final bool isSelected;
+  final double? height;
+  final double? width;
   final void Function(BuildContext context) onTap;
 
   @override
@@ -32,8 +36,8 @@ class ProjectTagButton extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints.loose(
           Size(
-            context.mediaQuery.size.width * 0.35,
-            context.mediaQuery.size.height * 0.18,
+            width?? context.mediaQuery.size.width * 0.35,
+            height?? context.mediaQuery.size.height * 0.18,
           ),
         ),
         padding: EdgeInsets.symmetric(

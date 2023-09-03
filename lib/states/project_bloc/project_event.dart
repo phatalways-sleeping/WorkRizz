@@ -21,3 +21,17 @@ final class ProjectFilterEvent extends ProjectEvent {
         filterStatus,
       ];
 }
+
+final class ProjectCreateNewOne extends ProjectEvent {
+  const ProjectCreateNewOne();
+}
+
+final class ProjectCloseCreateNewOne extends ProjectEvent {
+  const ProjectCloseCreateNewOne();
+}
+
+final class ProjectRetrieveLatestSetup extends ProjectEvent {
+  const ProjectRetrieveLatestSetup(this.context);
+
+  final BuildContext context;
+}

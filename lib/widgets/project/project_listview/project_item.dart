@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:avatar_stack/avatar_stack.dart';
-import 'package:avatar_stack/positions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_managing_application/assets/assets.dart';
@@ -80,7 +79,14 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
               child: Container(
                 width: context.mediaQuery.size.width * 0.95,
                 height: context.mediaQuery.size.height * 0.2,
-                decoration: const BoxDecoration(color: Colors.black),
+                decoration: const BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      25.0,
+                    ),
+                  ),
+                ),
               ),
             ),
           );
@@ -106,26 +112,54 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                   .add(ProjectItemFilterEvent(state.filterStatus));
             }
           },
-          child: Container(
-            constraints: BoxConstraints.expand(
-              width: context.mediaQuery.size.width * 0.98,
-              height: context.mediaQuery.size.height * 0.2,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: context.mediaQuery.size.width * RATIO_PADDING,
-              vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.4,
-            ),
-            decoration: ShapeDecoration(
-              color: (state is ProjectItemSuccess)
-                  ? context.colorScheme.onPrimary
-                  : (state as ProjectItemSuccessWithFilterStatus).filterColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0),
-                side: BorderSide(
-                  color: context.colorScheme.onSecondary,
-                  width: 1.50,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ButtonStyle(
+              padding: MaterialStatePropertyAll(
+                EdgeInsets.symmetric(
+                  horizontal: context.mediaQuery.size.width * RATIO_PADDING,
+                  vertical:
+                      context.mediaQuery.size.height * RATIO_PADDING * 0.4,
                 ),
               ),
+              maximumSize: MaterialStatePropertyAll(
+                Size(
+                  context.mediaQuery.size.width,
+                  context.mediaQuery.size.height * 0.2,
+                ),
+              ),
+              backgroundColor: MaterialStatePropertyAll(
+                (state is ProjectItemSuccess)
+                    ? context.colorScheme.onPrimary
+                    : (state as ProjectItemSuccessWithFilterStatus).filterColor,
+              ),
+              shape: MaterialStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  side: BorderSide(
+                    color: context.colorScheme.onSecondary,
+                    width: 1.50,
+                  ),
+                ),
+              ),
+              elevation: MaterialStateProperty.resolveWith(
+                (states) => states.isPressed ? 10.0 : 4.0,
+              ),
+              overlayColor: MaterialStatePropertyAll(
+                context.colorScheme.secondary,
+              ),
+              splashFactory: InkSparkle.splashFactory,
+              animationDuration: const Duration(
+                seconds: 2,
+              ),
+              tapTargetSize: MaterialTapTargetSize.padded,
+              iconSize: const MaterialStatePropertyAll(
+                25.0,
+              ),
+              iconColor: MaterialStatePropertyAll(
+                context.colorScheme.onSecondary,
+              ),
+              alignment: Alignment.center,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -151,10 +185,9 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                       ),
                     ),
                     const Spacer(),
-                    Icon(
+                    const Icon(
                       Icons.more_horiz_rounded,
                       size: 25.0,
-                      color: context.colorScheme.onSecondary,
                     )
                   ],
                 ),
@@ -207,9 +240,8 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.date_range_rounded,
-                      color: context.colorScheme.onSecondary,
                       size: 25.0,
                     ),
                     const SizedBox(
@@ -232,9 +264,8 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                       ),
                     ),
                     const Spacer(),
-                    Icon(
+                    const Icon(
                       Icons.link_rounded,
-                      color: context.colorScheme.onSecondary,
                       size: 25.0,
                     ),
                     const SizedBox(
@@ -257,9 +288,8 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                       ),
                     ),
                     const Spacer(),
-                    Icon(
+                    const Icon(
                       Icons.message_rounded,
-                      color: context.colorScheme.onSecondary,
                       size: 25.0,
                     ),
                     const SizedBox(

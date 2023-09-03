@@ -38,13 +38,19 @@ class CustomInputField extends StatelessWidget {
         hintText: hintText,
         labelStyle: context.textTheme.bodyMedium?.copyWith(
           color: context.colorScheme.onSurface,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         floatingLabelStyle: context.textTheme.bodyLarge?.copyWith(
           color: context.colorScheme.onSurface,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
         hintStyle: context.textTheme.bodyMedium?.copyWith(
           color: context.colorScheme.onSurface,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
         contentPadding: EdgeInsets.symmetric(
           vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.4,

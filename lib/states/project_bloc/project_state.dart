@@ -67,6 +67,48 @@ final class ProjectUserSubscription extends ProjectState {
       );
 }
 
+final class ProjectUserCreateAndSubscribe extends ProjectUserSubscription {
+  const ProjectUserCreateAndSubscribe({
+    required super.username,
+    required super.onGoingProjectsNumber,
+    required super.leaderProjectsNumber,
+    required super.completedProjectsNumber,
+    required super.projects,
+    required super.filterStatus,
+    required this.newProjectSetup,
+  });
+
+  final Project newProjectSetup;
+
+  @override
+  List<Object> get props => [
+        ...super.props,
+        newProjectSetup,
+      ];
+
+  @override
+  ProjectUserCreateAndSubscribe copyWith({
+    String? username,
+    int? leaderProjectsNumber,
+    int? onGoingProjectsNumber,
+    int? completedProjectsNumber,
+    List<String>? projects,
+    FilterStatus? filterStatus,
+    Project? newProjectSetup,
+  }) =>
+      ProjectUserCreateAndSubscribe(
+        username: username ?? this.username,
+        onGoingProjectsNumber:
+            onGoingProjectsNumber ?? this.onGoingProjectsNumber,
+        leaderProjectsNumber: leaderProjectsNumber ?? this.leaderProjectsNumber,
+        completedProjectsNumber:
+            completedProjectsNumber ?? this.completedProjectsNumber,
+        projects: projects ?? this.projects,
+        filterStatus: filterStatus ?? this.filterStatus,
+        newProjectSetup: newProjectSetup ?? this.newProjectSetup,
+      );
+}
+
 final class ProjectError extends ProjectState {
   const ProjectError();
 }

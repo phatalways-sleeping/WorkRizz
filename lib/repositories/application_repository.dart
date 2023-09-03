@@ -210,7 +210,7 @@ class ApplicationRepository {
   Future<Project?> retrieveLatestProjectSetup() async {
     Future<SharedPreferences> sharedPreferences =
         SharedPreferences.getInstance();
-    late Project? project;
+    Project? project;
     await sharedPreferences.then((value) {
       if (value.containsKey("latestProjectSetup")) {
         project = Project.fromJson(

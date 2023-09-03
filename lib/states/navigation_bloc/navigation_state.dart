@@ -43,3 +43,7 @@ final class Settings extends NavigationState {
 final class Splash extends NavigationState {
   const Splash();
 }
+
+final class ProjectDetail extends NavigationState {
+  const ProjectDetail();
+}

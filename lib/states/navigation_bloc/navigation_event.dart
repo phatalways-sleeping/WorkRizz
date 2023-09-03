@@ -36,6 +36,15 @@ final class NavigateToProjectsList extends NavigationEvent {
   const NavigateToProjectsList();
 }
 
+final class NavigateToProjectView extends NavigationEvent {
+  const NavigateToProjectView(this.projectId);
+
+  final String projectId;
+
+  @override
+  List<Object> get props => [...super.props, projectId];
+}
+
 final class NavigateToAssistant extends NavigationEvent {
   const NavigateToAssistant();
 }

@@ -20,9 +20,15 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  ApplicationRepository.repository.userId = "20230831-0517-8130-8211-a9c1dfa3e677";
+  ApplicationRepository.repository.userId =
+      "20230831-0517-8130-8211-a9c1dfa3e677";
 
-  runApp(const MyApp());
+  runApp(
+    RepositoryProvider(
+      create: (context) => ApplicationRepository.repository,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -32,17 +38,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => ApplicationRepository.repository,
-      child: MaterialApp(
-        restorationScopeId: 'app',
-        debugShowCheckedModeBanner: false,
-        title: 'Task Managing Application',
-        theme: LightTheme.theme,
-        home: BlocProvider(
-          create: (context) => NavigationBloc(),
-          child: const AppFlow(),
-        ),
+    return MaterialApp(
+      restorationScopeId: 'app',
+      debugShowCheckedModeBanner: false,
+      title: 'Task Managing Application',
+      theme: LightTheme.theme,
+      home: BlocProvider(
+        create: (context) =>
+            NavigationBloc(context.read<ApplicationRepository>()),
+        child: const AppFlow(),
       ),
     );
   }
@@ -118,6 +122,15 @@ class AppFlow extends StatelessWidget {
               create: (context) =>
                   ProjectBloc(context.read<ApplicationRepository>()),
               child: const ProjectScreen(),
+            ),
+          ),
+        if (state is ProjectDetail)
+          const MaterialPage(
+            child: BaseScreen(
+              child: SizedBox(
+                height: 700,
+                width: double.infinity,
+              ),
             ),
           ),
         if (state is Assistant)

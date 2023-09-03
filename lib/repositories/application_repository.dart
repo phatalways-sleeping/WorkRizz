@@ -32,6 +32,7 @@ class ApplicationRepository {
 
   String? latestAuthenticatedEmail;
   late String userId;
+  late String projectIdOnView;
 
   Future<void> login(String email, String password) async {
     await _authenticationAPI.login(email, password).then((value) async {

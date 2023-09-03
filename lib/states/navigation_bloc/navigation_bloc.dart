@@ -5,22 +5,29 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:task_managing_application/repositories/application_repository.dart';
 
 part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc() : super(const ProjectsList()) {
+  NavigationBloc(this._applicationRepository) : super(const ProjectsList()) {
     on<NavigateToSplash>((event, emit) => emit(const Splash()));
     on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
     on<NavigateToAuthentication>(_navigateToAuthentication);
     on<NavigateToProjectsList>(_onNavigateToProjectsList);
+    on<NavigateToProjectView>((event, emit) {
+      _applicationRepository.projectIdOnView = event.projectId;
+      emit(const ProjectDetail());
+    });
     on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
   }
+
+  final ApplicationRepository _applicationRepository;
 
   Future<void> _onNavigateToTestComponents(
     NavigateToTestComponents event,

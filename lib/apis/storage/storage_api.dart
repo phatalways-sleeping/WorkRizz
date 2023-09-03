@@ -100,14 +100,18 @@ sealed class StorageAPI {
   // - Project
   Future<void> updateAssigneesInProject(String id, List<String> latestVersion);
   Future<void> removeAssigneesInProject(String id, List<String> removedItems);
+  Future<void> updateAssigneeImageUrlsInProject(String id, List<String> latestVersion);
+  Future<void> removeAssigneeImageUrlsInProject(String id, List<String> removedItems);
   Future<void> updateTasksCompletedInProject(String id, int tasksCompleted);
   Future<void> updateActivitiesCompletedInProject(
       String id, int activitiesCompleted);
   Future<void> updateTotalActivitiesInProject(String id, int totalActivities);
+  Future<void> updateTotalFileLinksInProject(String id, int totalFileLinks);
   Future<void> updateIsCompletedInProject(String id, bool isCompleted);
   Future<void> updateStartDateInProject(String id, DateTime startDate);
   Future<void> updateEndDateInProject(String id, DateTime endDate);
   Future<void> updateLeaderInProject(String id, String leader);
+  Future<void> updateLeaderImageUrlInProject(String id, String leaderImageUrl);
   Future<void> updateMostActiveMembersInProject(
       String id, List<String> latestVersion);
   Future<void> removeMostActiveMembersInProject(

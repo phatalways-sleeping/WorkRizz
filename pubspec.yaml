@@ -28,6 +28,7 @@ dependencies:
   async: ^2.11.0
   firebase_storage: ^11.2.6
   badges: ^3.1.2
+  avatar_stack: ^1.2.0
 
 dev_dependencies:
   flutter_test:

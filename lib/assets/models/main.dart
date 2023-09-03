@@ -9,6 +9,8 @@ import 'package:task_managing_application/firebase_options.dart';
 import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:uuid/v8.dart';
 
+import 'project/project_data.dart';
+
 const String path = 'lib/assets/models/';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,8 +18,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  ApplicationRepository.repository.userId =
-      "20230831-0517-8230-a202-0089f860b83a";
+  // ApplicationRepository.repository.userId =
+  //     "20230831-0517-8230-a202-0089f860b83a";
 
   // for (var user in userDataList) {
   //   await FirebaseFirestoreConfigs.usersCollection
@@ -71,11 +73,11 @@ Future<void> main() async {
   //       .set(comment.toJson());
   // }
 
-  // for (var project in projectList) {
-  //   await FirebaseFirestoreConfigs.projectsCollection
-  //       .doc(project.id)
-  //       .set(project.toJson());
-  // }
+  for (var project in projectList) {
+    await FirebaseFirestoreConfigs.projectsCollection
+        .doc(project.id)
+        .set(project.toJson());
+  }
 
   // for (var schedule in scheduleList) {
   //   await FirebaseFirestoreConfigs.personalScheduleCollection
@@ -83,7 +85,7 @@ Future<void> main() async {
   //       .set(schedule.toJson());
   // }
 
-  runApp(const MyApp());
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {

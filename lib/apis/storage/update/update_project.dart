@@ -16,6 +16,16 @@ final class UpdateProject extends Update {
         "assignees": FieldValue.arrayRemove(removedItems),
       });
 
+  static Future<void> updateAssigneeImageUrls(String id, List<String> latestVersion) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "assigneeImageUrls": FieldValue.arrayUnion(latestVersion),
+      });
+
+  static Future<void> removeAssigneeImageUrls(String id, List<String> removedItems) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "assigneeImageUrls": FieldValue.arrayRemove(removedItems),
+      });
+
   static Future<void> updateTasksCompleted(String id, int increase) =>
       FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "tasksCompleted": FieldValue.increment(increase),
@@ -30,6 +40,11 @@ final class UpdateProject extends Update {
   static Future<void> updateTotalActivities(String id, int increase) =>
       FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "totalActivities": FieldValue.increment(increase),
+      });
+
+  static Future<void> updateTotalFileLinks(String id, int increase) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "totalFileLinks": FieldValue.increment(increase),
       });
 
   static Future<void> updateIsCompleted(String id, bool isCompleted) =>
@@ -50,6 +65,11 @@ final class UpdateProject extends Update {
   static Future<void> updateLeader(String id, String leader) =>
       FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
         "leader": leader,
+      });
+
+  static Future<void> updateLeaderImageUrl(String id, String leaderImageUrl) =>
+      FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
+        "leaderImageUrl": leaderImageUrl,
       });
 
   static Future<void> updateMostActiveMembers(

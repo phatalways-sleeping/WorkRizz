@@ -9,7 +9,14 @@ part of 'project.dart';
 Project _$ProjectFromJson(Map<String, dynamic> json) {
   $checkKeys(
     json,
-    requiredKeys: const ['name', 'startDate', 'endDate', 'leader', 'thread'],
+    requiredKeys: const [
+      'name',
+      'startDate',
+      'endDate',
+      'leader',
+      'leaderImageUrl',
+      'thread'
+    ],
   );
   return Project(
     reference: _$JsonConverterFromJson<DocumentReference<Object?>,
@@ -27,7 +34,12 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
     startDate: const DateTimeSerializer().fromJson(json['startDate'] as String),
     endDate: const DateTimeSerializer().fromJson(json['endDate'] as String),
     leader: json['leader'] as String,
+    leaderImageUrl: json['leaderImageUrl'] as String,
     assignees: (json['assignees'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
+    assigneeImageUrls: (json['assigneeImageUrls'] as List<dynamic>?)
             ?.map((e) => e as String)
             .toList() ??
         [],
@@ -40,6 +52,7 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
     tasksCompleted: json['tasksCompleted'] as int? ?? 0,
     activitiesCompleted: json['activitiesCompleted'] as int? ?? 0,
     totalActivities: json['totalActivities'] as int? ?? 0,
+    totalFileLinks: json['totalFileLinks'] as int? ?? 0,
   );
 }
 
@@ -54,13 +67,16 @@ Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
       'endDate': const DateTimeSerializer().toJson(instance.endDate),
       'tasks': instance.tasks,
       'leader': instance.leader,
+      'leaderImageUrl': instance.leaderImageUrl,
       'assignees': instance.assignees,
+      'assigneeImageUrls': instance.assigneeImageUrls,
       'mostActiveMemebers': instance.mostActiveMemebers,
       'thread': instance.thread,
       'isCompleted': instance.isCompleted,
       'tasksCompleted': instance.tasksCompleted,
       'activitiesCompleted': instance.activitiesCompleted,
       'totalActivities': instance.totalActivities,
+      'totalFileLinks': instance.totalFileLinks,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

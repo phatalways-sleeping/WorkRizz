@@ -32,13 +32,16 @@ class Project extends Base {
     required this.startDate,
     required this.endDate,
     required this.leader,
+    required this.leaderImageUrl,
     required this.assignees,
+    required this.assigneeImageUrls,
     required this.mostActiveMemebers,
     required this.thread,
     this.isCompleted = false,
     this.tasksCompleted = 0,
     this.activitiesCompleted = 0,
     this.totalActivities = 0,
+    this.totalFileLinks = 0,
   });
 
   factory Project.fromJson(Map<String, dynamic> json) =>
@@ -58,8 +61,12 @@ class Project extends Base {
   final List<String> tasks;
   @JsonKey(required: true)
   final String leader;
+  @JsonKey(required: true)
+  final String leaderImageUrl;
   @JsonKey(defaultValue: [])
   final List<String> assignees;
+  @JsonKey(defaultValue: [])
+  final List<String> assigneeImageUrls;
   @JsonKey(defaultValue: [])
   final List<String> mostActiveMemebers;
   @JsonKey(required: true)
@@ -72,6 +79,8 @@ class Project extends Base {
   final int activitiesCompleted;
   @JsonKey(defaultValue: 0)
   final int totalActivities;
+  @JsonKey(defaultValue: 0)
+  final int totalFileLinks;
 
   @override
   List<Object> get props => [
@@ -89,6 +98,9 @@ class Project extends Base {
         totalActivities,
         tasksCompleted,
         activitiesCompleted,
+        leaderImageUrl,
+        assigneeImageUrls,
+        totalFileLinks,
       ];
 
   Project copyWith({
@@ -107,6 +119,9 @@ class Project extends Base {
     int? totalActivities,
     int? tasksCompleted,
     int? activitiesCompleted,
+    String? leaderImageUrl,
+    List<String>? assigneeImageUrls,
+    int? totalFileLinks,
   }) {
     return Project(
       reference: reference ?? this.reference,
@@ -117,13 +132,16 @@ class Project extends Base {
       endDate: endDate ?? this.endDate,
       tasks: tasks ?? this.tasks,
       leader: leader ?? this.leader,
+      leaderImageUrl: leaderImageUrl ?? this.leaderImageUrl,
       assignees: assignees ?? this.assignees,
+      assigneeImageUrls: assigneeImageUrls ?? this.assigneeImageUrls,
       mostActiveMemebers: mostActiveMemebers ?? this.mostActiveMemebers,
       thread: thread ?? this.thread,
       isCompleted: isCompleted ?? this.isCompleted,
-      totalActivities: totalActivities?? this.totalActivities,
-      tasksCompleted: tasksCompleted?? this.tasksCompleted,
-      activitiesCompleted: activitiesCompleted?? this.activitiesCompleted,
+      totalActivities: totalActivities ?? this.totalActivities,
+      tasksCompleted: tasksCompleted ?? this.tasksCompleted,
+      activitiesCompleted: activitiesCompleted ?? this.activitiesCompleted,
+      totalFileLinks: totalFileLinks ?? this.totalFileLinks,
     );
   }
 }

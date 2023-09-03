@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 
 part 'project_event.dart';
@@ -33,6 +34,14 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       ),
     );
   }
+
+  Stream<Project> Function(String) get projectStream =>
+      _applicationRepository.projectStream;
+
+  String get userId => _applicationRepository.userId;
+
+  Future<String> Function(String) get imageFuture =>
+      _applicationRepository.imageUrlOnStorageOf;
 
   final ApplicationRepository _applicationRepository;
 }

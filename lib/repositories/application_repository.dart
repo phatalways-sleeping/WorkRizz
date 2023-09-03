@@ -170,7 +170,9 @@ class ApplicationRepository {
       startDate: startDate,
       endDate: endDate,
       leader: "",
+      leaderImageUrl: "",
       assignees: const [],
+      assigneeImageUrls: const [],
       mostActiveMemebers: const [],
       thread: threadId,
     );

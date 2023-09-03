@@ -5,7 +5,7 @@ const user1 = UserDataModel(
   id: '20230831-0517-8230-a202-0089f860b83a',
   username: 'Matthew Wilson',
   email: 'matwil@gmail.com',
-  imageUrl: "avatars/20230831-0517-8230-a202-0089f860b83a.jpg",
+  imageUrl: "avatars/avatar_1.jpg",
   subTasks: [
     '20230831-0437-8e17-8620-28c58df16111', // instance 1
     '20230831-0437-8217-9632-e267d2883df8', // instance 4
@@ -37,7 +37,7 @@ const user2 = UserDataModel(
   id: '20230831-0517-8130-8211-a9c1dfa3e677',
   username: 'Jane Smith',
   email: 'jane@example.com',
-  imageUrl: 'avatars/20230831-0517-8130-8211-a9c1dfa3e677.jfif',
+  imageUrl: 'avatars/avatar_4.jpg',
   subTasks: [
     '20230831-0437-8e17-b631-eb6dfab9622e', // instance 2
     '20230831-0437-8717-8631-730781d020f9', // instance 3

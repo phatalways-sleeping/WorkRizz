@@ -4,6 +4,7 @@ import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
+import 'package:task_managing_application/widgets/project/project_listview/project_listview.dart';
 import 'package:task_managing_application/widgets/project/project_tags_scrollview.dart';
 import 'package:task_managing_application/widgets/widgets.dart'
     show CustomCircularProgressIndicator;
@@ -65,6 +66,14 @@ class _ProjectViewState extends State<ProjectView> {
                 sliver: const SliverToBoxAdapter(
                   child: ProjectTagsScrollView(),
                 ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal:
+                      context.mediaQuery.size.width * RATIO_PADDING + 5.0,
+                  vertical: context.mediaQuery.size.height * RATIO_MARGIN * 0.5,
+                ),
+                sliver: const ProjectListView(),
               )
             ],
           ),

@@ -524,4 +524,28 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
     // TODO: implement updateProjectInvitationsInUser
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> removeAssigneeImageUrlsInProject(String id, List<String> removedItems) {
+    // TODO: implement removeAssigneeImageUrlsInProject
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateAssigneeImageUrlsInProject(String id, List<String> latestVersion) {
+    // TODO: implement updateAssigneeImageUrlsInProject
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateLeaderImageUrlInProject(String id, String leaderImageUrl) {
+    // TODO: implement updateLeaderImageUrlInProject
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateTotalFileLinksInProject(String id, int totalFileLinks) {
+    // TODO: implement updateTotalFileLinksInProject
+    throw UnimplementedError();
+  }
 }

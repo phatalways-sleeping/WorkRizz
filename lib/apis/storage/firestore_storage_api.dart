@@ -187,6 +187,13 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> removeAssigneesInProject(String id, List<String> removedItems) =>
       UpdateProject.removeAssignees(id, removedItems);
   @override
+  Future<void> updateAssigneeImageUrlsInProject(
+          String id, List<String> latestVersion) =>
+      UpdateProject.updateAssigneeImageUrls(id, latestVersion);
+  @override
+  Future<void> removeAssigneeImageUrlsInProject(String id, List<String> removedItems) =>
+      UpdateProject.removeAssignees(id, removedItems);
+  @override
   Future<void> updateTasksCompletedInProject(String id, int tasksCompleted) =>
       UpdateProject.updateTasksCompleted(id, tasksCompleted);
   @override
@@ -196,6 +203,9 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> updateTotalActivitiesInProject(String id, int totalActivities) =>
       UpdateProject.updateTotalActivities(id, totalActivities);
+  @override
+  Future<void> updateTotalFileLinksInProject(String id, int totalFileLinks) =>
+      UpdateProject.updateTotalFileLinks(id, totalFileLinks);
   @override
   Future<void> updateIsCompletedInProject(String id, bool isCompleted) =>
       UpdateProject.updateIsCompleted(id, isCompleted);
@@ -208,6 +218,9 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> updateLeaderInProject(String id, String leader) =>
       UpdateProject.updateLeader(id, leader);
+  @override
+  Future<void> updateLeaderImageUrlInProject(String id, String leaderImageUrl) =>
+      UpdateProject.updateLeaderImageUrl(id, leaderImageUrl);
   @override
   Future<void> updateMostActiveMembersInProject(
           String id, List<String> latestVersion) =>

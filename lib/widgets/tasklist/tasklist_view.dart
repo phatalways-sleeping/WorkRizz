@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/models/task/task.dart';
@@ -21,28 +20,6 @@ part 'progress.dart';
 part 'subtask.dart';
 part 'list_tag.dart';
 part 'list_subtask.dart';
-
-// Scaffold(
-//       body: SafeArea(
-//         child: CustomScrollView(
-//           slivers: [
-//             SliverPersistentHeader(
-//               pinned: true,
-//               delegate: CustomHeaderBar(
-//                   upperChild:
-//                       const Icon(Icons.arrow_back_outlined, color: BLACK),
-//                   bottomChild: Text("Mobile Final")),
-//             ),
-//             SliverToBoxAdapter(
-//               child: TaskListView(
-
-//                   task: instance1),
-//             ),
-//           ],
-//         ),
-//       ),
-//       extendBody: true,
-//     );
 
 class TaskListView extends StatefulWidget {
   const TaskListView({super.key, required this.task, required this.imageUrl});

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 const TextStyle displayLarge = TextStyle(
   fontSize: 96,
   fontWeight: FontWeight.w300,
-  letterSpacing: -1.5,
+  letterSpacing: 0.25,
 );
 const TextStyle displayMedium = TextStyle(
   fontSize: 60,
   fontWeight: FontWeight.w300,
-  letterSpacing: -0.5,
+  letterSpacing: 0.25,
 );
 const TextStyle displaySmall = TextStyle(
   fontSize: 48,

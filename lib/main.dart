@@ -11,6 +11,7 @@ import 'package:task_managing_application/states/authentication_bloc/authenticat
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
 import 'package:task_managing_application/states/states.dart';
+import 'package:task_managing_application/states/tasklist_bloc/tasklist_bloc.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -99,9 +100,12 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is Task)
-          const MaterialPage(
-            child: TaskListScreen()
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => TasklistBloc(),
+              child: const TaskListScreen(),
             ),
+          ),
         if (state is Authentication)
           MaterialPage(
               child: BlocProvider(

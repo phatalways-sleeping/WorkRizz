@@ -1,6 +1,6 @@
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
 
-import 'crud_Update.dart';
+import 'crud_update.dart';
 
 final class UpdateUserActivity extends Update {
   const UpdateUserActivity._() : super();

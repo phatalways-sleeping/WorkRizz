@@ -44,78 +44,74 @@ class _ListSubTaskState extends State<ListSubTask> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SliverToBoxAdapter(
-      child: Stack(children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Container(
-              // height : all remaining space
-              constraints: BoxConstraints(
-                maxHeight: context.mediaQuery.size.height * 0.40,),
-              child: PageView.builder(
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal:
-                              context.mediaQuery.size.width * RATIO_PADDING +
-                                  5.0),
-                      child: const SubTask());
-                },
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                // height : all remaining space
+                constraints: BoxConstraints(
+                  maxHeight: context.mediaQuery.size.height * 0.40,
+                ),
+                child: PageView.builder(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    return Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                context.mediaQuery.size.width * RATIO_PADDING +
+                                    5.0),
+                        child: const SubTask());
+                  },
+                ),
               ),
-            ),
-            DotsIndicator(
-              dotsCount: 4,
-              position: _currentPage,
-              decorator: const DotsDecorator(
-                color: GREY,
-                activeColor: BLACK,
+              DotsIndicator(
+                dotsCount: 4,
+                position: _currentPage,
+                decorator: const DotsDecorator(
+                  color: GREY,
+                  activeColor: BLACK,
+                ),
               ),
-            ),
-            Container(
-              height: 12,
-              width: context.mediaQuery.size.width /3,
-              decoration: const BoxDecoration(
-                color: PURPLE,
-                borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(MEDIUM_CORNER)),
-              ),
-            ),
-          ],
-        ),
-        if (_showButton)
-          Positioned(
-            top: 0,
-            right: 0,
-            child: GestureDetector(
-              // onHorizontalDragStart: (details) {
-              //   if (details.globalPosition.dx < 60) {
-              //     controller.previousPage(
-              //         duration: Duration(milliseconds: 300),
-              //         curve: Curves.ease);
-              //   }
-              // },
-              child: Container(
-                width: context.mediaQuery.size.width * RATIO_PADDING * 2,
-                height: context.mediaQuery.size.height * RATIO_PADDING * 4,
+              Container(
+                height: 12,
+                width: context.mediaQuery.size.width / 3,
                 decoration: const BoxDecoration(
-                  color: PINK,
-                  borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(MEDIUM_CORNER),
+                  color: PURPLE,
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(MEDIUM_CORNER)),
+                ),
+              ),
+            ],
+          ),
+          if (_showButton)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: GestureDetector(
+                child: Container(
+                  width: context.mediaQuery.size.width * RATIO_PADDING * 2,
+                  height: context.mediaQuery.size.height * RATIO_PADDING * 4,
+                  decoration: const BoxDecoration(
+                    color: PINK,
+                    borderRadius: BorderRadius.horizontal(
+                      left: Radius.circular(MEDIUM_CORNER),
+                    ),
+                  ),
+                  child: Center(
+                    child: SvgPicture.string(SvgAssets.add),
                   ),
                 ),
-                child: Center(
-                  child: SvgPicture.string(SvgAssets.add),
-                ),
               ),
             ),
-          ),
-      ]),
+        ],
+      ),
     );
   }
 }

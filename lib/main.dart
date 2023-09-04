@@ -26,15 +26,14 @@ Future<void> main() async {
   ApplicationRepository.repository.userId =
       "20230831-0517-8230-a202-0089f860b83a";
 
-  ApplicationRepository.repository.userImageUrl =
-      "avatars/avatar_1.jpg";
+  ApplicationRepository.repository.userImageUrl = "avatars/avatar_1.jpg";
 
-  ApplicationRepository.repository.userEmailAddress =
-      "matwil@gmail.com";
-  
-  ApplicationRepository.repository.username =
-      "Mathew Wilson";
+  ApplicationRepository.repository.userEmailAddress = "matwil@gmail.com";
 
+  ApplicationRepository.repository.username = "Mathew Wilson";
+
+  ApplicationRepository.repository.projectIdOnView =
+      '20230831-0508-8d53-a880-b370f9865591';
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,
@@ -128,7 +127,9 @@ class AppFlow extends StatelessWidget {
         if (state is TaskList)
           MaterialPage(
             child: BlocProvider(
-              create: (context) => TasklistBloc(),
+              create: (context) => TasklistBloc(
+                context.read<ApplicationRepository>(),
+              ),
               child: const TaskListScreen(),
             ),
           ),

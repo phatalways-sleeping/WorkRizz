@@ -6,3 +6,15 @@ sealed class TasklistEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+final class TasklistSubscribeToFirestore extends TasklistEvent {
+  const TasklistSubscribeToFirestore();
+}
+
+final class TasklistMarkProjectAsCompleted extends TasklistEvent {
+  const TasklistMarkProjectAsCompleted();
+}
+
+final class TasklistMarkProjectAsUncompleted extends TasklistEvent {
+  const TasklistMarkProjectAsUncompleted();
+}

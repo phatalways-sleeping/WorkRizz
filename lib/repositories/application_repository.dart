@@ -113,6 +113,7 @@ class ApplicationRepository {
   Stream<UserActivityModel> userActivityStream(String? id) =>
       _storageAPI.userActivityStreamInUserActivity(id ?? userId);
   Stream<Project> projectStream(String id) => _storageAPI.projectStream(id);
+  Stream<Project> projectOnViewStream() => _storageAPI.projectStream(projectIdOnView);
   Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
   Stream<SubTaskModel> subTaskStream(String subTaskId) =>
       _storageAPI.subTaskModelStream(subTaskId);

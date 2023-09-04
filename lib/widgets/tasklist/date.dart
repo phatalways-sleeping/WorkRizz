@@ -1,8 +1,14 @@
 part of 'tasklist_view.dart';
+
 class Date extends StatelessWidget {
   const Date({
     super.key,
+    required this.startDate,
+    required this.endDate,
   });
+
+  final DateTime startDate;
+  final DateTime endDate;
 
   @override
   Widget build(BuildContext context) {
@@ -11,22 +17,25 @@ class Date extends StatelessWidget {
         borderRadius: BorderRadius.circular(MEDIUM_CORNER),
         border: Border.all(color: BLACK, width: BORDER_WIDTH),
       ),
-      padding: EdgeInsets.all(MediaQuery.of(context).size.width * RATIO_PADDING),
+      padding:
+          EdgeInsets.all(MediaQuery.of(context).size.width * RATIO_PADDING),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
         children: [
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Start date",
-                style: context.textTheme.titleLarge
-              ),
+                  convertDayToString(
+                    startDate.day,
+                  ),
+                  style: context.textTheme.titleLarge),
               Text(
-                "Start month",
-                style: context.textTheme.bodyMedium
-              )
+                  convertMonthToFullString(
+                    startDate.month,
+                  ),
+                  style: context.textTheme.bodyMedium)
             ],
           ),
           Container(
@@ -38,15 +47,19 @@ class Date extends StatelessWidget {
             child: const Icon(Icons.arrow_forward_outlined),
           ),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Start date",
-                style: context.textTheme.titleLarge
+                convertDayToString(
+                  endDate.day,
+                ),
+                style: context.textTheme.titleLarge,
               ),
               Text(
-                "Start month",
-                style: context.textTheme.bodyMedium
+                convertMonthToFullString(
+                  endDate.month,
+                ),
+                style: context.textTheme.bodyMedium,
               )
             ],
           ),

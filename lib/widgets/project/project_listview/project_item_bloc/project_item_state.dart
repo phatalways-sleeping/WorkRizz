@@ -35,6 +35,41 @@ sealed class ProjectItemState extends Equatable {
         if (thread != null) thread!,
         if (totalFileLinks != null) totalFileLinks!,
       ];
+
+  Future<List<Row>> get tagsList async {
+    final List<List<Tag>> list = List.empty(growable: true);
+    final int length = tags!.length > 6 ? 6 : tags!.length;
+    for (var i = 0; i < length; i += 3) {
+      list.add(
+        tags!.sublist(i, i + 3 > length ? length : i + 3),
+      );
+    }
+    final List<List<ProjectTagWidget>> colors = List.empty(growable: true);
+    for (var i = 0; i < list.length; i++) {
+      final List<ProjectTagWidget> color = List.empty(growable: true);
+      for (var j = 0; j < list[i].length; j++) {
+        color.add(
+          ProjectTagWidget(
+            tag: list[i][j],
+            color: await TagBuilder.instance.getColorFromTag(
+              list[i][j],
+            ),
+          ),
+        );
+      }
+      colors.add(color);
+    }
+
+    return colors
+        .map(
+          (e) => Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: e,
+          ),
+        )
+        .toList();
+  }
 }
 
 final class ProjectItemInitial extends ProjectItemState {

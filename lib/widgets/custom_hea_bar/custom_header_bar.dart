@@ -35,6 +35,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
       child: Container(
         margin: EdgeInsets.symmetric(
           horizontal: context.mediaQuery.size.width * RATIO_MARGIN,
+          vertical: 5.0,
         ),
         decoration: const BoxDecoration(
           border: Border(),

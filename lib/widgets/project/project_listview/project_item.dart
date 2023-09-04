@@ -1,16 +1,12 @@
-import 'dart:math';
-
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/states/navigation_bloc/navigation_bloc.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/future_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/project/project_listview/project_item_bloc/project_item_bloc.dart';
-import 'package:task_managing_application/widgets/project/project_listview/project_tag.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_config.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_loading.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_wrapper.dart';
@@ -35,38 +31,6 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
           ProjectItemSubscribeToProjectEvent(widget.projectId),
         );
     super.initState();
-  }
-
-  List<Row> _buildTags(List<Tag> tags) {
-    final List<Row> rows = List.empty(growable: true);
-
-    int startIndex = 0;
-    while (startIndex < tags.length) {
-      int endIndex =
-          startIndex + 3 >= tags.length ? tags.length : startIndex + 3;
-      final List<ProjectTagWidget> tagsWidget = List.empty(growable: true);
-      while (startIndex < endIndex) {
-        tagsWidget.add(ProjectTagWidget(
-          tag: tags[startIndex],
-          color: TagBuilder.instance.getColorFromTag(
-            tags[startIndex],
-            LightTheme.tagColors[Random().nextInt(
-              LightTheme.tagColors.length,
-            )],
-          ),
-        ));
-        startIndex += 1;
-      }
-      rows.add(
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: tagsWidget,
-        ),
-      );
-    }
-
-    return rows;
   }
 
   @override
@@ -122,9 +86,10 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
             style: ButtonStyle(
               padding: MaterialStatePropertyAll(
                 EdgeInsets.symmetric(
-                  horizontal: context.mediaQuery.size.width * RATIO_PADDING,
+                  horizontal:
+                      context.mediaQuery.size.width * RATIO_PADDING * 1.2,
                   vertical:
-                      context.mediaQuery.size.height * RATIO_PADDING * 0.4,
+                      context.mediaQuery.size.height * RATIO_PADDING * 0.6,
                 ),
               ),
               maximumSize: MaterialStatePropertyAll(
@@ -203,11 +168,29 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: _buildTags(state.tags!),
+                    FutureBuilder(
+                      future: state.tagsList,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return SizedBox(
+                            width: 25.0,
+                            child: Icon(
+                              Icons.error,
+                              color: context.colorScheme.error,
+                            ),
+                          );
+                        }
+                        if (snapshot.hasData) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: snapshot.data!,
+                          );
+                        }
+                        return const CustomCircularProgressIndicator(
+                          size: 25.0,
+                        );
+                      },
                     ),
                     const Spacer(),
                     FutureBuilder(
@@ -259,7 +242,7 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                         selector: (state) => state.endDate!,
                         builder: (context, state) {
                           return Text(
-                            "${convertMonthToString(state!.month)} - ${state.day}${state.day == 1 ? 'st' : state.day == 2 ? 'nd' : state.day == 3 ? 'rd' : 'th'} - ${state.year}",
+                            "${convertMonthToString(state!.month)} ${state.day}${state.day == 1 ? 'st' : state.day == 2 ? 'nd' : state.day == 3 ? 'rd' : 'th'} ${state.year}",
                             style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,

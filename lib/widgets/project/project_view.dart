@@ -63,8 +63,7 @@ class _ProjectViewState extends State<ProjectView> {
                   ),
                   SliverPadding(
                     padding: EdgeInsets.only(
-                      left: context.mediaQuery.size.width * RATIO_PADDING + 5.0,
-                      top: context.mediaQuery.size.width * RATIO_PADDING * 2.0,
+                      top: context.mediaQuery.size.height * RATIO_PADDING * 0.8,
                     ),
                     sliver: const SliverToBoxAdapter(
                       child: ProjectTagsScrollView(),
@@ -84,7 +83,14 @@ class _ProjectViewState extends State<ProjectView> {
             ),
             Positioned(
               bottom: 0,
-              child: BlocBuilder<ProjectBloc, ProjectState>(
+              child: BlocConsumer<ProjectBloc, ProjectState>(
+                listener: (context, state) {
+                  if (state is ProjectUserCreateAndSubscribeClose) {
+                    context
+                        .read<ProjectBloc>()
+                        .add(const ProjectCloseCreateNewOne());
+                  }
+                },
                 builder: (context, state) {
                   if (state is ProjectInitial || state is ProjectError) {
                     return const SizedBox.shrink();

@@ -18,9 +18,9 @@ class ProjectCreateWidget extends StatefulWidget {
 class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
     with TickerProviderStateMixin {
   late final AnimationController _animationController = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 1),
-  );
+      vsync: this,
+      duration: const Duration(seconds: 2),
+      animationBehavior: AnimationBehavior.preserve);
 
   late final Animation<double> _animation =
       CurvedAnimation(parent: _animationController, curve: Curves.decelerate);
@@ -123,9 +123,19 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () => context
-                      .read<ProjectBloc>()
-                      .add(const ProjectCloseCreateNewOne()),
+                  onPressed: () async {
+                    _animationController.reverse();
+                    await Future.delayed(
+                      const Duration(
+                        seconds: 2,
+                        milliseconds: 500,
+                      ),
+                    ).then(
+                      (value) => context.read<ProjectBloc>().add(
+                            const ProjectRequestCloseNewOne(),
+                          ),
+                    );
+                  },
                   style: const ButtonStyle(
                     shape: MaterialStatePropertyAll(
                       CircleBorder(),
@@ -159,33 +169,37 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
             SizedBox(
               height: context.mediaQuery.size.height * RATIO_PADDING * 0.5,
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DateInputWidget(
-                  text: "Start date",
-                  execute: (context, input) => context
-                      .read<ProjectBloc>()
-                      .add(ProjectInputStartDate(input)),
-                ),
-                const Spacer(),
-                BlocSelector<ProjectBloc, ProjectState, DateTime>(
-                  selector: (state) => (state as ProjectUserCreateAndSubscribe)
-                      .newProjectSetup
-                      .startDate,
-                  builder: (context, state) {
-                    return DateInputWidget(
-                      startFrom: state,
+            BlocBuilder<ProjectBloc, ProjectState>(
+              builder: (context, state) {
+                if (state is ProjectUserSubscription &&
+                    state is! ProjectUserCreateAndSubscribe) {
+                  return const SizedBox.shrink();
+                }
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DateInputWidget(
+                      text: "Start date",
+                      execute: (context, input) => context
+                          .read<ProjectBloc>()
+                          .add(ProjectInputStartDate(input)),
+                    ),
+                    const Spacer(),
+                    DateInputWidget(
+                      key: const Key('end_date'),
+                      startFrom: (state as ProjectUserCreateAndSubscribe)
+                          .newProjectSetup
+                          .startDate,
                       text: "End date",
                       execute: (context, input) => context
                           .read<ProjectBloc>()
                           .add(ProjectInputEndDate(input)),
-                    );
-                  },
-                ),
-              ],
+                    ),
+                  ],
+                );
+              },
             ),
             SizedBox(
               height: context.mediaQuery.size.height * RATIO_PADDING * 0.5,

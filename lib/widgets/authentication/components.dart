@@ -54,7 +54,7 @@ class CustomInputField extends StatelessWidget {
         ),
         contentPadding: EdgeInsets.symmetric(
           vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.4,
-          horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.4,
+          horizontal: context.mediaQuery.size.width * RATIO_PADDING * 1.2,
         ),
         border: OutlineInputBorder(
           borderRadius: const BorderRadius.all(Radius.circular(10)),

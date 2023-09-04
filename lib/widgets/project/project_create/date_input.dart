@@ -77,19 +77,21 @@ class _DateInputWidgetState extends State<DateInputWidget>
                   25.0,
                 ),
               ),
+              padding: EdgeInsets.symmetric(
+                horizontal: context.mediaQuery.size.width * RATIO_PADDING * 1.2,
+                vertical: context.mediaQuery.size.height * RATIO_PADDING,
+              ),
               margin: const EdgeInsets.symmetric(
                 horizontal: 12.0,
                 vertical: 10.0,
               ),
               behavior: SnackBarBehavior.floating,
-              showCloseIcon: true,
-              closeIconColor: context.colorScheme.onSecondary,
-              backgroundColor: context.colorScheme.error,
+              backgroundColor: context.colorScheme.onSecondary,
               content: DefaultTextStyle.merge(
                 style: context.textTheme.bodySmall,
                 child: const Text(
                   "End date must be greater than start date!",
-                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
                 ),
               ),
             ),

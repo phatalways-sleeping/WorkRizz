@@ -49,6 +49,9 @@ final class NavigateToAssistant extends NavigationEvent {
   const NavigateToAssistant();
 }
 
+final class NavigateToSubTaskDetail extends NavigationEvent {
+  const NavigateToSubTaskDetail();
+}
 final class NavigateToSplash extends NavigationEvent {
   const NavigateToSplash();
 }

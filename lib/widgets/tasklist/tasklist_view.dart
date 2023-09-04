@@ -50,128 +50,104 @@ class _TaskListViewState extends State<TaskListView> {
     // TODO: implement build
     return BaseScreen(
       hideNavigationBar: true,
-      child: Stack(
-        children: [
-          CustomScrollView(controller: _scrollController, slivers: [
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: CustomHeaderBar(
-                  upperChild: const Icon(Icons.arrow_back_ios_new_outlined,
-                      color: BLACK, size: 16.0),
-                  bottomChild: const Text("Mobile Final"),
-                  onPressed: (context) {}),
+      child: CustomScrollView(controller: _scrollController, slivers: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: CustomHeaderBar(
+              upperChild: const Icon(Icons.arrow_back_ios_new_outlined,
+                  color: BLACK, size: 16.0),
+              bottomChild: const Text("Mobile Final"),
+              onPressed: (context) {}),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(
+            horizontal: context.mediaQuery.size.width * RATIO_PADDING + 5.0,
+          ),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text('Leader', style: context.textTheme.titleSmall),
+                        SizedBox(
+                            width:
+                                context.mediaQuery.size.width * RATIO_PADDING),
+                        CustomAvatarWidget(imageUrl: widget.imageUrl),
+                      ],
+                    ),
+                    const MiniNav()
+                  ],
+                ),
+                SizedBox(height: context.mediaQuery.size.width * RATIO_PADDING),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Assignee",
+                      style: context.textTheme.titleSmall,
+                    ),
+                    Text(
+                      "Completed",
+                      style: context.textTheme.titleSmall,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        CustomAvatarWidget(
+                          imageUrl:
+                              'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                          size: context.mediaQuery.size.width *
+                              (RATIO_MARGIN + 0.01),
+                        ),
+                        SizedBox(width: context.mediaQuery.size.width * 0.01),
+                        CustomAvatarWidget(
+                          imageUrl:
+                              'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                          size: context.mediaQuery.size.width *
+                              (RATIO_MARGIN + 0.01),
+                        ),
+                        SizedBox(width: context.mediaQuery.size.width * 0.01),
+                        CustomAvatarWidget(
+                          imageUrl:
+                              'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                          size: context.mediaQuery.size.width *
+                              (RATIO_MARGIN + 0.01),
+                        ),
+                      ],
+                    ),
+                    const SwitchButton()
+                  ],
+                ),
+              ],
             ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.mediaQuery.size.width * RATIO_PADDING + 5.0,
-              ),
-              sliver: SliverToBoxAdapter(
+          ),
+        ),
+        const ListTag(),
+        SliverPadding(
+            padding: EdgeInsets.symmetric(
+              horizontal: context.mediaQuery.size.width * RATIO_PADDING + 5.0,
+            ),
+            sliver: SliverToBoxAdapter(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text('Leader', style: context.textTheme.titleSmall),
-                            SizedBox(
-                                width: context.mediaQuery.size.width *
-                                    RATIO_PADDING),
-                            CustomAvatarWidget(imageUrl: widget.imageUrl),
-                          ],
-                        ),
-                        const MiniNav()
-                      ],
-                    ),
-                    SizedBox(
-                        height: context.mediaQuery.size.width * RATIO_PADDING),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Assignee",
-                          style: context.textTheme.titleSmall,
-                        ),
-                        Text(
-                          "Completed",
-                          style: context.textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            CustomAvatarWidget(
-                              imageUrl:
-                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
-                              size: context.mediaQuery.size.width *
-                                  (RATIO_MARGIN + 0.01),
-                            ),
-                            SizedBox(
-                                width: context.mediaQuery.size.width * 0.01),
-                            CustomAvatarWidget(
-                              imageUrl:
-                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
-                              size: context.mediaQuery.size.width *
-                                  (RATIO_MARGIN + 0.01),
-                            ),
-                            SizedBox(
-                                width: context.mediaQuery.size.width * 0.01),
-                            CustomAvatarWidget(
-                              imageUrl:
-                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
-                              size: context.mediaQuery.size.width *
-                                  (RATIO_MARGIN + 0.01),
-                            ),
-                          ],
-                        ),
-                        SwitchButton()
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const ListTag(),
-            SliverPadding(
-                padding: EdgeInsets.symmetric(
-                  horizontal:
-                      context.mediaQuery.size.width * RATIO_PADDING + 5.0,
-                ),
-                sliver: SliverToBoxAdapter(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: context.mediaQuery.size.width * RATIO_PADDING),
-                    Date(),
-                    SizedBox(
-                        height: context.mediaQuery.size.width * RATIO_SPACE),
-                    Progress(),
-                    SizedBox(
-                        height: context.mediaQuery.size.width * RATIO_SPACE),
-                  ],
-                ))),
-            const ListSubTask(),
-          ]),
-          Positioned(
-            bottom: 0,
-            left: context.mediaQuery.size.width * 1/3,
-            right: context.mediaQuery.size.width * 1/3,
-            child: Container(
-              height: 12,
-              decoration: const BoxDecoration(
-              color: PURPLE,
-                borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(MEDIUM_CORNER)),
-              ),
-            ),
-          )
-        ],
-      ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: context.mediaQuery.size.width * RATIO_PADDING),
+                const Date(),
+                SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
+                const Progress(),
+                SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
+              ],
+            ))),
+        const ListSubTask(),
+      ]),
     );
   }
 }

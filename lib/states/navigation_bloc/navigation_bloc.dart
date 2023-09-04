@@ -24,6 +24,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
+    on<NavigateToSubTaskDetail>(_onNavigateToSubTaskDetail);
   }
 
   final ApplicationRepository _applicationRepository;
@@ -82,5 +83,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) async {
     emit(const Authentication());
+  }
+
+  Future<void> _onNavigateToSubTaskDetail(
+    NavigateToSubTaskDetail event,
+    Emitter<NavigationState> emit,
+  ) async {
+    emit(const SubTaskDetail());
   }
 }

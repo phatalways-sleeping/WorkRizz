@@ -44,9 +44,14 @@ final class Splash extends NavigationState {
   const Splash();
 }
 
-final class Task extends NavigationState {
-  const Task();
+final class TaskList extends NavigationState {
+  const TaskList();
 }
+
+final class SubTaskDetail extends NavigationState {
+  const SubTaskDetail();
+}
+
 final class ProjectDetail extends NavigationState {
   const ProjectDetail();
 }

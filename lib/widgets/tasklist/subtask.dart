@@ -16,7 +16,7 @@ class SubTask extends StatelessWidget {
           toolbarHeight: context.mediaQuery.size.width * RATIO_PADDING * 1.8,
           flexibleSpace: Row(
             children: [
-              TaskTag(color: GREY, name: 'xx/xx'),
+              const TaskTag(color: GREY, name: 'xx/xx'),
               SizedBox(width: context.mediaQuery.size.width * RATIO_PADDING),
               Text('Task name', style: context.textTheme.titleSmall),
             ],
@@ -31,7 +31,7 @@ class SubTask extends StatelessWidget {
                     vertical:
                         context.mediaQuery.size.width * 0.01),
                 child: CustomItemWidget(
-                  firstChild: CheckboxWidget(),
+                  firstChild: const CheckboxWidget(),
                   isFixed: true,
                   name: 'Design UI',
                   subtext: '10pt',

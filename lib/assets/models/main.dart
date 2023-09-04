@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
-import 'package:task_managing_application/assets/models/comment/comment_data.dart';
-import 'package:task_managing_application/assets/models/sub_task/sub_task_data.dart';
 import 'package:task_managing_application/firebase_options.dart';
 import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:uuid/v8.dart';

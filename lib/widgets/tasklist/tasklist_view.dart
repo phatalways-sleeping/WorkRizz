@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/models/task/task.dart';
@@ -151,7 +150,7 @@ class _TaskListViewState extends State<TaskListView> {
                             ),
                           ],
                         ),
-                        SwitchButton()
+                        const SwitchButton()
                       ],
                     ),
                   ],
@@ -170,10 +169,10 @@ class _TaskListViewState extends State<TaskListView> {
                   children: [
                     SizedBox(
                         height: context.mediaQuery.size.width * RATIO_PADDING),
-                    Date(),
+                    const Date(),
                     SizedBox(
                         height: context.mediaQuery.size.width * RATIO_SPACE),
-                    Progress(),
+                    const Progress(),
                     SizedBox(
                         height: context.mediaQuery.size.width * RATIO_SPACE),
                   ],

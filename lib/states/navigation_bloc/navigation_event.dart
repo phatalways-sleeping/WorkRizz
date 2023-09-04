@@ -53,8 +53,8 @@ final class NavigateToTask extends NavigationEvent {
   const NavigateToTask();
 }
 
-final class NavigateToSubTaskView extends NavigationEvent {
-  const NavigateToSubTaskView();
+final class NavigateToSubTaskDetail extends NavigationEvent {
+  const NavigateToSubTaskDetail();
 }
 final class NavigateToSplash extends NavigationEvent {
   const NavigateToSplash();

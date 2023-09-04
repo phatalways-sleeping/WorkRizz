@@ -26,11 +26,11 @@ const TextStyle headlineSmall = TextStyle(
 const TextStyle titleLarge = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.w500,
-  letterSpacing: 0.15,
+  letterSpacing: 0.2,
 );
 const TextStyle titleMedium = TextStyle(
   fontSize: 16,
-  fontWeight: FontWeight.w400,
+  fontWeight: FontWeight.w500,
   letterSpacing: 0.15,
 );
 const TextStyle titleSmall = TextStyle(

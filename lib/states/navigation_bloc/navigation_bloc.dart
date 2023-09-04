@@ -11,7 +11,7 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc(this._applicationRepository) : super(const TaskList()) {
+  NavigationBloc(this._applicationRepository) : super(const SubTaskDetail()) {
     on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
@@ -25,7 +25,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
     on<NavigateToTask>(_onNavigateToTask);
-    on<NavigateToSubTaskView>(_onNavigateToSubTaskView);
+    on<NavigateToSubTaskDetail>(_onNavigateToSubTaskDetail);
   }
 
   final ApplicationRepository _applicationRepository;
@@ -93,10 +93,10 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     emit(const TaskList());
   }
 
-  Future<void> _onNavigateToSubTaskView(
-    NavigateToSubTaskView event,
+  Future<void> _onNavigateToSubTaskDetail(
+    NavigateToSubTaskDetail event,
     Emitter<NavigationState> emit,
   ) async {
-    emit(const SubTaskView());
+    emit(const SubTaskDetail());
   }
 }

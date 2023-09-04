@@ -48,12 +48,8 @@ final class TaskList extends NavigationState {
   const TaskList();
 }
 
-final class SubTaskView extends NavigationState {
-  const SubTaskView();
-}
-
-final class Task extends NavigationState {
-  const Task();
+final class SubTaskDetail extends NavigationState {
+  const SubTaskDetail();
 }
 
 final class ProjectDetail extends NavigationState {

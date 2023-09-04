@@ -4,6 +4,7 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/authentication/authentication_screen.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
+import 'package:task_managing_application/screens/subtask_view/subtask_view_screen.dart';
 import 'package:task_managing_application/screens/tasklist/tasklist_screen.dart';
 import 'package:task_managing_application/screens/project/project_screen.dart';
 import 'package:task_managing_application/screens/splash/splash_screen.dart';
@@ -99,6 +100,7 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is TaskList) const MaterialPage(child: TaskListScreen()),
+        if (state is SubTaskDetail) const MaterialPage(child: SubTaskScreen()),
         if (state is Authentication)
           MaterialPage(
               child: BlocProvider(

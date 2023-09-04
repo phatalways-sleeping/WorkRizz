@@ -49,7 +49,7 @@ class _ListSubTaskState extends State<ListSubTask> {
       child: Stack(children: [
         Column(
           children: [
-            Container(
+            SizedBox(
               // height : all remaining space
               height: 400,
 
@@ -67,10 +67,10 @@ class _ListSubTaskState extends State<ListSubTask> {
                 },
               ),
             ),
-            new DotsIndicator(
+            DotsIndicator(
               dotsCount: 4,
               position: _currentPage,
-              decorator: DotsDecorator(
+              decorator: const DotsDecorator(
                 color: GREY,
                 activeColor: BLACK,
               ),

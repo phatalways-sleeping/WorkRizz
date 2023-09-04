@@ -52,22 +52,22 @@ final class UpdateSubTask extends Update {
       });
 
   static Future<void> updateComments(String id, List<String> latestVersion) =>
-      FirebaseFirestoreConfigs.tasksCollection.doc(id).update({
+      FirebaseFirestoreConfigs.subTasksCollection.doc(id).update({
         "comments": FieldValue.arrayUnion(latestVersion),
       });
 
   static Future<void> removeComments(String id, List<String> removedItems) =>
-      FirebaseFirestoreConfigs.tasksCollection.doc(id).update({
+      FirebaseFirestoreConfigs.subTasksCollection.doc(id).update({
         "comments": FieldValue.arrayRemove(removedItems),
       });
 
   static Future<void> updateFiles(String id, List<String> latestVersion) =>
-      FirebaseFirestoreConfigs.tasksCollection.doc(id).update({
+      FirebaseFirestoreConfigs.subTasksCollection.doc(id).update({
         "files": FieldValue.arrayUnion(latestVersion),
       });
 
   static Future<void> removeFiles(String id, List<String> removedItems) =>
-      FirebaseFirestoreConfigs.tasksCollection.doc(id).update({
+      FirebaseFirestoreConfigs.subTasksCollection.doc(id).update({
         "files": FieldValue.arrayRemove(removedItems),
       });
 

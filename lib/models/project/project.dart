@@ -37,6 +37,7 @@ class Project extends Base {
     required this.assigneeImageUrls,
     required this.mostActiveMemebers,
     required this.thread,
+    required this.creatorId,
     this.isCompleted = false,
     this.tasksCompleted = 0,
     this.activitiesCompleted = 0,
@@ -61,6 +62,8 @@ class Project extends Base {
   final List<String> tasks;
   @JsonKey(required: true)
   final String leader;
+  @JsonKey(required: true)
+  final String creatorId;
   @JsonKey(required: true)
   final String leaderImageUrl;
   @JsonKey(defaultValue: [])
@@ -101,6 +104,7 @@ class Project extends Base {
         leaderImageUrl,
         assigneeImageUrls,
         totalFileLinks,
+        creatorId,
       ];
 
   Project copyWith({
@@ -112,6 +116,7 @@ class Project extends Base {
     DateTime? endDate,
     List<String>? tasks,
     String? leader,
+    String? creatorId,
     List<String>? assignees,
     List<String>? mostActiveMemebers,
     String? thread,
@@ -132,6 +137,7 @@ class Project extends Base {
       endDate: endDate ?? this.endDate,
       tasks: tasks ?? this.tasks,
       leader: leader ?? this.leader,
+      creatorId: creatorId ?? this.creatorId,
       leaderImageUrl: leaderImageUrl ?? this.leaderImageUrl,
       assignees: assignees ?? this.assignees,
       assigneeImageUrls: assigneeImageUrls ?? this.assigneeImageUrls,

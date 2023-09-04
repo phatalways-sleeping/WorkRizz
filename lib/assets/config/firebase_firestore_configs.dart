@@ -13,6 +13,7 @@ final class FirebaseFirestoreConfigs {
   static const _userActivitiesCollection = "userActivities";
   static const _projectThreadsCollection = "projectThreads";
   static const _messagesCollection = "messages";
+  static const _projectInvitationsCollection = "projectInvitations";
 
   static CollectionReference get usersCollection =>
       FirebaseFirestore.instance.collection(_usersCollection);
@@ -40,6 +41,9 @@ final class FirebaseFirestoreConfigs {
 
   static CollectionReference get subTaskCommentsCollection =>
       FirebaseFirestore.instance.collection(_subTaskCommentsCollection);
+
+  static CollectionReference get projectInvitationsCollection =>
+      FirebaseFirestore.instance.collection(_projectInvitationsCollection);
 
   static Reference get storageRef => FirebaseStorage.instance.ref();
 }

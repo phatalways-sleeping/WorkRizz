@@ -53,7 +53,6 @@ class _ProjectViewState extends State<ProjectView> {
                 controller: _scrollController,
                 slivers: [
                   SliverPersistentHeader(
-                    pinned: true,
                     delegate: CustomHeaderBar(
                       upperChild: Text("Hello ${state.username}"),
                       bottomChild: Text(

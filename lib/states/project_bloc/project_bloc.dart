@@ -1,11 +1,10 @@
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
-import 'package:uuid/v8.dart';
 
 part 'project_event.dart';
 part 'project_state.dart';
@@ -38,24 +37,8 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       ),
     );
     on<ProjectCreateNewOne>((event, emit) async {
-      final userImageUrl = await _applicationRepository
-          .userStream(_applicationRepository.userId)
-          .first
-          .then((value) => value.imageUrl);
-      final newProjectSetup = Project(
-        id: const UuidV8().generate(),
-        name: "Demo project",
-        tasks: const [],
-        tags: const [],
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        leader: _applicationRepository.userId,
-        leaderImageUrl: userImageUrl,
-        assignees: const [],
-        assigneeImageUrls: const [],
-        mostActiveMemebers: const [],
-        thread: const UuidV8().generate(),
-      );
+      final newProjectSetup =
+          _applicationRepository.createDefaultProjectSetup();
 
       emit(
         ProjectUserCreateAndSubscribe(
@@ -181,133 +164,178 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     );
     on<ProjectInputAssignee>(
       (event, emit) async {
-        final user =
-            await _applicationRepository.userStreamByEmail(event.email);
+        // get user by email
+        UserDataModel user =
+            await _applicationRepository.userStreamByEmail(event.email).first;
+        user = await _applicationRepository.userStream(user.id).first;
+
+        
+
         final usedState = (state as ProjectUserCreateAndSubscribe);
+        // check if user is already in assignees
         if (!usedState.newProjectSetup.assignees.contains(user.id)) {
-          emit(
-            usedState.copyWith(
-              newProjectSetup: usedState.newProjectSetup.copyWith(
-                assigneeImageUrls: [
-                  ...usedState.newProjectSetup.assigneeImageUrls,
-                  user.imageUrl,
-                ],
-                assignees: [
-                  ...usedState.newProjectSetup.assignees,
-                  user.id,
-                ],
+          // check if user is already the leader
+          if (usedState.newProjectSetup.leader == user.id) {
+            // show snackbar if user is already the leader
+            event.context.scaffoldMessenger.showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    25.0,
+                  ),
+                ),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 10.0,
+                ),
+                behavior: SnackBarBehavior.floating,
+                showCloseIcon: true,
+                closeIconColor: event.context.colorScheme.onSecondary,
+                backgroundColor: event.context.colorScheme.error,
+                content: DefaultTextStyle.merge(
+                  style: event.context.textTheme.bodySmall,
+                  child: const Text(
+                    "This user is already the leader!",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            // add user to assignees
+            emit(
+              usedState.copyWith(
+                newProjectSetup: usedState.newProjectSetup.copyWith(
+                  assigneeImageUrls: [
+                    ...usedState.newProjectSetup.assigneeImageUrls,
+                    user.imageUrl,
+                  ],
+                  assignees: [
+                    ...usedState.newProjectSetup.assignees,
+                    user.id,
+                  ],
+                ),
+              ),
+            );
+          }
         }
       },
     );
     on<ProjectInputLeader>(
       (event, emit) async {
+        // get user by email
         final user =
-            await _applicationRepository.userStreamByEmail(event.email);
+            await _applicationRepository.userStreamByEmail(event.email).first;
         final usedState = (state as ProjectUserCreateAndSubscribe);
+        // check if user is already the leader
         if (usedState.newProjectSetup.leader != user.id) {
+          // check if user is already in assignees
+          final newAssignees = usedState.newProjectSetup.assignees
+              .where((element) => element != user.id)
+              .toList();
+          // check if user imageUrl is already in assigneeImageUrls
+          final newAssigneeImageUrls = usedState
+              .newProjectSetup.assigneeImageUrls
+              .where((element) => element != user.imageUrl)
+              .toList();
+          // check if the owner account is leader
+          if (usedState.newProjectSetup.leader ==
+              _applicationRepository.userId) {
+            newAssignees.add(usedState.newProjectSetup.leader);
+            newAssigneeImageUrls.add(usedState.newProjectSetup.leaderImageUrl);
+          }
           emit(
             usedState.copyWith(
               newProjectSetup: usedState.newProjectSetup.copyWith(
                 leaderImageUrl: user.imageUrl,
                 leader: user.id,
+                assignees: newAssignees,
+                assigneeImageUrls: newAssigneeImageUrls,
               ),
             ),
           );
         }
       },
     );
-    on<ProjectRequestToCreate>((event, emit) async {
-      final project = (state as ProjectUserCreateAndSubscribe).newProjectSetup;
+    on<ProjectRequestToCreate>(
+      (event, emit) async {
+        final project =
+            (state as ProjectUserCreateAndSubscribe).newProjectSetup;
 
-      if (project.name.isEmpty ||
-          project.assignees.isEmpty ||
-          project.leader.isEmpty ||
-          project.tags.isEmpty) {
-        event.context.scaffoldMessenger.showSnackBar(
-          SnackBar(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                25.0,
+        if (project.name.isEmpty ||
+            project.leader.isEmpty ||
+            project.tags.isEmpty) {
+          event.context.scaffoldMessenger.showSnackBar(
+            SnackBar(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  25.0,
+                ),
               ),
-            ),
-            margin: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-              vertical: 10.0,
-            ),
-            behavior: SnackBarBehavior.floating,
-            showCloseIcon: true,
-            closeIconColor: event.context.colorScheme.onSecondary,
-            backgroundColor: event.context.colorScheme.error,
-            content: DefaultTextStyle.merge(
-              style: event.context.textTheme.bodySmall,
-              child: const Text(
-                "Please complete all the field!",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 10.0,
+              ),
+              behavior: SnackBarBehavior.floating,
+              showCloseIcon: true,
+              closeIconColor: event.context.colorScheme.onSecondary,
+              backgroundColor: event.context.colorScheme.error,
+              content: DefaultTextStyle.merge(
+                style: event.context.textTheme.bodySmall,
+                child: const Text(
+                  "Please complete all the field!",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      } else if (project.endDate.difference(project.startDate).inDays < 0) {
-        event.context.scaffoldMessenger.showSnackBar(
-          SnackBar(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                25.0,
+          );
+        } else if (project.endDate.difference(project.startDate).inDays < 0) {
+          event.context.scaffoldMessenger.showSnackBar(
+            SnackBar(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  25.0,
+                ),
               ),
-            ),
-            margin: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-              vertical: 10.0,
-            ),
-            behavior: SnackBarBehavior.floating,
-            showCloseIcon: true,
-            closeIconColor: event.context.colorScheme.onSecondary,
-            backgroundColor: event.context.colorScheme.error,
-            content: DefaultTextStyle.merge(
-              style: event.context.textTheme.bodySmall,
-              child: const Text(
-                "Invalid end date!",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 10.0,
+              ),
+              behavior: SnackBarBehavior.floating,
+              showCloseIcon: true,
+              closeIconColor: event.context.colorScheme.onSecondary,
+              backgroundColor: event.context.colorScheme.error,
+              content: DefaultTextStyle.merge(
+                style: event.context.textTheme.bodySmall,
+                child: const Text(
+                  "Invalid end date!",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      } else {
-        emit(ProjectUserCreateAndSubscribeLoading.from(
-            state as ProjectUserCreateAndSubscribe));
-        await _applicationRepository
-            .createNewProject(
-              name: project.name,
-              leader: project.leader,
-              assignees: project.assignees,
-              tagsName: project.tags.map((e) => e.title).toList(),
-              startDate: project.startDate,
-              endDate: project.endDate,
-            )
-            .then(
-              (value) => emit(
-                ProjectUserSubscription(
-                  username: state.username,
-                  onGoingProjectsNumber: state.onGoingProjectsNumber,
-                  leaderProjectsNumber: state.leaderProjectsNumber,
-                  completedProjectsNumber: state.completedProjectsNumber,
-                  projects: state.projects,
-                  filterStatus: (state as ProjectUserCreateAndSubscribeLoading)
-                      .filterStatus,
-                ),
-              ),
-            );
-      }
-    });
+          );
+        } else {
+          emit(
+            ProjectUserCreateAndSubscribeLoading.from(
+              state as ProjectUserCreateAndSubscribe,
+            ),
+          );
+          await _applicationRepository.createNewProject(
+            newSetupProject:
+                (state as ProjectUserCreateAndSubscribeLoading).newProjectSetup,
+          );
+        }
+      },
+    );
   }
 
   Stream<Project> Function(String) get projectStream =>

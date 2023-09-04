@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/apis/apis.dart';
 import 'package:task_managing_application/assets/config/config.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
+import 'package:task_managing_application/models/project_invitation/project_invitation.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
 import 'package:uuid/v8.dart';
 
@@ -32,6 +34,10 @@ class ApplicationRepository {
 
   String? latestAuthenticatedEmail;
   late String userId;
+  late String userEmailAddress;
+  late String userImageUrl;
+  late String username;
+
   late String projectIdOnView;
 
   Future<void> login(String email, String password) async {
@@ -39,6 +45,9 @@ class ApplicationRepository {
       final userDataModel =
           await _storageAPI.userStreamByEmailInUser(email).first;
       userId = userDataModel.id;
+      userImageUrl = userDataModel.imageUrl;
+      userEmailAddress = email;
+      username = userDataModel.username;
       await _storageAPI.updateUserActivity(userId, true, DateTime.now());
     });
   }
@@ -53,6 +62,9 @@ class ApplicationRepository {
     );
     final randomAvatar = AVATARS[Random(123).nextInt(AVATARS.length)];
     userId = const UuidV8().generate();
+    userImageUrl = randomAvatar;
+    userEmailAddress = email;
+    this.username = username;
     final newUser = UserDataModel(
       id: userId,
       imageUrl: randomAvatar,
@@ -87,6 +99,7 @@ class ApplicationRepository {
 
   Future<void> logout() async {
     userId = "";
+    userImageUrl = "";
     await _storageAPI.updateUserActivity(userId, false, DateTime.now());
     return _authenticationAPI.logout();
   }
@@ -106,6 +119,12 @@ class ApplicationRepository {
   Stream<List<String>> projectInvitationStream() => _storageAPI
       .userStreamByIdInUser(userId)
       .map((event) => event.projectInvitations);
+  // Future
+  Future<String> currentUserImageUrl() async => await _storageAPI
+      .userStreamByIdInUser(userId)
+      .first
+      .then((value) => value.imageUrl)
+      .onError((error, stackTrace) => "avatars/avatar_1.png");
   // User Online Status
   Future<void> updateUserActivity(bool isActive) =>
       _storageAPI.updateUserActivity(
@@ -115,112 +134,231 @@ class ApplicationRepository {
       );
   // Project Invitation
   Future<void> acceptProjectInvitation({
-    required String ofProjectId,
-    required bool isLeader,
+    required String projectInvitationId,
   }) async {
+    final invitation =
+        await _storageAPI.projectInvitationStream(projectInvitationId).first;
+
     await Future.wait<void>(
       [
-        _storageAPI.removeProjectInvitationsInUser(userId, [ofProjectId]),
-        if (isLeader) ...[
+        _storageAPI.removeProjectInvitationsInUser(
+          userId,
+          [projectInvitationId],
+        ),
+        _storageAPI.updateOnGoingProjectsInUser(userId, 1),
+        _storageAPI.updateIsAcceptedInProjectInvitation(
+            projectInvitationId, true),
+        _storageAPI.updateProjectsInUser(userId, [invitation.projectId]),
+        if (invitation.projectLeaderId == userId) ...[
           _storageAPI.updateLeaderProjectsInUser(userId, 1),
-          _storageAPI.updateLeaderInProject(ofProjectId, userId),
-        ] else ...[
-          _storageAPI.updateOnGoingProjectsInUser(userId, 1),
-          _storageAPI.updateAssigneesInProject(ofProjectId, [userId]),
         ]
       ],
     );
   }
 
   Future<void> rejectProjectInvitation({
-    required String ofProjectId,
-    required bool isLeader,
+    required String projectInvitationId,
   }) async {
+    late String creatorId;
+    late String creatorImageUrl;
+    final invitation =
+        await _storageAPI.projectInvitationStream(projectInvitationId).first;
+    if (invitation.projectLeaderId == userId) {
+      creatorId = await _storageAPI
+          .projectStream(invitation.projectId)
+          .first
+          .then((value) => value.creatorId)
+          .onError((error, stackTrace) => "");
+      creatorImageUrl = await _storageAPI
+          .userStreamByIdInUser(creatorId)
+          .first
+          .then((value) => value.imageUrl)
+          .onError((error, stackTrace) => "");
+    }
     await Future.wait<void>(
       [
-        _storageAPI.removeProjectInvitationsInUser(userId, [ofProjectId]),
-        if (isLeader) ...[
-          // _storageAPI.updateLeaderProjectsInUser(userId, 1),
-          // _storageAPI.updateLeaderInProject(ofProjectId, userId),
+        _storageAPI.removeProjectInvitationsInUser(userId, [invitation.id]),
+        _storageAPI.updateIsAcceptedInProjectInvitation(
+            projectInvitationId, false),
+        if (invitation.projectLeaderId == userId) ...[
+          _storageAPI.updateLeaderInProject(
+            invitation.projectId,
+            creatorId,
+          ),
+          _storageAPI.updateLeaderImageUrlInProject(
+            invitation.projectId,
+            creatorImageUrl,
+          ),
         ] else ...[
-          // _storageAPI.updateOnGoingProjectsInUser(userId, 1),
-          // _storageAPI.updateAssigneesInProject(ofProjectId, [userId]),
+          _storageAPI.removeAssigneesInProject(invitation.projectId, [userId]),
+          _storageAPI.removeAssigneeImageUrlsInProject(
+            invitation.projectId,
+            [userImageUrl],
+          ),
         ]
       ],
     );
   }
 
   // Projects Screen
-  Future<String> createNewProject({
-    required String name,
-    required String leader,
-    required List<String> assignees,
-    required List<String> tagsName,
-    required DateTime startDate,
-    required DateTime endDate,
-  }) async {
-    final tags = tagsName.map((e) => Tag(title: e)).toList();
-    final projectId = const UuidV8().generate();
-    final threadId = const UuidV8().generate();
-
-    final project = Project(
-      id: projectId,
-      name: name,
+  Project createDefaultProjectSetup() {
+    final newProject = Project(
+      id: const UuidV8().generate(),
+      name: "",
       tasks: const [],
-      tags: tags,
-      startDate: startDate,
-      endDate: endDate,
-      leader: "",
-      leaderImageUrl: "",
+      tags: const [],
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
+      leader: userId,
+      creatorId: userId,
+      leaderImageUrl: userImageUrl,
       assignees: const [],
       assigneeImageUrls: const [],
       mostActiveMemebers: const [],
-      thread: threadId,
+      thread: const UuidV8().generate(),
     );
-    final thread = ThreadModel(id: threadId, messages: const []);
+    return newProject;
+  }
+
+  Future<void> createNewProject({
+    required Project newSetupProject,
+  }) async {
+    if (newSetupProject.creatorId != userId) {
+      newSetupProject = newSetupProject.copyWith(
+        creatorId: userId,
+      );
+    }
+    late final String projectLeaderUsername;
+    late final String projectLeaderEmail;
+    if (newSetupProject.leader != userId) {
+      // if the user is not the leader
+      // get the leader's email and username
+      final leaderModel =
+          await _storageAPI.userStreamByIdInUser(newSetupProject.leader).first;
+      projectLeaderUsername = leaderModel.username;
+      projectLeaderEmail = leaderModel.email;
+      // create an invitation for the leader
+      final projectLeaderInvitation = ProjectInvitationModel(
+        id: const UuidV8().generate(),
+        projectId: newSetupProject.id,
+        projectName: newSetupProject.name,
+        projectLeaderId: newSetupProject.leader,
+        projectLeaderImageUrl: newSetupProject.leaderImageUrl,
+        projectLeaderEmail: projectLeaderEmail,
+        projectLeaderUsername: projectLeaderUsername,
+        senderId: userId,
+        receiverId: newSetupProject.leader,
+      );
+      // update the leader's project invitations
+      // and create the invitation in the collection
+      await Future.wait<void>(
+        [
+          _storageAPI.createNewProjectInvitation(projectLeaderInvitation),
+          _storageAPI.updateProjectInvitationsInUser(
+            newSetupProject.leader,
+            [projectLeaderInvitation.id],
+          ),
+        ],
+      );
+    } else {
+      // if the user is the leader
+      await Future.wait<void>(
+        [
+          _storageAPI.updateOnGoingProjectsInUser(userId, 1),
+          _storageAPI.updateLeaderProjectsInUser(userId, 1),
+          _storageAPI.updateProjectsInUser(userId, [newSetupProject.id]),
+        ],
+      );
+    }
+    // if user is in the assignees list
+    if (newSetupProject.assignees.contains(userId)) {
+      await Future.wait<void>(
+        [
+          _storageAPI.updateOnGoingProjectsInUser(userId, 1),
+          _storageAPI.updateProjectsInUser(userId, [newSetupProject.id]),
+        ],
+      );
+    }
+    final projectInvitations = newSetupProject.assignees
+        .where((element) => element != userId) // remove the user
+        .map(
+          (e) => ProjectInvitationModel(
+            id: const UuidV8().generate(),
+            projectId: newSetupProject.id,
+            projectName: newSetupProject.name,
+            projectLeaderId: newSetupProject.leader,
+            projectLeaderImageUrl: newSetupProject.leaderImageUrl,
+            projectLeaderEmail: (newSetupProject.leader == userId)
+                ? userEmailAddress
+                : projectLeaderEmail,
+            projectLeaderUsername: (newSetupProject.leader == userId)
+                ? username
+                : projectLeaderUsername,
+            senderId: userId,
+            receiverId: e,
+          ),
+        )
+        .toList();
     await Future.wait<void>(
       [
         // Create project in collection
-        _storageAPI.createNewProject(project),
+        _storageAPI.createNewProject(newSetupProject),
         // Create thread in collection
-        _storageAPI.createNewThread(thread),
-        // send invitations to leader and assignees
-        _storageAPI.updateProjectInvitationsInUser(leader, [projectId]),
+        _storageAPI.createNewThread(
+          ThreadModel(
+            id: newSetupProject.thread,
+            messages: const [],
+          ),
+        ),
+        // send invitations to assignees
         Future<void>(
           () {
-            for (var assignee in assignees) {
-              _storageAPI.updateProjectInvitationsInUser(assignee, [projectId]);
+            for (var invitation in projectInvitations) {
+              _storageAPI.createNewProjectInvitation(invitation);
+              _storageAPI.updateProjectInvitationsInUser(
+                invitation.receiverId,
+                [invitation.id],
+              );
             }
           },
         ),
         // Archive the project setup for later usage
-        _archiveLatestProjectSetup(project),
+        _archiveLatestProjectSetup(newSetupProject),
       ],
     );
-    return projectId;
   }
 
   Future<void> _archiveLatestProjectSetup(Project project) async {
     Future<SharedPreferences> sharedPreferences =
         SharedPreferences.getInstance();
-    await sharedPreferences.then((value) {
-      value.setString("latestProjectSetup", jsonEncode(project.toJson()));
-    });
+    await sharedPreferences.then(
+      (value) {
+        value.setString("latestProjectSetup".hashCode.toString(),
+            jsonEncode(project.toJson()));
+      },
+    ).onError(
+      (error, stackTrace) {},
+    );
   }
 
   Future<Project?> retrieveLatestProjectSetup() async {
     Future<SharedPreferences> sharedPreferences =
         SharedPreferences.getInstance();
     Project? project;
-    await sharedPreferences.then((value) {
-      if (value.containsKey("latestProjectSetup")) {
-        project = Project.fromJson(
-            jsonDecode(value.getString("latestProjectSetup")!)
-                as Map<String, dynamic>);
-      }
-    });
+    await sharedPreferences.then(
+      (value) {
+        if (value.containsKey("latestProjectSetup".hashCode.toString())) {
+          project = Project.fromJson(jsonDecode(
+                  value.getString("latestProjectSetup".hashCode.toString())!)
+              as Map<String, dynamic>);
+        }
+      },
+    );
 
-    return project;
+    return project?.copyWith(
+      id: const UuidV8().generate(),
+      thread: const UuidV8().generate(),
+    );
   }
 
   Stream<int> completedProjectsNumber() {
@@ -243,6 +381,7 @@ class ApplicationRepository {
 
   Future<String> imageUrlOnStorageOf(String path) async =>
       FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
+
 
   // Task / View list
   Future<void> markProjectCompleted(
@@ -426,8 +565,8 @@ class ApplicationRepository {
   }
 
   // Add a person: find by email
-  Future<UserDataModel> userStreamByEmail(String email) =>
-      _storageAPI.userStreamByEmailInUser(email).first;
+  Stream<UserDataModel> userStreamByEmail(String email) =>
+      _storageAPI.userStreamByEmailInUser(email);
 
   // Task / View task
   Future<void> updateDueDateOfSubTask({

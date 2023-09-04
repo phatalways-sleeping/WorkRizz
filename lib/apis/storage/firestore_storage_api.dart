@@ -32,7 +32,13 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> createNewComment(CommentModel commentModel) =>
       CreateComment.createNewComment(commentModel);
-
+  @override
+  Future<void> createNewProjectInvitation(
+    ProjectInvitationModel projectInvitationModel,
+  ) =>
+      CreateProjectInvitation.createNewProjectInvitation(
+        projectInvitationModel,
+      );
   // READ
   // - UserDataModel
   @override
@@ -76,6 +82,10 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   // - Project
   @override
   Stream<Project> projectStream(String id) => ReadProject.projectStream(id);
+  // - ProjectInvitationModel
+  @override
+  Stream<ProjectInvitationModel> projectInvitationStream(String id) =>
+      ReadProjectInvitation.readProjectInvitation(id);
   // - Task
   @override
   Future<String> taskNameInTask(String id) => ReadTask.taskName(id);
@@ -219,6 +229,9 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> updateLeaderInProject(String id, String leader) =>
       UpdateProject.updateLeader(id, leader);
   @override
+  Future<void> updateCreatorIdInProject(String id, String creatorId) =>
+      UpdateProject.updateCreatorId(id, creatorId);
+  @override
   Future<void> updateLeaderImageUrlInProject(String id, String leaderImageUrl) =>
       UpdateProject.updateLeaderImageUrl(id, leaderImageUrl);
   @override
@@ -247,6 +260,15 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> updateThreadInProject(String id, String thread) =>
       UpdateProject.updateThread(id, thread);
+  // - ProjectInvitationModel
+  @override
+  Future<void> updateProjectInvitationInProjectInvitation(
+          ProjectInvitationModel projectInvitationModel) =>
+      UpdateProjectInvitation.updateProjectInvitation(projectInvitationModel);
+  @override
+  Future<void> updateIsAcceptedInProjectInvitation(
+          String id, bool isAccepted) =>
+      UpdateProjectInvitation.updateIsAccepted(id, isAccepted);
   // - Task
   @override
   Future<void> updateNameInTask(String id, String name) =>
@@ -344,6 +366,10 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   // - Project
   @override
   Future<void> deleteProject(String id) => DeleteProject.deleteProject(id);
+  // - ProjectInvitationModel
+  @override
+  Future<void> deleteProjectInvitation(String id) =>
+      DeleteProjectInvitation.deleteProjectInvitation(id);
   // - Task
   @override
   Future<void> deleteTask(String id) => DeleteTask.deleteTask(id);

@@ -23,7 +23,16 @@ Future<void> main() async {
   );
 
   ApplicationRepository.repository.userId =
-      "20230831-0517-8130-8211-a9c1dfa3e677";
+      "20230831-0517-8230-a202-0089f860b83a";
+
+  ApplicationRepository.repository.userImageUrl =
+      "avatars/avatar_1.jpg";
+
+  ApplicationRepository.repository.userEmailAddress =
+      "matwil@gmail.com";
+  
+  ApplicationRepository.repository.username =
+      "Mathew Wilson";
 
   runApp(
     RepositoryProvider(
@@ -99,30 +108,12 @@ class AppFlow extends StatelessWidget {
               ),
             ),
           ),
-        if (state is Task)
-          MaterialPage(
-            child: BlocProvider(
-              create: (context) => TasklistBloc(),
-              child: const TaskListScreen(),
-            ),
-          ),
         if (state is Authentication)
           MaterialPage(
-              child: BlocProvider(
-            create: (context) =>
-                AuthenticationBloc(context.read<ApplicationRepository>()),
-            child: const AuthenticationScreen(),
-          )),
-        if (state is ChangePassword)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
-        if (state is Home)
-          MaterialPage(
-            child: BaseScreen(
-              child: Container(
-                height: 700,
-                color: Colors.pink,
-                width: double.infinity,
-              ),
+            child: BlocProvider(
+              create: (context) =>
+                  AuthenticationBloc(context.read<ApplicationRepository>()),
+              child: const AuthenticationScreen(),
             ),
           ),
         if (state is ProjectsList)
@@ -133,11 +124,21 @@ class AppFlow extends StatelessWidget {
               child: const ProjectScreen(),
             ),
           ),
-        if (state is ProjectDetail)
-          const MaterialPage(
+        if (state is Task)
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => TasklistBloc(),
+              child: const TaskListScreen(),
+            ),
+          ),
+        if (state is ChangePassword)
+          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+        if (state is Home)
+          MaterialPage(
             child: BaseScreen(
-              child: SizedBox(
+              child: Container(
                 height: 700,
+                color: Colors.pink,
                 width: double.infinity,
               ),
             ),

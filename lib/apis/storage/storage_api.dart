@@ -4,6 +4,7 @@ import 'package:task_managing_application/apis/storage/crud.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
 import 'package:task_managing_application/models/personal_schedule/time_line/time_line_model.dart';
+import 'package:task_managing_application/models/project_invitation/project_invitation.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
 
 part 'firestore_storage_api.dart';
@@ -23,6 +24,9 @@ sealed class StorageAPI {
   Future<void> createNewThread(ThreadModel threadModel);
   Future<void> createNewMessage(MessageModel messageModel);
   Future<void> createNewComment(CommentModel commentModel);
+  Future<void> createNewProjectInvitation(
+    ProjectInvitationModel projectInvitationModel,
+  );
 
   // READ
   // - UserDataModel
@@ -43,6 +47,8 @@ sealed class StorageAPI {
   Future<DateTime> dateScheduleInPersonalSchedule(String id);
   // - Project
   Stream<Project> projectStream(String id);
+  // - ProjectInvitationModel
+  Stream<ProjectInvitationModel> projectInvitationStream(String id);
   // - Task
   Future<String> taskNameInTask(String id);
   Future<String> projectIdInTask(String id);
@@ -100,8 +106,10 @@ sealed class StorageAPI {
   // - Project
   Future<void> updateAssigneesInProject(String id, List<String> latestVersion);
   Future<void> removeAssigneesInProject(String id, List<String> removedItems);
-  Future<void> updateAssigneeImageUrlsInProject(String id, List<String> latestVersion);
-  Future<void> removeAssigneeImageUrlsInProject(String id, List<String> removedItems);
+  Future<void> updateAssigneeImageUrlsInProject(
+      String id, List<String> latestVersion);
+  Future<void> removeAssigneeImageUrlsInProject(
+      String id, List<String> removedItems);
   Future<void> updateTasksCompletedInProject(String id, int tasksCompleted);
   Future<void> updateActivitiesCompletedInProject(
       String id, int activitiesCompleted);
@@ -111,6 +119,7 @@ sealed class StorageAPI {
   Future<void> updateStartDateInProject(String id, DateTime startDate);
   Future<void> updateEndDateInProject(String id, DateTime endDate);
   Future<void> updateLeaderInProject(String id, String leader);
+  Future<void> updateCreatorIdInProject(String id, String creatorId);
   Future<void> updateLeaderImageUrlInProject(String id, String leaderImageUrl);
   Future<void> updateMostActiveMembersInProject(
       String id, List<String> latestVersion);
@@ -122,6 +131,14 @@ sealed class StorageAPI {
   Future<void> updateTasksInProject(String id, List<String> latestVersion);
   Future<void> removeTasksInProject(String id, List<String> removedItems);
   Future<void> updateThreadInProject(String id, String thread);
+  // - ProjectInvitationModel
+  Future<void> updateProjectInvitationInProjectInvitation(
+    ProjectInvitationModel projectInvitationModel,
+  );
+  Future<void> updateIsAcceptedInProjectInvitation(
+    String id,
+    bool isAccepted,
+  );
   // - Task
   Future<void> updateNameInTask(String id, String name);
   Future<void> updateIsCompletedInTask(String id, bool isCompleted);
@@ -162,6 +179,8 @@ sealed class StorageAPI {
   Future<void> deletePersonalSchedule(String id);
   // - Project
   Future<void> deleteProject(String id);
+  // - ProjectInvitationModel
+  Future<void> deleteProjectInvitation(String id);
   // - Task
   Future<void> deleteTask(String id);
   // - SubTask

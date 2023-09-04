@@ -48,36 +48,13 @@ class ProjectItemBloc extends Bloc<ProjectItemEvent, ProjectItemState> {
         );
       },
     );
-    on<ProjectItemFilterEvent>((event, emit) {
-      if (event.filterStatus == FilterStatus.none) {
-        state as ProjectItemSuccessWithFilterStatus;
-        emit(
-          ProjectItemSuccess(
-            totalFileLinks: state.totalFileLinks,
-            name: state.name,
-            assigneeImageUrls: state.assigneeImageUrls,
-            leaderImageUrl: state.leaderImageUrl,
-            isCompleted: state.isCompleted,
-            endDate: state.endDate,
-            tags: state.tags,
-            thread: state.thread,
-            leader: state.leader,
-          ),
-        );
-      } else {
-        final filterColor =
-            (event.filterStatus == FilterStatus.completed && state.isCompleted!)
-                ? const Color(0xFF9C9AFF)
-                : (event.filterStatus == FilterStatus.ongoing &&
-                        !state.isCompleted!)
-                    ? const Color(0xFFEAB0FC)
-                    : (event.filterStatus == FilterStatus.leader &&
-                            state.leader! == userId)
-                        ? const Color(0xFF5CD669)
-                        : Colors.white;
-        if (state is ProjectItemSuccess) {
+    on<ProjectItemFilterEvent>(
+      (event, emit) {
+        if (event.filterStatus == FilterStatus.none) {
+          state as ProjectItemSuccessWithFilterStatus;
           emit(
-            ProjectItemSuccessWithFilterStatus(
+            ProjectItemSuccess(
+              totalFileLinks: state.totalFileLinks,
               name: state.name,
               assigneeImageUrls: state.assigneeImageUrls,
               leaderImageUrl: state.leaderImageUrl,
@@ -85,20 +62,45 @@ class ProjectItemBloc extends Bloc<ProjectItemEvent, ProjectItemState> {
               endDate: state.endDate,
               tags: state.tags,
               thread: state.thread,
-              filterColor: filterColor,
               leader: state.leader,
-              totalFileLinks: state.totalFileLinks,
             ),
           );
         } else {
-          emit(
-            (state as ProjectItemSuccessWithFilterStatus).copyWith(
-              filterColor: filterColor,
-            ),
-          );
+          final filterColor = (event.filterStatus == FilterStatus.completed &&
+                  state.isCompleted!)
+              ? const Color(0xFF9C9AFF)
+              : (event.filterStatus == FilterStatus.ongoing &&
+                      !state.isCompleted!)
+                  ? const Color(0xFFEAB0FC)
+                  : (event.filterStatus == FilterStatus.leader &&
+                          state.leader! == userId)
+                      ? const Color(0xFF5CD669)
+                      : Colors.white;
+          if (state is ProjectItemSuccess) {
+            emit(
+              ProjectItemSuccessWithFilterStatus(
+                name: state.name,
+                assigneeImageUrls: state.assigneeImageUrls,
+                leaderImageUrl: state.leaderImageUrl,
+                isCompleted: state.isCompleted,
+                endDate: state.endDate,
+                tags: state.tags,
+                thread: state.thread,
+                filterColor: filterColor,
+                leader: state.leader,
+                totalFileLinks: state.totalFileLinks,
+              ),
+            );
+          } else {
+            emit(
+              (state as ProjectItemSuccessWithFilterStatus).copyWith(
+                filterColor: filterColor,
+              ),
+            );
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   final Future<String> Function(String) imageFuture;

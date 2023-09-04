@@ -53,22 +53,27 @@ final class UpdateProject extends Update {
       });
 
   static Future<void> updateStartDate(String id, DateTime startDate) =>
-      FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "startDate": startDate.toIso8601String(),
       });
 
   static Future<void> updateEndDate(String id, DateTime endDate) =>
-      FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "endDate": endDate.toIso8601String(),
       });
 
   static Future<void> updateLeader(String id, String leader) =>
-      FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "leader": leader,
       });
 
+  static Future<void> updateCreatorId(String id, String creatorId) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "creatorId": creatorId,
+      });
+
   static Future<void> updateLeaderImageUrl(String id, String leaderImageUrl) =>
-      FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "leaderImageUrl": leaderImageUrl,
       });
 
@@ -85,7 +90,7 @@ final class UpdateProject extends Update {
       });
 
   static Future<void> updateName(String id, String name) =>
-      FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "name": name,
       });
 
@@ -113,7 +118,7 @@ final class UpdateProject extends Update {
       });
 
   static Future<void> updateThread(String id, String thread) =>
-      FirebaseFirestoreConfigs.projectThreadsCollection.doc(id).update({
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "thread": thread,
       });
 }

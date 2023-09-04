@@ -21,7 +21,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: ProjectView(),
+      body: ProjectView(key: Key("project_view"),),
     );
   }
 }

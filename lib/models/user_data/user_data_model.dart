@@ -50,7 +50,7 @@ class UserDataModel extends Base {
   @JsonKey(defaultValue: [])
   // This is the list of the projects id the user is in
   final List<String> projects;
-  @JsonKey()
+  @JsonKey(required: true)
   final String imageUrl;
   @JsonKey(defaultValue: [])
   // This is the list of the tasks id the user is assigned to

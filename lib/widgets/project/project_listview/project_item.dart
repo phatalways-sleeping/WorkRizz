@@ -5,7 +5,6 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/states/navigation_bloc/navigation_bloc.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/future_avatar_widget.dart';
-import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/project/project_listview/project_item_bloc/project_item_bloc.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_config.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_loading.dart';
@@ -57,12 +56,21 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
           );
         }
         if (state is ProjectItemError) {
-          return Container(
-            width: context.mediaQuery.size.width * 0.95,
-            height: context.mediaQuery.size.height * 0.2,
-            decoration: const BoxDecoration(color: Colors.black),
-            child: const Center(
-              child: CustomErrorIcon(),
+          return Shimmer(
+            linearGradient: shimmer_gradient,
+            child: ShimmerLoading(
+              child: Container(
+                width: context.mediaQuery.size.width * 0.95,
+                height: context.mediaQuery.size.height * 0.2,
+                decoration: const BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      25.0,
+                    ),
+                  ),
+                ),
+              ),
             ),
           );
         }
@@ -79,7 +87,7 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
           },
           child: ElevatedButton(
             onPressed: () => context.read<NavigationBloc>().add(
-                  NavigateToProjectView(
+                  NavigateToTask(
                     widget.projectId,
                   ),
                 ),

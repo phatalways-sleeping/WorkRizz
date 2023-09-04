@@ -9,7 +9,7 @@ part of 'user_data_model.dart';
 UserDataModel _$UserDataModelFromJson(Map<String, dynamic> json) {
   $checkKeys(
     json,
-    requiredKeys: const ['username', 'email'],
+    requiredKeys: const ['username', 'email', 'imageUrl'],
   );
   return UserDataModel(
     reference: _$JsonConverterFromJson<DocumentReference<Object?>,

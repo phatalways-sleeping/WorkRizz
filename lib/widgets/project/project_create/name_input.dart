@@ -11,8 +11,26 @@ class NameInput extends StatefulWidget {
 }
 
 class _NameInputState extends State<NameInput> {
-  late final TextEditingController _titleController = TextEditingController();
+  late final TextEditingController _titleController;
   late final FocusNode _focusNode = FocusNode()..addListener(() {});
+
+  @override
+  void initState() {
+    _titleController = TextEditingController();
+    _titleController.addListener(() {
+      if (_titleController.text.isNotEmpty) {
+        context
+            .read<ProjectBloc>()
+            .add(ProjectInputName(_titleController.text));
+      }
+    });
+    _titleController.text =
+        (context.read<ProjectBloc>().state as ProjectUserCreateAndSubscribe)
+            .newProjectSetup
+            .name;
+    super.initState();
+  }
+
   @override
   void dispose() {
     _titleController.dispose();

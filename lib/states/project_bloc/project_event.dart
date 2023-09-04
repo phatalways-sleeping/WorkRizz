@@ -76,12 +76,13 @@ final class ProjectInputTag extends ProjectEvent {
 }
 
 final class ProjectInputAssignee extends ProjectEvent {
-  const ProjectInputAssignee(this.email);
+  const ProjectInputAssignee(this.email, this.context);
 
   final String email;
+  final BuildContext context;
 
   @override
-  List<Object> get props => [...super.props, email];
+  List<Object> get props => [...super.props, email, context];
 }
 
 final class ProjectInputLeader extends ProjectEvent {

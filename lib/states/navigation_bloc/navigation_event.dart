@@ -36,8 +36,8 @@ final class NavigateToProjectsList extends NavigationEvent {
   const NavigateToProjectsList();
 }
 
-final class NavigateToProjectView extends NavigationEvent {
-  const NavigateToProjectView(this.projectId);
+final class NavigateToTask extends NavigationEvent {
+  const NavigateToTask(this.projectId);
 
   final String projectId;
 
@@ -47,10 +47,6 @@ final class NavigateToProjectView extends NavigationEvent {
 
 final class NavigateToAssistant extends NavigationEvent {
   const NavigateToAssistant();
-}
-
-final class NavigateToTask extends NavigationEvent {
-  const NavigateToTask();
 }
 
 final class NavigateToSplash extends NavigationEvent {

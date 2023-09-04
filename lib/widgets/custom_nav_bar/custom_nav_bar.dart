@@ -21,8 +21,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   Widget build(BuildContext context) {
     return Container(
       width: context.mediaQuery.size.width * 2 / 3,
+      height: context.mediaQuery.size.height * 0.08,
       margin: EdgeInsets.only(
-        bottom: context.mediaQuery.size.height * RATIO_MARGIN * 0.4,
         left: context.mediaQuery.size.width * RATIO_MARGIN,
         right: context.mediaQuery.size.width * RATIO_MARGIN,
       ),
@@ -33,42 +33,45 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
         ),
         borderRadius: BorderRadius.circular(15),
       ),
+      alignment: Alignment.center,
       child: BlocBuilder<NavigationBloc, NavigationState>(
         builder: (context, state) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (!widget.hideRouteButtons) ...[
-                CustomRouteButton(
-                  icon: SvgAssets.home,
-                  onPressed: (context) => context
-                      .read<NavigationBloc>()
-                      .add(const NavigateToHome()),
-                  route: 'Home',
-                  chosen: state is Home,
-                ),
-                CustomRouteButton(
-                  icon: SvgAssets.projectsList,
-                  onPressed: (context) => context
-                      .read<NavigationBloc>()
-                      .add(const NavigateToProjectsList()),
-                  route: 'Projects',
-                  chosen: state is ProjectsList,
-                ),
-                CustomRouteButton(
-                  icon: SvgAssets.assistant,
-                  onPressed: (context) => context
-                      .read<NavigationBloc>()
-                      .add(const NavigateToAssistant()),
-                  route: 'Assistant',
-                  chosen: state is Assistant,
-                )
+          return Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!widget.hideRouteButtons) ...[
+                  CustomRouteButton(
+                    icon: SvgAssets.home,
+                    onPressed: (context) => context
+                        .read<NavigationBloc>()
+                        .add(const NavigateToHome()),
+                    route: 'Home',
+                    chosen: state is Home,
+                  ),
+                  CustomRouteButton(
+                    icon: SvgAssets.projectsList,
+                    onPressed: (context) => context
+                        .read<NavigationBloc>()
+                        .add(const NavigateToProjectsList()),
+                    route: 'Projects',
+                    chosen: state is ProjectsList,
+                  ),
+                  CustomRouteButton(
+                    icon: SvgAssets.assistant,
+                    onPressed: (context) => context
+                        .read<NavigationBloc>()
+                        .add(const NavigateToAssistant()),
+                    route: 'Assistant',
+                    chosen: state is Assistant,
+                  )
+                ],
+                const Spacer(),
+                const CustomFloatingWidget(),
               ],
-              const Spacer(),
-              const CustomFloatingWidget(),
-            ],
+            ),
           );
         },
       ),

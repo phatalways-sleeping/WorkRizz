@@ -116,7 +116,7 @@ class _MembersAdderState extends State<MembersAdder> {
                           context.read<ProjectBloc>().add(
                               widget.role == MemberRole.leader
                                   ? ProjectInputLeader(value)
-                                  : ProjectInputAssignee(value));
+                                  : ProjectInputAssignee(value, context));
                           _controller.clear();
                         }
                       },

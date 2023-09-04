@@ -14,6 +14,7 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
       'startDate',
       'endDate',
       'leader',
+      'creatorId',
       'leaderImageUrl',
       'thread'
     ],
@@ -48,6 +49,7 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
             .toList() ??
         [],
     thread: json['thread'] as String,
+    creatorId: json['creatorId'] as String,
     isCompleted: json['isCompleted'] as bool? ?? false,
     tasksCompleted: json['tasksCompleted'] as int? ?? 0,
     activitiesCompleted: json['activitiesCompleted'] as int? ?? 0,
@@ -67,6 +69,7 @@ Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
       'endDate': const DateTimeSerializer().toJson(instance.endDate),
       'tasks': instance.tasks,
       'leader': instance.leader,
+      'creatorId': instance.creatorId,
       'leaderImageUrl': instance.leaderImageUrl,
       'assignees': instance.assignees,
       'assigneeImageUrls': instance.assigneeImageUrls,

@@ -9,7 +9,7 @@ class SubTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: SubTaskView(ava: Icon(Icons.person), subtask: )
+      // body: SubTaskView(ava: Icon(Icons.person), subtask: )
     );
   }
 }

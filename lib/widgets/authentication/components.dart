@@ -28,7 +28,7 @@ class CustomInputField extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: obscureText,
       textAlign: textAlign,
-      style: context.textTheme.bodyMedium!.copyWith(
+      style: context.textTheme.bodyMedium?.copyWith(
         color: context.colorScheme.onSurface,
         fontSize: 14,
         fontWeight: FontWeight.w500,
@@ -36,32 +36,41 @@ class CustomInputField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         hintText: hintText,
-        labelStyle: context.textTheme.bodyMedium!.copyWith(
+        labelStyle: context.textTheme.bodyMedium?.copyWith(
           color: context.colorScheme.onSurface,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
-        hintStyle: context.textTheme.bodyMedium!.copyWith(
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        floatingLabelStyle: context.textTheme.bodyLarge?.copyWith(
           color: context.colorScheme.onSurface,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        hintStyle: context.textTheme.bodyMedium?.copyWith(
+          color: context.colorScheme.onSurface,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
         contentPadding: EdgeInsets.symmetric(
           vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.4,
-          horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.4,
+          horizontal: context.mediaQuery.size.width * RATIO_PADDING * 1.2,
         ),
         border: OutlineInputBorder(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(
             color: context.colorScheme.onSecondary,
-            width: 1.5,
+            width: 2.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(
             color: context.colorScheme.onSecondary,
-            width: 1.5,
+            width: 2.0,
           ),
         ),
         focusColor: context.colorScheme.onSecondary,
-        fillColor: context.colorScheme.onSecondary,
       ),
     );
   }

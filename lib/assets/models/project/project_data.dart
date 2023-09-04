@@ -11,15 +11,24 @@ final Project project1 = Project(
     '20230831-0447-8a41-9189-1f4e72621f8d', // task 2
   ],
   leader: '20230831-0517-8230-a202-0089f860b83a',
+  leaderImageUrl: 'avatars/avatar_1.jpg',
   assignees: const [
     '20230831-0517-8230-a202-0089f860b83a',
     '20230831-0517-8130-8211-a9c1dfa3e677'
+  ],
+  assigneeImageUrls: const [
+    'avatars/avatar_1.jpg',
+    'avatars/avatar_4.jpg',
   ],
   mostActiveMemebers: const [
     '20230831-0517-8230-a202-0089f860b83a',
     '20230831-0517-8130-8211-a9c1dfa3e677'
   ],
-  thread: 'project-thread-123',
+  thread: '20230831-0729-8457-a023-e2fa64ce2b29',
+  totalActivities: 6,
+  tasksCompleted: 1,
+  activitiesCompleted: 4,
+  totalFileLinks: 7,
 );
 
 final Project project2 = Project(
@@ -40,15 +49,24 @@ final Project project2 = Project(
     '20230831-0447-8141-b190-f16bcf9d8fe1', // task 6
   ],
   leader: '20230831-0517-8130-8211-a9c1dfa3e677',
+  leaderImageUrl: 'avatars/avatar_4.jpg',
   assignees: const [
     '20230831-0517-8230-a202-0089f860b83a',
     '20230831-0517-8130-8211-a9c1dfa3e677'
+  ],
+  assigneeImageUrls: const [
+    'avatars/avatar_1.jpg',
+    'avatars/avatar_4.jpg',
   ],
   mostActiveMemebers: const [
     '20230831-0517-8230-a202-0089f860b83a',
     '20230831-0517-8130-8211-a9c1dfa3e677'
   ],
-  thread: 'project-thread-123',
+  thread: '20230831-0729-8657-b022-9b5f41734dcc',
+  tasksCompleted: 1,
+  totalActivities: 5,
+  activitiesCompleted: 1,
+  totalFileLinks: 5,
 );
 
 final projectList = [

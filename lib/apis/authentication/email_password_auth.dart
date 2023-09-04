@@ -53,7 +53,6 @@ final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
     if (password != confirmPassword) {
       throw const ConfirmPasswordException();
     }
-
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
@@ -61,31 +60,6 @@ final class EmailPasswordAuthenticationAPI extends AuthenticationAPI {
             password: password,
           )
           .then((value) async => persistAuthenticationState(email));
-      final randomAvatar = AVATARS[Random(123).nextInt(AVATARS.length)];
-      final newUser = UserDataModel(
-        id: const UuidV8().generate(),
-        imageUrl: randomAvatar,
-        username: username,
-        email: email,
-        subTasks: const [],
-        projects: const [],
-        tasks: const [],
-        personalSchedules: const [],
-      );
-
-      final userActivity = UserActivityModel(
-        id: newUser.id,
-        isActive: true,
-        lastActive: DateTime.now(),
-      );
-
-      await FirebaseFirestoreConfigs.usersCollection
-          .doc(newUser.id)
-          .set(newUser.toJson());
-
-      await FirebaseFirestoreConfigs.userActivitiesCollection
-          .doc(userActivity.id)
-          .set(userActivity.toJson());
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'email-already-in-use':

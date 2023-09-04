@@ -5,8 +5,10 @@ class CustomAvatarWidget extends StatelessWidget {
   const CustomAvatarWidget({
     super.key,
     required this.imageUrl,
+    this.size = 40.0,
   });
   final String imageUrl;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +18,8 @@ class CustomAvatarWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100.0),
           child: Image.network(
             imageUrl,
-            height: 40.0,
-            width: 40.0,
+            height: size,
+            width: size,
             fit: BoxFit.cover,
             filterQuality: FilterQuality.high,
             loadingBuilder: (context, child, loadingProgress) {
@@ -42,29 +44,6 @@ class CustomAvatarWidget extends StatelessWidget {
                 ),
               );
             },
-          ),
-        ),
-        Positioned(
-          top: 0.0,
-          right: 0.0,
-          child: Container(
-            width: 20.0,
-            height: 20.0,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: context.colorScheme.error,
-              shape: BoxShape.circle,
-            ),
-            child: DefaultTextStyle.merge(
-              style: context.textTheme.bodySmall,
-              child: const Text(
-                '3',
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
           ),
         ),
       ],

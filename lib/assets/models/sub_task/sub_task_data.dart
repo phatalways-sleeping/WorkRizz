@@ -10,8 +10,8 @@ final SubTaskModel instance1 = SubTaskModel(
   points: 20,
   files: const ['design_sketch.pdf'],
   comments: const [
-    'Remember to follow the brand colors.',
-    'Consider mobile responsiveness.'
+    "20230901-2106-8901-8497-af9b3f8d9382",
+"20230901-2106-8201-8509-1baaeb5fb954"
   ],
   progress: 30.0,
   grade: 0,
@@ -26,7 +26,7 @@ final instance2 = SubTaskModel(
   isCompleted: true,
   points: 15,
   files: const ['firebase_config.json', 'user_auth.docx'],
-  comments: const ['Ensure proper error handling for login and signup.'],
+  comments: const ["20230901-2106-8301-a509-aaa8ac57aed9"],
   progress: 100.0,
   grade: 95,
   leaderComment: 'Great job on implementing authentication!',
@@ -40,12 +40,12 @@ final instance3 = SubTaskModel(
   isCompleted: false,
   points: 12,
   files: const ['api_endpoints.pdf'],
-  comments: const ['Include code examples for each endpoint.'],
+  comments: const ["20230901-2106-8901-9509-c296da10dcbc"],
   progress: 60.0,
   grade: 0,
   leaderComment: '',
 );
-final instance4 = SubTaskModel(
+final instance4 = SubTaskModel(//
   id: '20230831-0437-8217-9632-e267d2883df8',
   name: 'Test Cross-Browser Compatibility',
   description: 'Test the website on various browsers for compatibility issues.',
@@ -54,7 +54,7 @@ final instance4 = SubTaskModel(
   isCompleted: true,
   points: 18,
   files: const ['browser_compatibility_report.docx'],
-  comments: const ['Pay attention to CSS rendering differences.'],
+  comments: const ["20230901-2106-8e01-8510-369f341de414"],
   progress: 100.0,
   grade: 88,
   leaderComment: 'Thank you for ensuring cross-browser compatibility!',
@@ -68,12 +68,12 @@ final instance5 = SubTaskModel(
   isCompleted: false,
   points: 25,
   files: const ['query_optimization_notes.csv'],
-  comments: const ['Consider indexing and caching strategies.'],
+  comments: const ["20230901-2106-8401-9510-e39c269e5b1a"],
   progress: 40.0,
   grade: 0,
   leaderComment: '',
 );
-final instance6 = SubTaskModel(
+final instance6 = SubTaskModel( //
   id: '20230831-0442-8540-9148-7529597c79ef',
   name: 'Create User Profile Page',
   description: 'Design and implement the user profile page.',
@@ -82,12 +82,12 @@ final instance6 = SubTaskModel(
   isCompleted: true,
   points: 18,
   files: const ['profile_design.pdf'],
-  comments: const ['Include user avatar and recent activity section.'],
+  comments: const ["20230901-2106-8101-9510-69c20fc59c7c"],
   progress: 100.0,
   grade: 92,
   leaderComment: 'Impressive work on the user profile page!',
 );
-final instance7 = SubTaskModel(
+final instance7 = SubTaskModel(//
   id: '20230831-0442-8640-9158-a07a41ed5778',
   name: 'Test Payment Integration',
   description: 'Test payment gateway integration for purchasing products.',
@@ -97,7 +97,7 @@ final instance7 = SubTaskModel(
   points: 15,
   files: const ['payment_integration_report.docx'],
   comments: const [
-    'Simulate different payment scenarios for thorough testing.'
+    "20230901-2106-8501-b511-3914e6370c9a"
   ],
   progress: 100.0,
   grade: 90,
@@ -112,7 +112,7 @@ final instance8 = SubTaskModel(
   isCompleted: false,
   points: 12,
   files: const ['user_documentation.pdf'],
-  comments: const ['Include step-by-step guides and troubleshooting tips.'],
+  comments: const ["20230901-2106-8501-8511-c7667838d9b4"],
   progress: 50.0,
   grade: 0,
   leaderComment: '',
@@ -126,7 +126,7 @@ final instance9 = SubTaskModel(
   isCompleted: false,
   points: 20,
   files: const ['search_functionality_notes.docx'],
-  comments: const ['Consider using full-text search libraries for efficiency.'],
+  comments: const ["20230901-2106-8401-8511-bf27373a66b1"],
   progress: 40.0,
   grade: 0,
   leaderComment: '',
@@ -140,7 +140,7 @@ final instance10 = SubTaskModel(
   isCompleted: false,
   points: 22,
   files: const ['bug_fixes_report.docx'],
-  comments: const ['Collaborate with QA team for thorough testing.'],
+  comments: const ["20230901-2106-8b01-b511-5ba65bc1d7c3"],
   progress: 60.0,
   grade: 0,
   leaderComment: '',
@@ -154,7 +154,7 @@ final instance11 = SubTaskModel(
   isCompleted: true,
   points: 25,
   files: const ['performance_optimization.pdf'],
-  comments: const ['Focus on critical user interactions and load times.'],
+  comments: const ["20230901-2106-8601-b512-24b194b5305c"],
   progress: 100.0,
   grade: 85,
   leaderComment: 'Thank you for enhancing the application\'s performance!',

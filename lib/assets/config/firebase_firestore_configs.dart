@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 final class FirebaseFirestoreConfigs {
   const FirebaseFirestoreConfigs._();
 
   static const _usersCollection = "users";
   static const _subTasksCollection = "subTasks";
+  static const _subTaskCommentsCollection = "subTaskComments";
   static const _tasksCollection = "tasks";
   static const _projectsCollection = "projects";
   static const _personalScheduleCollection = "personalSchedules";
@@ -35,4 +37,9 @@ final class FirebaseFirestoreConfigs {
 
   static CollectionReference get messagesCollection =>
       FirebaseFirestore.instance.collection(_messagesCollection);
+
+  static CollectionReference get subTaskCommentsCollection =>
+      FirebaseFirestore.instance.collection(_subTaskCommentsCollection);
+
+  static Reference get storageRef => FirebaseStorage.instance.ref();
 }

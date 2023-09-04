@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
+import 'package:task_managing_application/states/navigation_bloc/navigation_bloc.dart';
+import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 
 class CustomFloatingWidget extends StatelessWidget {
   const CustomFloatingWidget({
@@ -25,7 +28,11 @@ class CustomFloatingWidget extends StatelessWidget {
         return null;
       }),
       onTap: () {
-        // TODO: phatalways_sleeping
+        if (context.read<NavigationBloc>().state is ProjectsList) {
+          if (context.read<ProjectBloc>().state is ProjectUserSubscription) {
+            context.read<ProjectBloc>().add(const ProjectCreateNewOne());
+          }
+        }
       },
       child: Container(
         width: size,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/models/task/task.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
@@ -7,6 +8,7 @@ import 'package:task_managing_application/widgets/custom_item_widget/checkbox_bu
 import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
 import 'package:task_managing_application/widgets/custom_tag/project_tag.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
+import 'package:task_managing_application/widgets/tasklist/switch.dart';
 
 part 'date.dart';
 part 'mini_nav.dart';
@@ -46,45 +48,46 @@ class TaskListView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+              Text(
                     "Assignee",
                     style: context.textTheme.titleSmall,
                   ),
-                  Row(
-                    children: [
-                      CustomAvatarWidget(
-                        imageUrl:
-                            'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
-                        size: context.mediaQuery.size.width *
-                            (RATIO_MARGIN + 0.01),
-                      ),
-                      SizedBox(
-                          width: context.mediaQuery.size.width * 0.01),
-                      CustomAvatarWidget(
-                        imageUrl:
-                            'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
-                        size: context.mediaQuery.size.width *
-                            (RATIO_MARGIN + 0.01),
-                      ),
-                      SizedBox(
-                          width: context.mediaQuery.size.width * 0.01),
-                      CustomAvatarWidget(
-                        imageUrl:
-                            'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
-                        size: context.mediaQuery.size.width *
-                            (RATIO_MARGIN + 0.01),
-                      ),
-                    ],
+              Text(
+                    "Completed",
+                    style: context.textTheme.titleSmall,
+                  ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  CustomAvatarWidget(
+                    imageUrl:
+                        'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                    size: context.mediaQuery.size.width *
+                        (RATIO_MARGIN + 0.01),
+                  ),
+                  SizedBox(
+                      width: context.mediaQuery.size.width * 0.01),
+                  CustomAvatarWidget(
+                    imageUrl:
+                        'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                    size: context.mediaQuery.size.width *
+                        (RATIO_MARGIN + 0.01),
+                  ),
+                  SizedBox(
+                      width: context.mediaQuery.size.width * 0.01),
+                  CustomAvatarWidget(
+                    imageUrl:
+                        'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
+                    size: context.mediaQuery.size.width *
+                        (RATIO_MARGIN + 0.01),
                   ),
                 ],
               ),
-              Text(
-                "Completed",
-                style: context.textTheme.titleSmall,
-              )
+              SwitchExample()
             ],
           ),
           SizedBox(height: context.mediaQuery.size.width * RATIO_PADDING),

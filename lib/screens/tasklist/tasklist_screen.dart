@@ -31,7 +31,6 @@ class TaskListScreen extends StatelessWidget {
         ),
       ),
       extendBody: true,
-      bottomNavigationBar: CustomNavigationBar(),
     );
   }
 }

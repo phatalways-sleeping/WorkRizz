@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 part 'tasklist_event.dart';
 part 'tasklist_state.dart';
 

@@ -48,11 +48,13 @@ class _ListSubTaskState extends State<ListSubTask> {
     return SliverToBoxAdapter(
       child: Stack(children: [
         Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
           children: [
             Container(
               // height : all remaining space
-              height: 400,
-
+              constraints: BoxConstraints(
+                maxHeight: context.mediaQuery.size.height * 0.40,),
               child: PageView.builder(
                 controller: controller,
                 scrollDirection: Axis.horizontal,
@@ -67,14 +69,23 @@ class _ListSubTaskState extends State<ListSubTask> {
                 },
               ),
             ),
-            new DotsIndicator(
+            DotsIndicator(
               dotsCount: 4,
               position: _currentPage,
-              decorator: DotsDecorator(
+              decorator: const DotsDecorator(
                 color: GREY,
                 activeColor: BLACK,
               ),
-            )
+            ),
+            Container(
+              height: 12,
+              width: context.mediaQuery.size.width /3,
+              decoration: const BoxDecoration(
+                color: PURPLE,
+                borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(MEDIUM_CORNER)),
+              ),
+            ),
           ],
         ),
         if (_showButton)
@@ -90,7 +101,7 @@ class _ListSubTaskState extends State<ListSubTask> {
               //   }
               // },
               child: Container(
-width: context.mediaQuery.size.width * RATIO_PADDING * 2,
+                width: context.mediaQuery.size.width * RATIO_PADDING * 2,
                 height: context.mediaQuery.size.height * RATIO_PADDING * 4,
                 decoration: const BoxDecoration(
                   color: PINK,

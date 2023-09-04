@@ -33,4 +33,13 @@ mixin LightTheme {
       brightness: Brightness.light,
     ),
   );
+
+  static const List<Color> tagColors = [
+    Color(0xFF5CD669),
+    Color(0xFF9C9AFF),
+    Color(0xFFEAB0FC),
+    Color(0xFFF6BB54),
+    Color(0xFFFFAFAF),
+    Color(0xFFEAB0FC),
+  ];
 }

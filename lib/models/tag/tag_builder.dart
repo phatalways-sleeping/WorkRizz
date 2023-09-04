@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:task_managing_application/models/tag/tag.dart';
 
 class TagBuilder {
-  const TagBuilder._();
+  TagBuilder._();
 
-  final Map<String, Color> table = const {};
+  final Map<String, Color> table = {};
 
 
-  static TagBuilder get instance => const TagBuilder._();
+  static TagBuilder get instance => TagBuilder._();
 
   Color getColorFromTag(Tag tag, Color desiredColor) {
     if (table.keys.contains(tag.title)) {

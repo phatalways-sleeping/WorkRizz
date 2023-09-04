@@ -5,23 +5,29 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:task_managing_application/repositories/application_repository.dart';
 
 part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc() : super(const Task()) {
+  NavigationBloc(this._applicationRepository) : super(const Task()) {
     on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
     on<NavigateToAuthentication>(_navigateToAuthentication);
     on<NavigateToProjectsList>(_onNavigateToProjectsList);
+    on<NavigateToProjectView>((event, emit) {
+      _applicationRepository.projectIdOnView = event.projectId;
+      emit(const ProjectDetail());
+    });
     on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
-    on<NavigateToDashboard>(_onNavigateToDashboard);
     on<NavigateToTask>(_onNavigateToTask);
   }
+
+  final ApplicationRepository _applicationRepository;
 
   Future<void> _onNavigateToTestComponents(
     NavigateToTestComponents event,
@@ -56,13 +62,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) async {
     emit(const Settings());
-  }
-
-  Future<void> _onNavigateToDashboard(
-    NavigateToDashboard event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const Dashboard());
   }
 
   Future<void> _onNavigateToProjectsList(

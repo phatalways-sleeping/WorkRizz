@@ -40,10 +40,13 @@ final class Settings extends NavigationState {
   const Settings();
 }
 
-final class Dashboard extends NavigationState {
-  const Dashboard();
+final class Splash extends NavigationState {
+  const Splash();
 }
 
 final class Task extends NavigationState {
   const Task();
+}
+final class ProjectDetail extends NavigationState {
+  const ProjectDetail();
 }

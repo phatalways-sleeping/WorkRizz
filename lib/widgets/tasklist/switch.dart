@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/config/config.dart';
 
-class SwitchExample extends StatefulWidget {
-  const SwitchExample({super.key});
+class SwitchButton extends StatefulWidget {
+  const SwitchButton({super.key});
 
   @override
-  State<SwitchExample> createState() => _SwitchExampleState();
+  State<SwitchButton> createState() => _SwitchButtonState();
 }
 
-class _SwitchExampleState extends State<SwitchExample> {
+class _SwitchButtonState extends State<SwitchButton> {
   bool light = true;
 
   @override

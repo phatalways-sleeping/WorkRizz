@@ -32,12 +32,17 @@ final class NavigateToSettings extends NavigationEvent {
   const NavigateToSettings();
 }
 
-final class NavigateToDashboard extends NavigationEvent {
-  const NavigateToDashboard();
-}
-
 final class NavigateToProjectsList extends NavigationEvent {
   const NavigateToProjectsList();
+}
+
+final class NavigateToProjectView extends NavigationEvent {
+  const NavigateToProjectView(this.projectId);
+
+  final String projectId;
+
+  @override
+  List<Object> get props => [...super.props, projectId];
 }
 
 final class NavigateToAssistant extends NavigationEvent {
@@ -46,4 +51,8 @@ final class NavigateToAssistant extends NavigationEvent {
 
 final class NavigateToTask extends NavigationEvent {
   const NavigateToTask();
+}
+
+final class NavigateToSplash extends NavigationEvent {
+  const NavigateToSplash();
 }

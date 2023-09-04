@@ -4,3 +4,4 @@ export 'extensions/build_context_extensions.dart';
 export 'extensions/material_states_extensions.dart';
 export 'svgs/svg_assets.dart';
 export 'config/config.dart';
+export 'utils/functions.dart';

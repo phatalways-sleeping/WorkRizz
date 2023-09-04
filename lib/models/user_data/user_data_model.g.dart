@@ -33,7 +33,14 @@ UserDataModel _$UserDataModelFromJson(Map<String, dynamic> json) {
             ?.map((e) => e as String)
             .toList() ??
         [],
-    imageUrl: json['imageUrl'] as String?,
+    imageUrl: json['imageUrl'] as String,
+    completedProjects: json['completedProjects'] as int? ?? 0,
+    leaderProjects: json['leaderProjects'] as int? ?? 0,
+    onGoingProjects: json['onGoingProjects'] as int? ?? 0,
+    projectInvitations: (json['projectInvitations'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
   );
 }
 
@@ -50,6 +57,10 @@ Map<String, dynamic> _$UserDataModelToJson(UserDataModel instance) =>
       'tasks': instance.tasks,
       'subTasks': instance.subTasks,
       'personalSchedules': instance.personalSchedules,
+      'completedProjects': instance.completedProjects,
+      'leaderProjects': instance.leaderProjects,
+      'onGoingProjects': instance.onGoingProjects,
+      'projectInvitations': instance.projectInvitations,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

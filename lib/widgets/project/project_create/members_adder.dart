@@ -34,125 +34,113 @@ class _MembersAdderState extends State<MembersAdder> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        DefaultTextStyle.merge(
-          style: context.textTheme.bodyMedium,
-          child: Text(
-            widget.role == MemberRole.common ? 'Assignees' : 'Leader',
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Row(
+    return BlocBuilder<ProjectBloc, ProjectState>(
+      builder: (context, state) {
+        if (state is ProjectUserSubscription &&
+            state is! ProjectUserCreateAndSubscribe) {
+          return const SizedBox.shrink();
+        }
+        return Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocBuilder<ProjectBloc, ProjectState>(
-              buildWhen: (previous, current) {
-                if (widget.role == MemberRole.common) {
-                  return (previous as ProjectUserCreateAndSubscribe)
-                          .newProjectSetup
-                          .assigneeImageUrls !=
-                      (current as ProjectUserCreateAndSubscribe)
-                          .newProjectSetup
-                          .assigneeImageUrls;
-                }
-                return (previous as ProjectUserCreateAndSubscribe)
-                        .newProjectSetup
-                        .leaderImageUrl !=
-                    (current as ProjectUserCreateAndSubscribe)
-                        .newProjectSetup
-                        .leaderImageUrl;
-              },
-              builder: (context, state) {
+            DefaultTextStyle.merge(
+              style: context.textTheme.bodyMedium,
+              child: Text(
+                widget.role == MemberRole.common ? 'Assignees' : 'Leader',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 if ((state as ProjectUserCreateAndSubscribe)
                         .newProjectSetup
                         .leaderImageUrl
                         .isEmpty &&
-                    widget.role == MemberRole.leader) {
-                  return const SizedBox.shrink();
-                }
-                if (state.newProjectSetup.assigneeImageUrls.isEmpty &&
-                    widget.role == MemberRole.common) {
-                  return const SizedBox.shrink();
-                }
-                return FutureBuilder(
-                  future: widget.role == MemberRole.common
-                      ? context.read<ProjectBloc>().assigneeAvatars()
-                      : context.read<ProjectBloc>().leaderAvatar(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Icon(
-                        Icons.error,
-                        color: context.colorScheme.error,
-                        size: 10.0,
-                      );
-                    }
-                    if (snapshot.hasData) {
-                      if (widget.role == MemberRole.common) {
+                    widget.role == MemberRole.leader)
+                  const SizedBox.shrink()
+                else if (state.newProjectSetup.assigneeImageUrls.isEmpty &&
+                    widget.role == MemberRole.common)
+                  const SizedBox.shrink()
+                else
+                  FutureBuilder(
+                    future: widget.role == MemberRole.common
+                        ? context.read<ProjectBloc>().assigneeAvatars()
+                        : context.read<ProjectBloc>().leaderAvatar(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Icon(
+                          Icons.error,
+                          color: context.colorScheme.error,
+                          size: 10.0,
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        if (widget.role == MemberRole.common) {
+                          return AvatarStack(
+                            avatars: snapshot.data as List<NetworkImage>,
+                            width: 70.0,
+                            height: 30.0,
+                          );
+                        }
                         return AvatarStack(
-                          avatars: snapshot.data as List<NetworkImage>,
+                          avatars: [snapshot.data as NetworkImage],
                           width: 70.0,
                           height: 30.0,
                         );
                       }
-                      return AvatarStack(
-                        avatars: [snapshot.data as NetworkImage],
-                        width: 70.0,
-                        height: 30.0,
+                      return const CustomCircularProgressIndicator(
+                        size: 10.0,
                       );
-                    }
-                    return const CustomCircularProgressIndicator(
-                      size: 10.0,
+                    },
+                  ),
+                const SizedBox(width: 8),
+                InkWell(
+                  onTap: () async {
+                    await showDialog<String>(
+                      context: context,
+                      builder: (context) =>
+                          _EmailDialog(controller: _controller),
+                    ).then(
+                      (value) {
+                        if (value != null && value.isNotEmpty) {
+                          context.read<ProjectBloc>().add(
+                              widget.role == MemberRole.leader
+                                  ? ProjectInputLeader(value)
+                                  : ProjectInputAssignee(value));
+                          _controller.clear();
+                        }
+                      },
                     );
                   },
-                );
-              },
-            ),
-            const SizedBox(width: 8),
-            InkWell(
-              onTap: () async {
-                await showDialog<String>(
-                  context: context,
-                  builder: (context) => _EmailDialog(controller: _controller),
-                ).then(
-                  (value) {
-                    if (value != null && value.isNotEmpty) {
-                      context.read<ProjectBloc>().add(
-                          widget.role == MemberRole.leader
-                              ? ProjectInputLeader(value)
-                              : ProjectInputAssignee(value));
-                      _controller.clear();
-                    }
-                  },
-                );
-              },
-              child: Container(
-                width: 25.0,
-                height: 25.0,
-                decoration: const ShapeDecoration(
-                  color: Colors.black,
-                  shape: OvalBorder(),
+                  child: Container(
+                    width: 25.0,
+                    height: 25.0,
+                    decoration: const ShapeDecoration(
+                      color: Colors.black,
+                      shape: OvalBorder(),
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 20.0,
+                    ),
+                  ),
                 ),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 20.0,
-                ),
-              ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

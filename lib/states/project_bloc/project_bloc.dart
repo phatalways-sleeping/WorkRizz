@@ -37,7 +37,11 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         ),
       ),
     );
-    on<ProjectCreateNewOne>((event, emit) {
+    on<ProjectCreateNewOne>((event, emit) async {
+      final userImageUrl = await _applicationRepository
+          .userStream(_applicationRepository.userId)
+          .first
+          .then((value) => value.imageUrl);
       final newProjectSetup = Project(
         id: const UuidV8().generate(),
         name: "Demo project",
@@ -45,8 +49,8 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         tags: const [],
         startDate: DateTime.now(),
         endDate: DateTime.now(),
-        leader: '',
-        leaderImageUrl: '',
+        leader: _applicationRepository.userId,
+        leaderImageUrl: userImageUrl,
         assignees: const [],
         assigneeImageUrls: const [],
         mostActiveMemebers: const [],
@@ -65,7 +69,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         ),
       );
     });
-    on<ProjectCloseCreateNewOne>((event, emit) {
+    on<ProjectRequestCloseNewOne>((event, emit) {
       emit(
         ProjectUserSubscription(
           username: state.username,
@@ -74,6 +78,18 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
           completedProjectsNumber: state.completedProjectsNumber,
           projects: state.projects,
           filterStatus: (state as ProjectUserCreateAndSubscribe).filterStatus,
+        ),
+      );
+    });
+    on<ProjectCloseCreateNewOne>((event, emit) {
+      emit(
+        ProjectUserSubscription(
+          username: state.username,
+          onGoingProjectsNumber: state.onGoingProjectsNumber,
+          leaderProjectsNumber: state.leaderProjectsNumber,
+          completedProjectsNumber: state.completedProjectsNumber,
+          projects: state.projects,
+          filterStatus: FilterStatus.none,
         ),
       );
     });
@@ -89,6 +105,11 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       } else {
         event.context.scaffoldMessenger.showSnackBar(
           SnackBar(
+            padding: EdgeInsets.symmetric(
+              horizontal:
+                  event.context.mediaQuery.size.width * RATIO_PADDING * 1.2,
+              vertical: event.context.mediaQuery.size.height * RATIO_PADDING,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
                 25.0,
@@ -99,14 +120,12 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
               vertical: 10.0,
             ),
             behavior: SnackBarBehavior.floating,
-            showCloseIcon: true,
-            closeIconColor: event.context.colorScheme.onSecondary,
-            backgroundColor: event.context.colorScheme.secondary,
+            backgroundColor: event.context.colorScheme.onSecondary,
             content: DefaultTextStyle.merge(
               style: event.context.textTheme.bodySmall,
               child: const Text(
                 "You has not created one yet!",
-                style: TextStyle(color: Colors.black, fontSize: 20.0),
+                style: TextStyle(color: Colors.white, fontSize: 16.0),
               ),
             ),
           ),
@@ -234,6 +253,34 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
             ),
           ),
         );
+      } else if (project.endDate.difference(project.startDate).inDays < 0) {
+        event.context.scaffoldMessenger.showSnackBar(
+          SnackBar(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                25.0,
+              ),
+            ),
+            margin: const EdgeInsets.symmetric(
+              horizontal: 12.0,
+              vertical: 10.0,
+            ),
+            behavior: SnackBarBehavior.floating,
+            showCloseIcon: true,
+            closeIconColor: event.context.colorScheme.onSecondary,
+            backgroundColor: event.context.colorScheme.error,
+            content: DefaultTextStyle.merge(
+              style: event.context.textTheme.bodySmall,
+              child: const Text(
+                "Invalid end date!",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+          ),
+        );
       } else {
         emit(ProjectUserCreateAndSubscribeLoading.from(
             state as ProjectUserCreateAndSubscribe));
@@ -254,8 +301,8 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
                   leaderProjectsNumber: state.leaderProjectsNumber,
                   completedProjectsNumber: state.completedProjectsNumber,
                   projects: state.projects,
-                  filterStatus:
-                      (state as ProjectUserCreateAndSubscribeLoading).filterStatus,
+                  filterStatus: (state as ProjectUserCreateAndSubscribeLoading)
+                      .filterStatus,
                 ),
               ),
             );

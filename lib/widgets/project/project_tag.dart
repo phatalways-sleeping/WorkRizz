@@ -36,13 +36,16 @@ class ProjectTagButton extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints.loose(
           Size(
-            width?? context.mediaQuery.size.width * 0.35,
-            height?? context.mediaQuery.size.height * 0.18,
+            width ?? context.mediaQuery.size.width * 0.35,
+            height ?? context.mediaQuery.size.height * 0.18,
           ),
         ),
         padding: EdgeInsets.symmetric(
           horizontal: context.mediaQuery.size.width * RATIO_PADDING,
           vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.35,
+        ),
+        margin: EdgeInsets.only(
+          left: context.mediaQuery.size.width * RATIO_MARGIN * 0.6,
         ),
         decoration: ShapeDecoration(
           color: isSelected

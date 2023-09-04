@@ -26,6 +26,10 @@ final class ProjectCreateNewOne extends ProjectEvent {
   const ProjectCreateNewOne();
 }
 
+final class ProjectRequestCloseNewOne extends ProjectEvent {
+  const ProjectRequestCloseNewOne();
+}
+
 final class ProjectCloseCreateNewOne extends ProjectEvent {
   const ProjectCloseCreateNewOne();
 }

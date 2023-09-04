@@ -50,88 +50,94 @@ class _TagsAdderState extends State<TagsAdder> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        DefaultTextStyle.merge(
-          style: context.textTheme.bodySmall,
-          child: Text(
-            'Tag',
-            style: TextStyle(
-              color: context.colorScheme.onSecondary,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: context.mediaQuery.size.height * RATIO_PADDING * 0.3,
-        ),
-        Row(
+    return BlocBuilder<ProjectBloc, ProjectState>(
+      builder: (context, state) {
+        if (state is ProjectUserSubscription &&
+            state is! ProjectUserCreateAndSubscribe) {
+          return const SizedBox.shrink();
+        }
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            BlocSelector<ProjectBloc, ProjectState, List<Tag>>(
-              selector: (state) =>
-                  (state as ProjectUserCreateAndSubscribe).newProjectSetup.tags,
-              builder: (context, state) {
-                return Column(
+            DefaultTextStyle.merge(
+              style: context.textTheme.bodySmall,
+              child: Text(
+                'Tag',
+                style: TextStyle(
+                  color: context.colorScheme.onSecondary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: context.mediaQuery.size.height * RATIO_PADDING * 0.3,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
-                  children: _buildTags(state),
-                );
-              },
-            ),
-            SizedBox(
-              width: context.mediaQuery.size.width * RATIO_PADDING * 0.5,
-            ),
-            InkWell(
-              onTap: () async {
-                await showDialog<String>(
-                  context: context,
-                  builder: (context) => _TagDialog(controller: _controller),
-                ).then(
-                  (value) {
-                    if (value != null && value.isNotEmpty) {
-                      context.read<ProjectBloc>().add(
-                            ProjectInputTag(
-                              Tag(
-                                title: value.trim(),
-                              ),
-                            ),
-                          );
-                      _controller.clear();
-                    }
-                  },
-                );
-              },
-              child: Container(
-                width: 20.0,
-                height: 20.0,
-                decoration: ShapeDecoration(
-                  color: context.colorScheme.onPrimary,
-                  shape: const OvalBorder(
-                    side: BorderSide(
-                      width: 1.50,
-                      strokeAlign: BorderSide.strokeAlignOutside,
-                    ),
+                  children: _buildTags(
+                    (state as ProjectUserCreateAndSubscribe)
+                        .newProjectSetup
+                        .tags,
                   ),
                 ),
-                alignment: Alignment.center,
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.black,
-                  size: 18.0,
+                SizedBox(
+                  width: context.mediaQuery.size.width * RATIO_PADDING * 0.5,
                 ),
-              ),
-            )
+                InkWell(
+                  onTap: () async {
+                    await showDialog<String>(
+                      context: context,
+                      builder: (context) => _TagDialog(controller: _controller),
+                    ).then(
+                      (value) {
+                        if (value != null && value.isNotEmpty) {
+                          context.read<ProjectBloc>().add(
+                                ProjectInputTag(
+                                  Tag(
+                                    title: value.trim(),
+                                  ),
+                                ),
+                              );
+                          _controller.clear();
+                        }
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 20.0,
+                    height: 20.0,
+                    decoration: ShapeDecoration(
+                      color: context.colorScheme.onPrimary,
+                      shape: const OvalBorder(
+                        side: BorderSide(
+                          width: 1.50,
+                          strokeAlign: BorderSide.strokeAlignOutside,
+                        ),
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.black,
+                      size: 18.0,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/widgets/project/project_listview/project_tag.dart';

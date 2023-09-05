@@ -18,7 +18,7 @@ class TaskTag extends StatelessWidget {
         ),
         child: Align(
           alignment: Alignment.center,
-          child: Text(name, style: context.textTheme.labelMedium),
+          child: Text(name, style: context.textTheme.labelLarge),
         ));
   }
 }

@@ -20,8 +20,12 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: context.mediaQuery.size.width * 2 / 3,
-      height: context.mediaQuery.size.height * 0.08,
+      constraints: BoxConstraints.tight(
+        Size(
+          context.mediaQuery.size.width,
+          context.mediaQuery.size.height * 0.1,
+        ),
+      ),
       margin: EdgeInsets.only(
         left: context.mediaQuery.size.width * RATIO_MARGIN,
         right: context.mediaQuery.size.width * RATIO_MARGIN,

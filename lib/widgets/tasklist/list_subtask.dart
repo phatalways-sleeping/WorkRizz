@@ -14,22 +14,8 @@ class ListSubTask extends StatefulWidget {
 }
 
 class _ListSubTaskState extends State<ListSubTask> {
-  PageController controller = PageController();
-
+  late final PageController controller = PageController();
   var _currentPage = 0.0;
-  @override
-  void initState() {
-    super.initState();
-    controller.addListener(() {
-      controller.addListener(() {
-        setState(() {
-          _currentPage = controller.page!;
-          widget.changeTask!(_currentPage);
-        });
-      });
-    });
-  }
-
   @override
   void dispose() {
     controller.dispose();
@@ -38,39 +24,38 @@ class _ListSubTaskState extends State<ListSubTask> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: context.mediaQuery.size.height * 0.5,
+      ),
+      margin: EdgeInsets.only(
+        bottom: context.mediaQuery.size.width * RATIO_MARGIN,
+      ),
+      child: PageView.custom(
+        controller: controller,
+        padEnds: true,
+        physics: const BouncingScrollPhysics(),
+        onPageChanged: (index) {
+          setState(() {
+            _currentPage = index.toDouble();
+            widget.changeTask!(_currentPage);
+          });
+        },
+        childrenDelegate: SliverChildListDelegate(
+          [
+            ...List.filled(
+              10,
               Container(
-                // height : all remaining space
-                constraints: BoxConstraints(
-                  maxHeight: context.mediaQuery.size.height * 0.45,
-                ),
-                child: PageView.builder(
-                  controller: controller,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal:
-                                context.mediaQuery.size.width * RATIO_PADDING +
-                                    5.0),
-                        child: const SubTask());
-                  },
-                ),
+                margin: EdgeInsets.symmetric(
+                    horizontal:
+                        context.mediaQuery.size.width * RATIO_PADDING + 5.0),
+                child: const SubTask(),
               ),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: ElevatedButton(
+            ),
+            SizedBox(
+              height: context.mediaQuery.size.height * RATIO_MARGIN,
+            ),
+            ElevatedButton(
               onPressed: () {},
               style: const ButtonStyle(
                 overlayColor: MaterialStatePropertyAll(
@@ -96,8 +81,11 @@ class _ListSubTaskState extends State<ListSubTask> {
               ),
               child: SvgPicture.string(SvgAssets.add),
             ),
-          ),
-        ],
+            SizedBox(
+              height: context.mediaQuery.size.height * 0.2,
+            )
+          ],
+        ),
       ),
     );
   }

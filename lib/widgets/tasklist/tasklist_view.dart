@@ -77,6 +77,7 @@ class _TaskListViewState extends State<TaskListView> {
             children: [
               CustomScrollView(controller: _scrollController, slivers: [
                 SliverPersistentHeader(
+                  pinned: true,
                   delegate: CustomHeaderBar(
                     upperChild: const Icon(Icons.arrow_back_ios_new_outlined,
                         color: BLACK, size: 16.0),
@@ -248,10 +249,12 @@ class _TaskListViewState extends State<TaskListView> {
                     ),
                   ),
                 ),
-                ListSubTask(
-                    changeTask: (value) => setState(() {
-                          _currentPage = value;
-                        })),
+                SliverToBoxAdapter(
+                  child: ListSubTask(
+                      changeTask: (value) => setState(() {
+                            _currentPage = value;
+                          })),
+                ),
               ]),
               Positioned(
                 bottom: 0,

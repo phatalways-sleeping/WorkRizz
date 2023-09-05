@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
+import 'package:task_managing_application/assets/models/task/task_data.dart';
 import 'package:task_managing_application/firebase_options.dart';
 import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:uuid/v8.dart';
 
-import 'project/project_data.dart';
 
 const String path = 'lib/assets/models/';
 Future<void> main() async {
@@ -53,11 +53,11 @@ Future<void> main() async {
   //   }
   // }
 
-  // for (var task in taskList) {
-  //   await FirebaseFirestoreConfigs.tasksCollection
-  //       .doc(task.id)
-  //       .set(task.toJson());
-  // }
+  for (var task in taskList) {
+    await FirebaseFirestoreConfigs.tasksCollection
+        .doc(task.id)
+        .set(task.toJson());
+  }
 
   // for (var subTask in subTaskList) {
   //   await FirebaseFirestoreConfigs.subTasksCollection
@@ -71,11 +71,11 @@ Future<void> main() async {
   //       .set(comment.toJson());
   // }
 
-  for (var project in projectList) {
-    await FirebaseFirestoreConfigs.projectsCollection
-        .doc(project.id)
-        .set(project.toJson());
-  }
+  // for (var project in projectList) {
+  //   await FirebaseFirestoreConfigs.projectsCollection
+  //       .doc(project.id)
+  //       .set(project.toJson());
+  // }
 
   // for (var schedule in scheduleList) {
   //   await FirebaseFirestoreConfigs.personalScheduleCollection

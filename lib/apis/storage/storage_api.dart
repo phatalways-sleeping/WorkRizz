@@ -5,6 +5,7 @@ import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
 import 'package:task_managing_application/models/personal_schedule/time_line/time_line_model.dart';
 import 'package:task_managing_application/models/project_invitation/project_invitation.dart';
+import 'package:task_managing_application/models/task/sub_task_small_info.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
 
 part 'firestore_storage_api.dart';
@@ -146,6 +147,15 @@ sealed class StorageAPI {
   Future<void> updateSubTasksInTask(String id, List<String> latestVersion);
   Future<void> removeSubTasksInTask(String id, List<String> removedItems);
   Future<void> updateTaskInTask(String id, Task task);
+  Future<void> updateSubTaskSmallInformationsInTask(
+    String id,
+    List<SubTaskSmallInformation> latestVersion,
+  );
+  Future<void> removeSubTaskSmallInformationsInTask(
+    String id,
+    List<SubTaskSmallInformation> removedItems,
+  );
+  Future<void> updateSubTasksCompletedInTask(String id, int increase);
   // - SubTask
   Future<void> updateAssigneeInSubTask(String id, String assignee);
   Future<void> updateDescriptionInSubTask(String id, String description);

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/apis/apis.dart';
 import 'package:task_managing_application/assets/config/config.dart';
@@ -113,7 +112,8 @@ class ApplicationRepository {
   Stream<UserActivityModel> userActivityStream(String? id) =>
       _storageAPI.userActivityStreamInUserActivity(id ?? userId);
   Stream<Project> projectStream(String id) => _storageAPI.projectStream(id);
-  Stream<Project> projectOnViewStream() => _storageAPI.projectStream(projectIdOnView);
+  Stream<Project> projectOnViewStream() =>
+      _storageAPI.projectStream(projectIdOnView);
   Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
   Stream<SubTaskModel> subTaskStream(String subTaskId) =>
       _storageAPI.subTaskModelStream(subTaskId);
@@ -383,7 +383,6 @@ class ApplicationRepository {
   Future<String> imageUrlOnStorageOf(String path) async =>
       FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
 
-
   // Task / View list
   Future<void> markProjectCompleted(
     String projectId,
@@ -421,40 +420,58 @@ class ApplicationRepository {
     );
   }
 
+  Future<bool> _isSubTaskCompleted(String subTaskId) async =>
+      await _storageAPI.subTaskModelStream(subTaskId).first.then(
+            (value) => value.isCompleted,
+          );
+
   Future<void> markSubTaskCompleted({
     required String projectId,
     required String subTaskId,
-    String? taskId,
-    bool markTaskCompleted = false,
+    required String taskId,
   }) async {
-    assert((markTaskCompleted && taskId != null) || !markTaskCompleted);
     await Future.wait<void>(
       [
         _storageAPI.updateIsCompletedInSubTask(subTaskId, true),
         _storageAPI.updateActivitiesCompletedInProject(projectId, 1),
-        if (markTaskCompleted) ...[
-          _storageAPI.updateTasksCompletedInProject(taskId!, 1),
-          _storageAPI.updateIsCompletedInTask(taskId, true),
-        ]
       ],
+    );
+    final subTasks = await _storageAPI
+        .taskStream(taskId)
+        .first
+        .then((value) => value.subTasks);
+    await Future.wait<bool>([
+      for (var subTask in subTasks)
+        _isSubTaskCompleted(subTask).then((value) => value)
+    ]).then(
+      (value) async {
+        if (!value.contains(false)) {
+          await Future.wait([
+            _storageAPI.updateIsCompletedInTask(taskId, true),
+            _storageAPI.updateTasksCompletedInProject(projectId, 1),
+          ]);
+        }
+      },
     );
   }
 
   Future<void> markSubTaskIncompleted({
     required String projectId,
     required String subTaskId,
-    String? taskId,
-    bool markTaskIncompleted = false,
+    required String taskId,
   }) async {
-    assert((markTaskIncompleted && taskId != null) || !markTaskIncompleted);
+    final taskCompleted = await _storageAPI
+        .taskStream(taskId)
+        .first
+        .then((value) => value.isCompleted);
+    if (taskCompleted) {
+      _storageAPI.updateTasksCompletedInProject(projectId, -1);
+    }
     await Future.wait<void>(
       [
-        _storageAPI.updateIsCompletedInTask(subTaskId, false),
+        _storageAPI.updateIsCompletedInTask(taskId, false),
+        _storageAPI.updateIsCompletedInSubTask(subTaskId, false),
         _storageAPI.updateActivitiesCompletedInProject(projectId, -1),
-        if (markTaskIncompleted) ...[
-          _storageAPI.updateTasksCompletedInProject(taskId!, -1),
-          _storageAPI.updateIsCompletedInTask(taskId, false),
-        ]
       ],
     );
   }

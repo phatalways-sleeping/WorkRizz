@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_managing_application/models/base/base.dart';
-import 'package:task_managing_application/models/json_converters/json_converters.dart' show DocumentReferenceSerializer;
+import 'package:task_managing_application/models/json_converters/json_converters.dart'
+    show DocumentReferenceSerializer;
+import 'package:task_managing_application/models/task/sub_task_small_info.dart';
 
 part 'task.g.dart';
 
@@ -27,6 +29,8 @@ class Task extends Base {
     required this.project,
     required this.points,
     required this.isCompleted,
+    this.subTasksCompleted = 0,
+    this.subTaskSmallInformations = const [],
   });
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
@@ -38,11 +42,15 @@ class Task extends Base {
   @JsonKey(defaultValue: [])
   final List<String> subTasks;
   @JsonKey(required: true)
+  final int subTasksCompleted;
+  @JsonKey(required: true)
   final String project;
   @JsonKey(defaultValue: 0)
   final int points;
   @JsonKey(defaultValue: false)
   final bool isCompleted;
+  @JsonKey(required: true)
+  final List<SubTaskSmallInformation> subTaskSmallInformations;
 
   @override
   List<Object> get props => [
@@ -52,6 +60,8 @@ class Task extends Base {
         project,
         points,
         isCompleted,
+        subTasksCompleted,
+        subTaskSmallInformations,
       ];
 
   Task copyWith({
@@ -63,6 +73,8 @@ class Task extends Base {
     String? assignee,
     int? points,
     bool? isCompleted,
+    int? subTasksCompleted,
+    List<SubTaskSmallInformation>? subTaskSmallInformations,
   }) {
     return Task(
       reference: reference ?? this.reference,
@@ -72,6 +84,9 @@ class Task extends Base {
       project: project ?? this.project,
       points: points ?? this.points,
       isCompleted: isCompleted ?? this.isCompleted,
+      subTasksCompleted: subTasksCompleted ?? this.subTasksCompleted,
+      subTaskSmallInformations:
+          subTaskSmallInformations ?? this.subTaskSmallInformations,
     );
   }
 }

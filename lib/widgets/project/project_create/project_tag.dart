@@ -32,7 +32,7 @@ class ProjectTagWidget extends StatelessWidget {
             width: 1.50,
           ),
           borderRadius: BorderRadius.circular(
-            12.0,
+            MEDIUM_CORNER,
           ),
         ),
       ),

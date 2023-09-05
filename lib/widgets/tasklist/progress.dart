@@ -21,25 +21,48 @@ class Progress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(MEDIUM_CORNER),
-        border: Border.all(color: BLACK, width: BORDER_WIDTH),
+      constraints: BoxConstraints.tight(
+        Size(
+          context.mediaQuery.size.width,
+          context.mediaQuery.size.height * 0.1,
+        ),
       ),
-      padding:
-          EdgeInsets.all(MediaQuery.of(context).size.width * RATIO_PADDING),
+      decoration: const ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: BLACK,
+            width: BORDER_WIDTH,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(MEDIUM_CORNER),
+          ),
+        ),
+      ),
+      padding: EdgeInsets.only(
+        left: context.mediaQuery.size.width * RATIO_PADDING,
+        right: context.mediaQuery.size.width * RATIO_PADDING,
+        bottom: context.mediaQuery.size.width * RATIO_PADDING * 1.4,
+      ),
+      alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const ShapeDecoration(
               color: GREEN,
-              shape: BoxShape.circle,
-              border: Border.all(color: BLACK, width: BORDER_WIDTH),
+              shape: CircleBorder(
+                side: BorderSide(
+                  color: BLACK,
+                  width: BORDER_WIDTH,
+                ),
+              ),
             ),
             // size bound its child
             padding: EdgeInsets.all(
-                MediaQuery.of(context).size.width * RATIO_PADDING),
+              context.mediaQuery.size.width * RATIO_PADDING,
+            ),
             child: SizedBox(
               child: Text(
                 '${(progress * 100).toInt()}%',
@@ -48,6 +71,7 @@ class Progress extends StatelessWidget {
             ),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 '$tasksCompleted/$totalTasks',
@@ -60,6 +84,7 @@ class Progress extends StatelessWidget {
             ],
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 '$activitiesCompleted/$totalActivities',
@@ -72,6 +97,7 @@ class Progress extends StatelessWidget {
             ],
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               FutureBuilder(
                 future: context.read<TasklistBloc>().mostActiveMembers(),

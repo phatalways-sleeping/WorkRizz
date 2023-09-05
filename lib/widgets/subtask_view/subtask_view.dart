@@ -10,9 +10,17 @@ part 'comment_list.dart';
 part 'file_list.dart';
 part 'review.dart';
 
-class SubTaskView extends StatelessWidget {
-  const SubTaskView({super.key});
+// ignore: must_be_immutable
+class SubTaskView extends StatefulWidget {
+  SubTaskView({super.key});
+  Function()? changeColor;
 
+  @override
+  State<SubTaskView> createState() => _SubTaskViewState();
+}
+
+class _SubTaskViewState extends State<SubTaskView> {
+  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,10 +37,17 @@ class SubTaskView extends StatelessWidget {
                   ),
                   Text('Mobile Final', style: context.textTheme.labelMedium),
                 ]),
-                bottomChild: const Row(
+                bottomChild: Row(
                   children: [
-                    CheckboxWidget(),
-                    Text("Design UI"),
+                    CheckboxWidget(
+                      checkState: isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          isChecked = value!;
+                        });
+                      },
+                    ),
+                    const Text("Design UI"),
                   ],
                 ),
                 onPressed: (context) {}),
@@ -160,13 +175,13 @@ class SubTaskView extends StatelessWidget {
                         ),
                         padding: EdgeInsets.all(
                             MediaQuery.of(context).size.width * RATIO_PADDING),
-                        child: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae nisl eget nunc aliquam aliquet.',
+                        child: Text(
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae nisl eget nunc aliquam aliquet.',
                             style: context.textTheme.titleSmall),
                       ),
                     ],
                   ),
-                  SizedBox(
-                      height: context.mediaQuery.size.width * RATIO_SPACE),
+                  SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
                   const File(),
                   SizedBox(
                       height: context.mediaQuery.size.width * RATIO_PADDING),

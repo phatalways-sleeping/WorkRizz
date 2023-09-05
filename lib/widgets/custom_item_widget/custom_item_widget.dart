@@ -1,43 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
+import 'package:task_managing_application/widgets/tasklist/tasklist_view.dart';
 
+// ignore: must_be_immutable
 class CustomItemWidget extends StatefulWidget {
-  const CustomItemWidget(
+  CustomItemWidget(
       {super.key,
-      this.isDone = false,
-      required this.isFixed,
+      required this.isDone,
+      this.isFixed = true,
       required this.name,
       required this.subtext,
       required this.firstChild,
-      required this.secondChild,});
+      required this.secondChild,
+      required this.controller});
 
-  final bool isDone;
+  bool isDone;
   final bool isFixed;
   final String name;
   final String subtext;
   final Widget secondChild;
   final Widget firstChild;
+  final SubTaskController controller;
 
   @override
-  State<CustomItemWidget> createState() => _CustomItemWidgetState();
+  // ignore: no_logic_in_create_state
+  State<CustomItemWidget> createState() => _CustomItemWidgetState(controller);
 }
 
 class _CustomItemWidgetState extends State<CustomItemWidget> {
+  bool isDone = false;
+
+  void changeColor(bool? value) {
+    if (widget.isFixed) {
+      return;
+    }
+    setState(() {
+      widget.isDone = value!;
+      isDone = widget.isDone;
+    });
+  }
+
+  _CustomItemWidgetState(SubTaskController controller) {
+    controller.changeColor = changeColor;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        // border black, size 1, round corner 12
-        border: Border.all(
-          color: BLACK,
-          width: BORDER_WIDTH,
+    return ElevatedButton(
+      onPressed: () {},
+      style: ButtonStyle(
+        shape: MaterialStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(MEDIUM_CORNER),
+            side: const BorderSide(
+              color: BLACK,
+              width: 1,
+            ),
+          ),
         ),
-        borderRadius: BorderRadius.circular(MEDIUM_CORNER),
-        // fill color
-        color: widget.isDone ? GREEN : WHITE,
+        backgroundColor: MaterialStateProperty.resolveWith(
+            (states) => isDone ? GREEN : WHITE),
+        elevation: MaterialStateProperty.resolveWith(
+          (states) => states.isPressed ? 4.0 : 0.0,
+        ),
+        overlayColor: const MaterialStatePropertyAll(
+          PALE,
+        ),
+        splashFactory: InkSparkle.splashFactory,
+        animationDuration: const Duration(
+          seconds: 2,
+        ),
+        tapTargetSize: MaterialTapTargetSize.padded,
       ),
-      padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * RATIO_PADDING),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

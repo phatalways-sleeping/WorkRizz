@@ -35,7 +35,7 @@ class TaskListView extends StatefulWidget {
 class _TaskListViewState extends State<TaskListView> {
   late final ScrollController _scrollController = ScrollController()
     ..addListener(() {});
-
+  var _currentPage = 0.0;
   get separatorBuilder => null;
 
   get amount => null;
@@ -73,44 +73,139 @@ class _TaskListViewState extends State<TaskListView> {
         }
         return BaseScreen(
           hideNavigationBar: true,
-          child: CustomScrollView(controller: _scrollController, slivers: [
-            SliverPersistentHeader(
-              delegate: CustomHeaderBar(
-                upperChild: const Icon(Icons.arrow_back_ios_new_outlined,
-                    color: BLACK, size: 16.0),
-                atHomePage: false,
-                bottomChild:
-                    Text((state as TasklistSubscription).project!.name),
-                onPressed: (context) => context.read<NavigationBloc>().add(
-                      const NavigateToProjectsList(),
+          child: Stack(
+            children: [
+              CustomScrollView(controller: _scrollController, slivers: [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: CustomHeaderBar(
+                    upperChild: Container(
+                      constraints: BoxConstraints.tight(
+                        Size(
+                          context.mediaQuery.size.width * 0.3,
+                          context.mediaQuery.size.height * 0.03,
+                        ),
+                      ),
+                      decoration: ShapeDecoration(
+                        color: calculateColor(
+                            (state as TasklistSubscription).project!.endDate),
+                        shape: const RoundedRectangleBorder(
+                          side: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(ROUND_CORNER),
+                          ),
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        calculateDaysLeft(
+                          (state).project!.endDate,
+                        ),
+                      ),
                     ),
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.mediaQuery.size.width * RATIO_PADDING + 5.0,
-              ),
-              sliver: SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    atHomePage: false,
+                    bottomChild: Text((state).project!.name),
+                    onPressed: (context) => context.read<NavigationBloc>().add(
+                          const NavigateToProjectsList(),
+                        ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal:
+                        context.mediaQuery.size.width * RATIO_PADDING + 5.0,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Leader', style: context.textTheme.titleSmall),
-                            SizedBox(
-                                width: context.mediaQuery.size.width *
-                                    RATIO_PADDING),
+                            Row(
+                              children: [
+                                Text('Leader',
+                                    style: context.textTheme.titleSmall),
+                                SizedBox(
+                                    width: context.mediaQuery.size.width *
+                                        RATIO_PADDING),
+                                FutureBuilder(
+                                  future: context.read<TasklistBloc>().imageUrl(
+                                      (state).project!.leaderImageUrl),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return CustomAvatarWidget(
+                                        imageUrl: snapshot.data!,
+                                      );
+                                    }
+                                    if (snapshot.hasError) {
+                                      return Center(
+                                        child: Icon(
+                                          Icons.error_outline_rounded,
+                                          size: 20.0,
+                                          color: context.colorScheme.error,
+                                        ),
+                                      );
+                                    }
+                                    return const Center(
+                                      child: CustomCircularProgressIndicator(
+                                        size: 25.0,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            MiniNav(
+                              totalFiles: state.project!.totalFileLinks,
+                              totalNotes: state.project!.totalFileLinks,
+                              totalUnreadMessages: 2,
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                            height:
+                                context.mediaQuery.size.width * RATIO_PADDING),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Assignee",
+                              style: context.textTheme.titleSmall,
+                            ),
+                            Text(
+                              "Completed",
+                              style: context.textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
                             FutureBuilder(
                               future: context
                                   .read<TasklistBloc>()
-                                  .imageUrl((state).project!.leaderImageUrl),
+                                  .assigneeAvatars(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  return CustomAvatarWidget(
-                                    imageUrl: snapshot.data!,
+                                  return Row(
+                                    children: [
+                                      for (var avatar
+                                          in snapshot.data as List<String>)
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            right:
+                                                context.mediaQuery.size.width *
+                                                    0.01,
+                                          ),
+                                          child: CustomAvatarWidget(
+                                            imageUrl: avatar,
+                                            size:
+                                                context.mediaQuery.size.width *
+                                                    (RATIO_MARGIN + 0.01),
+                                          ),
+                                        ),
+                                    ],
                                   );
                                 }
                                 if (snapshot.hasError) {
@@ -129,115 +224,87 @@ class _TaskListViewState extends State<TaskListView> {
                                 );
                               },
                             ),
+                            const SwitchButton()
                           ],
                         ),
-                        MiniNav(
-                          totalFiles: state.project!.totalFileLinks,
-                          totalNotes: state.project!.totalFileLinks,
-                          totalUnreadMessages: 2,
-                        )
                       ],
                     ),
-                    SizedBox(
-                        height: context.mediaQuery.size.width * RATIO_PADDING),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Assignee",
-                          style: context.textTheme.titleSmall,
-                        ),
-                        Text(
-                          "Completed",
-                          style: context.textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        FutureBuilder(
-                          future:
-                              context.read<TasklistBloc>().assigneeAvatars(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Row(
-                                children: [
-                                  for (var avatar
-                                      in snapshot.data as List<String>)
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        right: context.mediaQuery.size.width *
-                                            0.01,
-                                      ),
-                                      child: CustomAvatarWidget(
-                                        imageUrl: avatar,
-                                        size: context.mediaQuery.size.width *
-                                            (RATIO_MARGIN + 0.01),
-                                      ),
-                                    ),
-                                ],
-                              );
-                            }
-                            if (snapshot.hasError) {
-                              return Center(
-                                child: Icon(
-                                  Icons.error_outline_rounded,
-                                  size: 20.0,
-                                  color: context.colorScheme.error,
-                                ),
-                              );
-                            }
-                            return const Center(
-                              child: CustomCircularProgressIndicator(
-                                size: 25.0,
-                              ),
-                            );
-                          },
-                        ),
-                        const SwitchButton()
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            ListTag(
-              tags: state.project!.tags,
-            ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.mediaQuery.size.width * RATIO_PADDING + 5.0,
-              ),
-              sliver: SliverToBoxAdapter(
+                ListTag(
+                  tags: state.project!.tags,
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal:
+                        context.mediaQuery.size.width * RATIO_PADDING + 5.0,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                            height:
+                                context.mediaQuery.size.width * RATIO_PADDING),
+                        Date(
+                          startDate: state.project!.startDate,
+                          endDate: state.project!.endDate,
+                        ),
+                        SizedBox(
+                            height:
+                                context.mediaQuery.size.width * RATIO_SPACE),
+                        Progress(
+                          progress: state.project!.activitiesCompleted /
+                              state.project!.totalActivities,
+                          tasksCompleted: state.project!.tasksCompleted,
+                          totalTasks: state.project!.tasks.length,
+                          activitiesCompleted:
+                              state.project!.activitiesCompleted,
+                          totalActivities: state.project!.totalActivities,
+                          mostActive: state.project!.mostActiveMemebers,
+                        ),
+                        SizedBox(
+                            height:
+                                context.mediaQuery.size.width * RATIO_SPACE),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: ListSubTask(
+                      changeTask: (value) => setState(() {
+                            _currentPage = value;
+                          })),
+                ),
+              ]),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                        height: context.mediaQuery.size.width * RATIO_PADDING),
-                    Date(
-                      startDate: state.project!.startDate,
-                      endDate: state.project!.endDate,
+                    DotsIndicator(
+                      dotsCount: 4,
+                      position: _currentPage,
+                      decorator: const DotsDecorator(
+                        color: GREY,
+                        activeColor: BLACK,
+                      ),
                     ),
-                    SizedBox(
-                        height: context.mediaQuery.size.width * RATIO_SPACE),
-                    Progress(
-                      progress: state.project!.activitiesCompleted /
-                          state.project!.totalActivities,
-                      tasksCompleted: state.project!.tasksCompleted,
-                      totalTasks: state.project!.tasks.length,
-                      activitiesCompleted: state.project!.activitiesCompleted,
-                      totalActivities: state.project!.totalActivities,
-                      mostActive: state.project!.mostActiveMemebers,
+                    Container(
+                      height: 12,
+                      width: context.mediaQuery.size.width / 3,
+                      decoration: const BoxDecoration(
+                        color: PURPLE,
+                        borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(MEDIUM_CORNER)),
+                      ),
                     ),
-                    SizedBox(
-                        height: context.mediaQuery.size.width * RATIO_SPACE),
                   ],
                 ),
               ),
-            ),
-            const ListSubTask(),
-          ]),
+            ],
+          ),
         );
       },
     );

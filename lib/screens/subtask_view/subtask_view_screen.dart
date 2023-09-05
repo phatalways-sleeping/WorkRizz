@@ -7,7 +7,7 @@ class SubTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SubTaskView()
+      body: SubTaskView(isLeader: true, isAssigned: true,)
     );
   }
 }

@@ -2,18 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/assets/fonts/base_font.dart';
+import 'package:task_managing_application/widgets/authentication/components.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
+import 'package:task_managing_application/widgets/project/project_create/date_input.dart';
+import 'package:task_managing_application/widgets/project/project_create/members_adder.dart';
+import 'package:task_managing_application/widgets/subtask_view/input/description_input.dart';
+import 'package:task_managing_application/widgets/subtask_view/input/duedate_input.dart';
+import 'package:task_managing_application/widgets/subtask_view/input/review_score_input.dart';
+import 'package:task_managing_application/widgets/subtask_view/input/score_input.dart';
+import 'package:task_managing_application/widgets/subtask_view/comment/comment_list.dart';
 
-part 'comment_list.dart';
 part 'file_list.dart';
 part 'review.dart';
 
 // ignore: must_be_immutable
 class SubTaskView extends StatefulWidget {
-  SubTaskView({super.key});
+  SubTaskView({super.key, required this.isLeader, required this.isAssigned});
   Function()? changeColor;
+  final bool isLeader;
+  final bool isAssigned;
 
   @override
   State<SubTaskView> createState() => _SubTaskViewState();
@@ -27,6 +36,7 @@ class _SubTaskViewState extends State<SubTaskView> {
       child: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
+            floating: true,
             pinned: true,
             delegate: CustomHeaderBar(
                 upperChild: Row(children: [
@@ -87,69 +97,90 @@ class _SubTaskViewState extends State<SubTaskView> {
                         children: [
                           Text('Due Date',
                               style: context.textTheme.labelMedium),
-                          Container(
-                              width: context.mediaQuery.size.width * 0.4,
-                              margin: EdgeInsets.only(
-                                  top: context.mediaQuery.size.width * 0.01),
-                              decoration: BoxDecoration(
-                                // border black, size 1, round corner 12
-                                border: Border.all(
-                                  color: BLACK,
-                                  width: BORDER_WIDTH,
-                                ),
-                                borderRadius:
-                                    BorderRadius.circular(MEDIUM_CORNER),
-                              ),
-                              padding: EdgeInsets.all(
-                                  MediaQuery.of(context).size.width *
-                                      RATIO_PADDING),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.date_range_rounded,
-                                      color: PALE),
-                                  SizedBox(
-                                      width: context.mediaQuery.size.width *
+                          widget.isLeader
+                              ? Column(
+                                  children: [
+                                    SizedBox(
+                                      height:
+                                          0.01 * context.mediaQuery.size.width,
+                                    ),
+                                    DueDateInputWidget(
+                                        execute:
+                                            (BuildContext t, DateTime m) {}),
+                                  ],
+                                )
+                              : Container(
+                                  width: context.mediaQuery.size.width * 0.4,
+                                  margin: EdgeInsets.only(
+                                      top:
+                                          context.mediaQuery.size.width * 0.01),
+                                  decoration: BoxDecoration(
+                                    // border black, size 1, round corner 12
+                                    border: Border.all(
+                                      color: BLACK,
+                                      width: BORDER_WIDTH,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.circular(MEDIUM_CORNER),
+                                  ),
+                                  padding: EdgeInsets.all(
+                                      MediaQuery.of(context).size.width *
                                           RATIO_PADDING),
-                                  Text('12/12/2021',
-                                      style: context.textTheme.titleSmall),
-                                ],
-                              )),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.date_range_rounded,
+                                          color: PALE),
+                                      SizedBox(
+                                          width: context.mediaQuery.size.width *
+                                              RATIO_PADDING),
+                                      Text('Sep 5th 2023',
+                                          style: context.textTheme.titleSmall),
+                                    ],
+                                  )),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Points', style: context.textTheme.labelMedium),
-                          Container(
-                              width: context.mediaQuery.size.width * 0.4,
-                              margin: EdgeInsets.only(
-                                  top: context.mediaQuery.size.width * 0.01),
-                              decoration: BoxDecoration(
-                                // border black, size 1, round corner 12
-                                border: Border.all(
-                                  color: BLACK,
-                                  width: BORDER_WIDTH,
-                                ),
-                                borderRadius:
-                                    BorderRadius.circular(MEDIUM_CORNER),
-                              ),
-                              padding: EdgeInsets.all(
-                                  MediaQuery.of(context).size.width *
-                                      RATIO_PADDING),
-                              child: Row(
-                                children: [
-                                  SvgPicture.string(
-                                    SvgAssets.note,
-                                    colorFilter: const ColorFilter.mode(
-                                        PINK, BlendMode.srcIn),
+                          widget.isLeader
+                              ? Container(
+                                  margin: EdgeInsets.only(
+                                      top:
+                                          context.mediaQuery.size.width * 0.01),
+                                  width: context.mediaQuery.size.width * 0.4,
+                                  child: const ScoreInput())
+                              : Container(
+                                  width: context.mediaQuery.size.width * 0.4,
+                                  margin: EdgeInsets.only(
+                                      top:
+                                          context.mediaQuery.size.width * 0.01),
+                                  decoration: BoxDecoration(
+                                    // border black, size 1, round corner 12
+                                    border: Border.all(
+                                      color: BLACK,
+                                      width: BORDER_WIDTH,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.circular(MEDIUM_CORNER),
                                   ),
-                                  SizedBox(
-                                      width: context.mediaQuery.size.width *
+                                  padding: EdgeInsets.all(
+                                      MediaQuery.of(context).size.width *
                                           RATIO_PADDING),
-                                  Text('10pt',
-                                      style: context.textTheme.titleSmall),
-                                ],
-                              )),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.string(
+                                        SvgAssets.note,
+                                        colorFilter: const ColorFilter.mode(
+                                            PINK, BlendMode.srcIn),
+                                      ),
+                                      SizedBox(
+                                          width: context.mediaQuery.size.width *
+                                              RATIO_PADDING),
+                                      Text('10pt',
+                                          style: context.textTheme.titleSmall),
+                                    ],
+                                  )),
                         ],
                       ),
                     ],
@@ -159,35 +190,54 @@ class _SubTaskViewState extends State<SubTaskView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Description', style: context.textTheme.labelMedium),
-                      Container(
-                        // width: max available width, finite
-                        width: double.maxFinite,
-                        height: context.mediaQuery.size.height * 0.1,
-                        margin: EdgeInsets.only(
-                            top: context.mediaQuery.size.width * 0.01),
-                        decoration: BoxDecoration(
-                          // border black, size 1, round corner 12
-                          border: Border.all(
-                            color: BLACK,
-                            width: BORDER_WIDTH,
-                          ),
-                          borderRadius: BorderRadius.circular(MEDIUM_CORNER),
-                        ),
-                        padding: EdgeInsets.all(
-                            MediaQuery.of(context).size.width * RATIO_PADDING),
-                        child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae nisl eget nunc aliquam aliquet.',
-                            style: context.textTheme.titleSmall),
-                      ),
+                      widget.isLeader
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                    height:
+                                        context.mediaQuery.size.width * 0.01),
+                                const DescriptionInput(
+                                  label: 'Description',
+                                  showLabel: false,
+                                ),
+                              ],
+                            )
+                          : Container(
+                              // width: max available width, finite
+                              width: double.maxFinite,
+                              height: context.mediaQuery.size.height * 0.1,
+                              margin: EdgeInsets.only(
+                                  top: context.mediaQuery.size.width * 0.01),
+                              decoration: BoxDecoration(
+                                // border black, size 1, round corner 12
+                                border: Border.all(
+                                  color: BLACK,
+                                  width: BORDER_WIDTH,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(MEDIUM_CORNER),
+                              ),
+                              padding: EdgeInsets.all(
+                                  MediaQuery.of(context).size.width *
+                                      RATIO_PADDING),
+                              child: Text(
+                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae nisl eget nunc aliquam aliquet.',
+                                  style: context.textTheme.titleSmall),
+                            ),
                     ],
                   ),
                   SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
-                  const File(),
+                  File(isAssigned: widget.isAssigned),
                   SizedBox(
                       height: context.mediaQuery.size.width * RATIO_PADDING),
-                  const Comment(),
+                  Comment(
+                    isAssigned: widget.isAssigned,
+                    isLeader: widget.isLeader,
+                  ),
                   const SizedBox(),
-                  const Review()
+                  Review(
+                    isAssigned: widget.isLeader,
+                  ),
                 ],
               ),
             ),

@@ -1,13 +1,21 @@
 import 'dart:io';
 
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:flutter/material.dart';
+// import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
+// import 'package:task_managing_application/firebase_options.dart';
+// import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:task_managing_application/apis/storage/crud.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
 import 'package:task_managing_application/assets/models/task/task_data.dart';
 import 'package:task_managing_application/firebase_options.dart';
-import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:uuid/v8.dart';
 
+import 'project_invitation/project_invitation_data.dart';
+
+// import 'project/project_data.dart';
 
 const String path = 'lib/assets/models/';
 Future<void> main() async {
@@ -84,82 +92,93 @@ Future<void> main() async {
   // }
 
   // runApp(const MyApp());
-}
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  // await generateIds(amount: 3, name: 'project_invitation');
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  // @override
-  // void initState() {
-  //   WidgetsBinding.instance.addObserver(this);
-  //   super.initState();
-  // }
-
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //   if (state == AppLifecycleState.resumed) {
-  //     ApplicationRepository.repository.updateUserActivity(true);
-  //   }
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.inactive) {
-  //     ApplicationRepository.repository.updateUserActivity(false);
-  //   }
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: StreamBuilder(
-          stream: ApplicationRepository.repository
-              .userStream(ApplicationRepository.repository.userId),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final taskId = snapshot.data!.tasks.first;
-              return Center(
-                child: StreamBuilder(
-                  stream: ApplicationRepository.repository.taskStream(taskId),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return ErrorWidget(snapshot.error.toString());
-                    }
-                    if (snapshot.hasData) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(snapshot.data!.project),
-                          ],
-                        ),
-                      );
-                    }
-                    return const CircularProgressIndicator();
-                  },
-                ),
-              );
-            }
-            if (snapshot.hasError) {
-              return ErrorWidget("");
-            }
-            return const CircularProgressIndicator();
-          },
-        ),
-      ),
-    );
+  for (var invitation in invitationList) {
+    await FirebaseFirestoreConfigs.projectInvitationsCollection
+        .doc(invitation.id)
+        .set(invitation.toJson());
   }
+
+  await UpdateUser.updateProjectInvitations(
+      '20230831-0517-8230-a202-0089f860b83a', invitationList.map((e) => e.id).toList());
 }
+
+// class MyApp extends StatefulWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   State<MyApp> createState() => _MyAppState();
+// }
+
+// class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+//   // @override
+//   // void initState() {
+//   //   WidgetsBinding.instance.addObserver(this);
+//   //   super.initState();
+//   // }
+
+//   // @override
+//   // void dispose() {
+//   //   WidgetsBinding.instance.removeObserver(this);
+//   //   super.dispose();
+//   // }
+
+//   // @override
+//   // void didChangeAppLifecycleState(AppLifecycleState state) {
+//   //   super.didChangeAppLifecycleState(state);
+//   //   if (state == AppLifecycleState.resumed) {
+//   //     ApplicationRepository.repository.updateUserActivity(true);
+//   //   }
+//   //   if (state == AppLifecycleState.paused ||
+//   //       state == AppLifecycleState.inactive) {
+//   //     ApplicationRepository.repository.updateUserActivity(false);
+//   //   }
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: StreamBuilder(
+//           stream: ApplicationRepository.repository
+//               .userStream(ApplicationRepository.repository.userId),
+//           builder: (context, snapshot) {
+//             if (snapshot.hasData) {
+//               final taskId = snapshot.data!.tasks.first;
+//               return Center(
+//                 child: StreamBuilder(
+//                   stream: ApplicationRepository.repository.taskStream(taskId),
+//                   builder: (context, snapshot) {
+//                     if (snapshot.hasError) {
+//                       return ErrorWidget(snapshot.error.toString());
+//                     }
+//                     if (snapshot.hasData) {
+//                       return Center(
+//                         child: Column(
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: [
+//                             Text(snapshot.data!.project),
+//                           ],
+//                         ),
+//                       );
+//                     }
+//                     return const CircularProgressIndicator();
+//                   },
+//                 ),
+//               );
+//             }
+//             if (snapshot.hasError) {
+//               return ErrorWidget("");
+//             }
+//             return const CircularProgressIndicator();
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 Future<void> generateIds({
   required int amount,

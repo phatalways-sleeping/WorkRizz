@@ -55,3 +55,7 @@ final class NavigateToSubTaskDetail extends NavigationEvent {
 final class NavigateToSplash extends NavigationEvent {
   const NavigateToSplash();
 }
+
+final class NavigateToUserProjectInvitation extends NavigationEvent {
+  const NavigateToUserProjectInvitation();
+}

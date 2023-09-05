@@ -201,9 +201,8 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
           String id, List<String> latestVersion) =>
       UpdateProject.updateAssigneeImageUrls(id, latestVersion);
   @override
-  Future<void> removeAssigneeImageUrlsInProject(
-          String id, List<String> removedItems) =>
-      UpdateProject.removeAssignees(id, removedItems);
+  Future<void> removeAssigneeImageUrlsInProject(String id, List<String> removedItems) =>
+      UpdateProject.removeAssigneeImageUrls(id, removedItems);
   @override
   Future<void> updateTasksCompletedInProject(String id, int tasksCompleted) =>
       UpdateProject.updateTasksCompleted(id, tasksCompleted);

@@ -16,10 +16,11 @@ final class ProjectInvitationModel extends Base {
     required this.projectName,
     required this.projectLeaderId,
     required this.projectLeaderImageUrl,
-    required this.projectLeaderEmail,
-    required this.projectLeaderUsername,
     required this.senderId,
     required this.receiverId,
+    required this.senderImageUrl,
+    required this.senderEmail,
+    required this.senderUsername,
     this.isAccepted = false,
   });
 
@@ -37,11 +38,13 @@ final class ProjectInvitationModel extends Base {
   @JsonKey(required: true)
   final String projectLeaderImageUrl;
   @JsonKey(required: true)
-  final String projectLeaderEmail;
-  @JsonKey(required: true)
-  final String projectLeaderUsername;
-  @JsonKey(required: true)
   final String senderId;
+  @JsonKey(required: true)
+  final String senderImageUrl;
+  @JsonKey(required: true)
+  final String senderEmail;
+  @JsonKey(required: true)
+  final String senderUsername;
   @JsonKey(required: true)
   final String receiverId;
   @JsonKey(defaultValue: false)
@@ -54,8 +57,6 @@ final class ProjectInvitationModel extends Base {
         projectName,
         projectLeaderId,
         projectLeaderImageUrl,
-        projectLeaderEmail,
-        projectLeaderUsername,
         senderId,
         receiverId,
         isAccepted,

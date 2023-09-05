@@ -4,6 +4,9 @@ import 'package:task_managing_application/assets/extensions/build_context_extens
 import 'package:task_managing_application/states/avatar_bloc/avatar_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_config.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_loading.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_wrapper.dart';
 import 'package:task_managing_application/widgets/widgets.dart';
 
 import 'future_avatar_widget.dart';
@@ -37,15 +40,37 @@ class _AvatarWidgetWithBadgeState extends State<AvatarWidgetWithBadge> {
     return BlocBuilder<AvatarBloc, AvatarState>(
       builder: (context, state) {
         if (state is AvatarInitial) {
-          return const Center(
-            child: CustomCircularProgressIndicator(
-              size: 52.0,
+          return Center(
+            child: Shimmer(
+              linearGradient: shimmer_gradient,
+              child: ShimmerLoading(
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
             ),
           );
         }
         if (state is AvatarError) {
-          return const Center(
-            child: CustomErrorIcon(),
+          return Center(
+            child: Shimmer(
+              linearGradient: shimmer_gradient,
+              child: ShimmerLoading(
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
           );
         }
         return FutureBuilder(
@@ -84,15 +109,19 @@ class _AvatarWidgetWithBadgeState extends State<AvatarWidgetWithBadge> {
                           ),
                     ),
                   ),
-                  onTap: () => widget.onTap(context),
                   child: FutureAvatarWidget(
                     avatarRatio: widget.avatarRatio,
                     radiusRatio: widget.radiusRatio,
                     imageUrl: snapshot.data!,
+                    onTap: widget.onTap,
                   ),
                 );
               }
-              return const SizedBox.shrink();
+              return Center(
+                child: CustomCircularProgressIndicator(
+                  size: context.mediaQuery.size.height * 0.04,
+                ),
+              );
             });
       },
     );

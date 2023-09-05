@@ -35,7 +35,7 @@ class TaskListView extends StatefulWidget {
 class _TaskListViewState extends State<TaskListView> {
   late final ScrollController _scrollController = ScrollController()
     ..addListener(() {});
-  var _currentPage = 0.0;
+  var _currentPage = 0;
   get separatorBuilder => null;
 
   get amount => null;

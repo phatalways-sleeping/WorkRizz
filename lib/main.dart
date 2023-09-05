@@ -6,6 +6,7 @@ import 'package:task_managing_application/screens/authentication/authentication_
 import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/screens/subtask_view/subtask_view_screen.dart';
 import 'package:task_managing_application/screens/tasklist/tasklist_screen.dart';
+import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
 import 'package:task_managing_application/screens/project/project_screen.dart';
 import 'package:task_managing_application/screens/splash/splash_screen.dart';
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
@@ -54,11 +55,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
-      home: BlocProvider(
+      home: FileListScreen(),
+      /* home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-      ),
+      ), */
     );
   }
 }
@@ -77,6 +79,7 @@ class AppFlow extends StatelessWidget {
   List<Page<dynamic>> onGeneratePages(
           NavigationState state, List<Page> pages) =>
       [
+        
         if (state is Splash)
           MaterialPage(
             child: BlocProvider(

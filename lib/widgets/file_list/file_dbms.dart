@@ -79,7 +79,7 @@ class FileManagement{
     );
     projects.add(project1);
   // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
-    ProjectStructure project2 = ProjectStructure("Ethics", Color(0xFF5CD669));;
+    ProjectStructure project2 = ProjectStructure("Ethics", Color(0xFFFFAFAF));;
       project2.addFile(
         FileStructure(
           name: "Instruction", 
@@ -93,7 +93,8 @@ class FileManagement{
       );
     projects.add(project2);
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
-    ProjectStructure project3 = ProjectStructure("Databases", Color(0xFF5CD669));;
+    ProjectStructure project3 = ProjectStructure("Databases", Color(0xFF9C9AFF));
+    for (int i = 0; i < 3; i++)
       project3.addFile(
         FileStructure(
           name: "Instruction", 
@@ -106,6 +107,21 @@ class FileManagement{
           date: DateTime.now())
       );
     projects.add(project3);
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+    ProjectStructure project4 = ProjectStructure("Calculus", Color(0xFFF6BB54));
+    for (int i = 0; i < 10; i++)
+      project4.addFile(
+        FileStructure(
+          name: "Instruction", 
+          url: "default", 
+          type: "docx", 
+          user: "vinh", 
+          avatarImage: "assets/images/avt.jpg", 
+          originProject: project4.projectName, 
+          color: project4.color, 
+          date: DateTime.now())
+      );
+    projects.add(project4);
   }
   List <FileStructure> getFiles(){
     List <FileStructure> returnList = [];

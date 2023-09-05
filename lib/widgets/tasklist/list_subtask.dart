@@ -26,7 +26,7 @@ class _ListSubTaskState extends State<ListSubTask> {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(
-        maxHeight: context.mediaQuery.size.height * 0.5,
+        maxHeight: context.mediaQuery.size.height * 0.48,
       ),
       margin: EdgeInsets.only(
         bottom: context.mediaQuery.size.width * RATIO_MARGIN,

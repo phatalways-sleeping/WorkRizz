@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:task_managing_application/assets/assets.dart';
+
 String convertWeekdayToString(int weekDay) {
   switch (weekDay) {
     case 1:
@@ -92,4 +95,19 @@ String convertMonthToFullString(int month) {
     default:
       return "";
   }
+}
+
+String calculateDaysLeft(DateTime date) {
+  final now = DateTime.now();
+  final difference = date.difference(now);
+  if(difference.inDays < 0) return 'Expired';
+  return '${difference.inDays} ${difference.inDays > 1 ? 'days' : 'day'} left';
+}
+
+Color calculateColor(DateTime date) {
+  final now = DateTime.now();
+  final difference = date.difference(now);
+  if(difference.inDays < 0) return PALE;
+  if(difference.inDays < 3) return ORANGE;
+  return GREY;
 }

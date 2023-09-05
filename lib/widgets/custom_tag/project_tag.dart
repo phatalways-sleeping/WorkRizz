@@ -10,14 +10,29 @@ class ProjectTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * RATIO_MARGIN,
-          vertical: MediaQuery.of(context).size.height * 0.005,
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * RATIO_MARGIN,
+        vertical: 1.0,
+      ),
+      constraints: BoxConstraints.loose(
+        Size(
+          MediaQuery.of(context).size.width * 0.3,
+          MediaQuery.of(context).size.width * RATIO_PADDING * 1.8,
         ),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(ROUND_CORNER),
+      ),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(ROUND_CORNER),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        name,
+        style: context.textTheme.bodySmall?.copyWith(
+          color: context.colorScheme.onSecondary,
+          fontWeight: FontWeight.w500,
+          fontSize: 13.0,
         ),
-        child: Text(name, style: context.textTheme.labelMedium));
+      ),
+    );
   }
 }

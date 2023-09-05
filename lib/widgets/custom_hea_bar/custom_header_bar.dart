@@ -69,37 +69,56 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                       child: upperChild,
                     )
                   else
-                    InkWell(
-                      onTap: () => onPressed!(context),
-                      borderRadius: BorderRadius.circular(25.0),
-                      radius: 20.0,
-                      overlayColor: MaterialStateProperty.resolveWith(
-                        (states) {
-                          if (states.isPressed) {
-                            return context.colorScheme.secondary;
-                          }
-                          return context.colorScheme.onSecondary;
-                        },
-                      ),
-                      splashFactory: InkRipple.splashFactory,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          size: 20.0,
-                          color: context.colorScheme.onSecondary,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        InkWell(
+                          onTap: () => onPressed!(context),
+                          borderRadius: BorderRadius.circular(25.0),
+                          radius: 20.0,
+                          overlayColor: MaterialStateProperty.resolveWith(
+                            (states) {
+                              if (states.isPressed) {
+                                return context.colorScheme.secondary;
+                              }
+                              return context.colorScheme.onSecondary;
+                            },
+                          ),
+                          splashFactory: InkRipple.splashFactory,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              size: 20.0,
+                              color: context.colorScheme.onSecondary,
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        DefaultTextStyle.merge(
+                          style: context.textTheme.displayMedium?.copyWith(
+                            color: context.colorScheme.onSecondary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.fade,
+                          ),
+                          child: upperChild,
+                        ),
+                      ],
                     ),
                   // const Spacer(),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: context.mediaQuery.size.width * 0.7,
+                      maxWidth: context.mediaQuery.size.width * 0.8,
                     ),
                     child: DefaultTextStyle.merge(
                       style: context.textTheme.displayLarge?.copyWith(
                         color: context.colorScheme.onSecondary,
-                        fontSize: 26.0,
+                        fontSize: 23.0,
                         fontWeight: FontWeight.w600,
                       ),
                       child: bottomChild,

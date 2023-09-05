@@ -427,25 +427,26 @@ class ApplicationRepository {
   }
 
   Future<void> markSubTaskCompleted({
-    required String projectId,
     required String subTaskId,
-    required String subTaskName,
-    required int points,
     required String taskId,
+    required String assigneeImageUrl,
   }) async {
     await Future.wait<void>(
       [
         _storageAPI.updateIsCompletedInSubTask(subTaskId, true),
-        _storageAPI.updateActivitiesCompletedInProject(projectId, 1),
+        _storageAPI.updateActivitiesCompletedInProject(projectIdOnView, 1),
         _storageAPI.updateSubTasksCompletedInTask(taskId, 1),
       ],
     );
 
+    final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+
     final subTaskInformation = SubTaskSmallInformation(
       id: subTaskId,
-      name: subTaskName,
+      name: subTask.name,
       isCompleted: false,
-      points: points,
+      points: subTask.points,
+      assigneeImageUrl: assigneeImageUrl,
     );
 
     await _storageAPI.removeSubTaskSmallInformationsInTask(taskId, [
@@ -463,24 +464,28 @@ class ApplicationRepository {
     if (task.subTasksCompleted == task.subTasks.length) {
       await Future.wait<void>([
         _storageAPI.updateIsCompletedInTask(taskId, true),
-        _storageAPI.updateTasksCompletedInProject(projectId, 1),
+        _storageAPI.updateTasksCompletedInProject(projectIdOnView, 1),
       ]);
     }
   }
 
-  Future<void> markSubTaskIncompleted({
-    required String projectId,
+  Future<void> markSubTaskUnCompleted({
     required String subTaskId,
-    required String subTaskName,
-    required bool taskIsCompleted,
-    required int points,
     required String taskId,
+    required String assigneeImageUrl,
   }) async {
+    final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+    final taskIsCompleteds = await _storageAPI.taskStream(taskId).first.then(
+          (value) => value.subTaskSmallInformations.map(
+            (e) => e.isCompleted,
+          ),
+        );
     final subTaskInformation = SubTaskSmallInformation(
       id: subTaskId,
-      name: subTaskName,
+      name: subTask.name,
       isCompleted: true,
-      points: points,
+      points: subTask.points,
+      assigneeImageUrl: assigneeImageUrl,
     );
     await _storageAPI.removeSubTaskSmallInformationsInTask(taskId, [
       subTaskInformation,
@@ -494,13 +499,13 @@ class ApplicationRepository {
       [
         _storageAPI.updateSubTasksCompletedInTask(taskId, -1),
         _storageAPI.updateIsCompletedInSubTask(subTaskId, false),
-        _storageAPI.updateActivitiesCompletedInProject(projectId, -1),
+        _storageAPI.updateActivitiesCompletedInProject(projectIdOnView, -1),
       ],
     );
-    if (taskIsCompleted) {
+    if (!taskIsCompleteds.contains(false)) {
       await Future.wait<void>([
         _storageAPI.updateIsCompletedInTask(taskId, false),
-        _storageAPI.updateTasksCompletedInProject(projectId, -1),
+        _storageAPI.updateTasksCompletedInProject(projectIdOnView, -1),
       ]);
     }
   }
@@ -538,6 +543,12 @@ class ApplicationRepository {
       name: newSubTask.name,
       isCompleted: false,
       points: newSubTask.points,
+      assigneeImageUrl: await _storageAPI
+          .userStreamByIdInUser(newSubTask.assignee)
+          .first
+          .then(
+            (value) => value.imageUrl,
+          ),
     );
     await Future.wait<void>(
       [
@@ -594,17 +605,24 @@ class ApplicationRepository {
     required bool needToUpdateTaskCompletion,
   }) async {
     final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+    final subTaskInformation = await _storageAPI.taskStream(taskId).first.then(
+          (value) => value.subTaskSmallInformations.where(
+            (element) => element.id == subTaskId,
+          ),
+        );
     final subTaskSmallInformationTrue = SubTaskSmallInformation(
       id: subTaskId,
       name: subTask.name,
       isCompleted: true,
       points: subTask.points,
+      assigneeImageUrl: subTaskInformation.first.assigneeImageUrl,
     );
     final subTaskSmallInformationFalse = SubTaskSmallInformation(
       id: subTaskId,
       name: subTask.name,
       isCompleted: false,
       points: subTask.points,
+      assigneeImageUrl: subTaskInformation.first.assigneeImageUrl,
     );
 
     await Future.wait<void>(

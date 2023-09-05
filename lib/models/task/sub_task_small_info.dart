@@ -10,12 +10,14 @@ final class SubTaskSmallInformation extends Equatable {
     required this.name,
     required this.isCompleted,
     required this.points,
+    required this.assigneeImageUrl,
   });
 
   final String id;
   final String name;
   final int points;
   final bool isCompleted;
+  final String assigneeImageUrl;
 
   factory SubTaskSmallInformation.fromJson(Map<String, dynamic> json) =>
       _$SubTaskSmallInformationFromJson(json);
@@ -28,6 +30,7 @@ final class SubTaskSmallInformation extends Equatable {
         name,
         isCompleted,
         points,
+        assigneeImageUrl,
       ];
 
   SubTaskSmallInformation copyWith({
@@ -35,12 +38,14 @@ final class SubTaskSmallInformation extends Equatable {
     String? name,
     bool? isCompleted,
     int? points,
+    String? assigneeImageUrl,
   }) {
     return SubTaskSmallInformation(
       id: id ?? this.id,
       name: name ?? this.name,
       isCompleted: isCompleted ?? this.isCompleted,
       points: points ?? this.points,
+      assigneeImageUrl: assigneeImageUrl ?? this.assigneeImageUrl,
     );
   }
 }

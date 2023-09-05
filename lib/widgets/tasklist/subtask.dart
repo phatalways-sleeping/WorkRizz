@@ -1,79 +1,122 @@
 part of 'tasklist_view.dart';
 
-class SubTask extends StatelessWidget {
-  const SubTask({super.key});
+class SubTask extends StatefulWidget {
+  const SubTask({
+    super.key,
+    required this.taskId,
+    required this.currentPage,
+    required this.totalPage,
+  });
+
+  final String taskId;
+  final int currentPage;
+  final int totalPage;
 
   @override
+  State<SubTask> createState() => _SubTaskState();
+}
+
+class _SubTaskState extends State<SubTask> {
+  @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      clipBehavior: Clip.hardEdge,
-      physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.only(
-        bottom: context.mediaQuery.size.width * RATIO_PADDING,
-      ),
-      children: [
-        AppBar(
-          title: Row(
-            children: [
-              const TaskTag(color: GREY, name: 'xx/xx'),
-              SizedBox(width: context.mediaQuery.size.width * RATIO_PADDING),
-              Text('Task name', style: context.textTheme.titleMedium),
-            ],
+    return StreamBuilder<Task>(
+      stream: context.read<TasklistBloc>().subTaskSmallInformationStream(
+            widget.taskId,
           ),
-          titleSpacing: 0.0,
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          toolbarHeight: context.mediaQuery.size.width * RATIO_PADDING * 2.5,
-        ),
-        ...List.filled(Random().nextInt(10) + 1, const SubTaskInfo()),
-        ElevatedButton(
-          onPressed: () {},
-          style: ButtonStyle(
-            alignment: Alignment.centerLeft,
-            shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(MEDIUM_CORNER),
-                side: const BorderSide(
-                  color: BLACK,
-                  width: 1,
-                ),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const ShimmerSubTaskWidget();
+        }
+        if (!snapshot.hasData) {
+          return const ShimmerSubTaskWidget();
+        }
+        final task = snapshot.data as Task;
+        return ListView(
+          shrinkWrap: true,
+          clipBehavior: Clip.hardEdge,
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.only(
+            bottom: context.mediaQuery.size.width * RATIO_PADDING,
+          ),
+          children: [
+            AppBar(
+              title: Row(
+                children: [
+                  TaskTag(
+                    color: GREY,
+                    name: '${widget.currentPage}/${widget.totalPage}',
+                  ),
+                  SizedBox(
+                      width: context.mediaQuery.size.width * RATIO_PADDING),
+                  Text(
+                    task.name,
+                    style: context.textTheme.titleMedium,
+                  ),
+                ],
+              ),
+              titleSpacing: 0.0,
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              toolbarHeight:
+                  context.mediaQuery.size.width * RATIO_PADDING * 2.5,
+            ),
+            ...List.generate(
+              task.subTasks.length,
+              (index) => SubTaskInfo(
+                subTaskSmallInformation: task.subTaskSmallInformations[index],
+                taskId: widget.taskId,
               ),
             ),
-            backgroundColor: const MaterialStatePropertyAll(
-              BLACK,
-            ),
-            elevation: MaterialStateProperty.resolveWith(
-              (states) => states.isPressed ? 4.0 : 0.0,
-            ),
-            overlayColor: const MaterialStatePropertyAll(
-              GREEN,
-            ),
-            splashFactory: InkSparkle.splashFactory,
-            animationDuration: const Duration(
-              seconds: 2,
-            ),
-            tapTargetSize: MaterialTapTargetSize.padded,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(width: context.mediaQuery.size.width * RATIO_PADDING),
-              SvgPicture.string(SvgAssets.addwhite),
-              SizedBox(
-                  width: context.mediaQuery.size.width *
-                      (RATIO_SPACE + RATIO_SPACE)),
-              Text(
-                'Add subtask',
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: WHITE,
+            ElevatedButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                alignment: Alignment.centerLeft,
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(MEDIUM_CORNER),
+                    side: const BorderSide(
+                      color: BLACK,
+                      width: 1,
+                    ),
+                  ),
                 ),
+                backgroundColor: const MaterialStatePropertyAll(
+                  BLACK,
+                ),
+                elevation: MaterialStateProperty.resolveWith(
+                  (states) => states.isPressed ? 4.0 : 0.0,
+                ),
+                overlayColor: const MaterialStatePropertyAll(
+                  GREEN,
+                ),
+                splashFactory: InkSparkle.splashFactory,
+                animationDuration: const Duration(
+                  seconds: 2,
+                ),
+                tapTargetSize: MaterialTapTargetSize.padded,
               ),
-            ],
-          ),
-        )
-      ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      width: context.mediaQuery.size.width * RATIO_PADDING),
+                  SvgPicture.string(SvgAssets.addwhite),
+                  SizedBox(
+                      width: context.mediaQuery.size.width *
+                          (RATIO_SPACE + RATIO_SPACE)),
+                  Text(
+                    'Add subtask',
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: WHITE,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }
@@ -85,7 +128,12 @@ class SubTaskController {
 class SubTaskInfo extends StatefulWidget {
   const SubTaskInfo({
     super.key,
+    required this.subTaskSmallInformation,
+    required this.taskId,
   });
+
+  final SubTaskSmallInformation subTaskSmallInformation;
+  final String taskId;
 
   @override
   State<SubTaskInfo> createState() => _SubTaskInfoState();
@@ -103,22 +151,44 @@ class _SubTaskInfoState extends State<SubTaskInfo> {
       child: CustomItemWidget(
         firstChild: CheckboxWidget(
           checkState: isChecked,
-          onChanged: (value) {
+          onChanged: (value, context) {
+            if (value! == true) {
+              context.read<TasklistBloc>().add(
+                    TasklistMarkSubTaskAsCompleted(
+                      taskId: widget.taskId,
+                      subTaskId: widget.subTaskSmallInformation.id,
+                      assigneeImageUrl:
+                          widget.subTaskSmallInformation.assigneeImageUrl,
+                    ),
+                  );
+            }
             setState(() {
-              isChecked = value!;
+              isChecked = value;
               _controller.changeColor!(isChecked);
             });
           },
         ),
         controller: _controller,
         isFixed: false,
-        isDone: false,
-        name: 'Design UI',
-        subtext: '10pt',
-        secondChild: CustomAvatarWidget(
-          imageUrl:
-              'https://flutter.github.io/assets-for-api-docs/assets/widgets/falcon.jpg',
-          size: context.mediaQuery.size.width * (RATIO_MARGIN + 0.01),
+        isDone: widget.subTaskSmallInformation.isCompleted,
+        name: widget.subTaskSmallInformation.name,
+        subtext: '${widget.subTaskSmallInformation.points}pt',
+        secondChild: FutureBuilder(
+          future: context
+              .read<TasklistBloc>()
+              .imageUrl(widget.subTaskSmallInformation.assigneeImageUrl),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const ShimmerAvatar(size: 24.0);
+            }
+            if (!snapshot.hasData) {
+              return const ShimmerAvatar(size: 24.0);
+            }
+            return CustomAvatarWidget(
+              imageUrl: snapshot.data as String,
+              size: context.mediaQuery.size.width * (RATIO_MARGIN + 0.01),
+            );
+          },
         ),
       ),
     );

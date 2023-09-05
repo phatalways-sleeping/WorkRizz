@@ -43,6 +43,7 @@ Future<void> main() async {
 
   ApplicationRepository.repository.username = "Jane Smith";
 
+
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,

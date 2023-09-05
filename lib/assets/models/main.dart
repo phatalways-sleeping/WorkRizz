@@ -95,14 +95,14 @@ Future<void> main() async {
 
   // await generateIds(amount: 3, name: 'project_invitation');
 
-  for (var invitation in invitationList) {
-    await FirebaseFirestoreConfigs.projectInvitationsCollection
-        .doc(invitation.id)
-        .set(invitation.toJson());
-  }
+  // for (var invitation in invitationList) {
+  //   await FirebaseFirestoreConfigs.projectInvitationsCollection
+  //       .doc(invitation.id)
+  //       .set(invitation.toJson());
+  // }
 
-  await UpdateUser.updateProjectInvitations(
-      '20230831-0517-8230-a202-0089f860b83a', invitationList.map((e) => e.id).toList());
+  // await UpdateUser.updateProjectInvitations(
+  //     '20230831-0517-8230-a202-0089f860b83a', invitationList.map((e) => e.id).toList());
 }
 
 // class MyApp extends StatefulWidget {

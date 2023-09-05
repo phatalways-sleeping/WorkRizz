@@ -19,6 +19,7 @@ const Task instance1 = Task(
       id: '20230831-0437-8e17-8620-28c58df16111',
       name: 'Design Website Homepage',
       points: 20,
+      assigneeImageUrl: 'avatars/avatar_1.jpg',
       isCompleted: false,
     ),
     SubTaskSmallInformation(
@@ -26,12 +27,14 @@ const Task instance1 = Task(
       name: 'Implement User Authentication',
       isCompleted: true,
       points: 15,
+      assigneeImageUrl: 'avatars/avatar_2.jpg',
     ),
     SubTaskSmallInformation(
       id: '20230831-0437-8717-8631-730781d020f9',
       name: 'Write API Documentation',
       isCompleted: false,
       points: 12,
+      assigneeImageUrl: 'avatars/avatar_2.jpg',
     ),
   ],
 );
@@ -47,6 +50,7 @@ const Task instance2 = Task(
   project:
       '20230831-0508-8853-9869-082ff370d762', // Replace with actual project ID
   points: 15,
+
   isCompleted: true,
   subTasksCompleted: 3,
   subTaskSmallInformations: [
@@ -55,18 +59,21 @@ const Task instance2 = Task(
       name: 'Test Cross-Browser Compatibility',
       isCompleted: true,
       points: 18,
+      assigneeImageUrl: 'avatars/avatar_1.jpg',
     ),
     SubTaskSmallInformation(
       id: '20230831-0442-8540-9148-7529597c79ef',
       name: 'Create User Profile Page',
       isCompleted: true,
       points: 18,
+      assigneeImageUrl: 'avatars/avatar_2.jpg',
     ),
     SubTaskSmallInformation(
       id: '20230831-0442-8640-9158-a07a41ed5778',
       name: 'Test Payment Integration',
       isCompleted: true,
       points: 15,
+      assigneeImageUrl: 'avatars/avatar_1.jpg',
     ),
   ],
 );
@@ -80,6 +87,7 @@ const Task instance3 = Task(
   project:
       '20230831-0508-8d53-a880-b370f9865591', // Replace with actual project ID
   points: 12,
+
   isCompleted: false,
   subTasksCompleted: 0,
   subTaskSmallInformations: [
@@ -88,6 +96,7 @@ const Task instance3 = Task(
       name: 'Optimize Database Queries',
       isCompleted: false,
       points: 25,
+      assigneeImageUrl: 'avatars/avatar_1.jpg',
     ),
   ],
 );
@@ -102,6 +111,7 @@ const Task instance4 = Task(
   project:
       '20230831-0508-8d53-a880-b370f9865591', // Replace with actual project ID
   points: 12,
+
   isCompleted: false,
   subTasksCompleted: 0,
   subTaskSmallInformations: [
@@ -110,12 +120,14 @@ const Task instance4 = Task(
       name: 'Write User Documentation',
       isCompleted: false,
       points: 12,
+      assigneeImageUrl: 'avatars/avatar_2.jpg',
     ),
     SubTaskSmallInformation(
       id: '20230831-0442-8e40-a159-3e9f946988dc',
       name: 'Implement Search Functionality',
       isCompleted: true,
       points: 20,
+      assigneeImageUrl: 'avatars/avatar_2.jpg',
     ),
   ],
 );
@@ -129,6 +141,7 @@ const Task instance5 = Task(
   project:
       '20230831-0508-8d53-a880-b370f9865591', // Replace with actual project ID
   points: 12,
+
   isCompleted: false,
   subTasksCompleted: 0,
   subTaskSmallInformations: [
@@ -137,6 +150,7 @@ const Task instance5 = Task(
       name: 'Bug Fixes and Testing',
       isCompleted: false,
       points: 22,
+      assigneeImageUrl: 'avatars/avatar_1.jpg',
     ),
   ],
 );
@@ -150,6 +164,7 @@ const Task instance6 = Task(
   project:
       '20230831-0508-8d53-a880-b370f9865591', // Replace with actual project ID
   points: 12,
+
   isCompleted: true,
   subTasksCompleted: 1,
   subTaskSmallInformations: [
@@ -158,6 +173,7 @@ const Task instance6 = Task(
       name: 'Performance Optimization',
       isCompleted: true,
       points: 25,
+      assigneeImageUrl: 'avatars/avatar_1.jpg',
     ),
   ],
 );

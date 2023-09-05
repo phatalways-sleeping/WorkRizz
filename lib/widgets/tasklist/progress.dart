@@ -61,12 +61,12 @@ class Progress extends StatelessWidget {
             ),
             // size bound its child
             padding: EdgeInsets.all(
-              context.mediaQuery.size.width * RATIO_PADDING,
+              context.mediaQuery.size.width * RATIO_PADDING * 1.2,
             ),
             child: SizedBox(
               child: Text(
                 '${(progress * 100).toInt()}%',
-                style: context.textTheme.titleSmall,
+                style: context.textTheme.titleLarge,
               ),
             ),
           ),
@@ -134,7 +134,7 @@ class Progress extends StatelessWidget {
               ),
               Text(
                 "Most Active",
-                style: context.textTheme.bodyMedium,
+                style: context.textTheme.bodyLarge,
               )
             ],
           ),

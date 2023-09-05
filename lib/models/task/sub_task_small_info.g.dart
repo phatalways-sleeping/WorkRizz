@@ -13,6 +13,7 @@ SubTaskSmallInformation _$SubTaskSmallInformationFromJson(
       name: json['name'] as String,
       isCompleted: json['isCompleted'] as bool,
       points: json['points'] as int,
+      assigneeImageUrl: json['assigneeImageUrl'] as String,
     );
 
 Map<String, dynamic> _$SubTaskSmallInformationToJson(
@@ -22,4 +23,5 @@ Map<String, dynamic> _$SubTaskSmallInformationToJson(
       'name': instance.name,
       'points': instance.points,
       'isCompleted': instance.isCompleted,
+      'assigneeImageUrl': instance.assigneeImageUrl,
     };

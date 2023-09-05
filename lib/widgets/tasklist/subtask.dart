@@ -140,7 +140,6 @@ class SubTaskInfo extends StatefulWidget {
 }
 
 class _SubTaskInfoState extends State<SubTaskInfo> {
-  bool isChecked = false;
   final SubTaskController _controller = SubTaskController();
 
   @override
@@ -150,7 +149,7 @@ class _SubTaskInfoState extends State<SubTaskInfo> {
           EdgeInsets.symmetric(vertical: context.mediaQuery.size.width * 0.01),
       child: CustomItemWidget(
         firstChild: CheckboxWidget(
-          checkState: isChecked,
+          checkState: widget.subTaskSmallInformation.isCompleted,
           onChanged: (value, context) {
             if (value! == true) {
               context.read<TasklistBloc>().add(
@@ -163,8 +162,8 @@ class _SubTaskInfoState extends State<SubTaskInfo> {
                   );
             }
             setState(() {
-              isChecked = value;
-              _controller.changeColor!(isChecked);
+              _controller
+                  .changeColor!(widget.subTaskSmallInformation.isCompleted);
             });
           },
         ),

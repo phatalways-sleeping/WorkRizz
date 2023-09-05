@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
@@ -14,8 +12,8 @@ import 'package:task_managing_application/widgets/subtask_view/input/description
 import 'package:task_managing_application/widgets/subtask_view/input/duedate_input.dart';
 import 'package:task_managing_application/widgets/subtask_view/input/review_score_input.dart';
 import 'package:task_managing_application/widgets/subtask_view/input/score_input.dart';
+import 'package:task_managing_application/widgets/subtask_view/comment/comment_list.dart';
 
-part 'comment_list.dart';
 part 'file_list.dart';
 part 'review.dart';
 
@@ -234,6 +232,7 @@ class _SubTaskViewState extends State<SubTaskView> {
                       height: context.mediaQuery.size.width * RATIO_PADDING),
                   Comment(
                     isAssigned: widget.isAssigned,
+                    isLeader: widget.isLeader,
                   ),
                   const SizedBox(),
                   Review(

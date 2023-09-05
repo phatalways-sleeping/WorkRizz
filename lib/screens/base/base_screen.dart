@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/widgets/widgets.dart'
-    show CustomNavigationBar;
+    show CustomFloatingWidget, CustomNavigationBar;
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({
     super.key,
     required this.child,
     this.hideNavigationBar = false,
+    required this.hideFloatingActionButton,
   });
 
   final Widget child;
   final bool hideNavigationBar;
+  final bool hideFloatingActionButton;
 
   @override
   State<BaseScreen> createState() => _BaseScreenState();
@@ -50,6 +52,10 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
       ),
       backgroundColor: context.colorScheme.onPrimary,
       extendBody: true,
+      floatingActionButtonLocation: widget.hideFloatingActionButton
+          ? null
+          : FloatingActionButtonLocation.endDocked,
+      floatingActionButton: widget.hideFloatingActionButton ? null : const CustomFloatingWidget(),
       bottomNavigationBar:
           !widget.hideNavigationBar ? const CustomNavigationBar() : null,
     );

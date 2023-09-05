@@ -17,39 +17,34 @@ class CustomFloatingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: context.colorScheme.error,
-      splashFactory: InkRipple.splashFactory,
-      borderRadius: BorderRadius.circular(13),
-      overlayColor: MaterialStateProperty.resolveWith((states) {
-        if (states.isPressed) {
-          return context.colorScheme.surface;
-        }
-        return null;
-      }),
-      onTap: () {
-        if (context.read<NavigationBloc>().state is ProjectsList) {
-          if (context.read<ProjectBloc>().state is ProjectUserSubscription) {
-            context.read<ProjectBloc>().add(const ProjectCreateNewOne());
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom:
+            context.read<NavigationBloc>().state is ProjectsList ? 0.0 : 10.0,
+      ),
+      child: FloatingActionButton(
+        onPressed: () {
+          if (context.read<NavigationBloc>().state is ProjectsList) {
+            if (context.read<ProjectBloc>().state is ProjectUserSubscription) {
+              context.read<ProjectBloc>().add(const ProjectCreateNewOne());
+            }
           }
-        }
-      },
-      child: Container(
-        width: size,
-        height: size,
-        alignment: Alignment.center,
-        decoration: ShapeDecoration(
-          color: context.colorScheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        child: SvgPicture.string(
-          icon,
-          fit: BoxFit.contain,
-          colorFilter: const ColorFilter.mode(
-            Colors.black,
-            BlendMode.srcATop,
+        },
+        backgroundColor: context.colorScheme.tertiary,
+        elevation: 10,
+        splashColor: context.colorScheme.primary,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        child: Container(
+          width: size,
+          height: size,
+          alignment: Alignment.center,
+          child: SvgPicture.string(
+            icon,
+            fit: BoxFit.contain,
+            colorFilter: const ColorFilter.mode(
+              Colors.black,
+              BlendMode.srcATop,
+            ),
           ),
         ),
       ),

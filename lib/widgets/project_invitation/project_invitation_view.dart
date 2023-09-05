@@ -35,6 +35,8 @@ class _ProjectInvitationsViewState extends State<ProjectInvitationsView> {
         }
         if (state is UserProjectInvitationSuccess) {
           return BaseScreen(
+            hideNavigationBar: true,
+            hideFloatingActionButton: true,
             child: CustomScrollView(
               slivers: [
                 SliverPersistentHeader(

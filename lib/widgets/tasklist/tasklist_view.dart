@@ -50,6 +50,7 @@ class TaskListView extends StatelessWidget {
         }
         return BaseScreen(
           hideNavigationBar: true,
+          hideFloatingActionButton: false,
           child: Stack(
             children: [
               CustomScrollView(

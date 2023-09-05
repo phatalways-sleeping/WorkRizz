@@ -97,6 +97,7 @@ class AppFlow extends StatelessWidget {
         if (state is TestComponents)
           const MaterialPage(
             child: BaseScreen(
+              hideFloatingActionButton: true,
               child:
                   CustomScrollView(
                 slivers: [
@@ -156,6 +157,7 @@ class AppFlow extends StatelessWidget {
         if (state is Home)
           MaterialPage(
             child: BaseScreen(
+              hideFloatingActionButton: true,
               child: Container(
                 height: 700,
                 color: Colors.pink,
@@ -166,6 +168,7 @@ class AppFlow extends StatelessWidget {
         if (state is Assistant)
           const MaterialPage(
             child: BaseScreen(
+              hideFloatingActionButton: true,
               child: SizedBox(
                 height: 700,
                 width: double.infinity,

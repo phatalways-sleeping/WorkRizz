@@ -2,7 +2,12 @@ part of 'tasklist_view.dart';
 
 // ignore: must_be_immutable
 class ListSubTask extends StatefulWidget {
-  const ListSubTask({super.key});
+  const ListSubTask({
+    super.key,
+    required this.changeTask,
+  });
+
+  final Function(double)? changeTask;
 
   @override
   State<ListSubTask> createState() => _ListSubTaskState();
@@ -12,7 +17,6 @@ class _ListSubTaskState extends State<ListSubTask> {
   PageController controller = PageController();
 
   var _currentPage = 0.0;
-  bool _showButton = false;
   @override
   void initState() {
     super.initState();
@@ -20,19 +24,9 @@ class _ListSubTaskState extends State<ListSubTask> {
       controller.addListener(() {
         setState(() {
           _currentPage = controller.page!;
+          widget.changeTask!(_currentPage);
         });
       });
-    });
-    controller.addListener(() {
-      if (controller.position.atEdge && controller.position.pixels != 0) {
-        setState(() {
-          _showButton = true;
-        });
-      } else {
-        setState(() {
-          _showButton = false;
-        });
-      }
     });
   }
 
@@ -55,7 +49,7 @@ class _ListSubTaskState extends State<ListSubTask> {
               Container(
                 // height : all remaining space
                 constraints: BoxConstraints(
-                  maxHeight: context.mediaQuery.size.height * 0.40,
+                  maxHeight: context.mediaQuery.size.height * 0.45,
                 ),
                 child: PageView.builder(
                   controller: controller,
@@ -71,45 +65,38 @@ class _ListSubTaskState extends State<ListSubTask> {
                   },
                 ),
               ),
-              DotsIndicator(
-                dotsCount: 4,
-                position: _currentPage,
-                decorator: const DotsDecorator(
-                  color: GREY,
-                  activeColor: BLACK,
-                ),
-              ),
-              Container(
-                height: 12,
-                width: context.mediaQuery.size.width / 3,
-                decoration: const BoxDecoration(
-                  color: PURPLE,
-                  borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(MEDIUM_CORNER)),
-                ),
-              ),
             ],
           ),
-          if (_showButton)
-            Positioned(
-              top: 0,
-              right: 0,
-              child: GestureDetector(
-                child: Container(
-                  width: context.mediaQuery.size.width * RATIO_PADDING * 2,
-                  height: context.mediaQuery.size.height * RATIO_PADDING * 4,
-                  decoration: const BoxDecoration(
-                    color: PINK,
+          Positioned(
+            top: 0,
+            right: 0,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: const ButtonStyle(
+                overlayColor: MaterialStatePropertyAll(
+                  PURPLE,
+                ),
+                splashFactory: InkSparkle.splashFactory,
+                animationDuration: Duration(
+                  seconds: 2,
+                ),
+                tapTargetSize: MaterialTapTargetSize.padded,
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
                     borderRadius: BorderRadius.horizontal(
                       left: Radius.circular(MEDIUM_CORNER),
                     ),
-                  ),
-                  child: Center(
-                    child: SvgPicture.string(SvgAssets.add),
+                    // no right borderd
+                    side: BorderSide.none,
                   ),
                 ),
+                backgroundColor: MaterialStatePropertyAll(
+                  PINK,
+                ),
               ),
+              child: SvgPicture.string(SvgAssets.add),
             ),
+          ),
         ],
       ),
     );

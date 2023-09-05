@@ -97,7 +97,8 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
             ),
             const Spacer(),
             BlocProvider(
-              create: (context) => AvatarBloc(context.read<ApplicationRepository>()),
+              create: (context) =>
+                  AvatarBloc(context.read<ApplicationRepository>()),
               child: AvatarWidgetWithBadge(
                 onTap: (context) {},
               ),

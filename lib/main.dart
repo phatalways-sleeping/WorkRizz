@@ -8,6 +8,7 @@ import 'package:task_managing_application/screens/subtask_view/subtask_view_scre
 import 'package:task_managing_application/screens/tasklist/tasklist_screen.dart';
 import 'package:task_managing_application/screens/project/project_screen.dart';
 import 'package:task_managing_application/screens/splash/splash_screen.dart';
+import 'package:task_managing_application/screens/homepage/homepage_screen.dart';
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
@@ -68,6 +69,7 @@ class AppFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return FlowBuilder(
       state: context.watch<NavigationBloc>().state,
       onGeneratePages: onGeneratePages,
@@ -77,6 +79,7 @@ class AppFlow extends StatelessWidget {
   List<Page<dynamic>> onGeneratePages(
           NavigationState state, List<Page> pages) =>
       [
+        
         if (state is Splash)
           MaterialPage(
             child: BlocProvider(
@@ -145,13 +148,7 @@ class AppFlow extends StatelessWidget {
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Home)
           MaterialPage(
-            child: BaseScreen(
-              child: Container(
-                height: 700,
-                color: Colors.pink,
-                width: double.infinity,
-              ),
-            ),
+            child: HomePageScreen(),
           ),
         if (state is Assistant)
           const MaterialPage(

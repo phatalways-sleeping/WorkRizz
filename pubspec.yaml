@@ -30,6 +30,7 @@ dependencies:
   firebase_storage: ^11.2.6
   badges: ^3.1.2
   avatar_stack: ^1.2.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

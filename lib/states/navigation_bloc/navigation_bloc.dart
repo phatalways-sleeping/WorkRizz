@@ -11,7 +11,7 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc(this._applicationRepository) : super(const SubTaskDetail()) {
+  NavigationBloc(this._applicationRepository) : super(const ProjectsList()) {
     on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
@@ -25,9 +25,46 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
     on<NavigateToSubTaskDetail>(_onNavigateToSubTaskDetail);
+    on<NavigateToSplash>((event, emit) async {
+      await _applicationRepository.logout();
+      emit(const Splash());
+    });
+    on<NavigateToUserProjectInvitation>((event, emit) {
+      emit(const UserProjectInvitation());
+    });
   }
 
   final ApplicationRepository _applicationRepository;
+
+  late NavigationEvent eventToNavigateBack;
+
+  void navigateBack() {
+    add(eventToNavigateBack);
+  }
+
+  void mapCurrentStateToEventThenEmit(NavigationState state) {
+    if (state is ProjectsList) {
+      eventToNavigateBack = const NavigateToProjectsList();
+    } else if (state is TaskList) {
+      eventToNavigateBack = NavigateToTask(_applicationRepository.projectIdOnView);
+    } else if (state is SubTaskDetail) {
+      eventToNavigateBack = const NavigateToSubTaskDetail();
+    } else if (state is Home) {
+      eventToNavigateBack = const NavigateToHome();
+    } else if (state is Settings) {
+      eventToNavigateBack = const NavigateToSettings();
+    } else if (state is Assistant) {
+      eventToNavigateBack = const NavigateToAssistant();
+    } else if (state is TestComponents) {
+      eventToNavigateBack = const NavigateToTestComponents();
+    } else if (state is Splash) {
+      eventToNavigateBack = const NavigateToSplash();
+    } else {
+      throw Exception('Unknown state: $state');
+    }
+
+    add(const NavigateToUserProjectInvitation());
+  }
 
   Future<void> _onNavigateToTestComponents(
     NavigateToTestComponents event,

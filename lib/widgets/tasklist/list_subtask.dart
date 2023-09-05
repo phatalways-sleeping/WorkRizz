@@ -7,7 +7,7 @@ class ListSubTask extends StatefulWidget {
     required this.changeTask,
   });
 
-  final Function(double)? changeTask;
+  final Function(int)? changeTask;
 
   @override
   State<ListSubTask> createState() => _ListSubTaskState();
@@ -15,7 +15,7 @@ class ListSubTask extends StatefulWidget {
 
 class _ListSubTaskState extends State<ListSubTask> {
   late final PageController controller = PageController();
-  var _currentPage = 0.0;
+  var _currentPage = 0;
   @override
   void dispose() {
     controller.dispose();
@@ -37,7 +37,7 @@ class _ListSubTaskState extends State<ListSubTask> {
         physics: const BouncingScrollPhysics(),
         onPageChanged: (index) {
           setState(() {
-            _currentPage = index.toDouble();
+            _currentPage = index;
             widget.changeTask!(_currentPage);
           });
         },

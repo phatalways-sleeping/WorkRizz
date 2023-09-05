@@ -40,6 +40,8 @@ flutter:
 
   assets:
     - assets/images/background.jpg
+    - assets/images/avt.svg
+    - assets/images/avt.jpg
     
   fonts:
   - family: Roboto

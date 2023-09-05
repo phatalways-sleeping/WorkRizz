@@ -153,7 +153,7 @@ class AppFlow extends StatelessWidget {
               ),
             ),
           ),
-        if (state is Assistant)
+        if (state is Assistant) 
           const MaterialPage(
             child: BaseScreen(
               child: SizedBox(

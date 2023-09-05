@@ -1,7 +1,8 @@
 part of 'subtask_view.dart';
 
 class Comment extends StatelessWidget {
-  const Comment({super.key});
+  const Comment({super.key, required this.isAssigned});
+  final bool isAssigned;
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +13,19 @@ class Comment extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Comment (2)', style: context.textTheme.labelMedium),
-            Text('Write a Comment', style: context.textTheme.titleSmall?.copyWith(
-              decoration: TextDecoration.underline,
-              shadows: [
-                        const Shadow(color: PURPLE, offset: Offset(0, -3))
-                      ],
-                      color: Colors.transparent,
-                      decorationColor: PURPLE,
-                      decorationThickness: 1.5,
-            )),
+            InkWell(
+              onTap: () {},
+              child: Text('Write a Comment',
+                  style: context.textTheme.titleSmall?.copyWith(
+                    decoration: TextDecoration.underline,
+                    shadows: [
+                      const Shadow(color: PURPLE, offset: Offset(0, -3))
+                    ],
+                    color: Colors.transparent,
+                    decorationColor: PURPLE,
+                    decorationThickness: 1.5,
+                  )),
+            ),
           ],
         ),
         ListView.builder(
@@ -72,16 +77,24 @@ class Comment extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Row(children: [
-                    Spacer(),
-                    Text(
-                      'Reply  ',
-                      style: bodySmall,
+                  Row(children: [
+                    const Spacer(),
+                    InkWell(
+                      onTap: () {},
+                      child: const Text(
+                        'Reply  ',
+                        style: bodySmall,
+                      ),
                     ),
-                    Icon(Icons.lens, size: 5, color: BLACK),
-                    Text(
-                      '  Solve',
-                      style: bodySmall,
+                    const Icon(Icons.lens, size: 5, color: BLACK),
+                    InkWell(
+                      onTap: () {
+                        if (isAssigned) {}
+                      },
+                      child: const Text(
+                        '  Solve',
+                        style: bodySmall,
+                      ),
                     ),
                   ]),
                 ],

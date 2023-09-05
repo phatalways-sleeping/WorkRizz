@@ -169,8 +169,6 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
             await _applicationRepository.userStreamByEmail(event.email).first;
         user = await _applicationRepository.userStream(user.id).first;
 
-        
-
         final usedState = (state as ProjectUserCreateAndSubscribe);
         // check if user is already in assignees
         if (!usedState.newProjectSetup.assignees.contains(user.id)) {
@@ -226,10 +224,12 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     );
     on<ProjectInputLeader>(
       (event, emit) async {
+        final usedState = (state as ProjectUserCreateAndSubscribe);
         // get user by email
         final user =
             await _applicationRepository.userStreamByEmail(event.email).first;
-        final usedState = (state as ProjectUserCreateAndSubscribe);
+        debugPrint(user.props.toString());
+
         // check if user is already the leader
         if (usedState.newProjectSetup.leader != user.id) {
           // check if user is already in assignees
@@ -244,8 +244,8 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
           // check if the owner account is leader
           if (usedState.newProjectSetup.leader ==
               _applicationRepository.userId) {
-            newAssignees.add(usedState.newProjectSetup.leader);
-            newAssigneeImageUrls.add(usedState.newProjectSetup.leaderImageUrl);
+            newAssignees.add(_applicationRepository.userId);
+            newAssigneeImageUrls.add(_applicationRepository.userImageUrl);
           }
           emit(
             usedState.copyWith(

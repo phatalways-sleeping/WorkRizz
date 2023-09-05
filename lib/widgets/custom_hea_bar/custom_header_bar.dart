@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/states/avatar_bloc/avatar_bloc.dart';
+import 'package:task_managing_application/states/navigation_bloc/navigation_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/avatar_widget_badge.dart';
 
 class CustomHeaderBar extends SliverPersistentHeaderDelegate {
@@ -132,7 +133,14 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
               create: (context) =>
                   AvatarBloc(context.read<ApplicationRepository>()),
               child: AvatarWidgetWithBadge(
-                onTap: (context) {},
+                onTap: (context) {
+                  if (context.read<NavigationBloc>().state
+                      is! UserProjectInvitation) {
+                    context.read<NavigationBloc>().mapCurrentStateToEventThenEmit(
+                          context.read<NavigationBloc>().state,
+                        );
+                  }
+                },
               ),
             ),
           ],

@@ -15,9 +15,10 @@ ProjectInvitationModel _$ProjectInvitationModelFromJson(
       'projectName',
       'projectLeaderId',
       'projectLeaderImageUrl',
-      'projectLeaderEmail',
-      'projectLeaderUsername',
       'senderId',
+      'senderImageUrl',
+      'senderEmail',
+      'senderUsername',
       'receiverId'
     ],
   );
@@ -30,10 +31,11 @@ ProjectInvitationModel _$ProjectInvitationModelFromJson(
     projectName: json['projectName'] as String,
     projectLeaderId: json['projectLeaderId'] as String,
     projectLeaderImageUrl: json['projectLeaderImageUrl'] as String,
-    projectLeaderEmail: json['projectLeaderEmail'] as String,
-    projectLeaderUsername: json['projectLeaderUsername'] as String,
     senderId: json['senderId'] as String,
     receiverId: json['receiverId'] as String,
+    senderImageUrl: json['senderImageUrl'] as String,
+    senderEmail: json['senderEmail'] as String,
+    senderUsername: json['senderUsername'] as String,
     isAccepted: json['isAccepted'] as bool? ?? false,
   );
 }
@@ -49,9 +51,10 @@ Map<String, dynamic> _$ProjectInvitationModelToJson(
       'projectName': instance.projectName,
       'projectLeaderId': instance.projectLeaderId,
       'projectLeaderImageUrl': instance.projectLeaderImageUrl,
-      'projectLeaderEmail': instance.projectLeaderEmail,
-      'projectLeaderUsername': instance.projectLeaderUsername,
       'senderId': instance.senderId,
+      'senderImageUrl': instance.senderImageUrl,
+      'senderEmail': instance.senderEmail,
+      'senderUsername': instance.senderUsername,
       'receiverId': instance.receiverId,
       'isAccepted': instance.isAccepted,
     };

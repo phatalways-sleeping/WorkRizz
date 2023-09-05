@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/apis/apis.dart';
 import 'package:task_managing_application/assets/config/config.dart';
@@ -113,13 +113,17 @@ class ApplicationRepository {
   Stream<UserActivityModel> userActivityStream(String? id) =>
       _storageAPI.userActivityStreamInUserActivity(id ?? userId);
   Stream<Project> projectStream(String id) => _storageAPI.projectStream(id);
-  Stream<Project> projectOnViewStream() => _storageAPI.projectStream(projectIdOnView);
+  Stream<Project> projectOnViewStream() =>
+      _storageAPI.projectStream(projectIdOnView);
   Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
   Stream<SubTaskModel> subTaskStream(String subTaskId) =>
       _storageAPI.subTaskModelStream(subTaskId);
-  Stream<List<String>> projectInvitationStream() => _storageAPI
+  Stream<List<String>> get projectInvitationsStreamInUser => _storageAPI
       .userStreamByIdInUser(userId)
       .map((event) => event.projectInvitations);
+  Stream<ProjectInvitationModel> projectInvitationStream(
+          String projectInvitationId) =>
+      _storageAPI.projectInvitationStream(projectInvitationId);
   // Future
   Future<String> currentUserImageUrl() async => await _storageAPI
       .userStreamByIdInUser(userId)
@@ -174,8 +178,11 @@ class ApplicationRepository {
           .userStreamByIdInUser(creatorId)
           .first
           .then((value) => value.imageUrl)
-          .onError((error, stackTrace) => "");
+          .onError((error, stackTrace) => '');
     }
+    // debugPrint("creatorId: $creatorId");
+    // debugPrint("creatorImageUrl: $creatorImageUrl");
+    debugPrint('userImageUrl: $userImageUrl');
     await Future.wait<void>(
       [
         _storageAPI.removeProjectInvitationsInUser(userId, [invitation.id]),
@@ -190,12 +197,19 @@ class ApplicationRepository {
             invitation.projectId,
             creatorImageUrl,
           ),
+          _storageAPI.updateLeaderProjectsInUser(creatorId, 1),
+          _storageAPI
+              .removeAssigneesInProject(invitation.projectId, [creatorId]),
+          _storageAPI.removeAssigneeImageUrlsInProject(
+            invitation.projectId,
+            [creatorImageUrl],
+          )
         ] else ...[
           _storageAPI.removeAssigneesInProject(invitation.projectId, [userId]),
           _storageAPI.removeAssigneeImageUrlsInProject(
             invitation.projectId,
             [userImageUrl],
-          ),
+          )
         ]
       ],
     );
@@ -229,15 +243,9 @@ class ApplicationRepository {
         creatorId: userId,
       );
     }
-    late final String projectLeaderUsername;
-    late final String projectLeaderEmail;
     if (newSetupProject.leader != userId) {
       // if the user is not the leader
       // get the leader's email and username
-      final leaderModel =
-          await _storageAPI.userStreamByIdInUser(newSetupProject.leader).first;
-      projectLeaderUsername = leaderModel.username;
-      projectLeaderEmail = leaderModel.email;
       // create an invitation for the leader
       final projectLeaderInvitation = ProjectInvitationModel(
         id: const UuidV8().generate(),
@@ -245,9 +253,10 @@ class ApplicationRepository {
         projectName: newSetupProject.name,
         projectLeaderId: newSetupProject.leader,
         projectLeaderImageUrl: newSetupProject.leaderImageUrl,
-        projectLeaderEmail: projectLeaderEmail,
-        projectLeaderUsername: projectLeaderUsername,
+        senderEmail: userEmailAddress,
         senderId: userId,
+        senderImageUrl: userImageUrl,
+        senderUsername: username,
         receiverId: newSetupProject.leader,
       );
       // update the leader's project invitations
@@ -289,13 +298,10 @@ class ApplicationRepository {
             projectName: newSetupProject.name,
             projectLeaderId: newSetupProject.leader,
             projectLeaderImageUrl: newSetupProject.leaderImageUrl,
-            projectLeaderEmail: (newSetupProject.leader == userId)
-                ? userEmailAddress
-                : projectLeaderEmail,
-            projectLeaderUsername: (newSetupProject.leader == userId)
-                ? username
-                : projectLeaderUsername,
+            senderEmail: userEmailAddress,
             senderId: userId,
+            senderImageUrl: userImageUrl,
+            senderUsername: username,
             receiverId: e,
           ),
         )
@@ -334,8 +340,7 @@ class ApplicationRepository {
         SharedPreferences.getInstance();
     await sharedPreferences.then(
       (value) {
-        value.setString("latestProjectSetup".hashCode.toString(),
-            jsonEncode(project.toJson()));
+        value.setString("latestProjectSetup", jsonEncode(project.toJson()));
       },
     ).onError(
       (error, stackTrace) {},
@@ -348,10 +353,10 @@ class ApplicationRepository {
     Project? project;
     await sharedPreferences.then(
       (value) {
-        if (value.containsKey("latestProjectSetup".hashCode.toString())) {
-          project = Project.fromJson(jsonDecode(
-                  value.getString("latestProjectSetup".hashCode.toString())!)
-              as Map<String, dynamic>);
+        if (value.containsKey("latestProjectSetup")) {
+          project = Project.fromJson(
+              jsonDecode(value.getString("latestProjectSetup")!)
+                  as Map<String, dynamic>);
         }
       },
     );
@@ -382,7 +387,6 @@ class ApplicationRepository {
 
   Future<String> imageUrlOnStorageOf(String path) async =>
       FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
-
 
   // Task / View list
   Future<void> markProjectCompleted(

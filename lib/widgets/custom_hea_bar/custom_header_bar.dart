@@ -33,67 +33,99 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Align(
       child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: context.mediaQuery.size.width * RATIO_MARGIN,
+        padding: EdgeInsets.symmetric(
+          horizontal: context.mediaQuery.size.width * RATIO_PADDING,
           vertical: 5.0,
         ),
-        decoration: const BoxDecoration(
-          border: Border(),
-          color: Colors.transparent,
+        decoration: ShapeDecoration(
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(
+              color: Colors.transparent,
+              width: 1.0,
+            ),
+          ),
+          color: context.colorScheme.onPrimary,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                if (atHomePage)
-                  DefaultTextStyle.merge(
-                    style: context.textTheme.displayMedium?.copyWith(
-                      color: context.colorScheme.onSecondary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    child: upperChild,
-                  )
-                else
-                  InkWell(
-                    onTap: () => onPressed!(context),
-                    borderRadius: BorderRadius.circular(25.0),
-                    radius: 20.0,
-                    overlayColor: MaterialStateProperty.resolveWith(
-                      (states) {
-                        if (states.isPressed) {
-                          return context.colorScheme.secondary;
-                        }
-                        return context.colorScheme.onSecondary;
-                      },
-                    ),
-                    splashFactory: InkRipple.splashFactory,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        size: 20.0,
+            FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (atHomePage)
+                    DefaultTextStyle.merge(
+                      style: context.textTheme.displayMedium?.copyWith(
                         color: context.colorScheme.onSecondary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.fade,
                       ),
+                      child: upperChild,
+                    )
+                  else
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        InkWell(
+                          onTap: () => onPressed!(context),
+                          borderRadius: BorderRadius.circular(25.0),
+                          radius: 20.0,
+                          overlayColor: MaterialStateProperty.resolveWith(
+                            (states) {
+                              if (states.isPressed) {
+                                return context.colorScheme.secondary;
+                              }
+                              return context.colorScheme.onSecondary;
+                            },
+                          ),
+                          splashFactory: InkRipple.splashFactory,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              size: 20.0,
+                              color: context.colorScheme.onSecondary,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        DefaultTextStyle.merge(
+                          style: context.textTheme.displayMedium?.copyWith(
+                            color: context.colorScheme.onSecondary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.fade,
+                          ),
+                          child: upperChild,
+                        ),
+                      ],
+                    ),
+                  // const Spacer(),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: context.mediaQuery.size.width * 0.8,
+                    ),
+                    child: DefaultTextStyle.merge(
+                      style: context.textTheme.displayLarge?.copyWith(
+                        color: context.colorScheme.onSecondary,
+                        fontSize: 23.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      child: bottomChild,
                     ),
                   ),
-                SizedBox(
-                  height: context.mediaQuery.size.height * RATIO_MARGIN * 0.2,
-                ),
-                DefaultTextStyle.merge(
-                  style: context.textTheme.displayLarge?.copyWith(
-                    color: context.colorScheme.onSecondary,
-                    fontSize: 26.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  child: bottomChild,
-                ),
-              ],
+                ],
+              ),
             ),
             const Spacer(),
             BlocProvider(

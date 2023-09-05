@@ -12,8 +12,9 @@ class ListTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: context.mediaQuery.size.width * RATIO_PADDING * 1.8,
+        height: context.mediaQuery.size.width * RATIO_PADDING * 2.0,
         child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           itemCount: tags.length,
           shrinkWrap: true,

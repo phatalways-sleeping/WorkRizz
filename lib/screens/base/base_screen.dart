@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/widgets/widgets.dart'
     show CustomNavigationBar;
 
@@ -47,6 +48,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
       body: SafeArea(
         child: widget.child,
       ),
+      backgroundColor: context.colorScheme.onPrimary,
       extendBody: true,
       bottomNavigationBar:
           !widget.hideNavigationBar ? const CustomNavigationBar() : null,

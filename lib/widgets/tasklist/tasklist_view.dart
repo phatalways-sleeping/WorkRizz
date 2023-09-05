@@ -77,12 +77,34 @@ class _TaskListViewState extends State<TaskListView> {
             children: [
               CustomScrollView(controller: _scrollController, slivers: [
                 SliverPersistentHeader(
+                  pinned: true,
                   delegate: CustomHeaderBar(
-                    upperChild: const Icon(Icons.arrow_back_ios_new_outlined,
-                        color: BLACK, size: 16.0),
+                    upperChild: Container(
+                      constraints: BoxConstraints.tight(
+                        Size(
+                          context.mediaQuery.size.width * 0.3,
+                          context.mediaQuery.size.height * 0.03,
+                        ),
+                      ),
+                      decoration: ShapeDecoration(
+                        color: calculateColor(
+                            (state as TasklistSubscription).project!.endDate),
+                        shape: const RoundedRectangleBorder(
+                          side: BorderSide.none,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(ROUND_CORNER),
+                          ),
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        calculateDaysLeft(
+                          (state).project!.endDate,
+                        ),
+                      ),
+                    ),
                     atHomePage: false,
-                    bottomChild:
-                        Text((state as TasklistSubscription).project!.name),
+                    bottomChild: Text((state).project!.name),
                     onPressed: (context) => context.read<NavigationBloc>().add(
                           const NavigateToProjectsList(),
                         ),
@@ -248,10 +270,12 @@ class _TaskListViewState extends State<TaskListView> {
                     ),
                   ),
                 ),
-                ListSubTask(
-                    changeTask: (value) => setState(() {
-                          _currentPage = value;
-                        })),
+                SliverToBoxAdapter(
+                  child: ListSubTask(
+                      changeTask: (value) => setState(() {
+                            _currentPage = value;
+                          })),
+                ),
               ]),
               Positioned(
                 bottom: 0,

@@ -55,11 +55,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
-      home: BlocProvider(
+      home: HomePageScreen(),
+      /* home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-      ),
+      ), */
     );
   }
 }

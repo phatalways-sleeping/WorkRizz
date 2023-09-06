@@ -72,3 +72,18 @@ final class TasklistMarkSubTaskAsUncompleted extends TasklistEvent {
         isTaskCompleted,
       ];
 }
+
+final class TasklistCreateNewTask extends TasklistEvent {
+  const TasklistCreateNewTask(this.name);
+
+  final String? name;
+
+  @override
+  List<Object> get props => [
+        if(name != null) name!,
+      ];
+}
+
+final class TasklistOpenTaskCreateDialog extends TasklistEvent {
+  const TasklistOpenTaskCreateDialog();
+}

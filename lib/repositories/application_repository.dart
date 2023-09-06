@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/apis/apis.dart';
 import 'package:task_managing_application/assets/config/config.dart';
@@ -40,6 +38,7 @@ class ApplicationRepository {
   late String username;
 
   late String projectIdOnView;
+  late String subTaskIdOnView;
 
   Future<void> login(String email, String password) async {
     await _authenticationAPI.login(email, password).then((value) async {
@@ -62,10 +61,12 @@ class ApplicationRepository {
       confirmPassword,
     );
     final randomAvatar = AVATARS[Random(123).nextInt(AVATARS.length)];
+
     userId = const UuidV8().generate();
     userImageUrl = randomAvatar;
     userEmailAddress = email;
     this.username = username;
+
     final newUser = UserDataModel(
       id: userId,
       imageUrl: randomAvatar,
@@ -181,9 +182,6 @@ class ApplicationRepository {
           .then((value) => value.imageUrl)
           .onError((error, stackTrace) => '');
     }
-    // debugPrint("creatorId: $creatorId");
-    // debugPrint("creatorImageUrl: $creatorImageUrl");
-    debugPrint('userImageUrl: $userImageUrl');
     await Future.wait<void>(
       [
         _storageAPI.removeProjectInvitationsInUser(userId, [invitation.id]),
@@ -475,11 +473,7 @@ class ApplicationRepository {
     required String assigneeImageUrl,
   }) async {
     final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
-    final taskIsCompleteds = await _storageAPI.taskStream(taskId).first.then(
-          (value) => value.subTaskSmallInformations.map(
-            (e) => e.isCompleted,
-          ),
-        );
+
     final subTaskInformation = SubTaskSmallInformation(
       id: subTaskId,
       name: subTask.name,
@@ -502,7 +496,10 @@ class ApplicationRepository {
         _storageAPI.updateActivitiesCompletedInProject(projectIdOnView, -1),
       ],
     );
-    if (!taskIsCompleteds.contains(false)) {
+    final taskIsCompleted = await _storageAPI.taskStream(taskId).first.then(
+          (value) => value.isCompleted,
+        );
+    if (taskIsCompleted) {
       await Future.wait<void>([
         _storageAPI.updateIsCompletedInTask(taskId, false),
         _storageAPI.updateTasksCompletedInProject(projectIdOnView, -1),
@@ -514,7 +511,6 @@ class ApplicationRepository {
   Future<void> createNewSubTask({
     required String projectId,
     required String taskId,
-    // required bool needToUpdateProjectCompletion,
     required bool needToUpdateTaskCompletion,
     required SubTaskModel newSubTask,
     required List<File> files,
@@ -571,31 +567,6 @@ class ApplicationRepository {
         ],
       ],
     );
-
-    // if (needToUpdateProjectCompletion) {
-    //   final assignees = await _storageAPI
-    //       .projectStream(projectId)
-    //       .first
-    //       .then((value) => value.assignees);
-    //   final leader = await _storageAPI
-    //       .projectStream(projectId)
-    //       .first
-    //       .then((value) => value.leader);
-    //   await Future.wait<void>(
-    //     [
-    //       // update project completion
-    //       _storageAPI.updateIsCompletedInProject(projectId, false),
-    //       // update leader completed projects
-    //       _storageAPI.updateCompletedProjectsInUser(leader, -1),
-    //       _storageAPI.updateOnGoingProjectsInUser(leader, 1),
-    //       // update assignees completed projects
-    //       for (var assignee in assignees)
-    //         _storageAPI.updateCompletedProjectsInUser(assignee, -1),
-    //       for (var assignee in assignees)
-    //         _storageAPI.updateOnGoingProjectsInUser(assignee, 1),
-    //     ],
-    //   );
-    // }
   }
 
   Future<void> removeSubTask({
@@ -640,30 +611,15 @@ class ApplicationRepository {
         ],
       ],
     );
-
-    // if (needToUpdateProjectCompletion) {
-    //   final project = await _storageAPI.projectStream(projectId).first;
-    //   final assignees = project.assignees;
-    //   final leader = project.leader;
-    //   await Future.wait<void>(
-    //     [
-    //       _storageAPI.updateIsCompletedInProject(projectId, true),
-    //       _storageAPI.updateCompletedProjectsInUser(leader, 1),
-    //       _storageAPI.updateOnGoingProjectsInUser(leader, -1),
-    //       for (var assignee in assignees)
-    //         _storageAPI.updateCompletedProjectsInUser(assignee, 1),
-    //       for (var assignee in assignees)
-    //         _storageAPI.updateOnGoingProjectsInUser(assignee, -1),
-    //     ],
-    //   );
-    // }
   }
 
   // Task / Add new category
-  Future<void> createNewTask() async {
+  Future<void> createNewTask({
+    required String name,
+  }) async {
     final newTask = Task(
       id: const UuidV8().generate(),
-      name: "New Category",
+      name: name,
       subTasks: const [],
       project: projectIdOnView,
       points: 0,
@@ -778,6 +734,74 @@ class ApplicationRepository {
       replyingCommentId,
     );
   }
-
   // Task / View files
+
+  // Thread / View thread
+  Future<void> addNewMessage({
+    required String threadId,
+    required String message,
+    required bool isTextMessage,
+    required bool isImageMessage,
+    File? image,
+    File? file,
+  }) async {
+    if (isTextMessage) {
+      final newMessage = TextMessageModel(
+        id: const UuidV8().generate(),
+        sender: userId,
+        time: DateTime.now(),
+        text: message,
+      );
+
+      await Future.wait<void>([
+        _storageAPI.createNewMessage(newMessage),
+        _storageAPI.updateMessagesInThread(threadId, [newMessage.id]),
+      ]);
+    } else if (isImageMessage) {
+      assert(image != null);
+      final newMessage = ImageMessageModel(
+        id: const UuidV8().generate(),
+        sender: userId,
+        time: DateTime.now(),
+        imageUrl: "images/${image!.path}",
+      );
+
+      await Future.wait<void>([
+        _storageAPI.createNewMessage(newMessage),
+        _storageAPI.updateMessagesInThread(threadId, [newMessage.id]),
+        _storageAPI.updateImageToStorage(image: image),
+      ]);
+    } else {
+      assert(file != null);
+      final fileTypeString = file!.path.split(".").last;
+      final fileType = fileTypeString == "pdf"
+          ? FileType.pdf
+          : fileTypeString == "docx"
+              ? FileType.doc
+              : fileTypeString == "csv"
+                  ? FileType.csv
+                  : fileTypeString == "pptx"
+                      ? FileType.ppt
+                      : FileType.other;
+
+      final newMessage = FileMessageModel(
+        id: const UuidV8().generate(),
+        sender: userId,
+        time: DateTime.now(),
+        fileUrl: "files/${file.path}",
+        fileName: file.path.split("/").last,
+        fileType: fileType,
+      );
+
+      await Future.wait<void>([
+        _storageAPI.createNewMessage(newMessage),
+        _storageAPI.updateMessagesInThread(threadId, [newMessage.id]),
+        _storageAPI.updateFileToStorage(file: file),
+      ]);
+    }
+  }
+
+  Future<File> downloadFile(String fileUrl) async => await _storageAPI.fileFromStorage(fileUrl);
+
+  Future<File> downloadImage(String imageUrl) async => await _storageAPI.imageFileFromStorage(imageUrl);
 }

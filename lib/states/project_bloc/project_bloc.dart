@@ -25,7 +25,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
                 ? FilterStatus.none
                 : (state as ProjectUserSubscription).filterStatus,
           ),
-          onError: (error, stackTrace) => const ProjectError(),
+          onError: (error, stackTrace) => ProjectError(error.toString()),
         );
       },
     );

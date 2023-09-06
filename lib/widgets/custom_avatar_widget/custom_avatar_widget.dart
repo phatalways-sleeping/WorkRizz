@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/extensions/build_context_extensions.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_config.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_loading.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_wrapper.dart';
 
 class CustomAvatarWidget extends StatelessWidget {
   const CustomAvatarWidget({
@@ -27,11 +30,18 @@ class CustomAvatarWidget extends StatelessWidget {
                 return child;
               }
               return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
+                child: Shimmer(
+                  linearGradient: shimmer_gradient,
+                  child: ShimmerLoading(
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ),
               );
             },

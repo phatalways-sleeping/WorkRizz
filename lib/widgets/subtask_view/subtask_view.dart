@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/assets/fonts/base_font.dart';
-import 'package:task_managing_application/widgets/authentication/components.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
-import 'package:task_managing_application/widgets/project/project_create/date_input.dart';
-import 'package:task_managing_application/widgets/project/project_create/members_adder.dart';
 import 'package:task_managing_application/widgets/subtask_view/input/description_input.dart';
 import 'package:task_managing_application/widgets/subtask_view/input/duedate_input.dart';
 import 'package:task_managing_application/widgets/subtask_view/input/review_score_input.dart';
 import 'package:task_managing_application/widgets/subtask_view/input/score_input.dart';
+import 'package:task_managing_application/widgets/subtask_view/comment/comment_list.dart';
 
-part 'comment_list.dart';
 part 'file_list.dart';
 part 'review.dart';
 
@@ -51,7 +47,7 @@ class _SubTaskViewState extends State<SubTaskView> {
                   children: [
                     CheckboxWidget(
                       checkState: isChecked,
-                      onChanged: (value) {
+                      onChanged: (value, context) {
                         setState(() {
                           isChecked = value!;
                         });
@@ -232,6 +228,7 @@ class _SubTaskViewState extends State<SubTaskView> {
                       height: context.mediaQuery.size.width * RATIO_PADDING),
                   Comment(
                     isAssigned: widget.isAssigned,
+                    isLeader: widget.isLeader,
                   ),
                   const SizedBox(),
                   Review(

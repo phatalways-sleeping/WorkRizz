@@ -49,6 +49,7 @@ class _ProjectViewState extends State<ProjectView> {
           children: [
             BaseScreen(
               hideNavigationBar: false,
+              hideFloatingActionButton: false,
               child: CustomScrollView(
                 controller: _scrollController,
                 slivers: [

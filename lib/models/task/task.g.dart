@@ -9,7 +9,12 @@ part of 'task.dart';
 Task _$TaskFromJson(Map<String, dynamic> json) {
   $checkKeys(
     json,
-    requiredKeys: const ['name', 'project'],
+    requiredKeys: const [
+      'name',
+      'subTasksCompleted',
+      'project',
+      'subTaskSmallInformations'
+    ],
   );
   return Task(
     reference: _$JsonConverterFromJson<DocumentReference<Object?>,
@@ -24,6 +29,13 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
     project: json['project'] as String,
     points: json['points'] as int? ?? 0,
     isCompleted: json['isCompleted'] as bool? ?? false,
+    subTasksCompleted: json['subTasksCompleted'] as int? ?? 0,
+    subTaskSmallInformations:
+        (json['subTaskSmallInformations'] as List<dynamic>?)
+                ?.map((e) =>
+                    SubTaskSmallInformation.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            const [],
   );
 }
 
@@ -34,9 +46,12 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'subTasks': instance.subTasks,
+      'subTasksCompleted': instance.subTasksCompleted,
       'project': instance.project,
       'points': instance.points,
       'isCompleted': instance.isCompleted,
+      'subTaskSmallInformations':
+          instance.subTaskSmallInformations.map((e) => e.toJson()).toList(),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

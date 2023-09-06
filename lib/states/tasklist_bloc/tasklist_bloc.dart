@@ -29,6 +29,23 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
         (state as TasklistSubscription).project!.leader,
       );
     });
+    on<TasklistChangePage>((event, emit) async {
+      emit((state as TasklistSubscription).copyWith(currentPage: event.page));
+    });
+    on<TasklistMarkSubTaskAsCompleted>((event, emit) async {
+      await _applicationRepository.markSubTaskCompleted(
+        taskId: event.taskId,
+        subTaskId: event.subTaskId,
+        assigneeImageUrl: event.assigneeImageUrl,
+      );
+    });
+    on<TasklistMarkSubTaskAsUncompleted>((event, emit) async {
+      await _applicationRepository.markSubTaskUnCompleted(
+        taskId: event.taskId,
+        subTaskId: event.subTaskId,
+        assigneeImageUrl: event.assigneeImageUrl,
+      );
+    });
   }
 
   final ApplicationRepository _applicationRepository;
@@ -60,11 +77,14 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
     }
     for (var imageUrl in list) {
       await this.imageUrl(imageUrl).then(
-        (value) => imageList.add(
-          NetworkImage(value),
-        ),
-      );
+            (value) => imageList.add(
+              NetworkImage(value),
+            ),
+          );
     }
     return imageList;
   }
+
+  Stream<Task> subTaskSmallInformationStream(String taskId) =>
+      _applicationRepository.taskStream(taskId);
 }

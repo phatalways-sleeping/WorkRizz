@@ -71,32 +71,38 @@ class _CustomItemWidgetState extends State<CustomItemWidget> {
           seconds: 2,
         ),
         tapTargetSize: MaterialTapTargetSize.padded,
+        padding: MaterialStatePropertyAll(
+          EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * RATIO_PADDING * 0.8,
+            vertical: MediaQuery.of(context).size.height * RATIO_PADDING * 0.4,
+          ),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              widget.firstChild,
-              SizedBox(width: MediaQuery.of(context).size.width * RATIO_SPACE),
-              Text(
+          widget.firstChild,
+          SizedBox(width: MediaQuery.of(context).size.width * RATIO_SPACE),
+          FittedBox(
+            fit: BoxFit.fitWidth,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Text(
                 widget.name,
-                style: context.textTheme.bodyMedium,
+                style: context.textTheme.bodyLarge?.copyWith(
+                  fontSize: 14.0,
+                ),
               ),
-            ],
+            ),
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              widget.secondChild,
-              SizedBox(width: MediaQuery.of(context).size.width * RATIO_SPACE),
-              Text(
-                widget.subtext,
-                style: context.textTheme.bodyMedium,
-              ),
-            ],
+          widget.secondChild,
+          SizedBox(width: MediaQuery.of(context).size.width * RATIO_SPACE),
+          Text(
+            widget.subtext,
+            style: context.textTheme.bodyLarge?.copyWith(
+              fontSize: 14.0,
+            ),
           )
         ],
       ),

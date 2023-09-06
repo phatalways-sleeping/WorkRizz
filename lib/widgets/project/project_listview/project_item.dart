@@ -95,7 +95,7 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
               padding: MaterialStatePropertyAll(
                 EdgeInsets.symmetric(
                   horizontal:
-                      context.mediaQuery.size.width * RATIO_PADDING * 1.2,
+                      context.mediaQuery.size.width * RATIO_PADDING,
                   vertical:
                       context.mediaQuery.size.height * RATIO_PADDING * 0.6,
                 ),
@@ -222,6 +222,7 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                             avatarRatio: 0.06,
                             radiusRatio: 0.04,
                             imageUrl: snaphot.data!,
+                            onTap: (context) {},
                           );
                         }
                         return const CustomCircularProgressIndicator(

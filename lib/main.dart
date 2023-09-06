@@ -4,6 +4,7 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/authentication/authentication_screen.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
+import 'package:task_managing_application/screens/project_invitation/project_invitation_screen.dart';
 import 'package:task_managing_application/screens/subtask_view/subtask_view_screen.dart';
 import 'package:task_managing_application/screens/tasklist/tasklist_screen.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
@@ -14,6 +15,7 @@ import 'package:task_managing_application/states/project_bloc/project_bloc.dart'
 import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/tasklist_bloc/tasklist_bloc.dart';
+import 'package:task_managing_application/states/user_project_invitation/user_project_invitation_bloc.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -24,17 +26,25 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // ApplicationRepository.repository.userId =
+  //     "20230831-0517-8230-a202-0089f860b83a";
+
+  // ApplicationRepository.repository.userImageUrl = "avatars/avatar_1.jpg";
+
+  // ApplicationRepository.repository.userEmailAddress = "matwil@gmail.com";
+
+  // ApplicationRepository.repository.username = "Mathew Wilson";
+
   ApplicationRepository.repository.userId =
-      "20230831-0517-8230-a202-0089f860b83a";
+      "20230831-0517-8130-8211-a9c1dfa3e677";
 
-  ApplicationRepository.repository.userImageUrl = "avatars/avatar_1.jpg";
+  ApplicationRepository.repository.userImageUrl = "avatars/avatar_2.jpg";
 
-  ApplicationRepository.repository.userEmailAddress = "matwil@gmail.com";
+  ApplicationRepository.repository.userEmailAddress = "jane@example.com";
 
-  ApplicationRepository.repository.username = "Mathew Wilson";
+  ApplicationRepository.repository.username = "Jane Smith";
 
-  ApplicationRepository.repository.projectIdOnView =
-      '20230831-0508-8d53-a880-b370f9865591';
+
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,
@@ -90,15 +100,8 @@ class AppFlow extends StatelessWidget {
         if (state is TestComponents)
           const MaterialPage(
             child: BaseScreen(
+              hideFloatingActionButton: true,
               child:
-                  //   CustomItemWidget(
-                  //     firstChild: CheckboxWidget(),
-                  //     isFixed: true,
-                  //     name: 'Design UI',
-                  //     subtext: '10pt',
-                  //     secondChild: Icon(Icons.add,
-                  //   ),
-                  // ProjectTag(color: PINK, name: "Online")
                   CustomScrollView(
                 slivers: [
                   Center(
@@ -127,6 +130,14 @@ class AppFlow extends StatelessWidget {
               child: const ProjectScreen(),
             ),
           ),
+        if(state is UserProjectInvitation)
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) =>
+                  UserProjectInvitationBloc(context.read<ApplicationRepository>()),
+              child: const ProjectInvitationScreen(),
+            ),
+          ),
         if (state is TaskList)
           MaterialPage(
             child: BlocProvider(
@@ -149,6 +160,7 @@ class AppFlow extends StatelessWidget {
         if (state is Home)
           MaterialPage(
             child: BaseScreen(
+              hideFloatingActionButton: true,
               child: Container(
                 height: 700,
                 color: Colors.pink,
@@ -159,6 +171,7 @@ class AppFlow extends StatelessWidget {
         if (state is Assistant) 
           const MaterialPage(
             child: BaseScreen(
+              hideFloatingActionButton: true,
               child: SizedBox(
                 height: 700,
                 width: double.infinity,

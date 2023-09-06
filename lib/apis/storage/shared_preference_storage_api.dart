@@ -602,4 +602,29 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
     // TODO: implement updateSubTasksCompletedInTask
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> updateFileToStorage({required File file}) {
+    // TODO: implement updateFileToStorage
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateImageToStorage({required File image}) {
+    // TODO: implement updateImageToStorage
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<File> fileFromStorage(String path) {
+    // TODO: implement fileFromStorage
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<File> imageFileFromStorage(String path) {
+    // TODO: implement imageFileFromStorage
+    throw UnimplementedError();
+  }
+  
 }

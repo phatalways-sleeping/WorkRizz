@@ -19,55 +19,22 @@ class ListSubTask extends StatelessWidget {
         margin: EdgeInsets.symmetric(
           horizontal: context.mediaQuery.size.width * RATIO_MARGIN,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              'No tasks yet',
-              style: context.textTheme.bodyLarge?.copyWith(
-                  color: context.colorScheme.onSecondary,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              style: ButtonStyle(
-                overlayColor: const MaterialStatePropertyAll(
-                  PURPLE,
-                ),
-                splashFactory: InkSparkle.splashFactory,
-                animationDuration: const Duration(
-                  seconds: 2,
-                ),
-                tapTargetSize: MaterialTapTargetSize.padded,
-                shape: const MaterialStatePropertyAll(
-                  CircleBorder(),
-                ),
-                backgroundColor: const MaterialStatePropertyAll(
-                  PINK,
-                ),
-                padding: MaterialStatePropertyAll(
-                  EdgeInsets.symmetric(
-                    horizontal: context.mediaQuery.size.width * 0.02,
-                    vertical: context.mediaQuery.size.width * 0.02,
-                  ),
-                ),
-                alignment: Alignment.center,
+        child: InkWell(
+          onTap: () => context.read<TasklistBloc>().add(
+                const TasklistOpenTaskCreateDialog(),
               ),
-              child: SvgPicture.string(
-                SvgAssets.add,
-                width: 16.0,
-                height: 16.0,
-                colorFilter: ColorFilter.mode(
-                  context.colorScheme.onSecondary,
-                  BlendMode.srcATop,
-                ),
-              ),
+          splashColor: Colors.transparent,
+          overlayColor: const MaterialStatePropertyAll(
+            Colors.transparent,
+          ),
+          child: Text(
+            'Start by adding a new task here',
+            style: context.textTheme.displaySmall?.copyWith(
+              color: context.colorScheme.error,
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
             ),
-          ],
+          ),
         ),
       );
     }

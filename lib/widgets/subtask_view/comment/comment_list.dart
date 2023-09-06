@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_dialog.dart';
-import 'package:task_managing_application/widgets/subtask_view/comment/switch.dart';
 
 part 'comment_entry.dart';
 part 'comment_widget.dart';
@@ -99,10 +98,10 @@ class _CommentState extends State<Comment> {
                       rightColor: PINK,
                       focusleftColor: PALE,
                       focusrightColor: GREEN,
-                      onLeftPressed: () {
+                      onLeftPressed: (context) {
                         Navigator.of(context).pop(false);
                       },
-                      onRightPressed: () {
+                      onRightPressed: (context) {
                         Navigator.of(context).pop(true);
                       }));
             },

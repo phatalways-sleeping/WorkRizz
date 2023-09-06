@@ -3,6 +3,8 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_snackbar.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/project/project_create/project_create_widget.dart';
 import 'package:task_managing_application/widgets/project/project_listview/project_listview.dart';
@@ -33,7 +35,19 @@ class _ProjectViewState extends State<ProjectView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProjectBloc, ProjectState>(
+    return BlocConsumer<ProjectBloc, ProjectState>(
+      listener: (context, state) {
+        if (state is ProjectError) {
+          final errorSnackBar = createErrorSnackBar(
+            context: context,
+            error: state.message,
+            onPressed: (context) =>
+                context.read<ProjectBloc>().add(const ProjectSubscribeToUserEvent()),
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
+        }
+      },
       builder: (context, state) {
         if (state is ProjectInitial) {
           return const Center(
@@ -41,8 +55,8 @@ class _ProjectViewState extends State<ProjectView> {
           );
         }
         if (state is ProjectError) {
-          return ErrorWidget.withDetails(
-            message: "An error has occured when trying to fetch your data",
+          return const Center(
+            child: CustomErrorIcon(),
           );
         }
         return Stack(

@@ -12,7 +12,7 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
       await emit.forEach(
         _applicationRepository.projectOnViewStream(),
         onData: (project) => TasklistSubscription(project: project),
-        onError: (error, stackTrace) => const TasklistError(),
+        onError: (error, stackTrace) => TasklistError(error.toString()),
       );
     });
     on<TasklistMarkProjectAsCompleted>((event, emit) async {
@@ -45,6 +45,23 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
         subTaskId: event.subTaskId,
         assigneeImageUrl: event.assigneeImageUrl,
       );
+    });
+    on<TasklistCreateNewTask>((event, emit) async {
+      if (event.name == null) {
+        emit(
+          TasklistSubscription.from(
+            state as TasklistSubscriptionAndOpenTaskCreateDialog,
+          ),
+        );
+        return;
+      }
+      await _applicationRepository.createNewTask(
+        name: event.name!,
+      );
+    });
+    on<TasklistOpenTaskCreateDialog>((event, emit) async {
+      emit(TasklistSubscriptionAndOpenTaskCreateDialog.from(
+          state as TasklistSubscription));
     });
   }
 

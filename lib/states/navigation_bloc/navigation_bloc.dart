@@ -32,6 +32,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToUserProjectInvitation>((event, emit) {
       emit(const UserProjectInvitation());
     });
+    on<NavigateToSubTaskCreate>((event, emit) {
+      emit(const SubTaskCreate());
+    });
   }
 
   final ApplicationRepository _applicationRepository;

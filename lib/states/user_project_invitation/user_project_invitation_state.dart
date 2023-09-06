@@ -30,5 +30,13 @@ final class UserProjectInvitationSuccess extends UserProjectInvitationState {
 }
 
 final class UserProjectInvitationFailure extends UserProjectInvitationState {
-  const UserProjectInvitationFailure();
+  const UserProjectInvitationFailure(this.message);
+
+  final String message;
+
+  @override
+  List<Object> get props => [
+        ...super.props,
+        message,
+      ];
 }

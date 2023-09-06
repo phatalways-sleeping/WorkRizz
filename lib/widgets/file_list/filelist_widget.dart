@@ -77,16 +77,17 @@ class _FileListState extends State<FileList> {
       },
       child: Container(
         margin: EdgeInsets.only(
-            left: width * RATIO_PADDING,
-            right: width * RATIO_PADDING,
-            top: width * RATIO_PADDING,
-          ),
+          left: width * RATIO_PADDING,
+          right: width * RATIO_PADDING,
+          top: width * RATIO_PADDING,
+        ),
         child: Dismissible(
           key: UniqueKey(),
           direction: DismissDirection.endToStart,
           background: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(MEDIUM_CORNER), color: BLACK),
+                borderRadius: BorderRadius.circular(MEDIUM_CORNER),
+                color: BLACK),
             child: Align(
               alignment: Alignment.centerRight,
               child: Padding(
@@ -98,21 +99,23 @@ class _FileListState extends State<FileList> {
           ),
           confirmDismiss: (direction) {
             return showDialog(
-                context: context,
-                builder: (context) => CustomDialog(
-                    title: "Remove this File",
-                    leftText: "No",
-                    rightText: "Yes",
-                    leftColor: PURPLE,
-                    rightColor: PINK,
-                    focusleftColor: PALE,
-                    focusrightColor: GREEN,
-                    onLeftPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    onRightPressed: () {
-                      Navigator.of(context).pop(true);
-                    }));
+              context: context,
+              builder: (context) => CustomDialog(
+                title: "Remove this File",
+                leftText: "No",
+                rightText: "Yes",
+                leftColor: PURPLE,
+                rightColor: PINK,
+                focusleftColor: PALE,
+                focusrightColor: GREEN,
+                onLeftPressed: (context) {
+                  Navigator.of(context).pop(false);
+                },
+                onRightPressed: (context) {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            );
           },
           onDismissed: (DismissDirection direction) {
             setState(() {
@@ -120,7 +123,6 @@ class _FileListState extends State<FileList> {
             });
           },
           child: Container(
-            
             decoration: BoxDecoration(
               color: WHITE,
               borderRadius: BorderRadius.circular(MEDIUM_CORNER),

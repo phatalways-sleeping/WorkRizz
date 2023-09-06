@@ -110,6 +110,37 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Stream<MessageModel> messageStream(String id) =>
       ReadMessage.messageStreamById(id);
+  @override
+  Future<File> imageFileFromStorage(String path) async {
+    // using dio and path_provider
+    final dir = await getTemporaryDirectory();
+    final file = File("${dir.path}/${path.split('/').last}");
+    final dio = Dio();
+    final downloadPath =
+        await FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
+    try {
+      await dio.download(downloadPath, file.path);
+      return file;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  @override
+  Future<File> fileFromStorage(String path) async {
+    // using dio and path_provider
+    final dir = await getTemporaryDirectory();
+    final file = File("${dir.path}/${path.split('/').last}");
+    final dio = Dio();
+    final downloadPath =
+        await FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
+    try {
+      await dio.download(downloadPath, file.path);
+      return file;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // - CommentModel
   @override
   Future<CommentModel> commentFuture(String id) => ReadComment.commentById(id);
@@ -201,7 +232,8 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
           String id, List<String> latestVersion) =>
       UpdateProject.updateAssigneeImageUrls(id, latestVersion);
   @override
-  Future<void> removeAssigneeImageUrlsInProject(String id, List<String> removedItems) =>
+  Future<void> removeAssigneeImageUrlsInProject(
+          String id, List<String> removedItems) =>
       UpdateProject.removeAssigneeImageUrls(id, removedItems);
   @override
   Future<void> updateTasksCompletedInProject(String id, int tasksCompleted) =>
@@ -351,6 +383,21 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> removeMessagesInThread(String id, List<String> removedItems) =>
       UpdateThread.removeMessages(id, removedItems);
   // - MessageModel
+  @override
+  Future<void> updateImageToStorage({
+    required File image,
+  }) async {
+    final imageUrl = "images/${image.path}";
+    await FirebaseFirestoreConfigs.storageRef.child(imageUrl).putFile(image);
+  }
+
+  @override
+  Future<void> updateFileToStorage({
+    required File file,
+  }) async {
+    final fileUrl = "files/${file.path}";
+    await FirebaseFirestoreConfigs.storageRef.child(fileUrl).putFile(file);
+  }
 
   // - CommentModel
   @override

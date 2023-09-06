@@ -63,3 +63,7 @@ final class ProjectDetail extends NavigationState {
 final class UserProjectInvitation extends NavigationState {
   const UserProjectInvitation();
 }
+
+final class SubTaskCreate extends NavigationState {
+  const SubTaskCreate();
+}

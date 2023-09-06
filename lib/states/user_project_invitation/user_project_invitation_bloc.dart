@@ -15,7 +15,9 @@ class UserProjectInvitationBloc
       await emit.forEach(
         _applicationRepository.projectInvitationsStreamInUser,
         onData: (data) => UserProjectInvitationSuccess(projectInvitation: data),
-        onError: (error, stackTrace) => const UserProjectInvitationFailure(),
+        onError: (error, stackTrace) => UserProjectInvitationFailure(
+          error.toString(),
+        ),
       );
     });
   }

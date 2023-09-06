@@ -16,6 +16,10 @@ final class ProjectsList extends NavigationState {
   const ProjectsList();
 }
 
+final class FileList extends NavigationState {
+  const FileList();
+}
+
 final class Authentication extends NavigationState {
   const Authentication();
 }

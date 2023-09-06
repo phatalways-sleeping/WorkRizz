@@ -44,7 +44,6 @@ Future<void> main() async {
 
   ApplicationRepository.repository.username = "Jane Smith";
 
-
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,
@@ -65,12 +64,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
-      home: FileListScreen(),
-      /* home: BlocProvider(
+      home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-      ), */
+      ),
     );
   }
 }
@@ -89,7 +87,6 @@ class AppFlow extends StatelessWidget {
   List<Page<dynamic>> onGeneratePages(
           NavigationState state, List<Page> pages) =>
       [
-        
         if (state is Splash)
           MaterialPage(
             child: BlocProvider(
@@ -101,8 +98,7 @@ class AppFlow extends StatelessWidget {
           const MaterialPage(
             child: BaseScreen(
               hideFloatingActionButton: true,
-              child:
-                  CustomScrollView(
+              child: CustomScrollView(
                 slivers: [
                   Center(
                     child: TaskTag(
@@ -130,11 +126,11 @@ class AppFlow extends StatelessWidget {
               child: const ProjectScreen(),
             ),
           ),
-        if(state is UserProjectInvitation)
+        if (state is UserProjectInvitation)
           MaterialPage(
             child: BlocProvider(
-              create: (context) =>
-                  UserProjectInvitationBloc(context.read<ApplicationRepository>()),
+              create: (context) => UserProjectInvitationBloc(
+                  context.read<ApplicationRepository>()),
               child: const ProjectInvitationScreen(),
             ),
           ),
@@ -168,7 +164,7 @@ class AppFlow extends StatelessWidget {
               ),
             ),
           ),
-        if (state is Assistant) 
+        if (state is Assistant)
           const MaterialPage(
             child: BaseScreen(
               hideFloatingActionButton: true,
@@ -182,5 +178,9 @@ class AppFlow extends StatelessWidget {
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Settings)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+        if (state is FileList)
+          const MaterialPage(
+            child: FileListScreen(),
+          ),
       ];
 }

@@ -26,7 +26,7 @@ mixin LightTheme {
       error: errorColor,
       onPrimary: Colors.white,
       onSecondary: Colors.black,
-      onErrorContainer: Colors.black,
+      onErrorContainer: buttonColor,
       onSurface: Colors.black,
       onBackground: Colors.white,
       onError: Colors.black,

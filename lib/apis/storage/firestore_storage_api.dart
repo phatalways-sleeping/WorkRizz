@@ -202,7 +202,7 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
       UpdateProject.updateAssigneeImageUrls(id, latestVersion);
   @override
   Future<void> removeAssigneeImageUrlsInProject(String id, List<String> removedItems) =>
-      UpdateProject.removeAssignees(id, removedItems);
+      UpdateProject.removeAssigneeImageUrls(id, removedItems);
   @override
   Future<void> updateTasksCompletedInProject(String id, int tasksCompleted) =>
       UpdateProject.updateTasksCompleted(id, tasksCompleted);
@@ -232,7 +232,8 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> updateCreatorIdInProject(String id, String creatorId) =>
       UpdateProject.updateCreatorId(id, creatorId);
   @override
-  Future<void> updateLeaderImageUrlInProject(String id, String leaderImageUrl) =>
+  Future<void> updateLeaderImageUrlInProject(
+          String id, String leaderImageUrl) =>
       UpdateProject.updateLeaderImageUrl(id, leaderImageUrl);
   @override
   Future<void> updateMostActiveMembersInProject(
@@ -288,6 +289,17 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> updateTaskInTask(String id, Task task) =>
       UpdateTask.updateTask(id, task);
+  @override
+  Future<void> updateSubTaskSmallInformationsInTask(
+          String id, List<SubTaskSmallInformation> latestVersion) =>
+      UpdateTask.updateSubTaskSmallInformations(id, latestVersion);
+  @override
+  Future<void> removeSubTaskSmallInformationsInTask(
+          String id, List<SubTaskSmallInformation> removedItems) =>
+      UpdateTask.removeSubTaskSmallInformations(id, removedItems);
+  @override
+  Future<void> updateSubTasksCompletedInTask(String id, int increase) =>
+      UpdateTask.updateSubTasksCompleted(id, increase);
   // - SubTask
   @override
   Future<void> updateAssigneeInSubTask(String id, String assignee) =>

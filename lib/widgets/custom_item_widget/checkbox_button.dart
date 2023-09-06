@@ -3,7 +3,7 @@ import 'package:task_managing_application/assets/config/config.dart';
 
 class CheckboxWidget extends StatelessWidget {
   const CheckboxWidget({super.key, required this.onChanged, required this.checkState});
-  final Function(bool?) onChanged;
+  final Function(bool?, BuildContext) onChanged;
   final bool checkState;
 
   @override
@@ -20,7 +20,7 @@ class CheckboxWidget extends StatelessWidget {
       fillColor: MaterialStateProperty.resolveWith(
           (states) => checkState ? BLACK : WHITE),
       value: checkState,
-      onChanged: onChanged,
+      onChanged: (value) => onChanged(value, context),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }

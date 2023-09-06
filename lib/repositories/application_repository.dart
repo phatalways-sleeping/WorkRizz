@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/apis/apis.dart';
 import 'package:task_managing_application/assets/config/config.dart';
@@ -11,6 +11,7 @@ import 'package:task_managing_application/assets/config/firebase_firestore_confi
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
 import 'package:task_managing_application/models/project_invitation/project_invitation.dart';
+import 'package:task_managing_application/models/task/sub_task_small_info.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
 import 'package:uuid/v8.dart';
 
@@ -113,13 +114,17 @@ class ApplicationRepository {
   Stream<UserActivityModel> userActivityStream(String? id) =>
       _storageAPI.userActivityStreamInUserActivity(id ?? userId);
   Stream<Project> projectStream(String id) => _storageAPI.projectStream(id);
-  Stream<Project> projectOnViewStream() => _storageAPI.projectStream(projectIdOnView);
+  Stream<Project> projectOnViewStream() =>
+      _storageAPI.projectStream(projectIdOnView);
   Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
   Stream<SubTaskModel> subTaskStream(String subTaskId) =>
       _storageAPI.subTaskModelStream(subTaskId);
-  Stream<List<String>> projectInvitationStream() => _storageAPI
+  Stream<List<String>> get projectInvitationsStreamInUser => _storageAPI
       .userStreamByIdInUser(userId)
       .map((event) => event.projectInvitations);
+  Stream<ProjectInvitationModel> projectInvitationStream(
+          String projectInvitationId) =>
+      _storageAPI.projectInvitationStream(projectInvitationId);
   // Future
   Future<String> currentUserImageUrl() async => await _storageAPI
       .userStreamByIdInUser(userId)
@@ -174,8 +179,11 @@ class ApplicationRepository {
           .userStreamByIdInUser(creatorId)
           .first
           .then((value) => value.imageUrl)
-          .onError((error, stackTrace) => "");
+          .onError((error, stackTrace) => '');
     }
+    // debugPrint("creatorId: $creatorId");
+    // debugPrint("creatorImageUrl: $creatorImageUrl");
+    debugPrint('userImageUrl: $userImageUrl');
     await Future.wait<void>(
       [
         _storageAPI.removeProjectInvitationsInUser(userId, [invitation.id]),
@@ -190,12 +198,19 @@ class ApplicationRepository {
             invitation.projectId,
             creatorImageUrl,
           ),
+          _storageAPI.updateLeaderProjectsInUser(creatorId, 1),
+          _storageAPI
+              .removeAssigneesInProject(invitation.projectId, [creatorId]),
+          _storageAPI.removeAssigneeImageUrlsInProject(
+            invitation.projectId,
+            [creatorImageUrl],
+          )
         ] else ...[
           _storageAPI.removeAssigneesInProject(invitation.projectId, [userId]),
           _storageAPI.removeAssigneeImageUrlsInProject(
             invitation.projectId,
             [userImageUrl],
-          ),
+          )
         ]
       ],
     );
@@ -229,15 +244,9 @@ class ApplicationRepository {
         creatorId: userId,
       );
     }
-    late final String projectLeaderUsername;
-    late final String projectLeaderEmail;
     if (newSetupProject.leader != userId) {
       // if the user is not the leader
       // get the leader's email and username
-      final leaderModel =
-          await _storageAPI.userStreamByIdInUser(newSetupProject.leader).first;
-      projectLeaderUsername = leaderModel.username;
-      projectLeaderEmail = leaderModel.email;
       // create an invitation for the leader
       final projectLeaderInvitation = ProjectInvitationModel(
         id: const UuidV8().generate(),
@@ -245,9 +254,10 @@ class ApplicationRepository {
         projectName: newSetupProject.name,
         projectLeaderId: newSetupProject.leader,
         projectLeaderImageUrl: newSetupProject.leaderImageUrl,
-        projectLeaderEmail: projectLeaderEmail,
-        projectLeaderUsername: projectLeaderUsername,
+        senderEmail: userEmailAddress,
         senderId: userId,
+        senderImageUrl: userImageUrl,
+        senderUsername: username,
         receiverId: newSetupProject.leader,
       );
       // update the leader's project invitations
@@ -289,13 +299,10 @@ class ApplicationRepository {
             projectName: newSetupProject.name,
             projectLeaderId: newSetupProject.leader,
             projectLeaderImageUrl: newSetupProject.leaderImageUrl,
-            projectLeaderEmail: (newSetupProject.leader == userId)
-                ? userEmailAddress
-                : projectLeaderEmail,
-            projectLeaderUsername: (newSetupProject.leader == userId)
-                ? username
-                : projectLeaderUsername,
+            senderEmail: userEmailAddress,
             senderId: userId,
+            senderImageUrl: userImageUrl,
+            senderUsername: username,
             receiverId: e,
           ),
         )
@@ -334,8 +341,7 @@ class ApplicationRepository {
         SharedPreferences.getInstance();
     await sharedPreferences.then(
       (value) {
-        value.setString("latestProjectSetup".hashCode.toString(),
-            jsonEncode(project.toJson()));
+        value.setString("latestProjectSetup", jsonEncode(project.toJson()));
       },
     ).onError(
       (error, stackTrace) {},
@@ -348,10 +354,10 @@ class ApplicationRepository {
     Project? project;
     await sharedPreferences.then(
       (value) {
-        if (value.containsKey("latestProjectSetup".hashCode.toString())) {
-          project = Project.fromJson(jsonDecode(
-                  value.getString("latestProjectSetup".hashCode.toString())!)
-              as Map<String, dynamic>);
+        if (value.containsKey("latestProjectSetup")) {
+          project = Project.fromJson(
+              jsonDecode(value.getString("latestProjectSetup")!)
+                  as Map<String, dynamic>);
         }
       },
     );
@@ -383,7 +389,6 @@ class ApplicationRepository {
   Future<String> imageUrlOnStorageOf(String path) async =>
       FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
 
-
   // Task / View list
   Future<void> markProjectCompleted(
     String projectId,
@@ -393,12 +398,12 @@ class ApplicationRepository {
     await Future.wait<void>(
       [
         _storageAPI.updateIsCompletedInProject(projectId, true),
-        Future(() {
-          for (var assignee in assignees) {
-            _storageAPI.updateCompletedProjectsInUser(assignee, 1);
-          }
-        }),
+        for (var assignee in assignees)
+          _storageAPI.updateCompletedProjectsInUser(assignee, 1),
+        for (var assignee in assignees)
+          _storageAPI.updateOnGoingProjectsInUser(assignee, -1),
         _storageAPI.updateCompletedProjectsInUser(leader, 1),
+        _storageAPI.updateOnGoingProjectsInUser(leader, -1),
       ],
     );
   }
@@ -411,69 +416,113 @@ class ApplicationRepository {
     await Future.wait<void>(
       [
         _storageAPI.updateIsCompletedInProject(projectId, false),
-        Future(() {
-          for (var assignee in assignees) {
-            _storageAPI.updateCompletedProjectsInUser(assignee, -1);
-          }
-        }),
+        for (var assignee in assignees)
+          _storageAPI.updateCompletedProjectsInUser(assignee, -1),
+        for (var assignee in assignees)
+          _storageAPI.updateOnGoingProjectsInUser(assignee, 1),
         _storageAPI.updateCompletedProjectsInUser(leader, -1),
+        _storageAPI.updateOnGoingProjectsInUser(leader, 1),
       ],
     );
   }
 
   Future<void> markSubTaskCompleted({
-    required String projectId,
     required String subTaskId,
-    String? taskId,
-    bool markTaskCompleted = false,
+    required String taskId,
+    required String assigneeImageUrl,
   }) async {
-    assert((markTaskCompleted && taskId != null) || !markTaskCompleted);
     await Future.wait<void>(
       [
         _storageAPI.updateIsCompletedInSubTask(subTaskId, true),
-        _storageAPI.updateActivitiesCompletedInProject(projectId, 1),
-        if (markTaskCompleted) ...[
-          _storageAPI.updateTasksCompletedInProject(taskId!, 1),
-          _storageAPI.updateIsCompletedInTask(taskId, true),
-        ]
+        _storageAPI.updateActivitiesCompletedInProject(projectIdOnView, 1),
+        _storageAPI.updateSubTasksCompletedInTask(taskId, 1),
       ],
     );
+
+    final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+
+    final subTaskInformation = SubTaskSmallInformation(
+      id: subTaskId,
+      name: subTask.name,
+      isCompleted: false,
+      points: subTask.points,
+      assigneeImageUrl: assigneeImageUrl,
+    );
+
+    await _storageAPI.removeSubTaskSmallInformationsInTask(taskId, [
+      subTaskInformation,
+    ]);
+
+    await _storageAPI.updateSubTaskSmallInformationsInTask(taskId, [
+      subTaskInformation.copyWith(
+        isCompleted: true,
+      ),
+    ]);
+
+    final task = await _storageAPI.taskStream(taskId).first;
+
+    if (task.subTasksCompleted == task.subTasks.length) {
+      await Future.wait<void>([
+        _storageAPI.updateIsCompletedInTask(taskId, true),
+        _storageAPI.updateTasksCompletedInProject(projectIdOnView, 1),
+      ]);
+    }
   }
 
-  Future<void> markSubTaskIncompleted({
-    required String projectId,
+  Future<void> markSubTaskUnCompleted({
     required String subTaskId,
-    String? taskId,
-    bool markTaskIncompleted = false,
+    required String taskId,
+    required String assigneeImageUrl,
   }) async {
-    assert((markTaskIncompleted && taskId != null) || !markTaskIncompleted);
+    final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+    final taskIsCompleteds = await _storageAPI.taskStream(taskId).first.then(
+          (value) => value.subTaskSmallInformations.map(
+            (e) => e.isCompleted,
+          ),
+        );
+    final subTaskInformation = SubTaskSmallInformation(
+      id: subTaskId,
+      name: subTask.name,
+      isCompleted: true,
+      points: subTask.points,
+      assigneeImageUrl: assigneeImageUrl,
+    );
+    await _storageAPI.removeSubTaskSmallInformationsInTask(taskId, [
+      subTaskInformation,
+    ]);
+    await _storageAPI.updateSubTaskSmallInformationsInTask(taskId, [
+      subTaskInformation.copyWith(
+        isCompleted: false,
+      ),
+    ]);
     await Future.wait<void>(
       [
-        _storageAPI.updateIsCompletedInTask(subTaskId, false),
-        _storageAPI.updateActivitiesCompletedInProject(projectId, -1),
-        if (markTaskIncompleted) ...[
-          _storageAPI.updateTasksCompletedInProject(taskId!, -1),
-          _storageAPI.updateIsCompletedInTask(taskId, false),
-        ]
+        _storageAPI.updateSubTasksCompletedInTask(taskId, -1),
+        _storageAPI.updateIsCompletedInSubTask(subTaskId, false),
+        _storageAPI.updateActivitiesCompletedInProject(projectIdOnView, -1),
       ],
     );
+    if (!taskIsCompleteds.contains(false)) {
+      await Future.wait<void>([
+        _storageAPI.updateIsCompletedInTask(taskId, false),
+        _storageAPI.updateTasksCompletedInProject(projectIdOnView, -1),
+      ]);
+    }
   }
 
   // Task / Create New Task
-  Future<String> createNewSubTask({
-    required String ofWhichProjectId,
-    required String ofWhichTaskId,
-    required String taskName,
-    required String assigneeEmail,
-    required String title,
-    required DateTime dueDate,
-    required int points,
-    required String description,
+  Future<void> createNewSubTask({
+    required String projectId,
+    required String taskId,
+    // required bool needToUpdateProjectCompletion,
     required bool needToUpdateTaskCompletion,
-    required bool needToUpdateProjectCompletion,
-    List<File> files = const [],
+    required SubTaskModel newSubTask,
+    required List<File> files,
   }) async {
     final fileUrls = files.map((e) => "files/${e.path}").toList();
+    newSubTask.copyWith(
+      files: fileUrls,
+    );
     for (var file in files.map(
       (e) => {
         "path": "files/${e.path}",
@@ -485,77 +534,152 @@ class ApplicationRepository {
           .putFile(file["data"] as File);
     }
     final assigneeId = await _storageAPI
-        .userStreamByEmailInUser(assigneeEmail)
+        .userStreamByEmailInUser(newSubTask.assignee)
         .first
         .then((value) => value.id);
-    final newSubTask = SubTaskModel(
-      id: const UuidV8().generate(),
-      name: taskName,
-      description: description,
-      assignee: assigneeId,
-      dueDate: dueDate,
+
+    final subTaskSmallInformation = SubTaskSmallInformation(
+      id: newSubTask.id,
+      name: newSubTask.name,
       isCompleted: false,
-      points: points,
-      files: fileUrls,
-      comments: const [],
-      progress: 0.0,
-      grade: 0,
-      leaderComment: "",
+      points: newSubTask.points,
+      assigneeImageUrl: await _storageAPI
+          .userStreamByIdInUser(newSubTask.assignee)
+          .first
+          .then(
+            (value) => value.imageUrl,
+          ),
     );
-    await Future.wait<void>([
-      _storageAPI.createNewSubTask(newSubTask),
-      _storageAPI.updateSubTasksInTask(ofWhichTaskId, [newSubTask.id]),
-      _storageAPI.updatePointsInTask(ofWhichTaskId, points),
-      _storageAPI.updateTotalActivitiesInProject(ofWhichProjectId, 1),
-      if (needToUpdateTaskCompletion) ...[
-        _storageAPI.updateIsCompletedInTask(ofWhichTaskId, false),
+    await Future.wait<void>(
+      [
+        _storageAPI.createNewSubTask(
+          newSubTask,
+        ),
+        _storageAPI.updateSubTaskSmallInformationsInTask(
+          taskId,
+          [
+            subTaskSmallInformation,
+          ],
+        ),
+        _storageAPI.updateSubTasksInTask(taskId, [newSubTask.id]),
+        _storageAPI.updatePointsInTask(taskId, newSubTask.points),
+        _storageAPI.updateTotalActivitiesInProject(projectId, 1),
+        _storageAPI.updateSubTasksInUser(assigneeId, [newSubTask.id]),
+        if (needToUpdateTaskCompletion) ...[
+          _storageAPI.updateIsCompletedInTask(taskId, false),
+          _storageAPI.updateTasksCompletedInProject(projectId, -1),
+        ],
       ],
-      if (needToUpdateProjectCompletion) ...[
-        _storageAPI.updateIsCompletedInProject(ofWhichProjectId, false),
-        _storageAPI.updateCompletedProjectsInUser(userId, -1),
-      ]
-    ]);
-    return newSubTask.id;
+    );
+
+    // if (needToUpdateProjectCompletion) {
+    //   final assignees = await _storageAPI
+    //       .projectStream(projectId)
+    //       .first
+    //       .then((value) => value.assignees);
+    //   final leader = await _storageAPI
+    //       .projectStream(projectId)
+    //       .first
+    //       .then((value) => value.leader);
+    //   await Future.wait<void>(
+    //     [
+    //       // update project completion
+    //       _storageAPI.updateIsCompletedInProject(projectId, false),
+    //       // update leader completed projects
+    //       _storageAPI.updateCompletedProjectsInUser(leader, -1),
+    //       _storageAPI.updateOnGoingProjectsInUser(leader, 1),
+    //       // update assignees completed projects
+    //       for (var assignee in assignees)
+    //         _storageAPI.updateCompletedProjectsInUser(assignee, -1),
+    //       for (var assignee in assignees)
+    //         _storageAPI.updateOnGoingProjectsInUser(assignee, 1),
+    //     ],
+    //   );
+    // }
   }
 
   Future<void> removeSubTask({
-    required String ofWhichProjectId,
-    required String ofWhichTaskId,
+    required String projectId,
+    required String taskId,
     required String subTaskId,
-    required String assigneeId,
-    required int points,
     required bool needToUpdateTaskCompletion,
-    required bool needToUpdateProjectCompletion,
   }) async {
-    await Future.wait<void>([
-      _storageAPI.updateTotalActivitiesInProject(ofWhichProjectId, -1),
-      _storageAPI.removeSubTasksInTask(ofWhichTaskId, [subTaskId]),
-      _storageAPI.updatePointsInTask(ofWhichTaskId, -points),
-      if (needToUpdateTaskCompletion)
-        _storageAPI.updateIsCompletedInTask(ofWhichTaskId, true),
-      if (needToUpdateProjectCompletion)
-        _storageAPI.updateTasksCompletedInProject(ofWhichProjectId, 1),
-    ]);
+    final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+    final subTaskInformation = await _storageAPI.taskStream(taskId).first.then(
+          (value) => value.subTaskSmallInformations.where(
+            (element) => element.id == subTaskId,
+          ),
+        );
+    final subTaskSmallInformationTrue = SubTaskSmallInformation(
+      id: subTaskId,
+      name: subTask.name,
+      isCompleted: true,
+      points: subTask.points,
+      assigneeImageUrl: subTaskInformation.first.assigneeImageUrl,
+    );
+    final subTaskSmallInformationFalse = SubTaskSmallInformation(
+      id: subTaskId,
+      name: subTask.name,
+      isCompleted: false,
+      points: subTask.points,
+      assigneeImageUrl: subTaskInformation.first.assigneeImageUrl,
+    );
+
+    await Future.wait<void>(
+      [
+        _storageAPI.removeSubTaskSmallInformationsInTask(taskId, [
+          subTaskSmallInformationTrue,
+          subTaskSmallInformationFalse,
+        ]),
+        _storageAPI.updateTotalActivitiesInProject(projectId, -1),
+        _storageAPI.removeSubTasksInTask(taskId, [subTaskId]),
+        _storageAPI.updatePointsInTask(taskId, -subTask.points),
+        if (needToUpdateTaskCompletion) ...[
+          _storageAPI.updateIsCompletedInTask(taskId, true),
+          _storageAPI.updateTasksCompletedInProject(projectId, 1),
+        ],
+      ],
+    );
+
+    // if (needToUpdateProjectCompletion) {
+    //   final project = await _storageAPI.projectStream(projectId).first;
+    //   final assignees = project.assignees;
+    //   final leader = project.leader;
+    //   await Future.wait<void>(
+    //     [
+    //       _storageAPI.updateIsCompletedInProject(projectId, true),
+    //       _storageAPI.updateCompletedProjectsInUser(leader, 1),
+    //       _storageAPI.updateOnGoingProjectsInUser(leader, -1),
+    //       for (var assignee in assignees)
+    //         _storageAPI.updateCompletedProjectsInUser(assignee, 1),
+    //       for (var assignee in assignees)
+    //         _storageAPI.updateOnGoingProjectsInUser(assignee, -1),
+    //     ],
+    //   );
+    // }
   }
 
   // Task / Add new category
-  Future<String> createNewTask({
-    required String ofWhichProjectId,
-    required bool needToUpdateProjectCompletion,
-  }) async {
+  Future<void> createNewTask() async {
     final newTask = Task(
       id: const UuidV8().generate(),
       name: "New Category",
       subTasks: const [],
-      project: ofWhichProjectId,
+      project: projectIdOnView,
       points: 0,
       isCompleted: false,
     );
-    await Future.wait<void>([
-      _storageAPI.createNewTask(newTask),
-      _storageAPI.updateTasksInProject(ofWhichProjectId, [newTask.id]),
-    ]);
-    return newTask.id;
+    await Future.wait<void>(
+      [
+        _storageAPI.createNewTask(newTask),
+        _storageAPI.updateTasksInProject(
+          projectIdOnView,
+          [
+            newTask.id,
+          ],
+        ),
+      ],
+    );
   }
 
   Future<void> updateTaskName({

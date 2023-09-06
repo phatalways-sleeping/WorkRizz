@@ -18,3 +18,57 @@ final class TasklistMarkProjectAsCompleted extends TasklistEvent {
 final class TasklistMarkProjectAsUncompleted extends TasklistEvent {
   const TasklistMarkProjectAsUncompleted();
 }
+
+final class TasklistChangePage extends TasklistEvent {
+  const TasklistChangePage({
+    required this.page,
+  });
+
+  final int page;
+
+  @override
+  List<Object> get props => [
+        page,
+      ];
+}
+
+final class TasklistMarkSubTaskAsCompleted extends TasklistEvent {
+  const TasklistMarkSubTaskAsCompleted({
+    required this.taskId,
+    required this.subTaskId,
+    required this.assigneeImageUrl,
+  });
+
+  final String taskId;
+  final String subTaskId;
+  final String assigneeImageUrl;
+
+  @override
+  List<Object> get props => [
+        taskId,
+        subTaskId,
+        assigneeImageUrl,
+      ];
+}
+
+final class TasklistMarkSubTaskAsUncompleted extends TasklistEvent {
+  const TasklistMarkSubTaskAsUncompleted({
+    required this.taskId,
+    required this.subTaskId,
+    required this.assigneeImageUrl,
+    required this.isTaskCompleted,
+  });
+
+  final String taskId;
+  final String subTaskId;
+  final String assigneeImageUrl;
+  final bool isTaskCompleted;
+
+  @override
+  List<Object> get props => [
+        taskId,
+        subTaskId,
+        assigneeImageUrl,
+        isTaskCompleted,
+      ];
+}

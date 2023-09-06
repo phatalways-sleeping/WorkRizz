@@ -12,9 +12,12 @@ import 'file.dart';
 
 // ignore: must_be_immutable
 class SubTaskCreateView extends StatefulWidget {
-  Function()? changeColor;
+  final Function()? changeColor;
 
-  SubTaskCreateView({super.key});
+  const SubTaskCreateView({
+    super.key,
+    this.changeColor,
+  });
 
   @override
   State<SubTaskCreateView> createState() => _SubTaskCreateViewState();

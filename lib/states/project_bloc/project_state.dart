@@ -203,5 +203,10 @@ final class ProjectUserCreateAndSubscribeLoading
 }
 
 final class ProjectError extends ProjectState {
-  const ProjectError();
+  const ProjectError(this.message);
+
+  final String message;
+
+  @override
+  List<Object> get props => [message];
 }

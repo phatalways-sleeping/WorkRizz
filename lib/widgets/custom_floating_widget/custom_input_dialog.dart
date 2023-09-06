@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/assets/config/config.dart';
-import 'package:task_managing_application/assets/extensions/build_context_extensions.dart';
+import 'package:task_managing_application/assets/assets.dart';
+import 'package:task_managing_application/widgets/authentication/components.dart';
 
-class CustomDialog extends StatelessWidget {
-  const CustomDialog({
+class CustomInputDialog extends StatefulWidget {
+  const CustomInputDialog({
     super.key,
     required this.title,
     required this.leftText,
@@ -14,18 +14,34 @@ class CustomDialog extends StatelessWidget {
     required this.focusrightColor,
     required this.onLeftPressed,
     required this.onRightPressed,
-    this.body = const SizedBox.shrink(),
+    this.inputLabel = '',
+    this.keyboardType = TextInputType.text,
   });
-  final String title;
-  final String leftText;
-  final String rightText;
+
   final Color leftColor;
   final Color rightColor;
   final Color focusleftColor;
   final Color focusrightColor;
-  final void Function(BuildContext) onLeftPressed;
-  final void Function(BuildContext) onRightPressed;
-  final Widget body;
+  final void Function(BuildContext, TextEditingController) onLeftPressed;
+  final void Function(BuildContext, TextEditingController) onRightPressed;
+  final Widget title;
+  final Widget leftText;
+  final Widget rightText;
+  final String inputLabel;
+  final TextInputType keyboardType;
+
+  @override
+  State<CustomInputDialog> createState() => _CustomInputDialogState();
+}
+
+class _CustomInputDialogState extends State<CustomInputDialog> {
+  late final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +49,8 @@ class CustomDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(MEDIUM_CORNER)), //this right here
       child: Container(
-        width: context.mediaQuery.size.width * 0.8,
-        height: context.mediaQuery.size.height * 0.15,
+        width: context.mediaQuery.size.width * 0.9,
+        height: context.mediaQuery.size.height * 0.25,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(MEDIUM_CORNER),
           color: WHITE,
@@ -43,29 +59,40 @@ class CustomDialog extends StatelessWidget {
             width: BORDER_WIDTH,
           ),
         ),
-        padding: EdgeInsets.all(context.mediaQuery.size.width * RATIO_PADDING),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.mediaQuery.size.width * RATIO_PADDING,
+          vertical: context.mediaQuery.size.height * 0.03,
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: context.textTheme.titleLarge,
+            DefaultTextStyle.merge(
+              style: context.textTheme.titleLarge?.copyWith(
+                color: BLACK,
+              ),
+              child: widget.title,
             ),
             SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
-            if (body != const SizedBox.shrink()) ...[
-              body,
-              SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
-            ],
+            CustomInputField(
+              label: widget.inputLabel,
+              controller: _controller,
+              keyboardType: widget.keyboardType,
+            ),
+            SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
             Row(
               children: [
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
-                    onLeftPressed(context);
-                  },
+                  onPressed: () => widget.onLeftPressed(context, _controller),
                   style: ButtonStyle(
+                    fixedSize: MaterialStatePropertyAll(
+                      Size(
+                        context.mediaQuery.size.width * 0.3,
+                        context.mediaQuery.size.height * 0.02,
+                      ),
+                    ),
                     overlayColor: MaterialStatePropertyAll(
-                      focusleftColor,
+                      widget.focusleftColor,
                     ),
                     splashFactory: InkSparkle.splashFactory,
                     animationDuration: const Duration(
@@ -82,22 +109,28 @@ class CustomDialog extends StatelessWidget {
                       ),
                     ),
                     backgroundColor: MaterialStatePropertyAll(
-                      leftColor,
+                      widget.leftColor,
                     ),
                   ),
-                  child: Text(
-                    leftText,
-                    style: context.textTheme.titleMedium,
+                  child: DefaultTextStyle.merge(
+                    style: context.textTheme.titleSmall?.copyWith(
+                      color: BLACK,
+                    ),
+                    child: widget.leftText,
                   ),
                 ),
                 SizedBox(width: context.mediaQuery.size.width * RATIO_SPACE),
                 ElevatedButton(
-                  onPressed: () {
-                    onRightPressed(context);
-                  },
+                  onPressed: () => widget.onRightPressed(context, _controller),
                   style: ButtonStyle(
+                    fixedSize: MaterialStatePropertyAll(
+                      Size(
+                        context.mediaQuery.size.width * 0.3,
+                        context.mediaQuery.size.height * 0.02,
+                      ),
+                    ),
                     overlayColor: MaterialStatePropertyAll(
-                      focusrightColor,
+                      widget.focusrightColor,
                     ),
                     splashFactory: InkSparkle.splashFactory,
                     animationDuration: const Duration(
@@ -114,12 +147,14 @@ class CustomDialog extends StatelessWidget {
                       ),
                     ),
                     backgroundColor: MaterialStatePropertyAll(
-                      rightColor,
+                      widget.rightColor,
                     ),
                   ),
-                  child: Text(
-                    rightText,
-                    style: context.textTheme.titleMedium,
+                  child: DefaultTextStyle.merge(
+                    style: context.textTheme.titleSmall?.copyWith(
+                      color: BLACK,
+                    ),
+                    child: widget.rightText,
                   ),
                 ),
                 const Spacer(),

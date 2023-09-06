@@ -6,6 +6,7 @@ import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/user_project_invitation/user_project_invitation_bloc.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_snackbar.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/project_invitation/invitation_widget.dart';
 
@@ -21,7 +22,21 @@ class ProjectInvitationsView extends StatefulWidget {
 class _ProjectInvitationsViewState extends State<ProjectInvitationsView> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserProjectInvitationBloc, UserProjectInvitationState>(
+    return BlocConsumer<UserProjectInvitationBloc, UserProjectInvitationState>(
+      listener: (context, state) {
+        if (state is UserProjectInvitationFailure) {
+          final snackBar = createErrorSnackBar(
+            context: context,
+            error: state.message,
+            onPressed: (context) => context
+                .read<UserProjectInvitationBloc>()
+                .add(const UserProjectInvitationSubscribeToStream()),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            snackBar,
+          );
+        }
+      },
       builder: (context, state) {
         if (state is UserProjectInvitationInitial) {
           return const Center(
@@ -94,8 +109,10 @@ class _ProjectInvitationsViewState extends State<ProjectInvitationsView> {
                 ),
                 SliverPadding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: context.mediaQuery.size.width * RATIO_MARGIN * 0.7,
-                    vertical: context.mediaQuery.size.height * RATIO_MARGIN * 0.7,
+                    horizontal:
+                        context.mediaQuery.size.width * RATIO_MARGIN * 0.7,
+                    vertical:
+                        context.mediaQuery.size.height * RATIO_MARGIN * 0.7,
                   ),
                   sliver: SliverList.separated(
                     itemCount: state.projectInvitation!.length,

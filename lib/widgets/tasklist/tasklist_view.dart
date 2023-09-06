@@ -9,6 +9,8 @@ import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/tasklist_bloc/tasklist_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_input_dialog.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
@@ -30,7 +32,43 @@ class TaskListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TasklistBloc, TasklistState>(
+    return BlocConsumer<TasklistBloc, TasklistState>(
+      listener: (context, state) async {
+        if (state is TasklistError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                state.message,
+                style: context.textTheme.headlineSmall,
+              ),
+              backgroundColor: context.colorScheme.error,
+            ),
+          );
+        }
+        if (state is TasklistSubscriptionAndOpenTaskCreateDialog) {
+          await showDialog<String>(
+            context: context,
+            builder: (context) => CustomInputDialog(
+              title: const Text('Create new task'),
+              leftText: const Text('Cancel'),
+              rightText: const Text('Create'),
+              inputLabel: 'Task name',
+              leftColor: context.colorScheme.error,
+              rightColor: context.colorScheme.primary,
+              focusleftColor: context.colorScheme.error,
+              focusrightColor: context.colorScheme.primary,
+              onLeftPressed: (context, controller) =>
+                  Navigator.of(context).pop(),
+              onRightPressed: (context, controller) =>
+                  Navigator.of(context).pop(controller.text.trim()),
+            ),
+          ).then(
+            (value) => context.read<TasklistBloc>().add(
+                  TasklistCreateNewTask(value),
+                ),
+          );
+        }
+      },
       builder: (context, state) {
         if (state is TasklistInitial || state is TasklistLoading) {
           return const Center(
@@ -40,12 +78,8 @@ class TaskListView extends StatelessWidget {
           );
         }
         if (state is TasklistError) {
-          return Center(
-            child: Icon(
-              Icons.error_outline_rounded,
-              size: 20.0,
-              color: context.colorScheme.error,
-            ),
+          return const Center(
+            child: CustomErrorIcon(),
           );
         }
         return BaseScreen(

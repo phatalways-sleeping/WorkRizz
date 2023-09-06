@@ -59,3 +59,10 @@ final class NavigateToSplash extends NavigationEvent {
 final class NavigateToUserProjectInvitation extends NavigationEvent {
   const NavigateToUserProjectInvitation();
 }
+
+final class NavigateToFileList extends NavigationEvent {
+  const NavigateToFileList();
+}
+final class NavigateToSubTaskCreate extends NavigationEvent {
+  const NavigateToSubTaskCreate();
+}

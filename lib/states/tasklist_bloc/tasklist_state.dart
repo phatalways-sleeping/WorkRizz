@@ -32,6 +32,13 @@ final class TasklistSubscription extends TasklistState {
     super.currentPage = 0,
   });
 
+  factory TasklistSubscription.from(
+          TasklistSubscriptionAndOpenTaskCreateDialog state) =>
+      TasklistSubscription(
+        project: state.project,
+        currentPage: state.currentPage,
+      );
+
   TasklistSubscription copyWith({
     Project? project,
     int? currentPage,
@@ -43,6 +50,39 @@ final class TasklistSubscription extends TasklistState {
   }
 }
 
+final class TasklistSubscriptionAndOpenTaskCreateDialog
+    extends TasklistSubscription {
+  const TasklistSubscriptionAndOpenTaskCreateDialog({
+    required super.project,
+    required super.currentPage,
+  });
+
+  factory TasklistSubscriptionAndOpenTaskCreateDialog.from(
+          TasklistSubscription state) =>
+      TasklistSubscriptionAndOpenTaskCreateDialog(
+        project: state.project,
+        currentPage: state.currentPage,
+      );
+
+  @override
+  TasklistSubscriptionAndOpenTaskCreateDialog copyWith({
+    Project? project,
+    int? currentPage,
+  }) {
+    return TasklistSubscriptionAndOpenTaskCreateDialog(
+      project: project ?? this.project,
+      currentPage: currentPage ?? this.currentPage,
+    );
+  }
+}
+
 final class TasklistError extends TasklistState {
-  const TasklistError();
+  const TasklistError(this.message);
+
+  final String message;
+
+  @override
+  List<Object> get props => [
+        message,
+      ];
 }

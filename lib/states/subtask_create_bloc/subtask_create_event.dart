@@ -66,12 +66,16 @@ final class SubTaskInputPointsEvent extends SubtaskCreateEvent {
 }
 
 final class SubTaskInputAttachmentsEvent extends SubtaskCreateEvent {
-  const SubTaskInputAttachmentsEvent(this.attachments);
+  const SubTaskInputAttachmentsEvent();
+}
 
-  final List<File> attachments;
+final class SubTaskRemoveAttachmentEvent extends SubtaskCreateEvent {
+  const SubTaskRemoveAttachmentEvent(this.attachment);
+
+  final File attachment;
 
   @override
-  List<Object> get props => [...super.props, attachments];
+  List<Object> get props => [...super.props, attachment];
 }
 
 final class SubTaskDownloadAttachmentEvent extends SubtaskCreateEvent {

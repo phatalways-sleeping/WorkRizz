@@ -30,7 +30,9 @@ class CreateFile extends StatelessWidget {
                 ),
                 const Spacer(),
                 InkWell(
-                  onTap: () async {},
+                  onTap: () => context.read<SubtaskCreateBloc>().add(
+                        const SubTaskInputAttachmentsEvent(),
+                      ),
                   child: SvgPicture.string(
                     SvgAssets.upload,
                   ),
@@ -78,6 +80,25 @@ class CreateFile extends StatelessWidget {
                               decoration: TextDecoration.underline,
                               decorationColor: BLACK,
                               decorationThickness: 1.5,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton.filled(
+                            color: context.colorScheme.error,
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            splashColor:
+                                context.colorScheme.error.withOpacity(0.2),
+                            splashRadius: 10.0,
+                            onPressed: () =>
+                                context.read<SubtaskCreateBloc>().add(
+                                      SubTaskRemoveAttachmentEvent(
+                                        state.attachments![index],
+                                      ),
+                                    ),
+                            icon: const Icon(
+                              Icons.close_rounded,
+                              size: 20.0,
                             ),
                           ),
                         ],

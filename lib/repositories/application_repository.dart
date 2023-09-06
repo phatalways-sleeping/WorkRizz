@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/apis/apis.dart';
 import 'package:task_managing_application/assets/config/config.dart';
@@ -509,17 +511,45 @@ class ApplicationRepository {
   }
 
   // Task / Create New Task
+  Future<List<File>> pickFiles() async {
+    final files = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: [
+        "pdf",
+        "docx",
+        "csv",
+        "pptx",
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'mp4',
+        'mov',
+        'avi',
+        'mp3',
+        'txt',
+      ],
+    );
+    if (files == null) {
+      return [];
+    }
+    return files.paths.map((path) => File(path!)).toList();
+  }
+
   Future<void> createNewSubTask({
     required SubTaskModel newSubTask,
     required List<File> files,
   }) async {
-    final fileUrls = files.map((e) => "files/${e.path}").toList();
+    final fileUrls =
+        files.map((e) => "files/${e.path.split('/').last}").toList();
     newSubTask.copyWith(
       files: fileUrls,
     );
+    debugPrint(newSubTask.assignee);
     for (var file in files.map(
       (e) => {
-        "path": "files/${e.path}",
+        "path": "files/${e.path.split('/').last}",
         "data": e,
       },
     )) {
@@ -527,22 +557,16 @@ class ApplicationRepository {
           .child(file["path"] as String)
           .putFile(file["data"] as File);
     }
-    final assigneeId = await _storageAPI
-        .userStreamByEmailInUser(newSubTask.assignee)
-        .first
-        .then((value) => value.id);
-
+    final assigneeImageUrl =
+        await _storageAPI.userStreamByIdInUser(newSubTask.assignee).first.then(
+              (value) => value.imageUrl,
+            );
     final subTaskSmallInformation = SubTaskSmallInformation(
       id: newSubTask.id,
       name: newSubTask.name,
       isCompleted: false,
       points: newSubTask.points,
-      assigneeImageUrl: await _storageAPI
-          .userStreamByIdInUser(newSubTask.assignee)
-          .first
-          .then(
-            (value) => value.imageUrl,
-          ),
+      assigneeImageUrl: assigneeImageUrl,
     );
     final needToUpdateTaskCompletion = await _storageAPI
         .taskStream(taskIdOnView)
@@ -562,7 +586,7 @@ class ApplicationRepository {
         _storageAPI.updateSubTasksInTask(taskIdOnView, [newSubTask.id]),
         _storageAPI.updatePointsInTask(taskIdOnView, newSubTask.points),
         _storageAPI.updateTotalActivitiesInProject(projectIdOnView, 1),
-        _storageAPI.updateSubTasksInUser(assigneeId, [newSubTask.id]),
+        _storageAPI.updateSubTasksInUser(newSubTask.assignee, [newSubTask.id]),
         if (needToUpdateTaskCompletion) ...[
           _storageAPI.updateIsCompletedInTask(taskIdOnView, false),
           _storageAPI.updateTasksCompletedInProject(projectIdOnView, -1),
@@ -777,14 +801,14 @@ class ApplicationRepository {
       assert(file != null);
       final fileTypeString = file!.path.split(".").last;
       final fileType = fileTypeString == "pdf"
-          ? FileType.pdf
+          ? FileTypeMode.pdf
           : fileTypeString == "docx"
-              ? FileType.doc
+              ? FileTypeMode.doc
               : fileTypeString == "csv"
-                  ? FileType.csv
+                  ? FileTypeMode.csv
                   : fileTypeString == "pptx"
-                      ? FileType.ppt
-                      : FileType.other;
+                      ? FileTypeMode.ppt
+                      : FileTypeMode.other;
 
       final newMessage = FileMessageModel(
         id: const UuidV8().generate(),

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:uuid/v8.dart';
@@ -92,12 +94,31 @@ class SubtaskCreateBloc extends Bloc<SubtaskCreateEvent, SubtaskCreateState> {
 
     on<SubTaskInputAttachmentsEvent>((event, emit) async {
       final usedState = state as SubtaskCreateSuccess;
+      final files = await _applicationRepository.pickFiles().onError(
+            (error, stackTrace) => [],
+          );
       emit(usedState.copyWith(
         attachments: [
           if (usedState.attachments != null) ...usedState.attachments!,
-          ...event.attachments
+          ...files,
         ],
       ));
+    });
+
+    on<SubTaskRemoveAttachmentEvent>((event, emit) async {
+      final usedState = state as SubtaskCreateSuccess;
+      if (usedState.attachments == null || usedState.attachments!.isEmpty) {
+        return;
+      }
+      emit(
+        usedState.copyWith(
+          attachments: [
+            ...usedState.attachments!.where(
+              (element) => element.path != event.attachment.path,
+            ),
+          ],
+        ),
+      );
     });
 
     on<SubTaskDownloadAttachmentEvent>((event, emit) async {
@@ -120,15 +141,6 @@ class SubtaskCreateBloc extends Bloc<SubtaskCreateEvent, SubtaskCreateState> {
           emit(
             const SubTaskCreateFailureDueToDataIntegrity(
               error: 'Subtask name is empty',
-            ),
-          );
-          return;
-        }
-
-        if (usedState.dueDate == null) {
-          emit(
-            const SubTaskCreateFailureDueToDataIntegrity(
-              error: 'Due date is empty',
             ),
           );
           return;
@@ -210,7 +222,7 @@ class SubtaskCreateBloc extends Bloc<SubtaskCreateEvent, SubtaskCreateState> {
           name: usedState.subTaskName!,
           description: usedState.description!,
           assignee: usedState.assignedTo!,
-          dueDate: usedState.dueDate!,
+          dueDate: usedState.dueDate?? DateTime.now(),
           isCompleted: false,
           points: usedState.points!,
           files: const [],
@@ -224,7 +236,7 @@ class SubtaskCreateBloc extends Bloc<SubtaskCreateEvent, SubtaskCreateState> {
         await _applicationRepository.createNewSubTask(
           newSubTask: subTask,
           files: files,
-        );
+        ).then((value) => debugPrint('Subtask created successfully'));
       },
     );
   }
@@ -233,9 +245,8 @@ class SubtaskCreateBloc extends Bloc<SubtaskCreateEvent, SubtaskCreateState> {
 
   Future<String> assigneeImage() async {
     final usedState = state as SubtaskCreateSuccess;
-    final member = await _applicationRepository
-        .userStream(usedState.assignedTo!)
-        .first;
+    final member =
+        await _applicationRepository.userStream(usedState.assignedTo!).first;
 
     return _applicationRepository.imageUrlOnStorageOf(member.imageUrl);
   }

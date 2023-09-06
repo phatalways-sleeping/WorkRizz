@@ -7,6 +7,8 @@ import 'dart:io';
 // import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
+import 'package:task_managing_application/assets/models/comment/comment_data.dart';
 import 'package:task_managing_application/firebase_options.dart';
 import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:uuid/v8.dart';
@@ -69,11 +71,11 @@ Future<void> main() async {
   //       .set(subTask.toJson());
   // }
 
-  // for (var comment in commentList) {
-  //   await FirebaseFirestoreConfigs.subTaskCommentsCollection
-  //       .doc(comment.id)
-  //       .set(comment.toJson());
-  // }
+  for (var comment in commentList) {
+    await FirebaseFirestoreConfigs.subTaskCommentsCollection
+        .doc(comment.id)
+        .set(comment.toJson());
+  }
 
   // for (var project in projectList) {
   //   await FirebaseFirestoreConfigs.projectsCollection
@@ -87,7 +89,7 @@ Future<void> main() async {
   //       .set(schedule.toJson());
   // }
 
-  runApp(const MyApp());
+  // runApp(const MyApp());
 
   // await generateIds(amount: 3, name: 'project_invitation');
 

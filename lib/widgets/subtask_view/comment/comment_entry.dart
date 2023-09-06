@@ -1,15 +1,21 @@
 part of 'comment_list.dart';
 
 class CommentEntryWidget extends StatefulWidget {
-  final VoidCallback onCommentAdded;
-  final VoidCallback onCommentCancelled;
+  final void Function(
+    BuildContext context,
+    TextEditingController controller,
+  ) onCommentAdded;
+  final void Function(
+    BuildContext context,
+  ) onCommentCancelled;
   final String replyUsername;
 
-  const CommentEntryWidget(
-      {super.key,
-      required this.onCommentAdded,
-      required this.onCommentCancelled,
-      required this.replyUsername});
+  const CommentEntryWidget({
+    super.key,
+    required this.onCommentAdded,
+    required this.onCommentCancelled,
+    required this.replyUsername,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -55,39 +61,45 @@ class _CommentEntryWidgetState extends State<CommentEntryWidget> {
             children: [
               const Spacer(),
               ElevatedButton(
-                  onPressed: () {
-                    // Submit the comment and notify the parent
-                    widget.onCommentCancelled();
-                  },
-                  style: const ButtonStyle(
-                    overlayColor: MaterialStatePropertyAll(
-                      PINK,
-                    ),
-                    splashFactory: InkSparkle.splashFactory,
-                    animationDuration: Duration(
-                      seconds: 2,
-                    ),
-                    tapTargetSize: MaterialTapTargetSize.padded,
-                    shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(MEDIUM_CORNER),
-                        ),
-                        // no right borderd
-                        side: BorderSide.none,
+                onPressed: () {
+                  // Submit the comment and notify the parent
+                  widget.onCommentCancelled(context);
+                },
+                style: const ButtonStyle(
+                  overlayColor: MaterialStatePropertyAll(
+                    PINK,
+                  ),
+                  splashFactory: InkSparkle.splashFactory,
+                  animationDuration: Duration(
+                    seconds: 2,
+                  ),
+                  tapTargetSize: MaterialTapTargetSize.padded,
+                  shape: MaterialStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(MEDIUM_CORNER),
                       ),
-                    ),
-                    backgroundColor: MaterialStatePropertyAll(
-                      PALE,
+                      // no right borderd
+                      side: BorderSide.none,
                     ),
                   ),
-                  
-                  child: Text('Cancel', style: context.textTheme.labelMedium)),
+                  backgroundColor: MaterialStatePropertyAll(
+                    PALE,
+                  ),
+                ),
+                child: Text(
+                  'Cancel',
+                  style: context.textTheme.labelMedium,
+                ),
+              ),
               const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
                   // Submit the comment and notify the parent
-                  widget.onCommentAdded();
+                  widget.onCommentAdded(
+                    context,
+                    _commentController,
+                  );
                 },
                 style: const ButtonStyle(
                   overlayColor: MaterialStatePropertyAll(

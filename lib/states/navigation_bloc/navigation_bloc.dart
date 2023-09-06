@@ -20,13 +20,23 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToTask>((event, emit) {
       if (event.projectId != null) {
         _applicationRepository.projectIdOnView = event.projectId!;
+        _applicationRepository.isLeaderOfProjectOnView =
+            event.leaderId! == _applicationRepository.userId;
+        if (event.projectName != null) {
+          _applicationRepository.projectOnViewName = event.projectName!;
+        }
       }
       emit(const TaskList());
     });
     on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
-    on<NavigateToSubTaskDetail>(_onNavigateToSubTaskDetail);
+    on<NavigateToSubTaskDetail>((event, emit) {
+      if(event.subTaskId != null) {
+        _applicationRepository.subTaskIdOnView = event.subTaskId!;
+      }
+      emit(const SubTaskDetail());
+    });
     on<NavigateToSplash>((event, emit) async {
       await _applicationRepository.logout();
       emit(const Splash());
@@ -52,18 +62,21 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     if (state is ProjectsList) {
       eventToNavigateBack = const NavigateToProjectsList();
     } else if (state is TaskList) {
-      eventToNavigateBack =
-          NavigateToTask(_applicationRepository.projectIdOnView);
+      eventToNavigateBack = NavigateToTask(
+        projectId: _applicationRepository.projectIdOnView,
+        leaderId: _applicationRepository.isLeaderOfProjectOnView
+            ? _applicationRepository.userId
+            : '',
+        projectName: null,
+      );
     } else if (state is SubTaskDetail) {
-      eventToNavigateBack = const NavigateToSubTaskDetail();
+      eventToNavigateBack = const NavigateToSubTaskDetail(null);
     } else if (state is Home) {
       eventToNavigateBack = const NavigateToHome();
     } else if (state is Settings) {
       eventToNavigateBack = const NavigateToSettings();
     } else if (state is Assistant) {
       eventToNavigateBack = const NavigateToAssistant();
-    } else if (state is TestComponents) {
-      eventToNavigateBack = const NavigateToTestComponents();
     } else if (state is Splash) {
       eventToNavigateBack = const NavigateToSplash();
     } else {

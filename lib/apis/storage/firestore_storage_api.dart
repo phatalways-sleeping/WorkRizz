@@ -143,7 +143,7 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
 
   // - CommentModel
   @override
-  Future<CommentModel> commentFuture(String id) => ReadComment.commentById(id);
+  Stream<CommentModel> commentStream(String id) => ReadComment.commentById(id);
   // UPDATE
   // - UserDataModel
   @override

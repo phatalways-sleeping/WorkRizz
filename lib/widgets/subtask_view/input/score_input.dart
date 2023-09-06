@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart';
 
 class ScoreInput extends StatefulWidget {
-  const ScoreInput({super.key});
+  const ScoreInput({
+    super.key,
+    required this.listener,
+    required this.initialValue,
+  });
+
+  final void Function(BuildContext context, TextEditingController controller)
+      listener;
+  final String initialValue;
 
   @override
   State<ScoreInput> createState() => _ScoreInputState();
@@ -18,15 +24,13 @@ class _ScoreInputState extends State<ScoreInput> {
   @override
   void initState() {
     _titleController = TextEditingController();
-    _titleController.addListener(() {
-      if (_titleController.text.isNotEmpty) {
-        context.read<SubtaskCreateBloc>().add(
-              SubTaskInputPointsEvent(
-                int.parse(_titleController.text),
-              ),
-            );
-      }
-    });
+    _titleController.addListener(
+      () => widget.listener(
+        context,
+        _titleController,
+      ),
+    );
+    _titleController.text = widget.initialValue;
     super.initState();
   }
 

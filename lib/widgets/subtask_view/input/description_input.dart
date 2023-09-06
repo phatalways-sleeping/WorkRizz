@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart';
 
 class DescriptionInput extends StatefulWidget {
   const DescriptionInput({
     super.key,
     required this.label,
     required this.showLabel,
+    required this.listener,
+    required this.initialValue,
+    this.forLeaderComment = false,
   });
   final String label;
   final bool showLabel;
+  final String initialValue;
+  final void Function(BuildContext context, TextEditingController controller)
+      listener;
+  final bool forLeaderComment;
 
   @override
   State<DescriptionInput> createState() => _DescriptionInputState();
@@ -23,23 +28,13 @@ class _DescriptionInputState extends State<DescriptionInput> {
   @override
   void initState() {
     _titleController = TextEditingController();
-    _titleController.addListener(() {
-      if (_titleController.text.isNotEmpty) {
-        if (widget.label == 'Description') {
-          context.read<SubtaskCreateBloc>().add(
-                SubTaskInputDescriptionEvent(
-                  _titleController.text,
-                ),
-              );
-        } else if (widget.label == 'Title') {
-          context.read<SubtaskCreateBloc>().add(
-                SubTaskInputNameEvent(
-                  _titleController.text,
-                ),
-              );
-        }
-      }
-    });
+    _titleController.addListener(
+      () => widget.listener(
+        context,
+        _titleController,
+      ),
+    );
+    _titleController.text = widget.initialValue;
     super.initState();
   }
 
@@ -61,14 +56,14 @@ class _DescriptionInputState extends State<DescriptionInput> {
       textAlign: TextAlign.start,
       style: context.textTheme.bodyMedium?.copyWith(
         color: context.colorScheme.onSurface,
-        fontSize: 14,
+        fontSize: widget.forLeaderComment ? 16 : 14,
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
         labelText: widget.showLabel ? widget.label : null,
         labelStyle: context.textTheme.bodyMedium?.copyWith(
           color: context.colorScheme.onSurface,
-          fontSize: 14,
+          fontSize: widget.forLeaderComment ? 16 : 14,
           fontWeight: FontWeight.w500,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,

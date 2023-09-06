@@ -151,7 +151,11 @@ class SubTaskCreateView extends StatelessWidget {
                     ),
                     bottomChild: const Text("Assign new task to a person"),
                     onPressed: (context) => context.read<NavigationBloc>().add(
-                          const NavigateToTask(null),
+                          const NavigateToTask(
+                            projectId: null,
+                            leaderId: null,
+                            projectName: null,
+                          ),
                         ),
                   ),
                 ),
@@ -190,7 +194,8 @@ class SubTaskCreateView extends StatelessWidget {
                               children: [
                                 Text(
                                   'Due Date',
-                                  style: context.textTheme.displaySmall?.copyWith(
+                                  style:
+                                      context.textTheme.displaySmall?.copyWith(
                                     fontSize: 16.0,
                                   ),
                                 ),
@@ -218,22 +223,38 @@ class SubTaskCreateView extends StatelessWidget {
                               children: [
                                 Text(
                                   'Points',
-                                  style: context.textTheme.displaySmall?.copyWith(
+                                  style:
+                                      context.textTheme.displaySmall?.copyWith(
                                     fontSize: 16.0,
                                   ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(
-                                      top: context.mediaQuery.size.width * 0.01),
+                                      top:
+                                          context.mediaQuery.size.width * 0.01),
                                   width: context.mediaQuery.size.width * 0.4,
-                                  child: const ScoreInput(),
+                                  child: ScoreInput(
+                                    initialValue: state.points != null
+                                        ? state.points.toString()
+                                        : '',
+                                    listener: (BuildContext context,
+                                            TextEditingController controller) =>
+                                        context.read<SubtaskCreateBloc>().add(
+                                              SubTaskInputPointsEvent(
+                                                int.parse(
+                                                  controller.text,
+                                                ),
+                                              ),
+                                            ),
+                                  ),
                                 )
                               ],
                             ),
                           ],
                         ),
                         SizedBox(
-                            height: context.mediaQuery.size.width * RATIO_SPACE),
+                            height:
+                                context.mediaQuery.size.width * RATIO_SPACE),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -245,13 +266,23 @@ class SubTaskCreateView extends StatelessWidget {
                             ),
                             SizedBox(
                                 height: context.mediaQuery.size.width * 0.01),
-                            const DescriptionInput(
+                            DescriptionInput(
                               label: 'Title',
                               showLabel: false,
+                              initialValue: state.subTaskName ?? '',
+                              listener: (
+                                BuildContext context,
+                                TextEditingController controller,
+                              ) =>
+                                  context.read<SubtaskCreateBloc>().add(
+                                        SubTaskInputNameEvent(
+                                          controller.text.trim(),
+                                        ),
+                                      ),
                             ),
                             SizedBox(
-                                height:
-                                    context.mediaQuery.size.width * RATIO_SPACE),
+                                height: context.mediaQuery.size.width *
+                                    RATIO_SPACE),
                             Text(
                               'Description',
                               style: context.textTheme.displaySmall?.copyWith(
@@ -260,13 +291,24 @@ class SubTaskCreateView extends StatelessWidget {
                             ),
                             SizedBox(
                                 height: context.mediaQuery.size.width * 0.01),
-                            const DescriptionInput(
+                            DescriptionInput(
                               label: 'Description',
                               showLabel: false,
+                              initialValue: state.description ?? '',
+                              listener: (
+                                BuildContext context,
+                                TextEditingController controller,
+                              ) =>
+                                  context.read<SubtaskCreateBloc>().add(
+                                        SubTaskInputDescriptionEvent(
+                                          controller.text.trim(),
+                                        ),
+                                      ),
                             ),
                             SizedBox(
-                                height:
-                                    context.mediaQuery.size.width * RATIO_SPACE),
+                              height:
+                                  context.mediaQuery.size.width * RATIO_SPACE,
+                            ),
                           ],
                         ),
                         const CreateFile(),
@@ -274,9 +316,10 @@ class SubTaskCreateView extends StatelessWidget {
                             height:
                                 context.mediaQuery.size.width * RATIO_PADDING),
                         ElevatedButton(
-                          onPressed: () => context.read<SubtaskCreateBloc>().add(
-                                const SubTaskRequestToCreateEvent(),
-                              ),
+                          onPressed: () =>
+                              context.read<SubtaskCreateBloc>().add(
+                                    const SubTaskRequestToCreateEvent(),
+                                  ),
                           style: ButtonStyle(
                             padding: MaterialStatePropertyAll(
                               EdgeInsets.symmetric(

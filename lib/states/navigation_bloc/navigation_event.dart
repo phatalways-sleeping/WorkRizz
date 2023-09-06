@@ -37,12 +37,24 @@ final class NavigateToProjectsList extends NavigationEvent {
 }
 
 final class NavigateToTask extends NavigationEvent {
-  const NavigateToTask(this.projectId);
+  const NavigateToTask({
+    required this.projectId,
+    required this.leaderId,
+    required this.projectName,
+  }) : assert(projectId == null || leaderId != null,
+            'If projectId is not null, leaderId must not be null');
 
   final String? projectId;
+  final String? leaderId;
+  final String? projectName;
 
   @override
-  List<Object> get props => [...super.props, if(projectId != null) projectId!];
+  List<Object> get props => [
+        ...super.props,
+        if (projectId != null) projectId!,
+        if (leaderId != null) leaderId!,
+        if (projectName != null) projectName!,
+      ];
 }
 
 final class NavigateToAssistant extends NavigationEvent {
@@ -50,7 +62,12 @@ final class NavigateToAssistant extends NavigationEvent {
 }
 
 final class NavigateToSubTaskDetail extends NavigationEvent {
-  const NavigateToSubTaskDetail();
+  const NavigateToSubTaskDetail(this.subTaskId);
+
+  final String? subTaskId;
+  
+  @override
+  List<Object> get props => [...super.props, if(subTaskId != null) subTaskId!];
 }
 
 final class NavigateToSplash extends NavigationEvent {

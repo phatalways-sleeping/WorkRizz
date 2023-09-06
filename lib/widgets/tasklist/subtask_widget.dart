@@ -125,11 +125,7 @@ class _SubTaskWidgetState extends State<SubTaskWidget> {
   }
 }
 
-class SubTaskController {
-  void Function(bool)? changeColor;
-}
-
-class SubTaskInfo extends StatefulWidget {
+class SubTaskInfo extends StatelessWidget {
   const SubTaskInfo({
     super.key,
     required this.subTaskSmallInformation,
@@ -140,46 +136,39 @@ class SubTaskInfo extends StatefulWidget {
   final String taskId;
 
   @override
-  State<SubTaskInfo> createState() => _SubTaskInfoState();
-}
-
-class _SubTaskInfoState extends State<SubTaskInfo> {
-  final SubTaskController _controller = SubTaskController();
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       margin:
           EdgeInsets.symmetric(vertical: context.mediaQuery.size.width * 0.01),
       child: CustomItemWidget(
+        onPressed: (context) => context.read<NavigationBloc>().add(
+              NavigateToSubTaskDetail(
+                subTaskSmallInformation.id,
+              ),
+            ),
         firstChild: CheckboxWidget(
-          checkState: widget.subTaskSmallInformation.isCompleted,
+          checkState: subTaskSmallInformation.isCompleted,
           onChanged: (value, context) {
             if (value! == true) {
               context.read<TasklistBloc>().add(
                     TasklistMarkSubTaskAsCompleted(
-                      taskId: widget.taskId,
-                      subTaskId: widget.subTaskSmallInformation.id,
+                      taskId: taskId,
+                      subTaskId: subTaskSmallInformation.id,
                       assigneeImageUrl:
-                          widget.subTaskSmallInformation.assigneeImageUrl,
+                          subTaskSmallInformation.assigneeImageUrl,
                     ),
                   );
             }
-            setState(() {
-              _controller
-                  .changeColor!(widget.subTaskSmallInformation.isCompleted);
-            });
           },
         ),
-        controller: _controller,
         isFixed: false,
-        isDone: widget.subTaskSmallInformation.isCompleted,
-        name: widget.subTaskSmallInformation.name,
-        subtext: '${widget.subTaskSmallInformation.points}pt',
+        isDone: subTaskSmallInformation.isCompleted,
+        name: subTaskSmallInformation.name,
+        subtext: '${subTaskSmallInformation.points}pt',
         secondChild: FutureBuilder(
           future: context
               .read<TasklistBloc>()
-              .imageUrl(widget.subTaskSmallInformation.assigneeImageUrl),
+              .imageUrl(subTaskSmallInformation.assigneeImageUrl),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const ShimmerAvatar(size: 24.0);

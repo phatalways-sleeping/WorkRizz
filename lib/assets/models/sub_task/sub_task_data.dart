@@ -11,7 +11,7 @@ final SubTaskModel instance1 = SubTaskModel(
   files: const ['design_sketch.pdf'],
   comments: const [
     "20230901-2106-8901-8497-af9b3f8d9382",
-"20230901-2106-8201-8509-1baaeb5fb954"
+    "20230901-2106-8201-8509-1baaeb5fb954",
   ],
   progress: 30.0,
   grade: 0,
@@ -45,7 +45,8 @@ final instance3 = SubTaskModel(
   grade: 0,
   leaderComment: '',
 );
-final instance4 = SubTaskModel(//
+final instance4 = SubTaskModel(
+  //
   id: '20230831-0437-8217-9632-e267d2883df8',
   name: 'Test Cross-Browser Compatibility',
   description: 'Test the website on various browsers for compatibility issues.',
@@ -73,7 +74,8 @@ final instance5 = SubTaskModel(
   grade: 0,
   leaderComment: '',
 );
-final instance6 = SubTaskModel( //
+final instance6 = SubTaskModel(
+  //
   id: '20230831-0442-8540-9148-7529597c79ef',
   name: 'Create User Profile Page',
   description: 'Design and implement the user profile page.',
@@ -87,7 +89,8 @@ final instance6 = SubTaskModel( //
   grade: 92,
   leaderComment: 'Impressive work on the user profile page!',
 );
-final instance7 = SubTaskModel(//
+final instance7 = SubTaskModel(
+  //
   id: '20230831-0442-8640-9158-a07a41ed5778',
   name: 'Test Payment Integration',
   description: 'Test payment gateway integration for purchasing products.',
@@ -96,9 +99,7 @@ final instance7 = SubTaskModel(//
   isCompleted: true,
   points: 15,
   files: const ['payment_integration_report.docx'],
-  comments: const [
-    "20230901-2106-8501-b511-3914e6370c9a"
-  ],
+  comments: const ["20230901-2106-8501-b511-3914e6370c9a"],
   progress: 100.0,
   grade: 90,
   leaderComment: 'Thank you for ensuring smooth payment integration!',

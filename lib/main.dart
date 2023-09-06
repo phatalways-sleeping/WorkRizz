@@ -15,6 +15,7 @@ import 'package:task_managing_application/states/project_bloc/project_bloc.dart'
 import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart';
+import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_bloc.dart';
 import 'package:task_managing_application/states/tasklist_bloc/tasklist_bloc.dart';
 import 'package:task_managing_application/states/user_project_invitation/user_project_invitation_bloc.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
@@ -153,7 +154,15 @@ class AppFlow extends StatelessWidget {
               child: const SubTaskCreateScreen(),
             ),
           ),
-        if (state is SubTaskDetail) const MaterialPage(child: SubTaskScreen()),
+        if (state is SubTaskDetail)
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => SubtaskViewBloc(
+                context.read<ApplicationRepository>(),
+              ),
+              child: const SubTaskScreen(),
+            ),
+          ),
         if (state is ChangePassword)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Home)

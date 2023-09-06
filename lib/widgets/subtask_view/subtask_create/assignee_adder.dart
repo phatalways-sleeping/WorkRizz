@@ -54,7 +54,7 @@ class _AssigneeAdderState extends State<AssigneeAdder> {
                         return Icon(
                           Icons.error,
                           color: context.colorScheme.error,
-                          size: 10.0,
+                          size: 20.0,
                         );
                       }
                       if (snapshot.hasData) {

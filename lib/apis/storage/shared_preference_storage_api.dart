@@ -477,11 +477,7 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
     throw UnimplementedError();
   }
   
-  @override
-  Future<CommentModel> commentFuture(String id) {
-    // TODO: implement commentFuture
-    throw UnimplementedError();
-  }
+
   
   @override
   Future<void> createNewComment(CommentModel commentModel) {
@@ -624,6 +620,12 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
   @override
   Future<File> imageFileFromStorage(String path) {
     // TODO: implement imageFileFromStorage
+    throw UnimplementedError();
+  }
+  
+  @override
+  Stream<CommentModel> commentStream(String id) {
+    // TODO: implement commentStream
     throw UnimplementedError();
   }
   

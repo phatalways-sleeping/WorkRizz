@@ -69,7 +69,7 @@ sealed class StorageAPI {
   Future<File> imageFileFromStorage(String path);
   Future<File> fileFromStorage(String path);
   // - CommentModel
-  Future<CommentModel> commentFuture(String id);
+  Stream<CommentModel> commentStream(String id);
 
   // UPDATE
   // - UserDataModel

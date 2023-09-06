@@ -88,14 +88,15 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
           child: ElevatedButton(
             onPressed: () => context.read<NavigationBloc>().add(
                   NavigateToTask(
-                    widget.projectId,
+                    projectId: widget.projectId,
+                    leaderId: state.leader,
+                    projectName: state.name,
                   ),
                 ),
             style: ButtonStyle(
               padding: MaterialStatePropertyAll(
                 EdgeInsets.symmetric(
-                  horizontal:
-                      context.mediaQuery.size.width * RATIO_PADDING,
+                  horizontal: context.mediaQuery.size.width * RATIO_PADDING,
                   vertical:
                       context.mediaQuery.size.height * RATIO_PADDING * 0.6,
                 ),

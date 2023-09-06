@@ -7,11 +7,13 @@ class DueDateInputWidget extends StatefulWidget {
     required this.execute,
     this.startFrom,
     this.restorationId,
+    this.input,
   });
 
   final String? restorationId;
   final void Function(BuildContext, DateTime) execute;
   final DateTime? startFrom;
+  final DateTime? input;
 
   @override
   State<DueDateInputWidget> createState() => _DueDateInputWidgetState();
@@ -105,38 +107,20 @@ class _DueDateInputWidgetState extends State<DueDateInputWidget>
         onPressed: () {
           _restorableDatePickerRouteFuture.present();
         },
-        // Container(
-        //                             width: context.mediaQuery.size.width * 0.4,
-        //                             margin: EdgeInsets.only(
-        //                                 top: context.mediaQuery.size.width *
-        //                                     0.01),
-        //                             decoration: BoxDecoration(
-        //                               // border black, size 1, round corner 12
-        //                               border: Border.all(
-        //                                 color: BLACK,
-        //                                 width: BORDER_WIDTH,
-        //                               ),
-        //                               borderRadius:
-        //                                   BorderRadius.circular(MEDIUM_CORNER),
-        //                             ),
-        //                             padding: EdgeInsets.all(
-        //                                 MediaQuery.of(context).size.width *
-        //                                     RATIO_PADDING),
         style: ButtonStyle(
-          padding: MaterialStatePropertyAll(
-            EdgeInsets.all(MediaQuery.of(context).size.width * RATIO_PADDING),
-          ),
-          shape: MaterialStatePropertyAll(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(MEDIUM_CORNER),
-              side: const BorderSide(
-                color: BLACK,
-                width: 1,
+            padding: MaterialStatePropertyAll(
+              EdgeInsets.all(MediaQuery.of(context).size.width * RATIO_PADDING),
+            ),
+            shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(MEDIUM_CORNER),
+                side: const BorderSide(
+                  color: BLACK,
+                  width: 1,
+                ),
               ),
             ),
-          ),
-          backgroundColor: const MaterialStatePropertyAll(WHITE)
-        ),
+            backgroundColor: const MaterialStatePropertyAll(WHITE)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -145,7 +129,7 @@ class _DueDateInputWidgetState extends State<DueDateInputWidget>
             DefaultTextStyle.merge(
               style: context.textTheme.bodyMedium,
               child: Text(
-                "${convertMonthToString(_selectedDate.value.month)} ${_selectedDate.value.day}${_selectedDate.value.day == 1 ? 'st' : _selectedDate.value.day == 2 ? 'nd' : _selectedDate.value.day == 3 ? 'rd' : 'th'} ${_selectedDate.value.year}",
+                "${convertMonthToString((widget.input ?? _selectedDate.value).month)} ${(widget.input ?? _selectedDate.value).day}${(widget.input ?? _selectedDate.value).day == 1 ? 'st' : (widget.input ?? _selectedDate.value).day == 2 ? 'nd' : (widget.input ?? _selectedDate.value).day == 3 ? 'rd' : 'th'} ${(widget.input ?? _selectedDate.value).year}",
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,

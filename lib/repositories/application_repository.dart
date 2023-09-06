@@ -40,6 +40,8 @@ class ApplicationRepository {
   late String username;
 
   late String projectIdOnView;
+  late String projectOnViewName;
+  late bool isLeaderOfProjectOnView;
   late String subTaskIdOnView;
   late String taskIdOnView;
 
@@ -121,14 +123,16 @@ class ApplicationRepository {
   Stream<Project> projectOnViewStream() =>
       _storageAPI.projectStream(projectIdOnView);
   Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
-  Stream<SubTaskModel> subTaskStream(String subTaskId) =>
-      _storageAPI.subTaskModelStream(subTaskId);
+  Stream<SubTaskModel> subTaskStream({String? subTaskId}) =>
+      _storageAPI.subTaskModelStream(subTaskId?? subTaskIdOnView);
   Stream<List<String>> get projectInvitationsStreamInUser => _storageAPI
       .userStreamByIdInUser(userId)
       .map((event) => event.projectInvitations);
   Stream<ProjectInvitationModel> projectInvitationStream(
           String projectInvitationId) =>
       _storageAPI.projectInvitationStream(projectInvitationId);
+  Stream<CommentModel> commentStream(String commentId) =>
+      _storageAPI.commentStream(commentId);
   // Future
   Future<String> currentUserImageUrl() async => await _storageAPI
       .userStreamByIdInUser(userId)
@@ -730,7 +734,7 @@ class ApplicationRepository {
       date: DateTime.now(),
       solved: false,
       isReplied: false,
-      replyCommentId: '',
+      repliedToUsername: '',
     );
     await Future.wait<void>([
       _storageAPI.createNewComment(commentModel),

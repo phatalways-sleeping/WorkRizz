@@ -223,7 +223,7 @@ class _SubTaskViewState extends State<SubTaskView> {
                     ],
                   ),
                   SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
-                  File(isAssigned: widget.isAssigned),
+                  FileList(isAssigned: widget.isAssigned),
                   SizedBox(
                       height: context.mediaQuery.size.width * RATIO_PADDING),
                   Comment(

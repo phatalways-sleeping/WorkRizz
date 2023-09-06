@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
+import 'package:task_managing_application/states/states.dart';
+import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart';
 
 class DescriptionInput extends StatefulWidget {
-  const DescriptionInput({super.key, required this.label, required this.showLabel});
+  const DescriptionInput({
+    super.key,
+    required this.label,
+    required this.showLabel,
+  });
   final String label;
   final bool showLabel;
 
@@ -19,15 +25,21 @@ class _DescriptionInputState extends State<DescriptionInput> {
     _titleController = TextEditingController();
     _titleController.addListener(() {
       if (_titleController.text.isNotEmpty) {
-        // context
-        //     .read<ProjectBloc>()
-        //     .add(ProjectInputName(_titleController.text));
+        if (widget.label == 'Description') {
+          context.read<SubtaskCreateBloc>().add(
+                SubTaskInputDescriptionEvent(
+                  _titleController.text,
+                ),
+              );
+        } else if (widget.label == 'Title') {
+          context.read<SubtaskCreateBloc>().add(
+                SubTaskInputNameEvent(
+                  _titleController.text,
+                ),
+              );
+        }
       }
     });
-    // _titleController.text =
-    //     (context.read<ProjectBloc>().state as ProjectUserCreateAndSubscribe)
-    //         .newProjectSetup
-    //         .name;
     super.initState();
   }
 
@@ -44,13 +56,6 @@ class _DescriptionInputState extends State<DescriptionInput> {
       minLines: 1,
       maxLines: 10,
       focusNode: _focusNode,
-      onTapOutside: (event) {
-        if (_titleController.text.isNotEmpty) {
-          // context
-          //     .read<ProjectBloc>()
-          //     .add(ProjectInputName(_titleController.text));
-        }
-      },
       controller: _titleController,
       keyboardType: TextInputType.name,
       textAlign: TextAlign.start,

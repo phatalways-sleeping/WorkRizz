@@ -1,7 +1,7 @@
 part of 'tasklist_view.dart';
 
-class SubTask extends StatefulWidget {
-  const SubTask({
+class SubTaskWidget extends StatefulWidget {
+  const SubTaskWidget({
     super.key,
     required this.taskId,
     required this.currentPage,
@@ -13,10 +13,10 @@ class SubTask extends StatefulWidget {
   final int totalPage;
 
   @override
-  State<SubTask> createState() => _SubTaskState();
+  State<SubTaskWidget> createState() => _SubTaskWidgetState();
 }
 
-class _SubTaskState extends State<SubTask> {
+class _SubTaskWidgetState extends State<SubTaskWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Task>(
@@ -68,7 +68,11 @@ class _SubTaskState extends State<SubTask> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.read<NavigationBloc>().add(
+                    NavigateToSubTaskCreate(
+                      widget.taskId,
+                    ),
+                  ),
               style: ButtonStyle(
                 alignment: Alignment.centerLeft,
                 shape: MaterialStatePropertyAll(

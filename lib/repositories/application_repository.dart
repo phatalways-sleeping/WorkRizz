@@ -39,6 +39,7 @@ class ApplicationRepository {
 
   late String projectIdOnView;
   late String subTaskIdOnView;
+  late String taskIdOnView;
 
   Future<void> login(String email, String password) async {
     await _authenticationAPI.login(email, password).then((value) async {
@@ -509,9 +510,6 @@ class ApplicationRepository {
 
   // Task / Create New Task
   Future<void> createNewSubTask({
-    required String projectId,
-    required String taskId,
-    required bool needToUpdateTaskCompletion,
     required SubTaskModel newSubTask,
     required List<File> files,
   }) async {
@@ -546,24 +544,28 @@ class ApplicationRepository {
             (value) => value.imageUrl,
           ),
     );
+    final needToUpdateTaskCompletion = await _storageAPI
+        .taskStream(taskIdOnView)
+        .first
+        .then((value) => value.isCompleted);
     await Future.wait<void>(
       [
         _storageAPI.createNewSubTask(
           newSubTask,
         ),
         _storageAPI.updateSubTaskSmallInformationsInTask(
-          taskId,
+          taskIdOnView,
           [
             subTaskSmallInformation,
           ],
         ),
-        _storageAPI.updateSubTasksInTask(taskId, [newSubTask.id]),
-        _storageAPI.updatePointsInTask(taskId, newSubTask.points),
-        _storageAPI.updateTotalActivitiesInProject(projectId, 1),
+        _storageAPI.updateSubTasksInTask(taskIdOnView, [newSubTask.id]),
+        _storageAPI.updatePointsInTask(taskIdOnView, newSubTask.points),
+        _storageAPI.updateTotalActivitiesInProject(projectIdOnView, 1),
         _storageAPI.updateSubTasksInUser(assigneeId, [newSubTask.id]),
         if (needToUpdateTaskCompletion) ...[
-          _storageAPI.updateIsCompletedInTask(taskId, false),
-          _storageAPI.updateTasksCompletedInProject(projectId, -1),
+          _storageAPI.updateIsCompletedInTask(taskIdOnView, false),
+          _storageAPI.updateTasksCompletedInProject(projectIdOnView, -1),
         ],
       ],
     );
@@ -801,7 +803,9 @@ class ApplicationRepository {
     }
   }
 
-  Future<File> downloadFile(String fileUrl) async => await _storageAPI.fileFromStorage(fileUrl);
+  Future<File> downloadFile(String fileUrl) async =>
+      await _storageAPI.fileFromStorage(fileUrl);
 
-  Future<File> downloadImage(String imageUrl) async => await _storageAPI.imageFileFromStorage(imageUrl);
+  Future<File> downloadImage(String imageUrl) async =>
+      await _storageAPI.imageFileFromStorage(imageUrl);
 }

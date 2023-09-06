@@ -32,7 +32,7 @@ SnackBar createErrorSnackBar({
       ),
       content: Center(
         child: Text(
-          'Something went wrong. Please try again later.',
+          error ?? 'Something went wrong. Please try again',
           style: context.textTheme.bodyLarge?.copyWith(
             color: context.colorScheme.onSecondary,
             fontWeight: FontWeight.w600,

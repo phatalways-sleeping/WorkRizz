@@ -1,8 +1,9 @@
-import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/states/states.dart';
+import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart';
 import 'package:task_managing_application/widgets/authentication/components.dart';
+import 'package:task_managing_application/widgets/custom_avatar_widget/future_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_util_components/custom_circular_progress.dart';
 
 class AssigneeAdder extends StatefulWidget {
@@ -30,71 +31,80 @@ class _AssigneeAdderState extends State<AssigneeAdder> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // if ((state as ProjectUserCreateAndSubscribe)
-            //         .newProjectSetup
-            //         .leaderImageUrl
-            //         .isEmpty )
-            //   const SizedBox.shrink()
-            // else
-            // FutureBuilder(
-            //   future: context.read<ProjectBloc>().leaderAvatar(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasError) {
-            //       return Icon(
-            //         Icons.error,
-            //         color: context.colorScheme.error,
-            //         size: 10.0,
-            //       );
-            //     }
-            //     if (snapshot.hasData) {
-            //       return AvatarStack(
-            //         avatars: [snapshot.data as NetworkImage],
-            //         width: 70.0,
-            //         height: 30.0,
-            //       );
-            //     }
-            //     return const CustomCircularProgressIndicator(
-            //       size: 10.0,
-            //     );
-            //   },
-            // ),
-            // const SizedBox(width: 8),
-            // InkWell(
-            //   onTap: () async {
-            //     await showDialog<String>(
-            //       context: context,
-            //       builder: (context) => _EmailDialog(controller: _controller),
-            //     ).then(
-            //       (value) {
-            //         if (value != null && value.isNotEmpty) {
-            //           context
-            //               .read<ProjectBloc>()
-            //               .add(ProjectInputLeader(value));
-            //           _controller.clear();
-            //         }
-            //       },
-            //     );
-            //   },
-            //   child: Container(
-            //     width: 25.0,
-            //     height: 25.0,
-            //     decoration: const ShapeDecoration(
-            //       color: Colors.black,
-            //       shape: OvalBorder(),
-            //     ),
-            //     child: const Icon(
-            //       Icons.add,
-            //       color: Colors.white,
-            //       size: 20.0,
-            //     ),
-            //   ),
-            // ),
-          ],
+        BlocBuilder<SubtaskCreateBloc, SubtaskCreateState>(
+          builder: (context, state) {
+            if (state is SubtaskCreateInitial ||
+                state is SubtaskCreateFailureDueToNetwork ||
+                state is SubTaskCreateFailureDueToDataIntegrity) {
+              return const SizedBox.shrink();
+            }
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if ((state as SubtaskCreateSuccess).assignedTo == null ||
+                    state.assignedTo!.isEmpty)
+                  const SizedBox.shrink()
+                else
+                  FutureBuilder(
+                    future: context.read<SubtaskCreateBloc>().assigneeImage(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Icon(
+                          Icons.error,
+                          color: context.colorScheme.error,
+                          size: 10.0,
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        return FutureAvatarWidget(
+                          avatarRatio: 0.04,
+                          radiusRatio: 0.02,
+                          imageUrl: snapshot.data as String,
+                          onTap: (context) {},
+                        );
+                      }
+                      return const CustomCircularProgressIndicator(
+                        size: 10.0,
+                      );
+                    },
+                  ),
+                const SizedBox(width: 8),
+                InkWell(
+                  onTap: () async {
+                    await showDialog<String>(
+                      context: context,
+                      builder: (context) =>
+                          _EmailDialog(controller: _controller),
+                    ).then(
+                      (value) {
+                        if (value != null && value.isNotEmpty) {
+                          context
+                              .read<SubtaskCreateBloc>()
+                              .add(SubTaskInputAssignedToEvent(value));
+                          _controller.clear();
+                        }
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 25.0,
+                    height: 25.0,
+                    decoration: const ShapeDecoration(
+                      color: Colors.black,
+                      shape: OvalBorder(),
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 20.0,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ],
     );

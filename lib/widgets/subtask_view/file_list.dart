@@ -1,7 +1,7 @@
 part of 'subtask_view.dart';
 
-class File extends StatelessWidget {
-  const File({super.key, required this.isAssigned});
+class FileList extends StatelessWidget {
+  const FileList({super.key, required this.isAssigned});
   final bool isAssigned;
 
   @override

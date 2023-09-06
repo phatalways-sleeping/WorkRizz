@@ -23,7 +23,7 @@ import 'package:task_managing_application/widgets/tasklist/switch.dart';
 part 'date.dart';
 part 'mini_nav.dart';
 part 'progress.dart';
-part 'subtask.dart';
+part 'subtask_widget.dart';
 part 'list_tag.dart';
 part 'list_subtask.dart';
 

@@ -39,10 +39,10 @@ final class NavigateToProjectsList extends NavigationEvent {
 final class NavigateToTask extends NavigationEvent {
   const NavigateToTask(this.projectId);
 
-  final String projectId;
+  final String? projectId;
 
   @override
-  List<Object> get props => [...super.props, projectId];
+  List<Object> get props => [...super.props, if(projectId != null) projectId!];
 }
 
 final class NavigateToAssistant extends NavigationEvent {
@@ -52,6 +52,7 @@ final class NavigateToAssistant extends NavigationEvent {
 final class NavigateToSubTaskDetail extends NavigationEvent {
   const NavigateToSubTaskDetail();
 }
+
 final class NavigateToSplash extends NavigationEvent {
   const NavigateToSplash();
 }
@@ -61,5 +62,12 @@ final class NavigateToUserProjectInvitation extends NavigationEvent {
 }
 
 final class NavigateToSubTaskCreate extends NavigationEvent {
-  const NavigateToSubTaskCreate();
+  const NavigateToSubTaskCreate(
+    this.ofTaskId,
+  );
+
+  final String ofTaskId;
+
+  @override
+  List<Object> get props => [...super.props, ofTaskId];
 }

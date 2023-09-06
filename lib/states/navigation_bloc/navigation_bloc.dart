@@ -18,7 +18,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToAuthentication>(_navigateToAuthentication);
     on<NavigateToProjectsList>(_onNavigateToProjectsList);
     on<NavigateToTask>((event, emit) {
-      _applicationRepository.projectIdOnView = event.projectId;
+      if (event.projectId != null) {
+        _applicationRepository.projectIdOnView = event.projectId!;
+      }
       emit(const TaskList());
     });
     on<NavigateToAssistant>(_onNavigateToAssistant);
@@ -33,6 +35,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       emit(const UserProjectInvitation());
     });
     on<NavigateToSubTaskCreate>((event, emit) {
+      _applicationRepository.taskIdOnView = event.ofTaskId;
       emit(const SubTaskCreate());
     });
   }
@@ -49,7 +52,8 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     if (state is ProjectsList) {
       eventToNavigateBack = const NavigateToProjectsList();
     } else if (state is TaskList) {
-      eventToNavigateBack = NavigateToTask(_applicationRepository.projectIdOnView);
+      eventToNavigateBack =
+          NavigateToTask(_applicationRepository.projectIdOnView);
     } else if (state is SubTaskDetail) {
       eventToNavigateBack = const NavigateToSubTaskDetail();
     } else if (state is Home) {

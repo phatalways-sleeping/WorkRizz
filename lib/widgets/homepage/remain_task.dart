@@ -4,6 +4,8 @@ import 'package:task_managing_application/widgets/custom_tag/project_tag.dart';
 import 'schedule_dbms.dart';
 
 class RemainTasksList extends StatefulWidget {
+  const RemainTasksList({super.key});
+
   @override
   _RemainTasksListState createState() => _RemainTasksListState();
 }
@@ -31,7 +33,7 @@ class _RemainTasksListState extends State<RemainTasksList> {
   Widget TaskDescription(int index, BuildContext context) {
     return Container(
         margin: EdgeInsets.symmetric(
-            vertical: context.mediaQuery.size.width * 0.02),
+            vertical: context.mediaQuery.size.width * RATIO_PADDING),
         child: GestureDetector(
           onTap: () {
             setState(() {});
@@ -54,7 +56,7 @@ class _RemainTasksListState extends State<RemainTasksList> {
                   end: FractionalOffset(0.0, 1.0),
                   stops: [0.0, 0.5, 1.0],
                   tileMode: TileMode.clamp),
-              borderRadius: BorderRadius.circular(MEDIUM_CORNER *2),
+              borderRadius: BorderRadius.circular(MEDIUM_CORNER * 2),
               // boxShadow: const [
               //   BoxShadow(
               //     //offset: Offset(4, 4),
@@ -68,30 +70,28 @@ class _RemainTasksListState extends State<RemainTasksList> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ProjectTag(
-                  color: taskColor[index], name: taskname[index],
-                  //   //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  //   alignment: Alignment.center,
-                  //   width: 80,
-                  //   height: 30,
-                  //   decoration: BoxDecoration(
-                  //     color: taskColor[index],
-                  //     borderRadius: BorderRadius.circular(20),
-                  //   ),
-                  //   child: Text(
-                  //     taskname[index],
-                  //     style: TextStyle(
-                  //       fontSize: 12,
-                  //       fontWeight: FontWeight.bold,
-                  //       color: Color(0xFF000000),
-                  //     ),
-                  //   ),
-                ),
-                SizedBox(
-                  width: context.mediaQuery.size.width * 0.02,
-                ),
-                SizedBox(
-                  height: context.mediaQuery.size.width * 0.001,
+                Container(
+                  margin: EdgeInsets.only(
+                      bottom: context.mediaQuery.size.width * RATIO_PADDING),
+                  child: ProjectTag(
+                    color: taskColor[index], name: taskname[index],
+                    //   //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    //   alignment: Alignment.center,
+                    //   width: 80,
+                    //   height: 30,
+                    //   decoration: BoxDecoration(
+                    //     color: taskColor[index],
+                    //     borderRadius: BorderRadius.circular(20),
+                    //   ),
+                    //   child: Text(
+                    //     taskname[index],
+                    //     style: TextStyle(
+                    //       fontSize: 12,
+                    //       fontWeight: FontWeight.bold,
+                    //       color: Color(0xFF000000),
+                    //     ),
+                    //   ),
+                  ),
                 ),
                 Text(taskDescription[index],
                     style: context.textTheme.bodyMedium),
@@ -101,18 +101,54 @@ class _RemainTasksListState extends State<RemainTasksList> {
         ));
   }
 
+  Widget animatedElement(
+      int index, BuildContext context, Animation<double> animation) {
+    return Container(
+      child: Draggable(
+        data: index,
+        feedback: Container(
+          decoration: BoxDecoration(
+            color: taskColor[index],
+            borderRadius: BorderRadius.circular(ROUND_CORNER),
+          ),
+          width: context.mediaQuery.size.width * RATIO_PADDING * 6,
+          height: context.mediaQuery.size.width * RATIO_PADDING * 6,
+        ), // The widget when dragging
+
+        child: TaskDescription(index, context), // Widget when being dragged
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return ListView.builder(
-      controller: scrollController,
+    // return ListView.builder(
+    //   controller: scrollController,
+    //   scrollDirection: Axis.horizontal,
+    //   physics: const ClampingScrollPhysics(),
+    //   shrinkWrap: true,
+    //   itemCount: taskname.length,
+    //   itemBuilder: (BuildContext context, int index) {
+    //     return Draggable(
+    //       data: index,
+    //       feedback: TaskDescription(index, context), // The widget when dragging
+    //       childWhenDragging:
+    //           Container(), // Pass the index as data to identify the item
+    //       child: TaskDescription(index, context), // Widget when being dragged
+    //     );
+    //   },
+    // );
+    return AnimatedList(
+      key: UniqueKey(),
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
-      itemCount: taskname.length,
-      itemBuilder: (BuildContext context, int index) {
-        return TaskDescription(index, context);
+      initialItemCount: taskname.length,
+      itemBuilder:
+          (BuildContext context, int index, Animation<double> animation) {
+        return animatedElement(index, context, animation);
       },
     );
   }

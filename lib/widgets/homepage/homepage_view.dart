@@ -38,12 +38,12 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      //hideNavigationBar: false,
+      hideNavigationBar: false,
       // margin: const EdgeInsets.only(top: 30),
       // color: Colors.white,
       // alignment: Alignment.center,
-      hideFloatingActionButton: true,
-      hideNavigationBar: true,
+      hideFloatingActionButton: false,
+      // hideNavigationBar: true,
       child: CustomScrollView(
         // turn off scroll
         physics: const NeverScrollableScrollPhysics(),
@@ -69,7 +69,7 @@ class _HomePageViewState extends State<HomePageView> {
                 // SizedBox(
                 //   height: context.mediaQuery.size.width * RATIO_SPACE,
                 // ),
-                ScheduleTitle(),
+                const ScheduleTitle(),
                 Container(
                   alignment: Alignment.center,
                   child: ScheduleProgress(),
@@ -112,7 +112,7 @@ class _HomePageViewState extends State<HomePageView> {
               ],
             ),
           ),
-          SliverFillRemaining(child: RemainTasksList()),
+          const SliverFillRemaining(child: RemainTasksList()),
         ],
       ),
     );

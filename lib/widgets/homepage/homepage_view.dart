@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:task_managing_application/assets/config/config.dart';
+import 'package:task_managing_application/assets/extensions/build_context_extensions.dart';
+import 'package:task_managing_application/assets/utils/functions.dart';
+import 'package:task_managing_application/screens/base/base_screen.dart';
+import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'schedule_progress.dart';
 import 'date_widget.dart';
-import 'schedule_dbms.dart';
 import 'schedule_title.dart';
 import 'remain_task.dart';
+
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
 
@@ -32,68 +37,79 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.center,
-      child:  SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-        child: Column(
-        //alignment: Alignment.center,
-        //color: Color(0xFF2D2F41),
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          
-        children: <Widget>[
-           Container(
-            alignment: Alignment.center,
-            child: DateCapsule(),
-          ),
-          SizedBox(height: 20,), 
-          ScheduleTitle(),
-          Container(
-            alignment: Alignment.center,
-            child: ScheduleProgress(),
-          ),
-          SizedBox(height: 0,),
-          Container(
-            //alignment: Alignment.center,
-            padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 5),
-            child: Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(  
-                  alignment: Alignment.topLeft,
-                  //padding:  EdgeInsets.only(left: screenWidth * 0.07, right: 5, top: 20, bottom: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[ 
-                      Text('Remaining', style: TextStyle(color: Color(0xFF000000), fontSize: 20, fontWeight: FontWeight.w600),),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.4),
-                      Ink(
-                        child: Text('View all...', style: TextStyle(color: Color(0xFF000000), fontSize: 20, fontWeight: FontWeight.w600),),
-
-                      )
-                      
-                    ],
-                    //Text(name, style: TextStyle(color: Color(0xFF001833), fontSize: 16,),),
-                  )
-                ),  
-              ],
-
+    return BaseScreen(
+      hideNavigationBar: false,
+      child: CustomScrollView(
+        // turn off scroll
+        physics: const NeverScrollableScrollPhysics(),
+        slivers: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: CustomHeaderBar(
+              upperChild: const Text("Hello Any"),
+              bottomChild: Text(
+                  "Today's ${convertWeekdayToString(DateTime.now().weekday)}"),
+              onPressed: (context) {},
             ),
           ),
-          Container(
-            alignment: Alignment.center,
-            child: RemainTasksList(),
+          SliverToBoxAdapter(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.center,
+                  child: const DateCapsule(),
+                ),
+                // SizedBox(
+                //   height: context.mediaQuery.size.width * RATIO_SPACE,
+                // ),
+                ScheduleTitle(),
+                Container(
+                  alignment: Alignment.center,
+                  child: ScheduleProgress(),
+                ),
+                SizedBox(
+                  height: context.mediaQuery.size.width * RATIO_SPACE,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal:
+                          context.mediaQuery.size.width * RATIO_PADDING),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Remaining',
+                        style: context.textTheme.titleLarge,
+                      ),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.4),
+                      InkWell(
+                        onTap: () {},
+                        child: Text(
+                          'View all...',
+                          style: context.textTheme.titleSmall?.copyWith(
+                            decoration: TextDecoration.underline,
+                            shadows: [
+                              const Shadow(color: PURPLE, offset: Offset(0, -3))
+                            ],
+                            color: Colors.transparent,
+                            decorationColor: PURPLE,
+                            decorationThickness: 1.5,
+                          ),
+                        ),
+                      )
+                    ],
+                    //Text(name, style: TextStyle(color: Color(0xFF001833), fontSize: 16,),),
+                  ),
+                ),
+              ],
+            ),
           ),
-          
+          SliverFillRemaining(child: RemainTasksList()),
         ],
       ),
-     ), 
     );
   }
 }

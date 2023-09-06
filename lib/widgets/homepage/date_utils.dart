@@ -1,9 +1,5 @@
 library utils;
 import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:math';
-import 'dart:math' as math;
 
 class DateUtils {
   static final DateFormat _monthFormat = DateFormat('MMMM yyyy');
@@ -53,6 +49,7 @@ static const _daysInMonth =  [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   static List<DateTime> daysInMonth(DateTime month) {
     var first = firstDayOfMonth(month);
     var daysBefore = first.weekday;
+    // ignore: unused_local_variable
     var firstToDisplay = first.subtract(Duration(days: daysBefore));
     var last = DateUtils.lastDayOfMonth(month);
 
@@ -68,7 +65,7 @@ static const _daysInMonth =  [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   }
 
   static Iterable<DateTime> daysRange(DateTime first, DateTime last) {
-    var listOfDates = new List<DateTime>.generate(
+    var listOfDates = List<DateTime>.generate(
         last.day, (i) => DateTime(first.year, first.month, i + 1));
     return listOfDates;
   }

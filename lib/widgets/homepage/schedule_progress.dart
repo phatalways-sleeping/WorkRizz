@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
-import 'dart:math' as math;
 import 'schedule_dbms.dart';
 class ScheduleProgress extends StatefulWidget {
   @override
@@ -46,6 +45,7 @@ class SchedulePainter extends CustomPainter {
     var center = Offset(centerX, centerY);
     var radius = min(centerX, centerY);
 
+    // ignore: unused_local_variable
     var outerCircleRadius = radius;
     var innerCircleRadius = radius;
     
@@ -53,6 +53,7 @@ class SchedulePainter extends CustomPainter {
 
     var fillBrush = Paint()..color = Color(0xFF444974);
 
+    // ignore: unused_local_variable
     var outlineBrush = Paint()
       ..color = Color(0xFFEAECFF)
       ..style = PaintingStyle.stroke

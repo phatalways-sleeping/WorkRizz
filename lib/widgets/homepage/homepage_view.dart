@@ -37,8 +37,11 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      hideNavigationBar: false,
+    return Container(
+      //hideNavigationBar: false,
+      margin: const EdgeInsets.only(top: 30),
+      color: Colors.white,
+      alignment: Alignment.center,
       child: CustomScrollView(
         // turn off scroll
         physics: const NeverScrollableScrollPhysics(),

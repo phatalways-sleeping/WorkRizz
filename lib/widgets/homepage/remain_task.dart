@@ -91,7 +91,7 @@ class _RemainTasksListState extends State<RemainTasksList> {
                   width: context.mediaQuery.size.width * 0.02,
                 ),
                 SizedBox(
-                  height: context.mediaQuery.size.width * 0.02,
+                  height: context.mediaQuery.size.width * 0.001,
                 ),
                 Text(taskDescription[index],
                     style: context.textTheme.bodyMedium),

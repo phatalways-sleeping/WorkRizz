@@ -148,7 +148,7 @@ class AppFlow extends StatelessWidget {
         if (state is ChangePassword)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Home)
-          const MaterialPage(
+          MaterialPage(
             child: HomePageScreen(),
           ),
         if (state is Assistant)

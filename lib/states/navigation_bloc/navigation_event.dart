@@ -60,11 +60,9 @@ final class NavigateToUserProjectInvitation extends NavigationEvent {
   const NavigateToUserProjectInvitation();
 }
 
-<<<<<<< HEAD
 final class NavigateToFileList extends NavigationEvent {
   const NavigateToFileList();
-=======
+}
 final class NavigateToSubTaskCreate extends NavigationEvent {
   const NavigateToSubTaskCreate();
->>>>>>> 4216139ba6079d091283d4169800856141d2ec61
 }

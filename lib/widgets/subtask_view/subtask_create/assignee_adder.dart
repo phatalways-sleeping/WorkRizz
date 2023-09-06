@@ -41,59 +41,59 @@ class _AssigneeAdderState extends State<AssigneeAdder> {
             //         .isEmpty )
             //   const SizedBox.shrink()
             // else
-            FutureBuilder(
-              future: context.read<ProjectBloc>().leaderAvatar(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Icon(
-                    Icons.error,
-                    color: context.colorScheme.error,
-                    size: 10.0,
-                  );
-                }
-                if (snapshot.hasData) {
-                  return AvatarStack(
-                    avatars: [snapshot.data as NetworkImage],
-                    width: 70.0,
-                    height: 30.0,
-                  );
-                }
-                return const CustomCircularProgressIndicator(
-                  size: 10.0,
-                );
-              },
-            ),
-            const SizedBox(width: 8),
-            InkWell(
-              onTap: () async {
-                await showDialog<String>(
-                  context: context,
-                  builder: (context) => _EmailDialog(controller: _controller),
-                ).then(
-                  (value) {
-                    if (value != null && value.isNotEmpty) {
-                      context
-                          .read<ProjectBloc>()
-                          .add(ProjectInputLeader(value));
-                      _controller.clear();
-                    }
-                  },
-                );
-              },
-              child: Container(
-                width: 25.0,
-                height: 25.0,
-                decoration: const ShapeDecoration(
-                  color: Colors.black,
-                  shape: OvalBorder(),
-                ),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 20.0,
-                ),
-              ),
-            ),
+            // FutureBuilder(
+            //   future: context.read<ProjectBloc>().leaderAvatar(),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasError) {
+            //       return Icon(
+            //         Icons.error,
+            //         color: context.colorScheme.error,
+            //         size: 10.0,
+            //       );
+            //     }
+            //     if (snapshot.hasData) {
+            //       return AvatarStack(
+            //         avatars: [snapshot.data as NetworkImage],
+            //         width: 70.0,
+            //         height: 30.0,
+            //       );
+            //     }
+            //     return const CustomCircularProgressIndicator(
+            //       size: 10.0,
+            //     );
+            //   },
+            // ),
+            // const SizedBox(width: 8),
+            // InkWell(
+            //   onTap: () async {
+            //     await showDialog<String>(
+            //       context: context,
+            //       builder: (context) => _EmailDialog(controller: _controller),
+            //     ).then(
+            //       (value) {
+            //         if (value != null && value.isNotEmpty) {
+            //           context
+            //               .read<ProjectBloc>()
+            //               .add(ProjectInputLeader(value));
+            //           _controller.clear();
+            //         }
+            //       },
+            //     );
+            //   },
+            //   child: Container(
+            //     width: 25.0,
+            //     height: 25.0,
+            //     decoration: const ShapeDecoration(
+            //       color: Colors.black,
+            //       shape: OvalBorder(),
+            //     ),
+            //     child: const Icon(
+            //       Icons.add,
+            //       color: Colors.white,
+            //       size: 20.0,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ],

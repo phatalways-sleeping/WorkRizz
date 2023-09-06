@@ -4,29 +4,55 @@ import 'package:task_managing_application/widgets/custom_tag/project_tag.dart';
 import 'schedule_dbms.dart';
 
 class RemainTasksList extends StatefulWidget {
-  const RemainTasksList({super.key});
+  const RemainTasksList({Key? key}) : super(key: key);
 
   @override
   _RemainTasksListState createState() => _RemainTasksListState();
 }
 
 class _RemainTasksListState extends State<RemainTasksList> {
-  double width = 0.0;
-  double height = 0.0;
-  ScrollController? scrollController;
-  TextEditingController controller = TextEditingController();
-
   var schedule = ScheduleData();
   List<String> taskname = [];
   List<String> taskDescription = [];
   List<Color> taskColor = [];
+
   @override
   void initState() {
+    super.initState();
     taskname = schedule.getTaskName();
     taskDescription = schedule.getTaskDescription();
     taskColor = schedule.getTaskColor();
-    scrollController = ScrollController(initialScrollOffset: 0.0);
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Widget animatedElement(int index, BuildContext context) {
+    return Draggable(
+      data: index,
+      // feedback: Container(
+      //   decoration: BoxDecoration(
+      //     color: taskColor[index],
+      //     borderRadius: BorderRadius.circular(ROUND_CORNER),
+      //   ),
+      //   width: context.mediaQuery.size.width * RATIO_PADDING * 6,
+      //   height: context.mediaQuery.size.width * RATIO_PADDING * 6,
+      // ), // The widget when dragging
+      childWhenDragging: Container(),
+      feedback: TaskDescription(index, context),
+      // child: SizeTransition(
+      // sizeFactor: _resizeAnimation!,
+      // child: SlideTransition(
+      // position: _moveAnimation,
+      child: TaskDescription(index, context),
+    )
+        // ),
+        // onDragCompleted: () {}
+        // Widget when being dragged
+        // );
+        ;
   }
 
   // ignore: non_constant_identifier_names
@@ -101,54 +127,22 @@ class _RemainTasksListState extends State<RemainTasksList> {
         ));
   }
 
-  Widget animatedElement(
-      int index, BuildContext context, Animation<double> animation) {
-    return Container(
-      child: Draggable(
-        data: index,
-        feedback: Container(
-          decoration: BoxDecoration(
-            color: taskColor[index],
-            borderRadius: BorderRadius.circular(ROUND_CORNER),
-          ),
-          width: context.mediaQuery.size.width * RATIO_PADDING * 6,
-          height: context.mediaQuery.size.width * RATIO_PADDING * 6,
-        ), // The widget when dragging
-
-        child: TaskDescription(index, context), // Widget when being dragged
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-    // return ListView.builder(
-    //   controller: scrollController,
-    //   scrollDirection: Axis.horizontal,
-    //   physics: const ClampingScrollPhysics(),
-    //   shrinkWrap: true,
-    //   itemCount: taskname.length,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return Draggable(
-    //       data: index,
-    //       feedback: TaskDescription(index, context), // The widget when dragging
-    //       childWhenDragging:
-    //           Container(), // Pass the index as data to identify the item
-    //       child: TaskDescription(index, context), // Widget when being dragged
-    //     );
-    //   },
-    // );
-    return AnimatedList(
-      key: UniqueKey(),
+    return ListView.builder(
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
-      initialItemCount: taskname.length,
-      itemBuilder:
-          (BuildContext context, int index, Animation<double> animation) {
-        return animatedElement(index, context, animation);
+      itemCount: taskname.length,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              // Handle tap on the task.
+            });
+          },
+          child: animatedElement(index, context),
+        );
       },
     );
   }

@@ -28,14 +28,8 @@ class _DescriptionInputState extends State<DescriptionInput> {
   @override
   void initState() {
     _titleController = TextEditingController();
-    _titleController.addListener(
-      () => widget.listener(
-        context,
-        _titleController,
-      ),
-    );
     _titleController.text = widget.initialValue;
-    _focusNode.requestFocus();
+    // _focusNode.requestFocus();
     super.initState();
   }
 
@@ -51,6 +45,7 @@ class _DescriptionInputState extends State<DescriptionInput> {
     return TextFormField(
       minLines: 1,
       maxLines: 10,
+      onChanged: (value) => widget.listener(context, _titleController),
       focusNode: _focusNode,
       controller: _titleController,
       keyboardType: TextInputType.name,

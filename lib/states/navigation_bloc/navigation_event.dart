@@ -62,12 +62,17 @@ final class NavigateToAssistant extends NavigationEvent {
 }
 
 final class NavigateToSubTaskDetail extends NavigationEvent {
-  const NavigateToSubTaskDetail(this.subTaskId);
+  const NavigateToSubTaskDetail(this.subTaskId, this.taskId);
 
   final String? subTaskId;
-  
+  final String? taskId;
+
   @override
-  List<Object> get props => [...super.props, if(subTaskId != null) subTaskId!];
+  List<Object> get props => [
+        ...super.props,
+        if (subTaskId != null) subTaskId!,
+        if (taskId != null) taskId!,
+      ];
 }
 
 final class NavigateToSplash extends NavigationEvent {

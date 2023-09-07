@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:task_managing_application/models/sub_task/comment/comment_model.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
@@ -24,9 +25,160 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
         );
       },
     );
-    on<SubTaskInputDueDateEvent>((event, emit) async {});
-    on<SubTaskInputPointsEvent>((event, emit) async {});
-    on<SubTaskInputDescriptionEvent>((event, emit) async {});
+    on<SubTaskInputDueDateEvent>((event, emit) {
+      if (state is SubTaskViewSuccessRequestConfirmChange) {
+        emit(
+          (state as SubTaskViewSuccessRequestConfirmChange).copyWith(
+            dueDate: event.dueDate,
+          ),
+        );
+      } else {
+        emit(
+          SubTaskViewSuccessRequestConfirmChange.from(
+            state: state as SubtaskViewSuccess,
+            dueDate: event.dueDate,
+            oldPoints: (state as SubtaskViewSuccess).points,
+          ),
+        );
+      }
+    });
+    on<SubTaskInputPointsEvent>((event, emit) {
+      if (state is SubTaskViewSuccessRequestConfirmChange) {
+        emit(
+          (state as SubTaskViewSuccessRequestConfirmChange).copyWith(
+            points: event.points,
+          ),
+        );
+      } else {
+        emit(
+          SubTaskViewSuccessRequestConfirmChange.from(
+            state: state as SubtaskViewSuccess,
+            points: event.points,
+            oldPoints: (state as SubtaskViewSuccess).points,
+          ),
+        );
+      }
+    });
+    on<SubTaskInputDescriptionEvent>((event, emit) {
+      if (state is SubTaskViewSuccessRequestConfirmChange) {
+        emit(
+          (state as SubTaskViewSuccessRequestConfirmChange).copyWith(
+            description: event.description,
+          ),
+        );
+      } else {
+        emit(
+          SubTaskViewSuccessRequestConfirmChange.from(
+            state: state as SubtaskViewSuccess,
+            description: event.description,
+            oldPoints: (state as SubtaskViewSuccess).points,
+          ),
+        );
+      }
+    });
+    on<SubTaskInputGradeEvent>((event, emit) {
+      if (state is SubTaskViewSuccessRequestConfirmChange) {
+        emit(
+          (state as SubTaskViewSuccessRequestConfirmChange).copyWith(
+            grade: event.grade,
+          ),
+        );
+      } else {
+        emit(
+          SubTaskViewSuccessRequestConfirmChange.from(
+            state: state as SubtaskViewSuccess,
+            grade: event.grade,
+            oldPoints: (state as SubtaskViewSuccess).points,
+          ),
+        );
+      }
+    });
+    on<SubTaskInputProgressEvent>((event, emit) {
+      if (state is SubTaskViewSuccessRequestConfirmChange) {
+        emit(
+          (state as SubTaskViewSuccessRequestConfirmChange).copyWith(
+            progress: event.progress,
+          ),
+        );
+      } else {
+        emit(
+          SubTaskViewSuccessRequestConfirmChange.from(
+            state: state as SubtaskViewSuccess,
+            progress: event.progress,
+            oldPoints: (state as SubtaskViewSuccess).points,
+          ),
+        );
+      }
+    });
+    on<SubTaskInputLeaderCommentEvent>((event, emit) {
+      if (state is SubTaskViewSuccessRequestConfirmChange) {
+        emit(
+          (state as SubTaskViewSuccessRequestConfirmChange).copyWith(
+            leaderComment: event.comment,
+          ),
+        );
+      } else {
+        emit(
+          SubTaskViewSuccessRequestConfirmChange.from(
+            state: state as SubtaskViewSuccess,
+            leaderComment: event.comment,
+            oldPoints: (state as SubtaskViewSuccess).points,
+          ),
+        );
+      }
+    });
+    on<SubTaskMarkSubTaskCompletedEvent>((event, emit) async {
+      if (state is SubTaskViewSuccessRequestConfirmChange) {
+        emit(
+          (state as SubTaskViewSuccessRequestConfirmChange).copyWith(
+            markAsCompleted: true,
+          ),
+        );
+      } else {
+        emit(
+          SubTaskViewSuccessRequestConfirmChange.from(
+            state: state as SubtaskViewSuccess,
+            markAsCompleted: true,
+            oldPoints: (state as SubtaskViewSuccess).points,
+          ),
+        );
+      }
+    });
+    on<SubTaskMarkSubTaskUncompletedEvent>((event, emit) async {
+      if (state is SubTaskViewSuccessRequestConfirmChange) {
+        emit(
+          (state as SubTaskViewSuccessRequestConfirmChange).copyWith(
+            markAsCompleted: false,
+          ),
+        );
+      } else {
+        emit(
+          SubTaskViewSuccessRequestConfirmChange.from(
+            state: state as SubtaskViewSuccess,
+            markAsCompleted: false,
+            oldPoints: (state as SubtaskViewSuccess).points,
+          ),
+        );
+      }
+    });
+    on<SubTaskConfirmChangePermissionsEvent>(
+      (event, emit) async {
+        await _applicationRepository.updateRemainingOfSubTask(
+          dueDate: (state as SubTaskViewSuccessRequestConfirmChange).dueDate,
+          points: (state as SubTaskViewSuccessRequestConfirmChange).points,
+          description:
+              (state as SubTaskViewSuccessRequestConfirmChange).description,
+          grade: (state as SubTaskViewSuccessRequestConfirmChange).grade,
+          progress: (state as SubTaskViewSuccessRequestConfirmChange).progress,
+          leaderComment:
+              (state as SubTaskViewSuccessRequestConfirmChange).leaderComment,
+          oldPoints:
+              (state as SubTaskViewSuccessRequestConfirmChange).oldPoints,
+          isCompleted:
+              (state as SubTaskViewSuccessRequestConfirmChange).markAsCompleted,
+        );
+      },
+    );
     on<SubTaskInputAttachmentEvent>((event, emit) async {
       await _applicationRepository.pickFiles().then((value) async {
         final files = (state as SubtaskViewSuccess).files;
@@ -69,9 +221,6 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
           .removeFilesFromSubTask(fileUrls: [event.attachment]);
     });
     on<SubTaskDownloadAttachmentEvent>((event, emit) async {});
-    on<SubTaskInputGradeEvent>((event, emit) async {});
-    on<SubTaskInputProgressEvent>((event, emit) async {});
-    on<SubTaskInputLeaderCommentEvent>((event, emit) async {});
     on<SubTaskRequestInputSubTaskCommentEvent>((event, emit) {
       emit(SubTaskViewSuccessRequestComment.from(state as SubtaskViewSuccess));
     });
@@ -141,6 +290,12 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
     });
   }
 
+  @override
+  void onEvent(SubtaskViewEvent event) {
+    debugPrint(event.toString());
+    super.onEvent(event);
+  }
+
   final ApplicationRepository _applicationRepository;
 
   String get projectName => _applicationRepository.projectOnViewName;
@@ -180,9 +335,23 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
   bool get isAssigned =>
       _applicationRepository.userId == (state as SubtaskViewSuccess).assignee;
 
-  SubtaskViewState streamTransformation(subTask) =>
-      (state is SubTaskViewSuccessRequestComment)
-          ? SubTaskViewSuccessRequestComment(
+  SubtaskViewState streamTransformation(subTask) => (state
+          is SubTaskViewSuccessRequestComment)
+      ? SubTaskViewSuccessRequestComment(
+          name: subTask.name,
+          description: subTask.description,
+          assignee: subTask.assignee,
+          dueDate: subTask.dueDate,
+          isCompleted: subTask.isCompleted,
+          points: subTask.points,
+          files: subTask.files,
+          comments: subTask.comments,
+          progress: subTask.progress,
+          grade: subTask.grade,
+          leaderComment: subTask.leaderComment,
+        )
+      : (state is SubTaskViewSuccessRequestReplyComment)
+          ? SubTaskViewSuccessRequestReplyComment(
               name: subTask.name,
               description: subTask.description,
               assignee: subTask.assignee,
@@ -194,9 +363,13 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
               progress: subTask.progress,
               grade: subTask.grade,
               leaderComment: subTask.leaderComment,
+              replyUsername: (state as SubTaskViewSuccessRequestReplyComment)
+                  .replyUsername,
+              replyCommentId: (state as SubTaskViewSuccessRequestReplyComment)
+                  .replyCommentId,
             )
-          : (state is SubTaskViewSuccessRequestReplyComment)
-              ? SubTaskViewSuccessRequestReplyComment(
+          : (state is SubTaskViewSuccessRequestConfirmChange)
+              ? SubTaskViewSuccessRequestConfirmChange(
                   name: subTask.name,
                   description: subTask.description,
                   assignee: subTask.assignee,
@@ -208,12 +381,11 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
                   progress: subTask.progress,
                   grade: subTask.grade,
                   leaderComment: subTask.leaderComment,
-                  replyUsername:
-                      (state as SubTaskViewSuccessRequestReplyComment)
-                          .replyUsername,
-                  replyCommentId:
-                      (state as SubTaskViewSuccessRequestReplyComment)
-                          .replyCommentId,
+                  oldPoints: (state as SubTaskViewSuccessRequestConfirmChange)
+                      .oldPoints,
+                  markAsCompleted:
+                      (state as SubTaskViewSuccessRequestConfirmChange)
+                          .markAsCompleted,
                 )
               : SubtaskViewSuccess(
                   name: subTask.name,

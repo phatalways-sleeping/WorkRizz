@@ -32,6 +32,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       if(event.subTaskId != null) {
         _applicationRepository.subTaskIdOnView = event.subTaskId!;
       }
+      if(event.taskId != null) {
+        _applicationRepository.taskIdOnView = event.taskId!;
+      }
       emit(const SubTaskDetail());
     });
     on<NavigateToSplash>((event, emit) async {
@@ -67,7 +70,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         projectName: null,
       );
     } else if (state is SubTaskDetail) {
-      eventToNavigateBack = const NavigateToSubTaskDetail(null);
+      eventToNavigateBack = const NavigateToSubTaskDetail(null, null);
     } else if (state is Home) {
       eventToNavigateBack = const NavigateToHome();
     } else if (state is Settings) {
@@ -137,12 +140,5 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) async {
     emit(const Authentication());
-  }
-
-  Future<void> _onNavigateToSubTaskDetail(
-    NavigateToSubTaskDetail event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const SubTaskDetail());
   }
 }

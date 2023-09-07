@@ -17,9 +17,9 @@ final class UpdateTask extends Update {
         "isCompleted": isCompleted,
       });
 
-  static Future<void> updatePoints(String id, int points) =>
+  static Future<void> updatePoints(String id, int increase) =>
       FirebaseFirestoreConfigs.tasksCollection.doc(id).update({
-        "points": points,
+        "points": FieldValue.increment(increase),
       });
 
   static Future<void> updateSubTasks(String id, List<String> latestVersion) =>

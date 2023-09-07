@@ -38,6 +38,58 @@ final class SubTaskInputDescriptionEvent extends SubtaskViewEvent {
   List<Object> get props => [...super.props, description];
 }
 
+
+final class SubTaskInputGradeEvent extends SubtaskViewEvent {
+  const SubTaskInputGradeEvent(this.grade);
+
+  final int grade;
+
+  @override
+  List<Object> get props => [...super.props, grade];
+}
+
+final class SubTaskMarkSubTaskCompletedEvent extends SubtaskViewEvent {
+  const SubTaskMarkSubTaskCompletedEvent();
+}
+
+final class SubTaskMarkSubTaskUncompletedEvent extends SubtaskViewEvent {
+  const SubTaskMarkSubTaskUncompletedEvent();
+}
+
+final class SubTaskInputProgressEvent extends SubtaskViewEvent {
+  const SubTaskInputProgressEvent(this.progress);
+
+  final double progress;
+
+  @override
+  List<Object> get props => [...super.props, progress];
+}
+
+final class SubTaskInputLeaderCommentEvent extends SubtaskViewEvent {
+  const SubTaskInputLeaderCommentEvent(this.comment);
+
+  final String comment;
+
+  @override
+  List<Object> get props => [...super.props, comment];
+}
+
+final class SubTaskConfirmChangePermissionsEvent
+    extends SubtaskViewEvent {
+  const SubTaskConfirmChangePermissionsEvent();
+
+  @override
+  List<Object> get props => [...super.props];
+}
+
+final class SubTaskCancelChangePermissionsEvent
+    extends SubtaskViewEvent {
+  const SubTaskCancelChangePermissionsEvent();
+
+  @override
+  List<Object> get props => [...super.props];
+}
+
 final class SubTaskInputAttachmentEvent extends SubtaskViewEvent {
   const SubTaskInputAttachmentEvent();
 }
@@ -76,33 +128,6 @@ final class SubTaskDownloadAttachmentEvent extends SubtaskViewEvent {
 
   @override
   List<Object> get props => [...super.props, attachment];
-}
-
-final class SubTaskInputGradeEvent extends SubtaskViewEvent {
-  const SubTaskInputGradeEvent(this.grade);
-
-  final int grade;
-
-  @override
-  List<Object> get props => [...super.props, grade];
-}
-
-final class SubTaskInputProgressEvent extends SubtaskViewEvent {
-  const SubTaskInputProgressEvent(this.progress);
-
-  final double progress;
-
-  @override
-  List<Object> get props => [...super.props, progress];
-}
-
-final class SubTaskInputLeaderCommentEvent extends SubtaskViewEvent {
-  const SubTaskInputLeaderCommentEvent(this.comment);
-
-  final String comment;
-
-  @override
-  List<Object> get props => [...super.props, comment];
 }
 
 final class SubTaskRequestInputSubTaskCommentEvent extends SubtaskViewEvent {

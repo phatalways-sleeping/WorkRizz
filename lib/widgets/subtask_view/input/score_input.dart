@@ -24,12 +24,7 @@ class _ScoreInputState extends State<ScoreInput> {
   @override
   void initState() {
     _titleController = TextEditingController();
-    _titleController.addListener(
-      () => widget.listener(
-        context,
-        _titleController,
-      ),
-    );
+    
     _titleController.text = widget.initialValue;
     super.initState();
   }
@@ -48,6 +43,7 @@ class _ScoreInputState extends State<ScoreInput> {
       maxLines: 10,
       focusNode: _focusNode,
       controller: _titleController,
+      onChanged: (value) => widget.listener(context, _titleController),
       keyboardType: TextInputType.number,
       textAlign: TextAlign.start,
       style: context.textTheme.bodyMedium?.copyWith(

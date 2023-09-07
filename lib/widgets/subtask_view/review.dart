@@ -52,7 +52,7 @@ class Review extends StatelessWidget {
                       ? TextInput(
                           suffixText: "%",
                           color: PINK,
-                          initialNumber: (progress).toInt(),
+                          initialNumber: (progress * 100).toInt(),
                           listener: (context, controller) => context
                               .read<SubtaskViewBloc>()
                               .add(

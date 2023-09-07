@@ -259,7 +259,8 @@ final class SubTaskViewSuccessAskPermissionToOverrideFiles
   final List<File> newfiles;
 
   factory SubTaskViewSuccessAskPermissionToOverrideFiles.from(
-    SubtaskViewSuccess state, List<File> newFiles,
+    SubtaskViewSuccess state,
+    List<File> newFiles,
   ) =>
       SubTaskViewSuccessAskPermissionToOverrideFiles(
         name: state.name,
@@ -306,6 +307,9 @@ final class SubTaskViewSuccessAskPermissionToOverrideFiles
       newfiles: newfiles ?? this.newfiles,
     );
   }
+
+  @override
+  List<Object> get props => [...super.props, newfiles];
 }
 
 final class SubTaskViewSuccessPendingToUpdateFiles extends SubtaskViewSuccess {
@@ -323,7 +327,8 @@ final class SubTaskViewSuccessPendingToUpdateFiles extends SubtaskViewSuccess {
     required super.leaderComment,
   });
 
-  factory SubTaskViewSuccessPendingToUpdateFiles.from(SubtaskViewSuccess state) =>
+  factory SubTaskViewSuccessPendingToUpdateFiles.from(
+          SubtaskViewSuccess state) =>
       SubTaskViewSuccessPendingToUpdateFiles(
         name: state.name,
         description: state.description,
@@ -367,7 +372,8 @@ final class SubTaskViewSuccessPendingToUpdateFiles extends SubtaskViewSuccess {
   }
 }
 
-final class SubTaskViewSuccessPendingToUpdateComment extends SubtaskViewSuccess {
+final class SubTaskViewSuccessPendingToUpdateComment
+    extends SubtaskViewSuccess {
   const SubTaskViewSuccessPendingToUpdateComment({
     required super.name,
     required super.description,
@@ -382,7 +388,8 @@ final class SubTaskViewSuccessPendingToUpdateComment extends SubtaskViewSuccess 
     required super.leaderComment,
   });
 
-  factory SubTaskViewSuccessPendingToUpdateComment.from(SubtaskViewSuccess state) =>
+  factory SubTaskViewSuccessPendingToUpdateComment.from(
+          SubtaskViewSuccess state) =>
       SubTaskViewSuccessPendingToUpdateComment(
         name: state.name,
         description: state.description,
@@ -426,6 +433,94 @@ final class SubTaskViewSuccessPendingToUpdateComment extends SubtaskViewSuccess 
   }
 }
 
+final class SubTaskViewSuccessRequestConfirmChange extends SubtaskViewSuccess {
+  const SubTaskViewSuccessRequestConfirmChange({
+    required super.name,
+    required super.description,
+    required super.assignee,
+    required super.dueDate,
+    required super.isCompleted,
+    required super.points,
+    required super.files,
+    required super.comments,
+    required super.progress,
+    required super.grade,
+    required super.leaderComment,
+    required this.oldPoints,
+    required this.markAsCompleted,
+  });
+
+  final int oldPoints;
+  final bool markAsCompleted;
+
+  factory SubTaskViewSuccessRequestConfirmChange.from({
+    required SubtaskViewSuccess state,
+    String? name,
+    String? description,
+    String? assignee,
+    DateTime? dueDate,
+    bool? isCompleted,
+    int? points,
+    List<String>? files,
+    List<String>? comments,
+    double? progress,
+    int? grade,
+    String? leaderComment,
+    int? oldPoints,
+    bool? markAsCompleted,
+  }) =>
+      SubTaskViewSuccessRequestConfirmChange(
+        name: name ?? state.name,
+        description: description ?? state.description,
+        assignee: assignee ?? state.assignee,
+        dueDate: dueDate ?? state.dueDate,
+        isCompleted: isCompleted ?? state.isCompleted,
+        points: points ?? state.points,
+        files: files ?? state.files,
+        comments: comments ?? state.comments,
+        progress: progress ?? state.progress,
+        grade: grade ?? state.grade,
+        leaderComment: leaderComment ?? state.leaderComment,
+        oldPoints: oldPoints ?? state.points,
+        markAsCompleted: markAsCompleted ?? state.isCompleted,
+      );
+
+  @override
+  SubTaskViewSuccessRequestConfirmChange copyWith({
+    String? name,
+    String? description,
+    String? assignee,
+    DateTime? dueDate,
+    bool? isCompleted,
+    int? points,
+    List<String>? files,
+    List<String>? comments,
+    double? progress,
+    int? grade,
+    String? leaderComment,
+    int? oldPoints,
+    bool? markAsCompleted,
+  }) {
+    return SubTaskViewSuccessRequestConfirmChange(
+      name: name ?? super.name,
+      description: description ?? super.description,
+      assignee: assignee ?? super.assignee,
+      dueDate: dueDate ?? super.dueDate,
+      isCompleted: isCompleted ?? super.isCompleted,
+      points: points ?? super.points,
+      files: files ?? super.files,
+      comments: comments ?? super.comments,
+      progress: progress ?? super.progress,
+      grade: grade ?? super.grade,
+      leaderComment: leaderComment ?? super.leaderComment,
+      oldPoints: oldPoints ?? this.oldPoints,
+      markAsCompleted: markAsCompleted ?? this.markAsCompleted,
+    );
+  }
+
+  @override
+  List<Object> get props => [...super.props, oldPoints, markAsCompleted];
+}
 
 abstract class SubtaskViewFailure extends SubtaskViewState {
   const SubtaskViewFailure(this.error);

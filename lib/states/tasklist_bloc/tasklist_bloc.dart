@@ -36,14 +36,12 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
       await _applicationRepository.markSubTaskCompleted(
         taskId: event.taskId,
         subTaskId: event.subTaskId,
-        assigneeImageUrl: event.assigneeImageUrl,
       );
     });
     on<TasklistMarkSubTaskAsUncompleted>((event, emit) async {
       await _applicationRepository.markSubTaskUnCompleted(
         taskId: event.taskId,
-        subTaskId: event.subTaskId,
-        assigneeImageUrl: event.assigneeImageUrl,
+        subTaskId: event.subTaskId,     
       );
     });
     on<TasklistCreateNewTask>((event, emit) async {

@@ -26,8 +26,6 @@ class _TextInputState extends State<TextInput> {
   @override
   void initState() {
     _titleController = TextEditingController();
-    _titleController
-        .addListener(() => widget.listener(context, _titleController));
     _titleController.text = widget.initialNumber?.toString() ?? '';
     super.initState();
   }
@@ -44,6 +42,7 @@ class _TextInputState extends State<TextInput> {
     return TextFormField(
       focusNode: _focusNode,
       controller: _titleController,
+      onChanged: (value) => widget.listener(context, _titleController),
       keyboardType: TextInputType.number,
       textAlign: TextAlign.start,
       style: context.textTheme.displaySmall?.copyWith(

@@ -5,6 +5,7 @@ import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/future_avatar_widget.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_confirm_change_dialog.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_snackbar.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/override_files_dialog.dart';
@@ -182,11 +183,24 @@ class _SubTaskViewState extends State<SubTaskView> {
                     bottomChild: Row(
                       children: [
                         CheckboxWidget(
-                          checkState: (state as SubtaskViewSuccess).isCompleted,
+                          checkState: (state
+                                  is SubTaskViewSuccessRequestConfirmChange)
+                              ? state
+                                  .markAsCompleted
+                              : (state as SubtaskViewSuccess).isCompleted,
                           onChanged: (value, context) {
-                            setState(() {
-                              isChecked = value!;
-                            });
+                            if (value == null) {
+                              return;
+                            }
+                            if (value == true) {
+                              context.read<SubtaskViewBloc>().add(
+                                    const SubTaskMarkSubTaskCompletedEvent(),
+                                  );
+                            } else {
+                              context.read<SubtaskViewBloc>().add(
+                                    const SubTaskMarkSubTaskUncompletedEvent(),
+                                  );
+                            }
                           },
                         ),
                         const SizedBox(
@@ -202,20 +216,50 @@ class _SubTaskViewState extends State<SubTaskView> {
                                 fontWeight: FontWeight.w600,
                               ),
                               child: Text(
-                                (state).name,
+                                (state as SubtaskViewSuccess).name,
                               ),
                             ),
                           ),
                         )
                       ],
                     ),
-                    onPressed: (context) => context.read<NavigationBloc>().add(
-                          const NavigateToTask(
-                            projectId: null,
-                            leaderId: null,
-                            projectName: null,
-                          ),
-                        ),
+                    onPressed: (context) async {
+                      // debugPrint((state is SubTaskViewSuccessRequestConfirmChange).toString());
+                      if (state is SubTaskViewSuccessRequestConfirmChange) {
+                        await showConfirmChangeDialog(
+                          onAccept: (context) => context
+                              .read<SubtaskViewBloc>()
+                              .add(
+                                  const SubTaskConfirmChangePermissionsEvent()),
+                          onDecline: (context) =>
+                              context.read<NavigationBloc>().add(
+                                    const NavigateToTask(
+                                      projectId: null,
+                                      leaderId: null,
+                                      projectName: null,
+                                    ),
+                                  ),
+                          onError: (context) {},
+                          context: context,
+                        ).then(
+                          (value) => context.read<NavigationBloc>().add(
+                                const NavigateToTask(
+                                  projectId: null,
+                                  leaderId: null,
+                                  projectName: null,
+                                ),
+                              ),
+                        );
+                      } else {
+                        context.read<NavigationBloc>().add(
+                              const NavigateToTask(
+                                projectId: null,
+                                leaderId: null,
+                                projectName: null,
+                              ),
+                            );
+                      }
+                    },
                   ),
                 ),
                 SliverPadding(

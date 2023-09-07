@@ -144,14 +144,27 @@ class SubTaskInfo extends StatelessWidget {
         onPressed: (context) => context.read<NavigationBloc>().add(
               NavigateToSubTaskDetail(
                 subTaskSmallInformation.id,
+                taskId,
               ),
             ),
         firstChild: CheckboxWidget(
           checkState: subTaskSmallInformation.isCompleted,
           onChanged: (value, context) {
-            if (value! == true) {
+            if (value == null) {
+              return;
+            }
+            if (value == true) {
               context.read<TasklistBloc>().add(
                     TasklistMarkSubTaskAsCompleted(
+                      taskId: taskId,
+                      subTaskId: subTaskSmallInformation.id,
+                      assigneeImageUrl:
+                          subTaskSmallInformation.assigneeImageUrl,
+                    ),
+                  );
+            } else {
+              context.read<TasklistBloc>().add(
+                    TasklistMarkSubTaskAsUncompleted(
                       taskId: taskId,
                       subTaskId: subTaskSmallInformation.id,
                       assigneeImageUrl:

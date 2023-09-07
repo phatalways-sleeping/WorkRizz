@@ -434,7 +434,6 @@ class ApplicationRepository {
   Future<void> markSubTaskCompleted({
     required String subTaskId,
     required String taskId,
-    required String assigneeImageUrl,
   }) async {
     await Future.wait<void>(
       [
@@ -445,6 +444,11 @@ class ApplicationRepository {
     );
 
     final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+
+    final assigneeImageUrl = await _storageAPI
+        .userStreamByIdInUser(subTask.assignee)
+        .first
+        .then((value) => value.imageUrl);
 
     final subTaskInformation = SubTaskSmallInformation(
       id: subTaskId,
@@ -477,9 +481,13 @@ class ApplicationRepository {
   Future<void> markSubTaskUnCompleted({
     required String subTaskId,
     required String taskId,
-    required String assigneeImageUrl,
   }) async {
     final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+
+    final assigneeImageUrl = await _storageAPI
+        .userStreamByIdInUser(subTask.assignee)
+        .first
+        .then((value) => value.imageUrl);
 
     final subTaskInformation = SubTaskSmallInformation(
       id: subTaskId,
@@ -516,7 +524,7 @@ class ApplicationRepository {
 
   // Task / Create New Task
   Future<List<File>> pickFiles() async {
-    final files = await FilePicker.platform.pickFiles(
+    return await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
       allowedExtensions: [
@@ -534,11 +542,15 @@ class ApplicationRepository {
         'mp3',
         'txt',
       ],
-    );
-    if (files == null) {
-      return [];
-    }
-    return files.paths.map((path) => File(path!)).toList();
+    ).then((value) {
+      if (value != null) {
+        return value.paths.map((path) => File(path!)).toList();
+      } else {
+        return <File>[];
+      }
+    }).onError((error, stackTrace) {
+      return <File>[];
+    });
   }
 
   Future<void> createNewSubTask({
@@ -851,6 +863,65 @@ class ApplicationRepository {
       _storageAPI.removeCommentsInSubTask(subTaskIdOnView, [commentId]),
       _storageAPI.deleteComment(commentId),
     ]);
+  }
+
+  Future<void> updateRemainingOfSubTask({
+    required String description,
+    required DateTime dueDate,
+    required int points,
+    required int grade,
+    required double progress,
+    required String leaderComment,
+    required int oldPoints,
+    required bool isCompleted,
+  }) async {
+    final task = await _storageAPI.taskStream(taskIdOnView).first;
+    final subTaskCompleted = await _storageAPI
+        .subTaskModelStream(subTaskIdOnView)
+        .first
+        .then((value) => value.isCompleted);
+    final subTaskSmallInformation = task.subTaskSmallInformations
+        .where((element) => element.id == subTaskIdOnView);
+    await Future.wait<void>(
+      [
+        _storageAPI.updateDescriptionInSubTask(subTaskIdOnView, description),
+        _storageAPI.updateDueDateInSubTask(subTaskIdOnView, dueDate),
+        _storageAPI.updateGradeInSubTask(subTaskIdOnView, grade),
+        if (oldPoints != points) ...[
+          _storageAPI.updatePointsInSubTask(subTaskIdOnView, points),
+          _storageAPI.updatePointsInTask(taskIdOnView, points - oldPoints),
+          _storageAPI.removeSubTaskSmallInformationsInTask(
+              taskIdOnView, [subTaskSmallInformation.first]),
+          _storageAPI.updateSubTaskSmallInformationsInTask(
+            taskIdOnView,
+            [
+              subTaskSmallInformation.first.copyWith(
+                points: points,
+              ),
+            ],
+          ),
+        ],
+        _storageAPI.updateProgressInSubTask(subTaskIdOnView, progress),
+        _storageAPI.updateLeaderCommentInSubTask(
+          subTaskIdOnView,
+          leaderComment,
+        ),
+        if (isCompleted && !subTaskCompleted)
+          markSubTaskCompleted(
+            subTaskId: subTaskIdOnView,
+            taskId: taskIdOnView,
+          )
+        else if (!isCompleted && subTaskCompleted)
+          markSubTaskUnCompleted(
+            subTaskId: subTaskIdOnView,
+            taskId: taskIdOnView,
+          )
+      ],
+    ).onError((error, stackTrace) {
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      return [];
+    });
   }
   // Task / View files
 

@@ -14,10 +14,11 @@ import 'package:task_managing_application/widgets/custom_floating_widget/custom_
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
-import 'package:task_managing_application/widgets/custom_tag/project_tag.dart';
+import 'package:task_managing_application/widgets/custom_tag/project_tag_widget.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'package:task_managing_application/widgets/custom_util_components/custom_circular_progress.dart';
-import 'package:task_managing_application/widgets/tasklist/shimmer_components.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_avatar.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_subtask_widget.dart';
 import 'package:task_managing_application/widgets/tasklist/switch.dart';
 
 part 'date.dart';

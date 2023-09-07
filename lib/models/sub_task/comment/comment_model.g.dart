@@ -20,7 +20,7 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
     commenter: json['commenter'] as String,
     date: const DateTimeSerializer().fromJson(json['date'] as String),
     solved: json['solved'] as bool? ?? false,
-    isReplied: json['isReplied'] as bool? ?? false,
+    isReplied: json['isReplied'] as bool,
     repliedToUsername: json['repliedToUsername'] as String,
   );
 }

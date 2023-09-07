@@ -6,12 +6,10 @@ class CommentWidget extends StatefulWidget {
     super.key,
     required this.isAssigned,
     required this.commentId,
-    required this.commentOwnerUsername,
   });
 
   final bool isAssigned;
   final String commentId;
-  final String commentOwnerUsername;
 
   @override
   State<CommentWidget> createState() => _CommentWidgetState();
@@ -93,7 +91,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                             children: [
                               if (commentModel.isReplied)
                                 Text(
-                                  "Replied to @${commentModel.repliedToUsername}",
+                                  "Replied to ${commentModel.repliedToUsername}",
                                   style:
                                       context.textTheme.labelMedium?.copyWith(
                                     color: GREEN,
@@ -123,7 +121,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                                 if (widget.isAssigned) {
                                   context.read<SubtaskViewBloc>().add(
                                         SubTaskMarkCommentUnsolvedEvent(
-                                          commentModel,
+                                          commentModel.id,
                                         ),
                                       );
                                 }
@@ -145,7 +143,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                                   context.read<SubtaskViewBloc>().add(
                                         SubTaskRequestReplyToCommentEvent(
                                           replyToUsername:
-                                              widget.commentOwnerUsername,
+                                              commentModel.repliedToUsername,
+                                          commentId: commentModel.id,
                                         ),
                                       );
                                 }
@@ -161,7 +160,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                                 if (widget.isAssigned) {
                                   context.read<SubtaskViewBloc>().add(
                                         SubTaskMarkCommentSolvedEvent(
-                                          commentModel,
+                                          commentModel.id,
                                         ),
                                       );
                                 }

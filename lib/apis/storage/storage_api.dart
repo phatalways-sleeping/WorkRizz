@@ -190,7 +190,7 @@ sealed class StorageAPI {
   // - CommentModel
   Future<void> updateSolvedInComment(String id, bool solved);
   Future<void> updateIsRepliedInComment(String id, bool isReplied);
-  Future<void> updateReplyCommentIdInComment(String id, String replyCommentId);
+  Future<void> updateRepliedToUsernameInComment(String id, String repliedToUsername);
   // DELETE
   // - UserDataModel
   Future<void> deleteUser(String id);

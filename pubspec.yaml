@@ -35,6 +35,8 @@ dependencies:
   external_path: ^1.0.3
   permission_handler: ^10.4.3
   file_picker: ^5.5.0
+  bloc: ^8.1.2
+  meta: ^1.9.1
 
 dev_dependencies:
   flutter_test:
@@ -81,4 +83,11 @@ flutter:
     - asset: assets/fonts/Montserrat/Montserrat-Medium.ttf
       weight: 500
     - asset: assets/fonts/Montserrat/Montserrat-Bold.ttf
+      weight: 700
+  - family: SFProDisplay
+    fonts:
+    - asset: assets/fonts/SFProDisplay/SF-Pro-Display-Regular.otf
+    - asset: assets/fonts/SFProDisplay/SF-Pro-Display-Medium.otf
+      weight: 500
+    - asset: assets/fonts/SFProDisplay/SF-Pro-Display-Bold.otf
       weight: 700

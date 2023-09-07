@@ -124,7 +124,7 @@ class ApplicationRepository {
       _storageAPI.projectStream(projectIdOnView);
   Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
   Stream<SubTaskModel> subTaskStream({String? subTaskId}) =>
-      _storageAPI.subTaskModelStream(subTaskId?? subTaskIdOnView);
+      _storageAPI.subTaskModelStream(subTaskId ?? subTaskIdOnView);
   Stream<List<String>> get projectInvitationsStreamInUser => _storageAPI
       .userStreamByIdInUser(userId)
       .map((event) => event.projectInvitations);
@@ -643,6 +643,75 @@ class ApplicationRepository {
     );
   }
 
+  Future<void> updateFilesWithoutOverridePermissionToSubTask({
+    required List<File> files,
+  }) async {
+    final fileUrls =
+        files.map((e) => "files/${e.path.split('/').last}").toList();
+    final currentFileUrls = await _storageAPI
+        .subTaskModelStream(subTaskIdOnView)
+        .first
+        .then((value) => value.files);
+    final needToUpdateFileUrls = fileUrls
+        .where((element) => !currentFileUrls.contains(element))
+        .toList();
+    final needToUpdateFiles = files
+        .where((element) => needToUpdateFileUrls
+            .contains('files/${element.path.split('/').last}'))
+        .toList();
+
+    for (var file in needToUpdateFiles.map(
+      (e) => {
+        "path": "files/${e.path.split('/').last}",
+        "data": e,
+      },
+    )) {
+      await FirebaseFirestoreConfigs.storageRef
+          .child(file["path"] as String)
+          .putFile(file["data"] as File);
+    }
+
+    await Future.wait<void>(
+      [
+        _storageAPI.updateFilesInSubTask(subTaskIdOnView, needToUpdateFileUrls),
+      ],
+    );
+  }
+
+  Future<void> updateFilesWithOverridePermissionToSubTask({
+    required List<File> files,
+  }) async {
+    final fileUrls =
+        files.map((e) => "files/${e.path.split('/').last}").toList();
+    for (var file in files.map(
+      (e) => {
+        "path": "files/${e.path.split('/').last}",
+        "data": e,
+      },
+    )) {
+      await FirebaseFirestoreConfigs.storageRef
+          .child(file["path"] as String)
+          .putFile(file["data"] as File);
+    }
+    await Future.wait<void>(
+      [
+        _storageAPI.updateFilesInSubTask(subTaskIdOnView, fileUrls),
+      ],
+    );
+  }
+
+  Future<void> removeFilesFromSubTask({
+    required List<String> fileUrls,
+  }) async {
+    await Future.wait<void>(
+      [
+        for (var fileUrl in fileUrls)
+          FirebaseFirestoreConfigs.storageRef.child(fileUrl).delete(),
+        _storageAPI.removeFilesInSubTask(subTaskIdOnView, fileUrls),
+      ],
+    );
+  }
+
   // Task / Add new category
   Future<void> createNewTask({
     required String name,
@@ -723,22 +792,20 @@ class ApplicationRepository {
   }
 
   Future<void> createNewComment({
-    required String ofWhichSubTaskId,
     required String comment,
-    required String commenter,
   }) async {
     final commentModel = CommentModel(
       id: const UuidV8().generate(),
       comment: comment,
-      commenter: commenter,
+      commenter: userId,
       date: DateTime.now(),
       solved: false,
       isReplied: false,
-      repliedToUsername: '',
+      repliedToUsername: username,
     );
     await Future.wait<void>([
       _storageAPI.createNewComment(commentModel),
-      _storageAPI.updateCommentsInSubTask(ofWhichSubTaskId, [commentModel.id]),
+      _storageAPI.updateCommentsInSubTask(subTaskIdOnView, [commentModel.id]),
     ]);
   }
 
@@ -756,13 +823,34 @@ class ApplicationRepository {
 
   Future<void> repliedToComment({
     required String repliedCommentId,
-    required String replyingCommentId,
+    required String repliedToUsername,
+    required String message,
   }) async {
-    await _storageAPI.updateIsRepliedInComment(repliedCommentId, true);
-    await _storageAPI.updateReplyCommentIdInComment(
-      repliedCommentId,
-      replyingCommentId,
+    final commentModel = CommentModel(
+      id: const UuidV8().generate(),
+      comment: message,
+      commenter: userId,
+      date: DateTime.now(),
+      solved: false,
+      isReplied: true,
+      repliedToUsername: repliedToUsername,
     );
+
+    debugPrint(commentModel.toString());
+    await Future.wait<void>(
+      [
+        _storageAPI.updateIsRepliedInComment(repliedCommentId, false),
+        _storageAPI.createNewComment(commentModel),
+        _storageAPI.updateCommentsInSubTask(subTaskIdOnView, [commentModel.id]),
+      ],
+    );
+  }
+
+  Future<void> removeCommentOutOfSubTask({required String commentId}) async {
+    await Future.wait<void>([
+      _storageAPI.removeCommentsInSubTask(subTaskIdOnView, [commentId]),
+      _storageAPI.deleteComment(commentId),
+    ]);
   }
   // Task / View files
 

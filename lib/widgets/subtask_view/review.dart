@@ -20,7 +20,9 @@ class Review extends StatelessWidget {
       children: [
         Text(
           'Review',
-          style: context.textTheme.labelMedium,
+          style: context.textTheme.displaySmall?.copyWith(
+            fontSize: 16.0,
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,7 +132,7 @@ class Review extends StatelessWidget {
         SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
         isLeader
             ? DescriptionInput(
-              forLeaderComment: true,
+                forLeaderComment: true,
                 label: "Leader's Review",
                 showLabel: true,
                 initialValue: leaderReview,

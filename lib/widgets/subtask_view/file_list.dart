@@ -25,6 +25,36 @@ class FileList extends StatelessWidget {
                 fontSize: 16.0,
               ),
             ),
+            if (context.watch<SubtaskViewBloc>().state
+                is SubTaskViewSuccessPendingToUpdateFiles) ...[
+              const SizedBox(
+                width: 10.0,
+              ),
+              SizedBox(
+                height: 15.0,
+                width: 15.0,
+                child: CustomCircularProgressIndicator(
+                  color: context.colorScheme.primary,
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: SizedBox(
+                  width: context.mediaQuery.size.width * 0.5,
+                  child: DefaultTextStyle.merge(
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      fontSize: 13.0,
+                    ),
+                    child: const Text(
+                      'Please wait, updating files is in progress',
+                    ),
+                  ),
+                ),
+              ),
+            ],
             if (isLeader || isAssigned) ...[
               const Spacer(),
               InkWell(
@@ -64,7 +94,7 @@ class FileList extends StatelessWidget {
                     ),
                     // underlined text
                     Text(
-                      files[index],
+                      files[index].split('/').last,
                       style: context.textTheme.bodyMedium?.copyWith(
                         shadows: [
                           const Shadow(color: BLACK, offset: Offset(0, -3))
@@ -80,8 +110,7 @@ class FileList extends StatelessWidget {
                       color: context.colorScheme.error,
                       visualDensity: VisualDensity.compact,
                       padding: EdgeInsets.zero,
-                      splashColor:
-                          context.colorScheme.error.withOpacity(0.2),
+                      splashColor: context.colorScheme.error.withOpacity(0.2),
                       splashRadius: 10.0,
                       onPressed: () => context.read<SubtaskViewBloc>().add(
                             SubTaskDeleteAttachmentEvent(

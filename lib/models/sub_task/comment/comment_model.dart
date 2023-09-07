@@ -42,7 +42,7 @@ class CommentModel extends Base {
   final DateTime date;
   @JsonKey(defaultValue: false)
   final bool solved;
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   final bool isReplied;
   @JsonKey(required: true)
   final String repliedToUsername;

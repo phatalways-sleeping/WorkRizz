@@ -8,6 +8,7 @@ import 'package:task_managing_application/widgets/shimmer/shimmer_config.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_loading.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_wrapper.dart';
 import 'package:task_managing_application/widgets/subtask_view/comment/stream_custom_avatar_widget.dart';
+import 'package:task_managing_application/widgets/widgets.dart';
 
 part 'comment_entry.dart';
 part 'comment_widget.dart';
@@ -25,7 +26,7 @@ class Comment extends StatefulWidget {
   final List<String> comments;
 
   @override
-  _CommentState createState() => _CommentState();
+  State<Comment> createState() => _CommentState();
 }
 
 class _CommentState extends State<Comment> {
@@ -35,12 +36,26 @@ class _CommentState extends State<Comment> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               'Comment (${widget.comments.length})',
-              style: context.textTheme.labelMedium,
+              style: context.textTheme.displaySmall?.copyWith(
+                fontSize: 16.0,
+              ),
             ),
+            if (context.watch<SubtaskViewBloc>().state
+                is SubTaskViewSuccessPendingToUpdateComment) ...[
+              const SizedBox(width: 10.0),
+              SizedBox(
+                width: 15.0,
+                height: 15.0,
+                child: CustomCircularProgressIndicator(
+                  color: context.colorScheme.primary,
+                ),
+              ),
+            ],
+            const Spacer(),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -51,6 +66,7 @@ class _CommentState extends State<Comment> {
                   child: Text(
                     'Write a Comment',
                     style: context.textTheme.titleSmall?.copyWith(
+                      fontSize: 14.0,
                       decoration: TextDecoration.underline,
                       shadows: [
                         const Shadow(color: PURPLE, offset: Offset(0, -3))
@@ -65,18 +81,10 @@ class _CommentState extends State<Comment> {
             ),
           ],
         ),
-        if (context.watch<SubtaskViewBloc>().state
-            is SubTaskViewSuccessRequestComment || context
-                .watch<SubtaskViewBloc>()
-                .state
-                is SubTaskViewSuccessRequestReplyComment)
+        if (context.read<SubtaskViewBloc>().state
+            is SubTaskViewSuccessRequestComment)
           CommentEntryWidget(
-            replyUsername: (context.watch<SubtaskViewBloc>().state
-                    is SubTaskViewSuccessRequestComment)
-                ? ''
-                : (context.watch<SubtaskViewBloc>().state
-                        as SubTaskViewSuccessRequestReplyComment)
-                    .replyUsername,
+            replyUsername: '',
             onCommentAdded: (context, controller) =>
                 context.read<SubtaskViewBloc>().add(
                       SubTaskInputSubTaskCommentEvent(
@@ -87,6 +95,23 @@ class _CommentState extends State<Comment> {
                 context.read<SubtaskViewBloc>().add(
                       const SubTaskCancelRequestInputSubTaskCommentEvent(),
                     ),
+          ),
+        if (context.read<SubtaskViewBloc>().state
+            is SubTaskViewSuccessRequestReplyComment)
+          CommentEntryWidget(
+            onCommentAdded: (context, controller) =>
+                context.read<SubtaskViewBloc>().add(
+                      SubTaskReplyToCommentEvent(
+                        comment: controller.text.trim(),
+                      ),
+                    ),
+            onCommentCancelled: (context) =>
+                context.read<SubtaskViewBloc>().add(
+                      const SubTaskCancelRequestInputSubTaskCommentEvent(),
+                    ),
+            replyUsername: (context.watch<SubtaskViewBloc>().state
+                    as SubTaskViewSuccessRequestReplyComment)
+                .replyUsername,
           ),
         ListView.builder(
           shrinkWrap: true,
@@ -110,7 +135,7 @@ class _CommentState extends State<Comment> {
                 ),
               ),
               confirmDismiss: (direction) {
-                return showDialog<bool>(
+                return showDialog(
                   context: context,
                   builder: (context) => CustomDialog(
                     title: "Remove this Comment",
@@ -127,7 +152,14 @@ class _CommentState extends State<Comment> {
                       Navigator.of(context).pop(true);
                     },
                   ),
-                );
+                ).then((value) async {
+                  if (value != null && value) {
+                    context.read<SubtaskViewBloc>().add(
+                        SubTaskRemoveSubTaskCommentEvent(
+                            widget.comments[index]));
+                  }
+                  return null;
+                });
               },
               dismissThresholds: const {
                 DismissDirection.endToStart: 0.1,
@@ -144,20 +176,9 @@ class _CommentState extends State<Comment> {
                 //     content: const Text("Remove successfully!")));
               },
               key: UniqueKey(),
-              child: FutureBuilder(
-                future: context
-                    .read<SubtaskViewBloc>()
-                    .ownerUsernameOF(widget.comments[index]),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError || !snapshot.hasData) {
-                    return const SizedBox.shrink();
-                  }
-                  return CommentWidget(
-                    commentId: widget.comments[index],
-                    isAssigned: widget.isAssigned,
-                    commentOwnerUsername: snapshot.data as String,
-                  );
-                },
+              child: CommentWidget(
+                commentId: widget.comments[index],
+                isAssigned: widget.isAssigned,
               ),
             );
           },

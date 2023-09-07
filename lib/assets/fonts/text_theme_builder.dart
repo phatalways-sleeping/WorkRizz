@@ -89,4 +89,21 @@ class TextThemeBuilder {
     labelMedium: labelMedium.copyWith(fontFamily: 'IBMPlexSans'),
     labelSmall: labelSmall.copyWith(fontFamily: 'IBMPlexSans'),
   );
+
+  static final TextTheme sfProDisplayTextTheme = TextTheme(
+    displayLarge: displayLarge.copyWith(fontFamily: 'SFProDisplay'),
+    displayMedium: displayMedium.copyWith(fontFamily: 'SFProDisplay'),
+    displaySmall: displaySmall.copyWith(fontFamily: 'SFProDisplay'),
+    headlineMedium: headlineMedium.copyWith(fontFamily: 'SFProDisplay'),
+    headlineSmall: headlineSmall.copyWith(fontFamily: 'SFProDisplay'),
+    titleLarge: titleLarge.copyWith(fontFamily: 'SFProDisplay'),
+    titleMedium: titleMedium.copyWith(fontFamily: 'SFProDisplay'),
+    titleSmall: titleSmall.copyWith(fontFamily: 'SFProDisplay'),
+    bodyLarge: bodyLarge.copyWith(fontFamily: 'SFProDisplay'),
+    bodyMedium: bodyMedium.copyWith(fontFamily: 'SFProDisplay'),
+    bodySmall: bodySmall.copyWith(fontFamily: 'SFProDisplay'),
+    labelLarge: labelLarge.copyWith(fontFamily: 'SFProDisplay'),
+    labelMedium: labelMedium.copyWith(fontFamily: 'SFProDisplay'),
+    labelSmall: labelSmall.copyWith(fontFamily: 'SFProDisplay'),
+  );
 }

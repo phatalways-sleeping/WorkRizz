@@ -6,9 +6,7 @@ import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_
 import 'package:task_managing_application/widgets/custom_avatar_widget/future_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:badges/badges.dart' as badges;
-import 'package:task_managing_application/widgets/shimmer/shimmer_config.dart';
-import 'package:task_managing_application/widgets/shimmer/shimmer_loading.dart';
-import 'package:task_managing_application/widgets/shimmer/shimmer_wrapper.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_avatar.dart';
 
 class StreamCustomAvatarWidget extends StatefulWidget {
   const StreamCustomAvatarWidget({
@@ -36,20 +34,8 @@ class _StreamCustomAvatarWidgetState extends State<StreamCustomAvatarWidget> {
       future: context.read<SubtaskViewBloc>().imageUrlOf(widget.userId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: Shimmer(
-              linearGradient: shimmer_gradient,
-              child: ShimmerLoading(
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
+          return const ShimmerAvatar(
+            avatarRatio: 0.06,
           );
         }
         if (snapshot.hasError) {
@@ -91,18 +77,6 @@ class _StreamCustomAvatarWidgetState extends State<StreamCustomAvatarWidget> {
                 badgeAnimation: const badges.BadgeAnimation.scale(
                   animationDuration: Duration(milliseconds: 800),
                 ),
-                // badgeContent: DefaultTextStyle.merge(
-                //   style: context.textTheme.bodySmall,
-                //   child: Text(
-                //     state.notifications!.length.toString(),
-                //     style: widget.badgeTextStyle ??
-                //         TextStyle(
-                //           color: context.colorScheme.onSecondary,
-                //           fontSize: 14.0,
-                //           fontWeight: FontWeight.w500,
-                //         ),
-                //   ),
-                // ),
                 child: FutureAvatarWidget(
                   avatarRatio: widget.avatarRatio,
                   radiusRatio: widget.radiusRatio,
@@ -111,20 +85,12 @@ class _StreamCustomAvatarWidgetState extends State<StreamCustomAvatarWidget> {
                 ),
               );
             }
-            return Center(
-                child: Shimmer(
-              linearGradient: shimmer_gradient,
-              child: ShimmerLoading(
-                child: Container(
-                  width: 12.0,
-                  height: 12.0,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.black,
-                  ),
-                ),
+            return const Center(
+              child: ShimmerAvatar(
+                avatarRatio: 0.04,
+                radiusRatio: 0.02,
               ),
-            ));
+            );
           },
         );
       },

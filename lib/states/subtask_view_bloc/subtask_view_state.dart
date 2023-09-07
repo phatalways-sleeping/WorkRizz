@@ -30,7 +30,7 @@ final class SubtaskViewSuccess extends SubtaskViewState {
     required this.leaderComment,
   });
 
-  factory SubtaskViewSuccess.from(SubTaskViewSuccessRequestComment state) =>
+  factory SubtaskViewSuccess.from(SubtaskViewSuccess state) =>
       SubtaskViewSuccess(
         name: state.name,
         description: state.description,
@@ -161,8 +161,7 @@ final class SubTaskViewSuccessRequestComment extends SubtaskViewSuccess {
   }
 }
 
-final class SubTaskViewSuccessRequestReplyComment
-    extends SubTaskViewSuccessRequestComment {
+final class SubTaskViewSuccessRequestReplyComment extends SubtaskViewSuccess {
   const SubTaskViewSuccessRequestReplyComment({
     required super.name,
     required super.description,
@@ -176,11 +175,13 @@ final class SubTaskViewSuccessRequestReplyComment
     required super.grade,
     required super.leaderComment,
     required this.replyUsername,
+    required this.replyCommentId,
   });
 
   factory SubTaskViewSuccessRequestReplyComment.from(
     SubtaskViewSuccess state,
     String replyUsername,
+    String replyCommentId,
   ) =>
       SubTaskViewSuccessRequestReplyComment(
         name: state.name,
@@ -195,12 +196,14 @@ final class SubTaskViewSuccessRequestReplyComment
         grade: state.grade,
         leaderComment: state.leaderComment,
         replyUsername: replyUsername,
+        replyCommentId: replyCommentId,
       );
 
   final String replyUsername;
+  final String replyCommentId;
 
   @override
-  List<Object> get props => [...super.props, replyUsername];
+  List<Object> get props => [...super.props, replyUsername, replyCommentId];
 
   @override
   SubTaskViewSuccessRequestReplyComment copyWith({
@@ -216,6 +219,7 @@ final class SubTaskViewSuccessRequestReplyComment
     int? grade,
     String? leaderComment,
     String? replyUsername,
+    String? replyCommentId,
   }) {
     return SubTaskViewSuccessRequestReplyComment(
       name: name ?? super.name,
@@ -230,9 +234,198 @@ final class SubTaskViewSuccessRequestReplyComment
       grade: grade ?? super.grade,
       leaderComment: leaderComment ?? super.leaderComment,
       replyUsername: replyUsername ?? this.replyUsername,
+      replyCommentId: replyCommentId ?? this.replyCommentId,
     );
   }
 }
+
+final class SubTaskViewSuccessAskPermissionToOverrideFiles
+    extends SubtaskViewSuccess {
+  const SubTaskViewSuccessAskPermissionToOverrideFiles({
+    required super.name,
+    required super.description,
+    required super.assignee,
+    required super.dueDate,
+    required super.isCompleted,
+    required super.points,
+    required super.files,
+    required super.comments,
+    required super.progress,
+    required super.grade,
+    required super.leaderComment,
+    required this.newfiles,
+  });
+
+  final List<File> newfiles;
+
+  factory SubTaskViewSuccessAskPermissionToOverrideFiles.from(
+    SubtaskViewSuccess state, List<File> newFiles,
+  ) =>
+      SubTaskViewSuccessAskPermissionToOverrideFiles(
+        name: state.name,
+        description: state.description,
+        assignee: state.assignee,
+        dueDate: state.dueDate,
+        isCompleted: state.isCompleted,
+        points: state.points,
+        files: state.files,
+        comments: state.comments,
+        progress: state.progress,
+        grade: state.grade,
+        leaderComment: state.leaderComment,
+        newfiles: newFiles,
+      );
+
+  @override
+  SubTaskViewSuccessAskPermissionToOverrideFiles copyWith({
+    String? name,
+    String? description,
+    String? assignee,
+    DateTime? dueDate,
+    bool? isCompleted,
+    int? points,
+    List<String>? files,
+    List<String>? comments,
+    double? progress,
+    int? grade,
+    String? leaderComment,
+    List<File>? newfiles,
+  }) {
+    return SubTaskViewSuccessAskPermissionToOverrideFiles(
+      name: name ?? super.name,
+      description: description ?? super.description,
+      assignee: assignee ?? super.assignee,
+      dueDate: dueDate ?? super.dueDate,
+      isCompleted: isCompleted ?? super.isCompleted,
+      points: points ?? super.points,
+      files: files ?? super.files,
+      comments: comments ?? super.comments,
+      progress: progress ?? super.progress,
+      grade: grade ?? super.grade,
+      leaderComment: leaderComment ?? super.leaderComment,
+      newfiles: newfiles ?? this.newfiles,
+    );
+  }
+}
+
+final class SubTaskViewSuccessPendingToUpdateFiles extends SubtaskViewSuccess {
+  const SubTaskViewSuccessPendingToUpdateFiles({
+    required super.name,
+    required super.description,
+    required super.assignee,
+    required super.dueDate,
+    required super.isCompleted,
+    required super.points,
+    required super.files,
+    required super.comments,
+    required super.progress,
+    required super.grade,
+    required super.leaderComment,
+  });
+
+  factory SubTaskViewSuccessPendingToUpdateFiles.from(SubtaskViewSuccess state) =>
+      SubTaskViewSuccessPendingToUpdateFiles(
+        name: state.name,
+        description: state.description,
+        assignee: state.assignee,
+        dueDate: state.dueDate,
+        isCompleted: state.isCompleted,
+        points: state.points,
+        files: state.files,
+        comments: state.comments,
+        progress: state.progress,
+        grade: state.grade,
+        leaderComment: state.leaderComment,
+      );
+
+  @override
+  SubTaskViewSuccessPendingToUpdateFiles copyWith(
+      {String? name,
+      String? description,
+      String? assignee,
+      DateTime? dueDate,
+      bool? isCompleted,
+      int? points,
+      List<String>? files,
+      List<String>? comments,
+      double? progress,
+      int? grade,
+      String? leaderComment}) {
+    return SubTaskViewSuccessPendingToUpdateFiles(
+      name: name ?? super.name,
+      description: description ?? super.description,
+      assignee: assignee ?? super.assignee,
+      dueDate: dueDate ?? super.dueDate,
+      isCompleted: isCompleted ?? super.isCompleted,
+      points: points ?? super.points,
+      files: files ?? super.files,
+      comments: comments ?? super.comments,
+      progress: progress ?? super.progress,
+      grade: grade ?? super.grade,
+      leaderComment: leaderComment ?? super.leaderComment,
+    );
+  }
+}
+
+final class SubTaskViewSuccessPendingToUpdateComment extends SubtaskViewSuccess {
+  const SubTaskViewSuccessPendingToUpdateComment({
+    required super.name,
+    required super.description,
+    required super.assignee,
+    required super.dueDate,
+    required super.isCompleted,
+    required super.points,
+    required super.files,
+    required super.comments,
+    required super.progress,
+    required super.grade,
+    required super.leaderComment,
+  });
+
+  factory SubTaskViewSuccessPendingToUpdateComment.from(SubtaskViewSuccess state) =>
+      SubTaskViewSuccessPendingToUpdateComment(
+        name: state.name,
+        description: state.description,
+        assignee: state.assignee,
+        dueDate: state.dueDate,
+        isCompleted: state.isCompleted,
+        points: state.points,
+        files: state.files,
+        comments: state.comments,
+        progress: state.progress,
+        grade: state.grade,
+        leaderComment: state.leaderComment,
+      );
+
+  @override
+  SubTaskViewSuccessPendingToUpdateComment copyWith(
+      {String? name,
+      String? description,
+      String? assignee,
+      DateTime? dueDate,
+      bool? isCompleted,
+      int? points,
+      List<String>? files,
+      List<String>? comments,
+      double? progress,
+      int? grade,
+      String? leaderComment}) {
+    return SubTaskViewSuccessPendingToUpdateComment(
+      name: name ?? super.name,
+      description: description ?? super.description,
+      assignee: assignee ?? super.assignee,
+      dueDate: dueDate ?? super.dueDate,
+      isCompleted: isCompleted ?? super.isCompleted,
+      points: points ?? super.points,
+      files: files ?? super.files,
+      comments: comments ?? super.comments,
+      progress: progress ?? super.progress,
+      grade: grade ?? super.grade,
+      leaderComment: leaderComment ?? super.leaderComment,
+    );
+  }
+}
+
 
 abstract class SubtaskViewFailure extends SubtaskViewState {
   const SubtaskViewFailure(this.error);

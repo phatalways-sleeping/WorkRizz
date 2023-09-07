@@ -407,9 +407,9 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> updateIsRepliedInComment(String id, bool isReplied) =>
       UpdateComment.updateIsRepliedInComment(id, isReplied);
   @override
-  Future<void> updateReplyCommentIdInComment(
-          String id, String replyCommentId) =>
-      UpdateComment.updateReplyCommentIdInComment(id, replyCommentId);
+  Future<void> updateRepliedToUsernameInComment(
+          String id, String repliedToUsername) =>
+      UpdateComment.updateRepliedToUsernameInComment(id, repliedToUsername);
   // DELETE
   // - UserDataModel
   @override

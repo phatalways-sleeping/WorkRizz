@@ -18,12 +18,25 @@ class CommentEntryWidget extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _CommentEntryWidgetState createState() => _CommentEntryWidgetState();
+  State<CommentEntryWidget> createState() => _CommentEntryWidgetState();
 }
 
 class _CommentEntryWidgetState extends State<CommentEntryWidget> {
-  final TextEditingController _commentController = TextEditingController();
+  late final TextEditingController _commentController = TextEditingController();
+  late final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    _focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _commentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +48,11 @@ class _CommentEntryWidgetState extends State<CommentEntryWidget> {
         children: [
           TextField(
             controller: _commentController,
+            focusNode: _focusNode,
             decoration: InputDecoration(
               hintText: 'Enter your comment...',
               labelText: widget.replyUsername.isNotEmpty
-                  ? 'Reply to @${widget.replyUsername}'
+                  ? 'Reply to ${widget.replyUsername}'
                   : null,
               labelStyle: context.textTheme.titleMedium,
               border: const OutlineInputBorder(
@@ -134,11 +148,5 @@ class _CommentEntryWidgetState extends State<CommentEntryWidget> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _commentController.dispose();
-    super.dispose();
   }
 }

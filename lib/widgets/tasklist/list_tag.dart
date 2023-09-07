@@ -12,7 +12,7 @@ class ListTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: context.mediaQuery.size.width * RATIO_PADDING * 2.0,
+        height: context.mediaQuery.size.width * RATIO_PADDING * 2.5,
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
@@ -25,14 +25,10 @@ class ListTag extends StatelessWidget {
               ),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                      left: context.mediaQuery.size.width * RATIO_PADDING + 5.0,
-                    ),
-                    child: ProjectTag(
-                      color: snapshot.data as Color,
-                      name: tags[index].title,
-                    ),
+                  return ProjectTagWidget(
+                    color: snapshot.data as Color,
+                    tag: tags[index],
+                    forProjectView: false,
                   );
                 }
                 if (snapshot.hasError) {

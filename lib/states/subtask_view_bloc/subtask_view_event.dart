@@ -42,6 +42,24 @@ final class SubTaskInputAttachmentEvent extends SubtaskViewEvent {
   const SubTaskInputAttachmentEvent();
 }
 
+final class SubTaskAcceptOverrideAttachments extends SubtaskViewEvent {
+  const SubTaskAcceptOverrideAttachments(this.files);
+
+  final List<File> files;
+
+  @override
+  List<Object> get props => [...super.props, files];
+}
+
+final class SubTaskRejectOverrideAttachments extends SubtaskViewEvent {
+  const SubTaskRejectOverrideAttachments(this.files);
+
+  final List<File> files;
+
+  @override
+  List<Object> get props => [...super.props, files];
+}
+
 final class SubTaskDeleteAttachmentEvent extends SubtaskViewEvent {
   const SubTaskDeleteAttachmentEvent(this.attachment);
 
@@ -94,7 +112,8 @@ final class SubTaskRequestInputSubTaskCommentEvent extends SubtaskViewEvent {
   List<Object> get props => [...super.props];
 }
 
-final class SubTaskCancelRequestInputSubTaskCommentEvent extends SubtaskViewEvent {
+final class SubTaskCancelRequestInputSubTaskCommentEvent
+    extends SubtaskViewEvent {
   const SubTaskCancelRequestInputSubTaskCommentEvent();
 
   @override
@@ -110,15 +129,26 @@ final class SubTaskInputSubTaskCommentEvent extends SubtaskViewEvent {
   List<Object> get props => [...super.props, comment];
 }
 
+final class SubTaskRemoveSubTaskCommentEvent extends SubtaskViewEvent {
+  const SubTaskRemoveSubTaskCommentEvent(this.commentId);
+
+  final String commentId;
+
+  @override
+  List<Object> get props => [...super.props, commentId];
+}
+
 final class SubTaskRequestReplyToCommentEvent extends SubtaskViewEvent {
   const SubTaskRequestReplyToCommentEvent({
     required this.replyToUsername,
+    required this.commentId,
   });
 
   final String replyToUsername;
+  final String commentId;
 
   @override
-  List<Object> get props => [...super.props, replyToUsername];
+  List<Object> get props => [...super.props, replyToUsername, commentId];
 }
 
 final class SubTaskReplyToCommentEvent extends SubtaskViewEvent {
@@ -133,20 +163,19 @@ final class SubTaskReplyToCommentEvent extends SubtaskViewEvent {
 }
 
 final class SubTaskMarkCommentSolvedEvent extends SubtaskViewEvent {
-  const SubTaskMarkCommentSolvedEvent(this.comment);
+  const SubTaskMarkCommentSolvedEvent(this.commentId);
 
-  final CommentModel comment;
+  final String commentId;
 
   @override
-  List<Object> get props => [...super.props, comment];
+  List<Object> get props => [...super.props, commentId];
 }
 
-
 final class SubTaskMarkCommentUnsolvedEvent extends SubtaskViewEvent {
-  const SubTaskMarkCommentUnsolvedEvent(this.comment);
+  const SubTaskMarkCommentUnsolvedEvent(this.commentId);
 
-  final CommentModel comment;
+  final String commentId;
 
   @override
-  List<Object> get props => [...super.props, comment];
+  List<Object> get props => [...super.props, commentId];
 }

@@ -15,8 +15,8 @@ final class UpdateComment extends Update {
         "isReplied": isReplied,
       });
 
-  static Future<void> updateReplyCommentIdInComment(String id, String replyCommentId) =>
+  static Future<void> updateRepliedToUsernameInComment(String id, String repliedToUsername) =>
       FirebaseFirestoreConfigs.subTaskCommentsCollection.doc(id).update({
-        "replyCommentId": replyCommentId,
+        "repliedToUsername": repliedToUsername,
       });
 }

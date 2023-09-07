@@ -35,6 +35,7 @@ class _DescriptionInputState extends State<DescriptionInput> {
       ),
     );
     _titleController.text = widget.initialValue;
+    _focusNode.requestFocus();
     super.initState();
   }
 
@@ -80,7 +81,11 @@ class _DescriptionInputState extends State<DescriptionInput> {
           ),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(MEDIUM_CORNER)),
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              MEDIUM_CORNER,
+            ),
+          ),
           borderSide: BorderSide(
             color: BLACK,
             width: 1.0,

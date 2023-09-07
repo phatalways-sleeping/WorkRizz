@@ -56,26 +56,3 @@ class ShimmerSubTaskWidget extends StatelessWidget {
     );
   }
 }
-
-class ShimmerAvatar extends StatelessWidget {
-  const ShimmerAvatar({super.key, required this.size});
-
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer(
-      linearGradient: shimmer_gradient,
-      child: ShimmerLoading(
-        child: Container(
-          width: size,
-          height: size,
-          decoration: const BoxDecoration(
-            color: Colors.black,
-            shape: BoxShape.circle,
-          ),
-        ),
-      ),
-    );
-  }
-}

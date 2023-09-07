@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
 
-class ProjectTagButton extends StatelessWidget {
-  const ProjectTagButton({
+class ProjectFilterOptionButton extends StatelessWidget {
+  const ProjectFilterOptionButton({
     super.key,
     required this.title,
     required this.amount,
@@ -36,7 +36,7 @@ class ProjectTagButton extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints.loose(
           Size(
-            width ?? context.mediaQuery.size.width * 0.35,
+            width ?? context.mediaQuery.size.width * 0.40,
             height ?? context.mediaQuery.size.height * 0.18,
           ),
         ),

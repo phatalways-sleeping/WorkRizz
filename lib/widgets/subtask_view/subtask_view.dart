@@ -7,6 +7,7 @@ import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_
 import 'package:task_managing_application/widgets/custom_avatar_widget/future_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_snackbar.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/override_files_dialog.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
 import 'package:task_managing_application/widgets/subtask_view/input/description_input.dart';
@@ -36,7 +37,7 @@ class _SubTaskViewState extends State<SubTaskView> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SubtaskViewBloc, SubtaskViewState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is SubtaskViewFailureDueToNetwork) {
           final snackBar = createErrorSnackBar(
             context: context,
@@ -69,6 +70,22 @@ class _SubTaskViewState extends State<SubTaskView> {
             },
           );
         }
+        if (state is SubTaskViewSuccessAskPermissionToOverrideFiles) {
+          await showOverridePermissonDialog(
+            onAccept: (context) => context.read<SubtaskViewBloc>().add(
+                  SubTaskAcceptOverrideAttachments(
+                    state.newfiles,
+                  ),
+                ),
+            onDecline: (context) => context.read<SubtaskViewBloc>().add(
+                  SubTaskRejectOverrideAttachments(state.newfiles),
+                ),
+            onError: (context) => context.read<SubtaskViewBloc>().add(
+                  const SubTaskSubscribeEvent(),
+                ),
+            context: context,
+          );
+        }
       },
       builder: (context, state) {
         if (state is SubtaskViewInitial) {
@@ -76,17 +93,19 @@ class _SubTaskViewState extends State<SubTaskView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const CustomCircularProgressIndicator(),
+                CustomCircularProgressIndicator(
+                  color: context.colorScheme.primary,
+                ),
                 const SizedBox(
                   height: 10.0,
                 ),
                 DefaultTextStyle.merge(
                   style: context.textTheme.displaySmall,
-                  child: const Text(
+                  child: Text(
                     'Please wait, we are loading your data...',
                     style: TextStyle(
-                      color: BLACK,
-                      fontSize: 22.0,
+                      color: context.colorScheme.tertiary,
+                      fontSize: 16.0,
                     ),
                   ),
                 ),
@@ -259,7 +278,10 @@ class _SubTaskViewState extends State<SubTaskView> {
                               children: [
                                 Text(
                                   'Due Date',
-                                  style: context.textTheme.labelMedium,
+                                  style:
+                                      context.textTheme.displaySmall?.copyWith(
+                                    fontSize: 16.0,
+                                  ),
                                 ),
                                 widget.isLeader
                                     ? Column(
@@ -309,8 +331,11 @@ class _SubTaskViewState extends State<SubTaskView> {
                                                     RATIO_PADDING),
                                             Text(
                                               "${convertMonthToString((state.dueDate).month)} ${(state.dueDate).day}${(state.dueDate).day == 1 ? 'st' : (state.dueDate).day == 2 ? 'nd' : (state.dueDate).day == 3 ? 'rd' : 'th'} ${(state.dueDate).year}",
-                                              style:
-                                                  context.textTheme.titleSmall,
+                                              style: context
+                                                  .textTheme.titleSmall
+                                                  ?.copyWith(
+                                                fontSize: 12.0,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -320,15 +345,21 @@ class _SubTaskViewState extends State<SubTaskView> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Points',
-                                    style: context.textTheme.labelMedium),
+                                Text(
+                                  'Points',
+                                  style:
+                                      context.textTheme.displaySmall?.copyWith(
+                                    fontSize: 16.0,
+                                  ),
+                                ),
                                 widget.isLeader
                                     ? Container(
                                         margin: EdgeInsets.only(
-                                            top: context.mediaQuery.size.width *
-                                                0.01),
-                                        width:
-                                            context.mediaQuery.size.width * 0.4,
+                                          top: context.mediaQuery.size.width *
+                                              0.01,
+                                        ),
+                                        width: context.mediaQuery.size.width *
+                                            0.45,
                                         child: ScoreInput(
                                           initialValue: state.points.toString(),
                                           listener: (context, controller) =>
@@ -375,8 +406,11 @@ class _SubTaskViewState extends State<SubTaskView> {
                                             ),
                                             Text(
                                               '${state.points}pt',
-                                              style:
-                                                  context.textTheme.titleSmall,
+                                              style: context
+                                                  .textTheme.titleSmall
+                                                  ?.copyWith(
+                                                fontSize: 12.0,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -391,8 +425,12 @@ class _SubTaskViewState extends State<SubTaskView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Description',
-                                style: context.textTheme.labelMedium),
+                            Text(
+                              'Description',
+                              style: context.textTheme.displaySmall?.copyWith(
+                                fontSize: 16.0,
+                              ),
+                            ),
                             widget.isLeader
                                 ? Column(
                                     children: [
@@ -458,7 +496,9 @@ class _SubTaskViewState extends State<SubTaskView> {
                           isLeader: widget.isLeader,
                           comments: state.comments,
                         ),
-                        const SizedBox(),
+                        SizedBox(
+                          height: context.mediaQuery.size.width * RATIO_PADDING,
+                        ),
                         Review(
                           isLeader: widget.isLeader,
                           progress: state.progress,

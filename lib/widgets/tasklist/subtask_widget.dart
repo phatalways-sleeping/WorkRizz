@@ -171,10 +171,14 @@ class SubTaskInfo extends StatelessWidget {
               .imageUrl(subTaskSmallInformation.assigneeImageUrl),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return const ShimmerAvatar(size: 24.0);
+              return const ShimmerAvatar(
+                radiusRatio: 0.06,
+              );
             }
             if (!snapshot.hasData) {
-              return const ShimmerAvatar(size: 24.0);
+              return const ShimmerAvatar(
+                radiusRatio: 0.06,
+              );
             }
             return CustomAvatarWidget(
               imageUrl: snapshot.data as String,

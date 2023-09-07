@@ -12,7 +12,7 @@ mixin LightTheme {
   static const Color floatingButtonColor = Color(0xFFEAB0FC);
 
   static final ThemeData theme = ThemeData(
-    textTheme: TextThemeBuilder.robotoTextTheme,
+    textTheme: TextThemeBuilder.montserratTextTheme,
     buttonTheme: const ButtonThemeData(
       buttonColor: buttonColor,
       textTheme: ButtonTextTheme.primary,

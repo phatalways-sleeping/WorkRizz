@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_managing_application/models/base/base.dart';
 import 'package:task_managing_application/models/json_converters/json_converters.dart';
+import 'package:task_managing_application/models/project/files_small_info.dart';
 import 'package:task_managing_application/models/project/task_small_info.dart';
 import 'package:task_managing_application/models/tag/tag.dart';
 
@@ -45,6 +46,7 @@ class Project extends Base {
     this.totalActivities = 0,
     this.totalFileLinks = 0,
     this.taskSmallInformations = const [],
+    this.filesSmallInformations = const [],
   });
 
   factory Project.fromJson(Map<String, dynamic> json) =>
@@ -88,6 +90,8 @@ class Project extends Base {
   final int totalFileLinks;
   @JsonKey(defaultValue: [])
   final List<TaskSmallInformation> taskSmallInformations;
+  @JsonKey()
+  final List<FilesSmallInformation> filesSmallInformations;
 
   @override
   List<Object> get props => [
@@ -110,6 +114,7 @@ class Project extends Base {
         totalFileLinks,
         creatorId,
         taskSmallInformations,
+        filesSmallInformations,
       ];
 
   Project copyWith({
@@ -133,6 +138,7 @@ class Project extends Base {
     List<String>? assigneeImageUrls,
     int? totalFileLinks,
     List<TaskSmallInformation>? taskSmallInformations,
+    List<FilesSmallInformation>? filesSmallInformations,
   }) {
     return Project(
       reference: reference ?? this.reference,
@@ -156,6 +162,8 @@ class Project extends Base {
       totalFileLinks: totalFileLinks ?? this.totalFileLinks,
       taskSmallInformations:
           taskSmallInformations ?? this.taskSmallInformations,
+      filesSmallInformations:
+          filesSmallInformations ?? this.filesSmallInformations,
     );
   }
 }

@@ -19,14 +19,16 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   final currentUser = await FirebaseAuth.instance.authStateChanges().first;
-  final email = currentUser!.email!;
 
-  final userAccount =
-      await ApplicationRepository.repository.userStreamByEmail(email).first;
-  debugPrint(userAccount.toString());
-  ApplicationRepository.initializeRepo(
-    userAccount: userAccount,
-  );
+  if (currentUser != null) {
+    final email = currentUser.email!;
+
+    final userAccount =
+        await ApplicationRepository.repository.userStreamByEmail(email).first;
+    ApplicationRepository.initializeRepo(
+      userAccount: userAccount,
+    );
+  }
 
   runApp(
     RepositoryProvider(
@@ -116,6 +118,15 @@ class AppFlow extends StatelessWidget {
               child: const TaskListScreen(),
             ),
           ),
+        if (state is FileList)
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => FilelistBloc(
+                context.read<ApplicationRepository>(),
+              )..add(const FilelistSubscibeToStreamEvent()),
+              child: const FileListScreen(),
+            ),
+          ),
         if (state is SubTaskCreate)
           MaterialPage(
             child: BlocProvider(
@@ -161,9 +172,5 @@ class AppFlow extends StatelessWidget {
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Settings)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
-        if (state is FileList)
-          const MaterialPage(
-            child: FileListScreen(),
-          ),
       ];
 }

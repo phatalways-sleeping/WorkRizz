@@ -51,7 +51,7 @@ final class SubtaskViewSuccess extends SubtaskViewState {
   final DateTime dueDate;
   final bool isCompleted;
   final int points;
-  final List<String> files;
+  final List<FileModel> files;
   final List<String> comments;
   final double progress;
   final int grade;
@@ -80,7 +80,7 @@ final class SubtaskViewSuccess extends SubtaskViewState {
     DateTime? dueDate,
     bool? isCompleted,
     int? points,
-    List<String>? files,
+    List<FileModel>? files,
     List<String>? comments,
     double? progress,
     int? grade,
@@ -140,7 +140,7 @@ final class SubTaskViewSuccessRequestComment extends SubtaskViewSuccess {
       DateTime? dueDate,
       bool? isCompleted,
       int? points,
-      List<String>? files,
+      List<FileModel>? files,
       List<String>? comments,
       double? progress,
       int? grade,
@@ -213,7 +213,7 @@ final class SubTaskViewSuccessRequestReplyComment extends SubtaskViewSuccess {
     DateTime? dueDate,
     bool? isCompleted,
     int? points,
-    List<String>? files,
+    List<FileModel>? files,
     List<String>? comments,
     double? progress,
     int? grade,
@@ -285,7 +285,7 @@ final class SubTaskViewSuccessAskPermissionToOverrideFiles
     DateTime? dueDate,
     bool? isCompleted,
     int? points,
-    List<String>? files,
+    List<FileModel>? files,
     List<String>? comments,
     double? progress,
     int? grade,
@@ -351,7 +351,7 @@ final class SubTaskViewSuccessPendingToUpdateFiles extends SubtaskViewSuccess {
       DateTime? dueDate,
       bool? isCompleted,
       int? points,
-      List<String>? files,
+      List<FileModel>? files,
       List<String>? comments,
       double? progress,
       int? grade,
@@ -412,7 +412,7 @@ final class SubTaskViewSuccessPendingToUpdateComment
       DateTime? dueDate,
       bool? isCompleted,
       int? points,
-      List<String>? files,
+      List<FileModel>? files,
       List<String>? comments,
       double? progress,
       int? grade,
@@ -461,7 +461,7 @@ final class SubTaskViewSuccessRequestConfirmChange extends SubtaskViewSuccess {
     DateTime? dueDate,
     bool? isCompleted,
     int? points,
-    List<String>? files,
+    List<FileModel>? files,
     List<String>? comments,
     double? progress,
     int? grade,
@@ -493,7 +493,7 @@ final class SubTaskViewSuccessRequestConfirmChange extends SubtaskViewSuccess {
     DateTime? dueDate,
     bool? isCompleted,
     int? points,
-    List<String>? files,
+    List<FileModel>? files,
     List<String>? comments,
     double? progress,
     int? grade,
@@ -565,7 +565,7 @@ final class SubTaskLoadingSubTaskCompletion extends SubTaskViewSuccessRequestCon
     DateTime? dueDate,
     bool? isCompleted,
     int? points,
-    List<String>? files,
+    List<FileModel>? files,
     List<String>? comments,
     double? progress,
     int? grade,

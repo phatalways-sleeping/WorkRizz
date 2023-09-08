@@ -6,11 +6,13 @@ class MiniNav extends StatelessWidget {
     required this.totalFiles,
     required this.totalNotes,
     required this.totalUnreadMessages,
+    required this.projectName,
   });
 
   final int totalFiles;
   final int totalNotes;
   final int totalUnreadMessages;
+  final String projectName;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,13 @@ class MiniNav extends StatelessWidget {
             totalFiles.toString(),
             style: context.textTheme.bodySmall,
           ),
-          child: SvgPicture.string(
-            SvgAssets.file,
+          child: InkWell(
+            onTap: () {
+              context.read<NavigationBloc>().add(NavigateToFileList(projectName));
+            },
+            child: SvgPicture.string(
+              SvgAssets.file,
+            ),
           ),
         ),
         SizedBox(

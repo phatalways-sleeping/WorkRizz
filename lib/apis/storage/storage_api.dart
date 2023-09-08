@@ -5,9 +5,11 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:task_managing_application/apis/storage/crud.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
+import 'package:task_managing_application/models/file/file_model.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
 import 'package:task_managing_application/models/personal_schedule/time_line/time_line_model.dart';
+import 'package:task_managing_application/models/project/files_small_info.dart';
 import 'package:task_managing_application/models/project/task_small_info.dart';
 import 'package:task_managing_application/models/project_invitation/project_invitation.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
@@ -146,6 +148,14 @@ sealed class StorageAPI {
     String id,
     List<TaskSmallInformation> removedItems,
   );
+  Future<void> updateFilesSmallInformationsInProject(
+    String id,
+    List<FilesSmallInformation> latestVersion,
+  );
+  Future<void> removeFilesSmallInformationsInProject(
+    String id,
+    List<FilesSmallInformation> removedItems,
+  );
   // - ProjectInvitationModel
   Future<void> updateProjectInvitationInProjectInvitation(
     ProjectInvitationModel projectInvitationModel,
@@ -174,8 +184,8 @@ sealed class StorageAPI {
   Future<void> updateDueDateInSubTask(String id, DateTime dueDate);
   Future<void> updateCommentsInSubTask(String id, List<String> latestVersion);
   Future<void> removeCommentsInSubTask(String id, List<String> removedItems);
-  Future<void> updateFilesInSubTask(String id, List<String> latestVersion);
-  Future<void> removeFilesInSubTask(String id, List<String> removedItems);
+  Future<void> updateFilesInSubTask(String id, List<FileModel> latestVersion);
+  Future<void> removeFilesInSubTask(String id, List<FileModel> removedItems);
   Future<void> updateSubTaskInSubTask(String id, SubTaskModel subTaskModel);
   // - ThreadModel
   Future<void> updateMessagesInThread(String id, List<String> latestVersion);

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:task_managing_application/models/file/file_model.dart';
 import 'package:task_managing_application/models/sub_task/comment/comment_model.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
@@ -189,7 +190,7 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
         final files = (state as SubtaskViewSuccess).files;
         final newFiles = value.map((e) => e.path.split('/').last).toList();
         if (files
-            .map((e) => e.split('/').last)
+            .map((e) => e.fileName.split('/').last)
             .any((element) => newFiles.contains(element))) {
           emit(
             SubTaskViewSuccessAskPermissionToOverrideFiles.from(

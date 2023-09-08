@@ -565,7 +565,7 @@ class _SubTaskViewState extends State<SubTaskView> {
                           isAssigned:
                               context.read<SubtaskViewBloc>().isAssigned,
                           isLeader: widget.isLeader,
-                          files: state.files,
+                          files: state.files.map((e) => e.fileName).toList(),
                         ),
                         SizedBox(
                           height: context.mediaQuery.size.width * RATIO_PADDING,

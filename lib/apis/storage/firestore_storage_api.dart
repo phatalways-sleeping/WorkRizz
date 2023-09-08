@@ -301,6 +301,14 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> removeTaskSmallInformationsInProject(
           String id, List<TaskSmallInformation> removedItems) =>
       UpdateProject.removeTaskSmallInformations(id, removedItems);
+  @override
+  Future<void> updateFilesSmallInformationsInProject(
+          String id, List<FilesSmallInformation> latestVersion) =>
+      UpdateProject.updateFileSmallInformations(id, latestVersion);
+  @override
+  Future<void> removeFilesSmallInformationsInProject(
+          String id, List<FilesSmallInformation> removedItems) =>
+      UpdateProject.removeFileSmallInformations(id, removedItems);
   // - ProjectInvitationModel
   @override
   Future<void> updateProjectInvitationInProjectInvitation(
@@ -367,10 +375,10 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> removeCommentsInSubTask(String id, List<String> removedItems) =>
       UpdateSubTask.removeComments(id, removedItems);
   @override
-  Future<void> updateFilesInSubTask(String id, List<String> latestVersion) =>
+  Future<void> updateFilesInSubTask(String id, List<FileModel> latestVersion) =>
       UpdateSubTask.updateFiles(id, latestVersion);
   @override
-  Future<void> removeFilesInSubTask(String id, List<String> removedItems) =>
+  Future<void> removeFilesInSubTask(String id, List<FileModel> removedItems) =>
       UpdateSubTask.removeFiles(id, removedItems);
   @override
   Future<void> updateSubTaskInSubTask(String id, SubTaskModel subTaskModel) =>

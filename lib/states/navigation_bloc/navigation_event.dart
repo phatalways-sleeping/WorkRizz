@@ -87,9 +87,13 @@ final class NavigateToRedirect extends NavigationEvent {
   const NavigateToRedirect();
 }
 
-
 final class NavigateToFileList extends NavigationEvent {
-  const NavigateToFileList();
+  const NavigateToFileList(this.projectName);
+
+  final String? projectName;
+
+  @override
+  List<Object> get props => [...super.props, if (projectName != null) projectName!];
 }
 
 final class NavigateToSubTaskCreate extends NavigationEvent {

@@ -1,4 +1,6 @@
+import 'package:task_managing_application/models/file/file_model.dart';
 import 'package:task_managing_application/models/models.dart' show Project, Tag;
+import 'package:task_managing_application/models/project/files_small_info.dart';
 import 'package:task_managing_application/models/project/sub_task_small_info.dart';
 import 'package:task_managing_application/models/project/task_small_info.dart';
 
@@ -84,6 +86,69 @@ final Project project1 = Project(
           isCompleted: true,
           points: 15,
           assigneeImageUrl: 'avatars/avatar_1.jpg',
+        ),
+      ],
+    ),
+  ],
+  filesSmallInformations: [
+    FilesSmallInformation(
+      taskId: '20230831-0447-8e41-b180-662c48acc0b9',
+      taskName: 'Task 1',
+      files: [
+        FileModel(
+          fileName: 'homepage_design.pdf',
+          uploadDate: DateTime(2023, 9, 1),
+          ownerId: '20230831-0517-8230-a202-0089f860b83a',
+          ownerImageUrl: 'avatars/avatar_1.jpg',
+          ownerName: 'Matthew Wilson',
+        ),
+        FileModel(
+          fileName: 'user_auth.pdf',
+          uploadDate: DateTime(2023, 9, 4),
+          ownerId: '20230831-0517-8130-8211-a9c1dfa3e677',
+          ownerImageUrl: 'avatars/avatar_2.jpg',
+          ownerName: 'David Wilson',
+        ),
+        FileModel(
+          fileName: 'firebase_config.json',
+          uploadDate: DateTime(2023, 8, 27),
+          ownerId: '20230831-0517-8130-8211-a9c1dfa3e677',
+          ownerImageUrl: 'avatars/avatar_2.jpg',
+          ownerName: 'Jane Smith',
+        ),
+        FileModel(
+          fileName: 'api_endpoints.pdf',
+          uploadDate: DateTime(2023, 8, 30),
+          ownerId: '20230831-0517-8130-8211-a9c1dfa3e677',
+          ownerImageUrl: 'avatars/avatar_2.jpg',
+          ownerName: 'Jane Smith',
+        ),
+      ],
+    ),
+    FilesSmallInformation(
+      taskId: '20230831-0447-8a41-9189-1f4e72621f8d',
+      taskName: 'Task 2',
+      files: [
+        FileModel(
+          fileName: 'browser_compatibility_report.docx',
+          uploadDate: DateTime(2023, 9, 1),
+          ownerId: '20230831-0517-8230-a202-0089f860b83a',
+          ownerImageUrl: 'avatars/avatar_1.jpg',
+          ownerName: 'Matthew Wilson',
+        ),
+        FileModel(
+          fileName: 'profile_design.pdf',
+          uploadDate: DateTime(2023, 9, 7),
+          ownerId: '20230831-0517-8130-8211-a9c1dfa3e677',
+          ownerImageUrl: 'avatars/avatar_2.jpg',
+          ownerName: 'Jane Smith',
+        ),
+        FileModel(
+          fileName: 'payment_integration_report.docx',
+          uploadDate: DateTime(2023, 9, 8),
+          ownerId: '20230831-0517-8230-a202-0089f860b83a',
+          ownerImageUrl: 'avatars/avatar_1.jpg',
+          ownerName: 'Matthew Wilson',
         ),
       ],
     ),
@@ -187,6 +252,67 @@ final Project project2 = Project(
         ),
       ],
     )
+  ],
+  filesSmallInformations: [
+    FilesSmallInformation(
+      taskId: '20230831-0447-8841-b189-624e4164c668',
+      taskName: 'Task 3',
+      files: [
+        FileModel(
+          fileName: 'query_optimization_notes.csv',
+          uploadDate: DateTime(2023, 9, 2),
+          ownerId: '20230831-0517-8230-a202-0089f860b83a',
+          ownerImageUrl: 'avatars/avatar_1.jpg',
+          ownerName: 'Matthew Wilson',
+        ),
+      ],
+    ),
+    FilesSmallInformation(
+      taskId: '20230831-0447-8e41-8189-6919e8aeb5a2',
+      taskName: 'Task 4',
+      files: [
+        FileModel(
+          fileName: 'user_documentation.pdf',
+          uploadDate: DateTime(2023, 9, 10),
+          ownerId: '20230831-0517-8130-8211-a9c1dfa3e677',
+          ownerImageUrl: 'avatars/avatar_2.jpg',
+          ownerName: 'Jane Smith',
+        ),
+        FileModel(
+          fileName: 'search_functionality_notes.docx',
+          uploadDate: DateTime(2023, 9, 11),
+          ownerId: '20230831-0517-8130-8211-a9c1dfa3e677',
+          ownerImageUrl: 'avatars/avatar_2.jpg',
+          ownerName: 'Jane Smith',
+        ),
+      ],
+    ),
+    FilesSmallInformation(
+      taskId: '20230831-0447-8841-b189-1cee18c6c2cb',
+      taskName: 'Task 5',
+      files: [
+        FileModel(
+          fileName: 'bug_fixes_report.docx',
+          uploadDate: DateTime(2023, 9, 15),
+          ownerId: '20230831-0517-8230-a202-0089f860b83a',
+          ownerImageUrl: 'avatars/avatar_1.jpg',
+          ownerName: 'Matthew Wilson',
+        ),
+      ],
+    ),
+    FilesSmallInformation(
+      taskId: '20230831-0447-8141-b190-f16bcf9d8fe1',
+      taskName: 'Task 6',
+      files: [
+        FileModel(
+          fileName: 'performance_optimization.pdf',
+          uploadDate: DateTime(2023, 9, 16),
+          ownerId: '20230831-0517-8230-a202-0089f860b83a',
+          ownerImageUrl: 'avatars/avatar_1.jpg',
+          ownerName: 'Matthew Wilson',
+        ),
+      ],
+    ),
   ],
 );
 

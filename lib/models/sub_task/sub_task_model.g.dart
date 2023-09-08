@@ -22,9 +22,10 @@ SubTaskModel _$SubTaskModelFromJson(Map<String, dynamic> json) {
     dueDate: const DateTimeSerializer().fromJson(json['dueDate'] as String),
     isCompleted: json['isCompleted'] as bool? ?? false,
     points: json['points'] as int? ?? 0,
-    files:
-        (json['files'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-            [],
+    files: (json['files'] as List<dynamic>?)
+            ?.map((e) => FileModel.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
     comments: (json['comments'] as List<dynamic>?)
             ?.map((e) => e as String)
             .toList() ??
@@ -47,7 +48,7 @@ Map<String, dynamic> _$SubTaskModelToJson(SubTaskModel instance) =>
       'dueDate': const DateTimeSerializer().toJson(instance.dueDate),
       'isCompleted': instance.isCompleted,
       'points': instance.points,
-      'files': instance.files,
+      'files': instance.files.map((e) => e.toJson()).toList(),
       'comments': instance.comments,
       'progress': instance.progress,
       'grade': instance.grade,

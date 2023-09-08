@@ -8,9 +8,8 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
-import 'package:task_managing_application/assets/models/comment/comment_data.dart';
 import 'package:task_managing_application/assets/models/project/project_data.dart';
-import 'package:task_managing_application/assets/models/task/task_data.dart';
+import 'package:task_managing_application/assets/models/sub_task/sub_task_data.dart';
 import 'package:task_managing_application/firebase_options.dart';
 import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:uuid/v8.dart';
@@ -61,23 +60,23 @@ Future<void> main() async {
   //   }
   // }
 
-  for (var task in taskList) {
-    await FirebaseFirestoreConfigs.tasksCollection
-        .doc(task.id)
-        .set(task.toJson());
-  }
-
-  // for (var subTask in subTaskList) {
-  //   await FirebaseFirestoreConfigs.subTasksCollection
-  //       .doc(subTask.id)
-  //       .set(subTask.toJson());
+  // for (var task in taskList) {
+  //   await FirebaseFirestoreConfigs.tasksCollection
+  //       .doc(task.id)
+  //       .set(task.toJson());
   // }
 
-  for (var comment in commentList) {
-    await FirebaseFirestoreConfigs.subTaskCommentsCollection
-        .doc(comment.id)
-        .set(comment.toJson());
+  for (var subTask in subTaskList) {
+    await FirebaseFirestoreConfigs.subTasksCollection
+        .doc(subTask.id)
+        .set(subTask.toJson());
   }
+
+  // for (var comment in commentList) {
+  //   await FirebaseFirestoreConfigs.subTaskCommentsCollection
+  //       .doc(comment.id)
+  //       .set(comment.toJson());
+  // }
 
   for (var project in projectList) {
     await FirebaseFirestoreConfigs.projectsCollection

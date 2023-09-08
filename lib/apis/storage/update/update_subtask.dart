@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_managing_application/apis/storage/update/crud_update.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
+import 'package:task_managing_application/models/file/file_model.dart';
 import 'package:task_managing_application/models/models.dart';
 
 final class UpdateSubTask extends Update {
@@ -61,12 +62,12 @@ final class UpdateSubTask extends Update {
         "comments": FieldValue.arrayRemove(removedItems),
       });
 
-  static Future<void> updateFiles(String id, List<String> latestVersion) =>
+  static Future<void> updateFiles(String id, List<FileModel> latestVersion) =>
       FirebaseFirestoreConfigs.subTasksCollection.doc(id).update({
         "files": FieldValue.arrayUnion(latestVersion),
       });
 
-  static Future<void> removeFiles(String id, List<String> removedItems) =>
+  static Future<void> removeFiles(String id, List<FileModel> removedItems) =>
       FirebaseFirestoreConfigs.subTasksCollection.doc(id).update({
         "files": FieldValue.arrayRemove(removedItems),
       });

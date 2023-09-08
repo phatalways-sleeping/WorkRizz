@@ -50,6 +50,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       _applicationRepository.taskIdOnView = event.ofTaskId;
       emit(const SubTaskCreate());
     });
+    on<NavigateToFileList>((event, emit) {
+      if(event.projectName != null) {
+        _applicationRepository.projectOnViewName = event.projectName!;
+      }
+      emit(const FileList());
+    });
   }
 
   final ApplicationRepository _applicationRepository;
@@ -81,6 +87,8 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       eventToNavigateBack = const NavigateToAssistant();
     } else if (state is Splash) {
       eventToNavigateBack = const NavigateToSplash();
+    } else if (state is FileList) {
+      eventToNavigateBack = const NavigateToFileList(null);
     } else {
       throw Exception('Unknown state: $state');
     }

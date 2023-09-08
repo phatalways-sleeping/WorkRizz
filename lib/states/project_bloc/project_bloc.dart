@@ -13,6 +13,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   ProjectBloc(this._applicationRepository) : super(const ProjectInitial()) {
     on<ProjectSubscribeToUserEvent>(
       (event, emit) async {
+        debugPrint(_applicationRepository.userId);
         await emit.forEach(
           _applicationRepository.userStream(_applicationRepository.userId),
           onData: (user) => ProjectUserSubscription(

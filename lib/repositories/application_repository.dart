@@ -16,14 +16,18 @@ import 'package:task_managing_application/models/user_data/user_activity_model.d
 import 'package:uuid/v8.dart';
 
 class ApplicationRepository {
-  ApplicationRepository._({
-    this.latestAuthenticatedEmail,
-  });
+  ApplicationRepository._();
 
-  static void initializeRepo({String? latestAuthenticatedEmail}) {
-    _instance = ApplicationRepository._(
-      latestAuthenticatedEmail: latestAuthenticatedEmail,
-    );
+  static void initializeRepo({
+    UserDataModel? userAccount,
+  }) {
+    _instance = ApplicationRepository._();
+    if (userAccount != null) {
+      _instance.userId = userAccount.id;
+      _instance.userEmailAddress = userAccount.email;
+      _instance.userImageUrl = userAccount.imageUrl;
+      _instance.username = userAccount.username;
+    }
   }
 
   static ApplicationRepository _instance = ApplicationRepository._();
@@ -33,7 +37,6 @@ class ApplicationRepository {
       const EmailPasswordAuthenticationAPI();
   final StorageAPI _storageAPI = const CloudFirestoreStorageAPI();
 
-  String? latestAuthenticatedEmail;
   late String userId;
   late String userEmailAddress;
   late String userImageUrl;
@@ -55,6 +58,13 @@ class ApplicationRepository {
       username = userDataModel.username;
       await _storageAPI.updateUserActivity(userId, true, DateTime.now());
     });
+
+    await SharedPreferences.getInstance().then((value) {
+      value.setString('userEmailAddress', email);
+      value.setString('userImageUrl', userImageUrl);
+      value.setString('username', username);
+      value.setString('userId', userId);
+    });
   }
 
   Future<void> signUp(String username, String email, String password,
@@ -65,7 +75,7 @@ class ApplicationRepository {
       password,
       confirmPassword,
     );
-    final randomAvatar = AVATARS[Random(123).nextInt(AVATARS.length)];
+    final randomAvatar = AVATARS[Random().nextInt(AVATARS.length)];
 
     userId = const UuidV8().generate();
     userImageUrl = randomAvatar;
@@ -90,6 +100,12 @@ class ApplicationRepository {
 
     await _storageAPI.createNewUser(newUser);
     await _storageAPI.createNewUserActivity(userActivity);
+    await SharedPreferences.getInstance().then((value) {
+      value.setString('userEmailAddress', email);
+      value.setString('userImageUrl', userImageUrl);
+      value.setString('username', username);
+      value.setString('userId', userId);
+    });
   }
 
   Future<void> forgotPassword(String email) {
@@ -105,9 +121,18 @@ class ApplicationRepository {
   }
 
   Future<void> logout() async {
-    userId = "";
-    userImageUrl = "";
     await _storageAPI.updateUserActivity(userId, false, DateTime.now());
+    await SharedPreferences.getInstance().then((value) {
+      value.setString('userEmailAddress', "");
+      value.setString('userImageUrl', "");
+      value.setString('username', "");
+      value.setString('userId', "");
+      userId = "";
+      userEmailAddress = "";
+      userImageUrl = "";
+      username = "";
+    });
+
     return _authenticationAPI.logout();
   }
 

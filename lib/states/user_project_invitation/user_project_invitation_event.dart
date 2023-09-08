@@ -11,3 +11,13 @@ final class UserProjectInvitationSubscribeToStream
     extends UserProjectInvitationEvent {
   const UserProjectInvitationSubscribeToStream();
 }
+
+final class UserProjectInvitationRequestToLogout
+    extends UserProjectInvitationEvent {
+  const UserProjectInvitationRequestToLogout();
+}
+
+final class UserProjectInvitationCancelRequest
+    extends UserProjectInvitationEvent {
+  const UserProjectInvitationCancelRequest();
+}

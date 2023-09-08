@@ -83,6 +83,10 @@ final class NavigateToUserProjectInvitation extends NavigationEvent {
   const NavigateToUserProjectInvitation();
 }
 
+final class NavigateToRedirect extends NavigationEvent {
+  const NavigateToRedirect();
+}
+
 final class NavigateToSubTaskCreate extends NavigationEvent {
   const NavigateToSubTaskCreate(
     this.ofTaskId,

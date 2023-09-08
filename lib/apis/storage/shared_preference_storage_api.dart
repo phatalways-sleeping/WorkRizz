@@ -565,16 +565,6 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
   }
   
   @override
-  Future<void> removeSubTaskSmallInformationsInTask(String id, List<SubTaskSmallInformation> removedItems) {
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<void> updateSubTaskSmallInformationsInTask(String id, List<SubTaskSmallInformation> latestVersion) {
-    throw UnimplementedError();
-  }
-  
-  @override
   Future<void> updateSubTasksCompletedInTask(String id, int increase) {
     throw UnimplementedError();
   }
@@ -601,6 +591,18 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
   
   @override
   Stream<CommentModel> commentStream(String id) {
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> removeTaskSmallInformationsInProject(String id, List<TaskSmallInformation> removedItems) {
+    // TODO: implement removeTaskSmallInformationsInProject
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateTaskSmallInformationsInProject(String id, List<TaskSmallInformation> latestVersion) {
+    // TODO: implement updateTaskSmallInformationsInProject
     throw UnimplementedError();
   }
   

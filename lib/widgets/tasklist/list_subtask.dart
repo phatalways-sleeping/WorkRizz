@@ -7,7 +7,7 @@ class ListSubTask extends StatelessWidget {
     required this.tasks,
   });
 
-  final List<String> tasks;
+  final List<TaskSmallInformation> tasks;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class ListSubTask extends StatelessWidget {
                     horizontal:
                         context.mediaQuery.size.width * RATIO_PADDING + 5.0),
                 child: SubTaskWidget(
-                  taskId: tasks[index],
+                  task: tasks[index],
                   currentPage: index + 1,
                   totalPage: tasks.length,
                 ),

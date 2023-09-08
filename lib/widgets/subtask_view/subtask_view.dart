@@ -8,6 +8,7 @@ import 'package:task_managing_application/widgets/custom_avatar_widget/future_av
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_confirm_change_dialog.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_snackbar.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_subtask_completion.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/override_files_dialog.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
@@ -85,6 +86,42 @@ class _SubTaskViewState extends State<SubTaskView> {
                   const SubTaskSubscribeEvent(),
                 ),
             context: context,
+          );
+        } else if (state is SubTaskLoadingSubTaskCompletion) {
+          createSubTaskCompletionSnackBar(
+            context: context,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Update is underway...',
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: context.colorScheme.onSecondary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13.0,
+                  ),
+                ),
+                const SizedBox(
+                  width: 20.0,
+                ),
+                Text(
+                  'Please don\'t wait and do not modify the task.',
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: context.colorScheme.onSecondary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13.0,
+                  ),
+                ),
+                const SizedBox(
+                  width: 50.0,
+                ),
+                const CustomCircularProgressIndicator(
+                  color: GREEN,
+                  size: 20.0,
+                ),
+              ],
+            ),
           );
         }
       },
@@ -183,11 +220,10 @@ class _SubTaskViewState extends State<SubTaskView> {
                     bottomChild: Row(
                       children: [
                         CheckboxWidget(
-                          checkState: (state
-                                  is SubTaskViewSuccessRequestConfirmChange)
-                              ? state
-                                  .markAsCompleted
-                              : (state as SubtaskViewSuccess).isCompleted,
+                          checkState:
+                              (state is SubTaskViewSuccessRequestConfirmChange)
+                                  ? state.markAsCompleted
+                                  : (state as SubtaskViewSuccess).isCompleted,
                           onChanged: (value, context) {
                             if (value == null) {
                               return;

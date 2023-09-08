@@ -47,13 +47,13 @@ class _TextInputState extends State<TextInput> {
       textAlign: TextAlign.start,
       style: context.textTheme.displaySmall?.copyWith(
         color: widget.color,
-        fontSize: 40.0,
+        fontSize: 33.0,
       ),
       decoration: InputDecoration(
         suffixText: widget.suffixText,
         suffixStyle: context.textTheme.displaySmall?.copyWith(
           color: widget.color,
-          fontSize: 40.0,
+          fontSize: 33.0,
         ),
         // hide the underline of the textformfield when text not empty
         border: InputBorder.none,

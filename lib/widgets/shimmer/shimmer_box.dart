@@ -9,11 +9,15 @@ class ShimmerBox extends StatelessWidget {
     this.height = 90.0,
     this.width = double.infinity,
     this.radius = 16.0,
+    this.margin = const EdgeInsets.symmetric(
+      horizontal: 20.0,
+    ),
   });
 
   final double height;
   final double width;
   final double radius;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,7 @@ class ShimmerBox extends StatelessWidget {
         child: Container(
           width: width,
           height: height,
+          margin: margin,
           decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.all(

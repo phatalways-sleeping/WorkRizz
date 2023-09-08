@@ -163,6 +163,11 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
     });
     on<SubTaskConfirmChangePermissionsEvent>(
       (event, emit) async {
+        emit(
+          SubTaskLoadingSubTaskCompletion.from(
+            state as SubTaskViewSuccessRequestConfirmChange,
+          ),
+        );
         await _applicationRepository.updateRemainingOfSubTask(
           dueDate: (state as SubTaskViewSuccessRequestConfirmChange).dueDate,
           points: (state as SubTaskViewSuccessRequestConfirmChange).points,

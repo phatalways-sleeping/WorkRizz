@@ -28,10 +28,12 @@ class Review extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: context.mediaQuery.size.width * 0.4,
+              width: context.mediaQuery.size.width * 0.40,
+              height: context.mediaQuery.size.width * 0.30,
               margin: EdgeInsets.only(
                 top: context.mediaQuery.size.width * 0.01,
               ),
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 // border black, size 1, round corner 12
                 border: Border.all(
@@ -47,25 +49,25 @@ class Review extends StatelessWidget {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   isLeader
                       ? TextInput(
                           suffixText: "%",
                           color: PINK,
-                          initialNumber: (progress * 100).toInt(),
-                          listener: (context, controller) => context
-                              .read<SubtaskViewBloc>()
-                              .add(
-                                SubTaskInputProgressEvent(
-                                  double.parse(controller.text.trim()) / 100.0,
-                                ),
-                              ),
+                          initialNumber: (progress).toInt(),
+                          listener: (context, controller) =>
+                              context.read<SubtaskViewBloc>().add(
+                                    SubTaskInputProgressEvent(
+                                      double.parse(controller.text.trim()),
+                                    ),
+                                  ),
                         )
                       : Text(
-                          '${(progress).toStringAsFixed(0)}%',
+                          '${(progress).toString()}%',
                           style: context.textTheme.bodyLarge?.copyWith(
                             color: BLACK,
-                            fontSize: 36.0,
+                            fontSize: 33.0,
                           ),
                         ),
                   SizedBox(
@@ -81,7 +83,8 @@ class Review extends StatelessWidget {
               ),
             ),
             Container(
-                width: context.mediaQuery.size.width * 0.4,
+                width: context.mediaQuery.size.width * 0.40,
+                height: context.mediaQuery.size.width * 0.30,
                 margin:
                     EdgeInsets.only(top: context.mediaQuery.size.width * 0.01),
                 decoration: BoxDecoration(
@@ -98,6 +101,7 @@ class Review extends StatelessWidget {
                         MediaQuery.of(context).size.width * RATIO_PADDING * 2),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     isLeader
                         ? TextInput(
@@ -107,15 +111,17 @@ class Review extends StatelessWidget {
                             listener: (context, controller) =>
                                 context.read<SubtaskViewBloc>().add(
                                       SubTaskInputGradeEvent(
-                                        int.parse(controller.text.trim()),
+                                        int.parse(
+                                          controller.text.trim(),
+                                        ),
                                       ),
                                     ),
                           )
                         : Text(
-                            '${(grade / 10.0)}/10',
+                            '${(grade)}/10',
                             style: context.textTheme.bodyLarge?.copyWith(
                               color: BLACK,
-                              fontSize: 36.0,
+                              fontSize: 33.0,
                             ),
                           ),
                     SizedBox(

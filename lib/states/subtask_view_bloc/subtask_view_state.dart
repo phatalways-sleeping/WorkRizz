@@ -522,6 +522,75 @@ final class SubTaskViewSuccessRequestConfirmChange extends SubtaskViewSuccess {
   List<Object> get props => [...super.props, oldPoints, markAsCompleted];
 }
 
+final class SubTaskLoadingSubTaskCompletion extends SubTaskViewSuccessRequestConfirmChange {
+  const SubTaskLoadingSubTaskCompletion({
+    required super.name,
+    required super.description,
+    required super.assignee,
+    required super.dueDate,
+    required super.isCompleted,
+    required super.points,
+    required super.files,
+    required super.comments,
+    required super.progress,
+    required super.grade,
+    required super.leaderComment,
+    required super.oldPoints,
+    required super.markAsCompleted,
+  });
+
+  factory SubTaskLoadingSubTaskCompletion.from(
+          SubTaskViewSuccessRequestConfirmChange state) =>
+      SubTaskLoadingSubTaskCompletion(
+        name: state.name,
+        description: state.description,
+        assignee: state.assignee,
+        dueDate: state.dueDate,
+        isCompleted: state.isCompleted,
+        points: state.points,
+        files: state.files,
+        comments: state.comments,
+        progress: state.progress,
+        grade: state.grade,
+        leaderComment: state.leaderComment,
+        oldPoints: state.oldPoints,
+        markAsCompleted: state.markAsCompleted,
+      );
+
+  @override
+  SubTaskLoadingSubTaskCompletion copyWith({
+    String? name,
+    String? description,
+    String? assignee,
+    DateTime? dueDate,
+    bool? isCompleted,
+    int? points,
+    List<String>? files,
+    List<String>? comments,
+    double? progress,
+    int? grade,
+    String? leaderComment,
+    int? oldPoints,
+    bool? markAsCompleted,
+  }) {
+    return SubTaskLoadingSubTaskCompletion(
+      name: name ?? super.name,
+      description: description ?? super.description,
+      assignee: assignee ?? super.assignee,
+      dueDate: dueDate ?? super.dueDate,
+      isCompleted: isCompleted ?? super.isCompleted,
+      points: points ?? super.points,
+      files: files ?? super.files,
+      comments: comments ?? super.comments,
+      progress: progress ?? super.progress,
+      grade: grade ?? super.grade,
+      leaderComment: leaderComment ?? super.leaderComment,
+      oldPoints: oldPoints ?? super.oldPoints,
+      markAsCompleted: markAsCompleted ?? super.markAsCompleted,
+    );
+  }
+}
+
 abstract class SubtaskViewFailure extends SubtaskViewState {
   const SubtaskViewFailure(this.error);
 

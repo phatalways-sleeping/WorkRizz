@@ -293,6 +293,14 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> updateThreadInProject(String id, String thread) =>
       UpdateProject.updateThread(id, thread);
+  @override
+  Future<void> updateTaskSmallInformationsInProject(
+          String id, List<TaskSmallInformation> latestVersion) =>
+      UpdateProject.updateTaskSmallInformations(id, latestVersion);
+  @override
+  Future<void> removeTaskSmallInformationsInProject(
+          String id, List<TaskSmallInformation> removedItems) =>
+      UpdateProject.removeTaskSmallInformations(id, removedItems);
   // - ProjectInvitationModel
   @override
   Future<void> updateProjectInvitationInProjectInvitation(
@@ -321,14 +329,6 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> updateTaskInTask(String id, Task task) =>
       UpdateTask.updateTask(id, task);
-  @override
-  Future<void> updateSubTaskSmallInformationsInTask(
-          String id, List<SubTaskSmallInformation> latestVersion) =>
-      UpdateTask.updateSubTaskSmallInformations(id, latestVersion);
-  @override
-  Future<void> removeSubTaskSmallInformationsInTask(
-          String id, List<SubTaskSmallInformation> removedItems) =>
-      UpdateTask.removeSubTaskSmallInformations(id, removedItems);
   @override
   Future<void> updateSubTasksCompletedInTask(String id, int increase) =>
       UpdateTask.updateSubTasksCompleted(id, increase);

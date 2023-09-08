@@ -24,10 +24,6 @@ final class Authentication extends NavigationState {
   const Authentication();
 }
 
-final class TestComponents extends NavigationState {
-  const TestComponents();
-}
-
 final class ChangePassword extends NavigationState {
   const ChangePassword();
 }
@@ -62,6 +58,10 @@ final class ProjectDetail extends NavigationState {
 
 final class UserProjectInvitation extends NavigationState {
   const UserProjectInvitation();
+}
+
+final class Redirect extends NavigationState {
+  const Redirect();
 }
 
 final class SubTaskCreate extends NavigationState {

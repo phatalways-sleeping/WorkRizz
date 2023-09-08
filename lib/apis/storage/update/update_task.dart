@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_managing_application/apis/storage/update/crud_update.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
 import 'package:task_managing_application/models/models.dart';
-import 'package:task_managing_application/models/task/sub_task_small_info.dart';
 
 final class UpdateTask extends Update {
   const UpdateTask._() : super();
@@ -17,9 +16,9 @@ final class UpdateTask extends Update {
         "isCompleted": isCompleted,
       });
 
-  static Future<void> updatePoints(String id, int points) =>
+  static Future<void> updatePoints(String id, int increase) =>
       FirebaseFirestoreConfigs.tasksCollection.doc(id).update({
-        "points": points,
+        "points": FieldValue.increment(increase),
       });
 
   static Future<void> updateSubTasks(String id, List<String> latestVersion) =>
@@ -34,20 +33,6 @@ final class UpdateTask extends Update {
 
   static Future<void> updateTask(String id, Task task) =>
       FirebaseFirestoreConfigs.tasksCollection.doc(id).update(task.toJson());
-
-  static Future<void> updateSubTaskSmallInformations(
-          String id, List<SubTaskSmallInformation> latestVersion) =>
-      FirebaseFirestoreConfigs.tasksCollection.doc(id).update({
-        "subTaskSmallInformations": FieldValue.arrayUnion(
-            latestVersion.map((e) => e.toJson()).toList()),
-      });
-
-  static Future<void> removeSubTaskSmallInformations(
-          String id, List<SubTaskSmallInformation> removedItems) =>
-      FirebaseFirestoreConfigs.tasksCollection.doc(id).update({
-        "subTaskSmallInformations": FieldValue.arrayRemove(
-            removedItems.map((e) => e.toJson()).toList()),
-      });
 
   static Future<void> updateSubTasksCompleted(
           String id, int increase) =>

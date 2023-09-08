@@ -4,26 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/models/models.dart';
-import 'package:task_managing_application/models/task/sub_task_small_info.dart';
+import 'package:task_managing_application/models/project/sub_task_small_info.dart';
+import 'package:task_managing_application/models/project/task_small_info.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/tasklist_bloc/tasklist_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_input_dialog.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_subtask_completion.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
-import 'package:task_managing_application/widgets/custom_tag/project_tag.dart';
+import 'package:task_managing_application/widgets/custom_tag/project_tag_widget.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'package:task_managing_application/widgets/custom_util_components/custom_circular_progress.dart';
-import 'package:task_managing_application/widgets/tasklist/shimmer_components.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_avatar.dart';
+import 'package:task_managing_application/widgets/shimmer/shimmer_box.dart';
 import 'package:task_managing_application/widgets/tasklist/switch.dart';
 
 part 'date.dart';
 part 'mini_nav.dart';
 part 'progress.dart';
-part 'subtask.dart';
+part 'subtask_widget.dart';
 part 'list_tag.dart';
 part 'list_subtask.dart';
 
@@ -67,6 +70,8 @@ class TaskListView extends StatelessWidget {
                   TasklistCreateNewTask(value),
                 ),
           );
+        } else if (state is TasklistSubscriptionLoading) {
+          createSubTaskCompletionSnackBar(context: context);
         }
       },
       builder: (context, state) {
@@ -286,11 +291,30 @@ class TaskListView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: ListSubTask(
-                      tasks: state.project!.tasks,
+                  if (state is! TasklistSubscriptionLoading)
+                    SliverToBoxAdapter(
+                      child: ListSubTask(
+                        tasks: state.project!.taskSmallInformations,
+                      ),
+                    )
+                  else
+                    SliverToBoxAdapter(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) => ShimmerBox(
+                          height: context.mediaQuery.size.height * 0.1,
+                          margin: EdgeInsets.symmetric(
+                            horizontal:
+                                context.mediaQuery.size.width * RATIO_PADDING +
+                                    5.0,
+                          ),
+                        ),
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 10.0,
+                        ),
+                        itemCount: 3,
+                      ),
                     ),
-                  ),
                 ],
               ),
               if (state.project!.tasks.isNotEmpty)

@@ -14,12 +14,40 @@ class UserProjectInvitationBloc
     on<UserProjectInvitationSubscribeToStream>((event, emit) async {
       await emit.forEach(
         _applicationRepository.projectInvitationsStreamInUser,
-        onData: (data) => UserProjectInvitationSuccess(projectInvitation: data),
+        onData: (data) => (state is UserProjectInvitationSuccessConfirmLogout)
+            ? UserProjectInvitationSuccessConfirmLogout(projectInvitation: data)
+            : UserProjectInvitationSuccess(projectInvitation: data),
         onError: (error, stackTrace) => UserProjectInvitationFailure(
           error.toString(),
         ),
       );
     });
+
+    on<UserProjectInvitationRequestToLogout>(
+      (event, emit) async {
+        emit(
+          UserProjectInvitationSuccessConfirmLogout(
+            projectInvitation: (state is UserProjectInvitationSuccess)
+                ? (state as UserProjectInvitationSuccess).projectInvitation
+                : null,
+          ),
+        );
+      },
+    );
+
+    on<UserProjectInvitationCancelRequest>(
+      (event, emit) async {
+        emit(
+          UserProjectInvitationSuccess(
+            projectInvitation:
+                (state is UserProjectInvitationSuccessConfirmLogout)
+                    ? (state as UserProjectInvitationSuccessConfirmLogout)
+                        .projectInvitation
+                    : null,
+          ),
+        );
+      },
+    );
   }
 
   final ApplicationRepository _applicationRepository;

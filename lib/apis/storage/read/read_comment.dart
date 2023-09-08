@@ -5,8 +5,10 @@ import 'package:task_managing_application/models/models.dart';
 final class ReadComment extends Read {
   const ReadComment._() : super();
 
-  static Future<CommentModel> commentById(String id) =>
-      FirebaseFirestoreConfigs.subTaskCommentsCollection.doc(id).get().then(
-          (value) =>
-              CommentModel.fromJson(value.data() as Map<String, dynamic>));
+  static Stream<CommentModel> commentById(String id) =>
+      FirebaseFirestoreConfigs.subTaskCommentsCollection.doc(id).snapshots().map(
+            (snapshot) => CommentModel.fromJson(
+              snapshot.data() as Map<String, dynamic>,
+            ),
+          );
 }

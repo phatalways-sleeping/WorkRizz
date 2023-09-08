@@ -9,7 +9,7 @@ part of 'comment_model.dart';
 CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
   $checkKeys(
     json,
-    requiredKeys: const ['comment', 'commenter', 'date', 'replyCommentId'],
+    requiredKeys: const ['comment', 'commenter', 'date', 'repliedToUsername'],
   );
   return CommentModel(
     reference: _$JsonConverterFromJson<DocumentReference<Object?>,
@@ -20,8 +20,8 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
     commenter: json['commenter'] as String,
     date: const DateTimeSerializer().fromJson(json['date'] as String),
     solved: json['solved'] as bool? ?? false,
-    isReplied: json['isReplied'] as bool? ?? false,
-    replyCommentId: json['replyCommentId'] as String,
+    isReplied: json['isReplied'] as bool,
+    repliedToUsername: json['repliedToUsername'] as String,
   );
 }
 
@@ -36,7 +36,7 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
       'date': const DateTimeSerializer().toJson(instance.date),
       'solved': instance.solved,
       'isReplied': instance.isReplied,
-      'replyCommentId': instance.replyCommentId,
+      'repliedToUsername': instance.repliedToUsername,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

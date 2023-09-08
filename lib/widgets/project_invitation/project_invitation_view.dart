@@ -4,10 +4,11 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/states/user_project_invitation/user_project_invitation_bloc.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_dialog.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_snackbar.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
+import 'package:task_managing_application/widgets/custom_util_components/custom_circular_progress.dart';
 import 'package:task_managing_application/widgets/project_invitation/invitation_widget.dart';
 
 import 'invitation_bloc/invitation_bloc.dart';
@@ -23,7 +24,7 @@ class _ProjectInvitationsViewState extends State<ProjectInvitationsView> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserProjectInvitationBloc, UserProjectInvitationState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is UserProjectInvitationFailure) {
           final snackBar = createErrorSnackBar(
             context: context,
@@ -32,20 +33,59 @@ class _ProjectInvitationsViewState extends State<ProjectInvitationsView> {
                 .read<UserProjectInvitationBloc>()
                 .add(const UserProjectInvitationSubscribeToStream()),
           );
-          ScaffoldMessenger.of(context).showSnackBar(
+          context.scaffoldMessenger.showSnackBar(
             snackBar,
+          );
+        }
+
+        if (state is UserProjectInvitationSuccessConfirmLogout) {
+          await showDialog<bool>(
+            context: context,
+            builder: (context) => CustomDialog(
+              title: 'Log out',
+              leftText: 'Agree',
+              rightText: 'Cancel',
+              leftColor: PURPLE,
+              rightColor: PINK,
+              focusleftColor: PURPLE,
+              focusrightColor: PINK,
+              onLeftPressed: (context) => Navigator.of(context).pop(true),
+              onRightPressed: (context) => Navigator.of(context).pop(false),
+            ),
+          ).then(
+            (value) {
+              if (value != null && value) {
+                context
+                    .read<NavigationBloc>()
+                    .add(const NavigateToRedirect());
+              } else {
+                context
+                    .read<UserProjectInvitationBloc>()
+                    .add(const UserProjectInvitationCancelRequest());
+              }
+            },
+          ).onError(
+            (error, stackTrace) {
+              context
+                  .read<UserProjectInvitationBloc>()
+                  .add(const UserProjectInvitationCancelRequest());
+            },
           );
         }
       },
       builder: (context, state) {
         if (state is UserProjectInvitationInitial) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(
+              size: 30.0,
+            ),
           );
         }
         if (state is UserProjectInvitationLoading) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(
+              size: 30.0,
+            ),
           );
         }
         if (state is UserProjectInvitationSuccess) {
@@ -60,7 +100,23 @@ class _ProjectInvitationsViewState extends State<ProjectInvitationsView> {
                     onPressed: (context) =>
                         context.read<NavigationBloc>().navigateBack(),
                     atHomePage: false,
+                    hideAvatar: true,
                     upperChild: const SizedBox.shrink(),
+                    trailing: InkWell(
+                      onTap: () => context
+                          .read<UserProjectInvitationBloc>()
+                          .add(const UserProjectInvitationRequestToLogout()),
+                      child: SvgPicture.string(
+                        SvgAssets.logout,
+                        fit: BoxFit.cover,
+                        width: context.mediaQuery.size.width * 0.05,
+                        height: context.mediaQuery.size.width * 0.05,
+                        colorFilter: ColorFilter.mode(
+                          context.colorScheme.onSecondary,
+                          BlendMode.srcATop,
+                        ),
+                      ),
+                    ),
                     bottomChild: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,8 +154,8 @@ class _ProjectInvitationsViewState extends State<ProjectInvitationsView> {
                           "Invitations (${state.projectInvitation!.length})",
                           style: context.textTheme.displayLarge?.copyWith(
                             color: context.colorScheme.onSecondary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
                             overflow: TextOverflow.fade,
                           ),
                         ),

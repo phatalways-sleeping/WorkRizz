@@ -477,153 +477,132 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
     throw UnimplementedError();
   }
   
-  @override
-  Future<CommentModel> commentFuture(String id) {
-    // TODO: implement commentFuture
-    throw UnimplementedError();
-  }
+
   
   @override
   Future<void> createNewComment(CommentModel commentModel) {
-    // TODO: implement createNewComment
     throw UnimplementedError();
   }
   
   @override
   Future<void> deleteComment(String id) {
-    // TODO: implement deleteComment
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateIsRepliedInComment(String id, bool isReplied) {
-    // TODO: implement updateIsRepliedInComment
     throw UnimplementedError();
   }
   
   @override
-  Future<void> updateReplyCommentIdInComment(String id, String replyCommentId) {
-    // TODO: implement updateReplyCommentIdInComment
+  Future<void> updateRepliedToUsernameInComment(String id, String repliedToUsername) {
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateSolvedInComment(String id, bool solved) {
-    // TODO: implement updateSolvedInComment
     throw UnimplementedError();
   }
   
   @override
   Future<void> removeProjectInvitationsInUser(String id, List<String> removedItems) {
-    // TODO: implement removeProjectInvitationsInUser
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateProjectInvitationsInUser(String id, List<String> latestVersion) {
-    // TODO: implement updateProjectInvitationsInUser
     throw UnimplementedError();
   }
   
   @override
   Future<void> removeAssigneeImageUrlsInProject(String id, List<String> removedItems) {
-    // TODO: implement removeAssigneeImageUrlsInProject
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateAssigneeImageUrlsInProject(String id, List<String> latestVersion) {
-    // TODO: implement updateAssigneeImageUrlsInProject
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateLeaderImageUrlInProject(String id, String leaderImageUrl) {
-    // TODO: implement updateLeaderImageUrlInProject
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateTotalFileLinksInProject(String id, int totalFileLinks) {
-    // TODO: implement updateTotalFileLinksInProject
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateCreatorIdInProject(String id, String creatorId) {
-    // TODO: implement updateCreatorIdInProject
     throw UnimplementedError();
   }
   
   @override
   Future<void> createNewProjectInvitation(ProjectInvitationModel projectInvitationModel) {
-    // TODO: implement createNewProjectInvitation
     throw UnimplementedError();
   }
   
   @override
   Future<void> deleteProjectInvitation(String id) {
-    // TODO: implement deleteProjectInvitation
     throw UnimplementedError();
   }
   
   @override
   Stream<ProjectInvitationModel> projectInvitationStream(String id) {
-    // TODO: implement projectInvitationStream
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateIsAcceptedInProjectInvitation(String id, bool isAccepted) {
-    // TODO: implement updateIsAcceptedInProjectInvitation
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateProjectInvitationInProjectInvitation(ProjectInvitationModel projectInvitationModel) {
-    // TODO: implement updateProjectInvitationInProjectInvitation
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<void> removeSubTaskSmallInformationsInTask(String id, List<SubTaskSmallInformation> removedItems) {
-    // TODO: implement removeSubTaskSmallInformationsInTask
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<void> updateSubTaskSmallInformationsInTask(String id, List<SubTaskSmallInformation> latestVersion) {
-    // TODO: implement updateSubTaskSmallInformationsInTask
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateSubTasksCompletedInTask(String id, int increase) {
-    // TODO: implement updateSubTasksCompletedInTask
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateFileToStorage({required File file}) {
-    // TODO: implement updateFileToStorage
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateImageToStorage({required File image}) {
-    // TODO: implement updateImageToStorage
     throw UnimplementedError();
   }
   
   @override
   Future<File> fileFromStorage(String path) {
-    // TODO: implement fileFromStorage
     throw UnimplementedError();
   }
   
   @override
   Future<File> imageFileFromStorage(String path) {
-    // TODO: implement imageFileFromStorage
+    throw UnimplementedError();
+  }
+  
+  @override
+  Stream<CommentModel> commentStream(String id) {
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> removeTaskSmallInformationsInProject(String id, List<TaskSmallInformation> removedItems) {
+    // TODO: implement removeTaskSmallInformationsInProject
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateTaskSmallInformationsInProject(String id, List<TaskSmallInformation> latestVersion) {
+    // TODO: implement updateTaskSmallInformationsInProject
     throw UnimplementedError();
   }
   

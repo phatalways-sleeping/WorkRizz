@@ -10,6 +10,10 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc(this._applicationRepository)
       : super(const StartingState()) {
+    on<AuthenticationClearEvent>((event, emit) async {
+      await _applicationRepository.logout();
+      emit(const StartingState());
+    });
     on<LoginEvent>((event, emit) {
       emit(const AuthenticationBySignInState());
     });

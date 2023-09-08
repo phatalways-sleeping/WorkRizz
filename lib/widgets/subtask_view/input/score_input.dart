@@ -3,7 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
 
 class ScoreInput extends StatefulWidget {
-  const ScoreInput({super.key});
+  const ScoreInput({
+    super.key,
+    required this.listener,
+    required this.initialValue,
+  });
+
+  final void Function(BuildContext context, TextEditingController controller)
+      listener;
+  final String initialValue;
 
   @override
   State<ScoreInput> createState() => _ScoreInputState();
@@ -16,17 +24,8 @@ class _ScoreInputState extends State<ScoreInput> {
   @override
   void initState() {
     _titleController = TextEditingController();
-    _titleController.addListener(() {
-      if (_titleController.text.isNotEmpty) {
-        // context
-        //     .read<ProjectBloc>()
-        //     .add(ProjectInputName(_titleController.text));
-      }
-    });
-    // _titleController.text =
-    //     (context.read<ProjectBloc>().state as ProjectUserCreateAndSubscribe)
-    //         .newProjectSetup
-    //         .name;
+    
+    _titleController.text = widget.initialValue;
     super.initState();
   }
 
@@ -43,14 +42,8 @@ class _ScoreInputState extends State<ScoreInput> {
       minLines: 1,
       maxLines: 10,
       focusNode: _focusNode,
-      onTapOutside: (event) {
-        if (_titleController.text.isNotEmpty) {
-          // context
-          //     .read<ProjectBloc>()
-          //     .add(ProjectInputName(_titleController.text));
-        }
-      },
       controller: _titleController,
+      onChanged: (value) => widget.listener(context, _titleController),
       keyboardType: TextInputType.number,
       textAlign: TextAlign.start,
       style: context.textTheme.bodyMedium?.copyWith(

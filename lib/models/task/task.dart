@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:task_managing_application/models/base/base.dart';
 import 'package:task_managing_application/models/json_converters/json_converters.dart'
     show DocumentReferenceSerializer;
-import 'package:task_managing_application/models/task/sub_task_small_info.dart';
+import 'package:task_managing_application/models/project/sub_task_small_info.dart';
 
 part 'task.g.dart';
 
@@ -30,7 +30,6 @@ class Task extends Base {
     required this.points,
     required this.isCompleted,
     this.subTasksCompleted = 0,
-    this.subTaskSmallInformations = const [],
   });
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
@@ -49,8 +48,6 @@ class Task extends Base {
   final int points;
   @JsonKey(defaultValue: false)
   final bool isCompleted;
-  @JsonKey(required: true)
-  final List<SubTaskSmallInformation> subTaskSmallInformations;
 
   @override
   List<Object> get props => [
@@ -61,7 +58,6 @@ class Task extends Base {
         points,
         isCompleted,
         subTasksCompleted,
-        subTaskSmallInformations,
       ];
 
   Task copyWith({
@@ -85,8 +81,6 @@ class Task extends Base {
       points: points ?? this.points,
       isCompleted: isCompleted ?? this.isCompleted,
       subTasksCompleted: subTasksCompleted ?? this.subTasksCompleted,
-      subTaskSmallInformations:
-          subTaskSmallInformations ?? this.subTaskSmallInformations,
     );
   }
 }

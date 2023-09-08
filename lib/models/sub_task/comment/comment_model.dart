@@ -26,7 +26,7 @@ class CommentModel extends Base {
     required this.date,
     required this.solved,
     required this.isReplied,
-    required this.replyCommentId,
+    required this.repliedToUsername,
   });
   
   factory CommentModel.fromJson(Map<String, dynamic> json) =>
@@ -42,10 +42,10 @@ class CommentModel extends Base {
   final DateTime date;
   @JsonKey(defaultValue: false)
   final bool solved;
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   final bool isReplied;
   @JsonKey(required: true)
-  final String replyCommentId;
+  final String repliedToUsername;
 
   @override
   List<Object> get props => [
@@ -55,7 +55,7 @@ class CommentModel extends Base {
         date,
         solved,
         isReplied,
-        replyCommentId,
+        repliedToUsername,
       ];
 
   CommentModel copyWith({
@@ -66,7 +66,7 @@ class CommentModel extends Base {
     DateTime? date,
     bool? solved,
     bool? isReplied,
-    String? replyCommentId,
+    String? repliedToUsername,
   }) {
     return CommentModel(
       reference: reference ?? this.reference,
@@ -76,7 +76,7 @@ class CommentModel extends Base {
       date: date ?? this.date,
       solved: solved ?? this.solved,
       isReplied: isReplied ?? this.isReplied,
-      replyCommentId: replyCommentId ?? this.replyCommentId,
+      repliedToUsername: repliedToUsername ?? this.repliedToUsername,
     );
   }
 }

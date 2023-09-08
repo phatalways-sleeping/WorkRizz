@@ -1,23 +1,42 @@
 part of 'comment_list.dart';
 
 class CommentEntryWidget extends StatefulWidget {
-  final VoidCallback onCommentAdded;
-  final VoidCallback onCommentCancelled;
+  final void Function(
+    BuildContext context,
+    TextEditingController controller,
+  ) onCommentAdded;
+  final void Function(
+    BuildContext context,
+  ) onCommentCancelled;
   final String replyUsername;
 
-  const CommentEntryWidget(
-      {super.key,
-      required this.onCommentAdded,
-      required this.onCommentCancelled,
-      required this.replyUsername});
+  const CommentEntryWidget({
+    super.key,
+    required this.onCommentAdded,
+    required this.onCommentCancelled,
+    required this.replyUsername,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _CommentEntryWidgetState createState() => _CommentEntryWidgetState();
+  State<CommentEntryWidget> createState() => _CommentEntryWidgetState();
 }
 
 class _CommentEntryWidgetState extends State<CommentEntryWidget> {
-  final TextEditingController _commentController = TextEditingController();
+  late final TextEditingController _commentController = TextEditingController();
+  late final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    _focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _commentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +48,11 @@ class _CommentEntryWidgetState extends State<CommentEntryWidget> {
         children: [
           TextField(
             controller: _commentController,
+            focusNode: _focusNode,
             decoration: InputDecoration(
               hintText: 'Enter your comment...',
               labelText: widget.replyUsername.isNotEmpty
-                  ? 'Reply to @${widget.replyUsername}'
+                  ? 'Reply to ${widget.replyUsername}'
                   : null,
               labelStyle: context.textTheme.titleMedium,
               border: const OutlineInputBorder(
@@ -55,39 +75,45 @@ class _CommentEntryWidgetState extends State<CommentEntryWidget> {
             children: [
               const Spacer(),
               ElevatedButton(
-                  onPressed: () {
-                    // Submit the comment and notify the parent
-                    widget.onCommentCancelled();
-                  },
-                  style: const ButtonStyle(
-                    overlayColor: MaterialStatePropertyAll(
-                      PINK,
-                    ),
-                    splashFactory: InkSparkle.splashFactory,
-                    animationDuration: Duration(
-                      seconds: 2,
-                    ),
-                    tapTargetSize: MaterialTapTargetSize.padded,
-                    shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(MEDIUM_CORNER),
-                        ),
-                        // no right borderd
-                        side: BorderSide.none,
+                onPressed: () {
+                  // Submit the comment and notify the parent
+                  widget.onCommentCancelled(context);
+                },
+                style: const ButtonStyle(
+                  overlayColor: MaterialStatePropertyAll(
+                    PINK,
+                  ),
+                  splashFactory: InkSparkle.splashFactory,
+                  animationDuration: Duration(
+                    seconds: 2,
+                  ),
+                  tapTargetSize: MaterialTapTargetSize.padded,
+                  shape: MaterialStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(MEDIUM_CORNER),
                       ),
-                    ),
-                    backgroundColor: MaterialStatePropertyAll(
-                      PALE,
+                      // no right borderd
+                      side: BorderSide.none,
                     ),
                   ),
-                  
-                  child: Text('Cancel', style: context.textTheme.labelMedium)),
+                  backgroundColor: MaterialStatePropertyAll(
+                    PALE,
+                  ),
+                ),
+                child: Text(
+                  'Cancel',
+                  style: context.textTheme.labelMedium,
+                ),
+              ),
               const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
                   // Submit the comment and notify the parent
-                  widget.onCommentAdded();
+                  widget.onCommentAdded(
+                    context,
+                    _commentController,
+                  );
                 },
                 style: const ButtonStyle(
                   overlayColor: MaterialStatePropertyAll(
@@ -122,11 +148,5 @@ class _CommentEntryWidgetState extends State<CommentEntryWidget> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _commentController.dispose();
-    super.dispose();
   }
 }

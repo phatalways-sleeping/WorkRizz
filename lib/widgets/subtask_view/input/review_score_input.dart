@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
 
 class TextInput extends StatefulWidget {
-  const TextInput({super.key, required this.suffixText, required this.color});
+  const TextInput({
+    super.key,
+    required this.suffixText,
+    required this.color,
+    required this.initialNumber,
+    required this.listener,
+  });
   final String suffixText;
   final Color color;
+  final int? initialNumber;
+  final void Function(BuildContext context, TextEditingController controller)
+      listener;
 
   @override
   State<TextInput> createState() => _TextInputState();
@@ -17,17 +26,7 @@ class _TextInputState extends State<TextInput> {
   @override
   void initState() {
     _titleController = TextEditingController();
-    // _titleController.addListener(() {
-    //   if (_titleController.text.isNotEmpty) {
-    //     context
-    //         .read<ProjectBloc>()
-    //         .add(ProjectInputName(_titleController.text));
-    //   }
-    // });
-    // _titleController.text =
-    //     (context.read<ProjectBloc>().state as ProjectUserCreateAndSubscribe)
-    //         .newProjectSetup
-    //         .name;
+    _titleController.text = widget.initialNumber?.toString() ?? '';
     super.initState();
   }
 
@@ -42,38 +41,22 @@ class _TextInputState extends State<TextInput> {
   Widget build(BuildContext context) {
     return TextFormField(
       focusNode: _focusNode,
-      onTapOutside: (event) {
-        // if (_titleController.text.isNotEmpty) {
-        //   context
-        //       .read<ProjectBloc>()
-        //       .add(ProjectInputName(_titleController.text));
-        // }
-      },
       controller: _titleController,
+      onChanged: (value) => widget.listener(context, _titleController),
       keyboardType: TextInputType.number,
       textAlign: TextAlign.start,
-      style: context.textTheme.displaySmall?.copyWith(color: widget.color),
+      style: context.textTheme.displaySmall?.copyWith(
+        color: widget.color,
+        fontSize: 33.0,
+      ),
       decoration: InputDecoration(
         suffixText: widget.suffixText,
-        suffixStyle:
-            context.textTheme.displaySmall?.copyWith(color: widget.color),
+        suffixStyle: context.textTheme.displaySmall?.copyWith(
+          color: widget.color,
+          fontSize: 33.0,
+        ),
         // hide the underline of the textformfield when text not empty
         border: InputBorder.none,
-
-        // border: OutlineInputBorder(
-        //   borderRadius: const BorderRadius.all(Radius.circular(10)),
-        //   borderSide: BorderSide(
-        //     color: context.colorScheme.onSecondary,
-        //     width: 2.0,
-        //   ),
-        // ),
-        // focusedBorder: OutlineInputBorder(
-        //   borderRadius: const BorderRadius.all(Radius.circular(10)),
-        //   borderSide: BorderSide(
-        //     color: context.colorScheme.onSecondary,
-        //     width: 2.0,
-        //   ),
-        // ),
         focusColor: context.colorScheme.onSecondary,
       ),
     );

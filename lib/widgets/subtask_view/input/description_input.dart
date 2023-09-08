@@ -2,9 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
 
 class DescriptionInput extends StatefulWidget {
-  const DescriptionInput({super.key, required this.label, required this.showLabel});
+  const DescriptionInput({
+    super.key,
+    required this.label,
+    required this.showLabel,
+    required this.listener,
+    required this.initialValue,
+    this.forLeaderComment = false,
+  });
   final String label;
   final bool showLabel;
+  final String initialValue;
+  final void Function(BuildContext context, TextEditingController controller)
+      listener;
+  final bool forLeaderComment;
 
   @override
   State<DescriptionInput> createState() => _DescriptionInputState();
@@ -17,17 +28,8 @@ class _DescriptionInputState extends State<DescriptionInput> {
   @override
   void initState() {
     _titleController = TextEditingController();
-    _titleController.addListener(() {
-      if (_titleController.text.isNotEmpty) {
-        // context
-        //     .read<ProjectBloc>()
-        //     .add(ProjectInputName(_titleController.text));
-      }
-    });
-    // _titleController.text =
-    //     (context.read<ProjectBloc>().state as ProjectUserCreateAndSubscribe)
-    //         .newProjectSetup
-    //         .name;
+    _titleController.text = widget.initialValue;
+    // _focusNode.requestFocus();
     super.initState();
   }
 
@@ -43,27 +45,21 @@ class _DescriptionInputState extends State<DescriptionInput> {
     return TextFormField(
       minLines: 1,
       maxLines: 10,
+      onChanged: (value) => widget.listener(context, _titleController),
       focusNode: _focusNode,
-      onTapOutside: (event) {
-        if (_titleController.text.isNotEmpty) {
-          // context
-          //     .read<ProjectBloc>()
-          //     .add(ProjectInputName(_titleController.text));
-        }
-      },
       controller: _titleController,
       keyboardType: TextInputType.name,
       textAlign: TextAlign.start,
       style: context.textTheme.bodyMedium?.copyWith(
         color: context.colorScheme.onSurface,
-        fontSize: 14,
+        fontSize: widget.forLeaderComment ? 16 : 14,
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
         labelText: widget.showLabel ? widget.label : null,
         labelStyle: context.textTheme.bodyMedium?.copyWith(
           color: context.colorScheme.onSurface,
-          fontSize: 14,
+          fontSize: widget.forLeaderComment ? 16 : 14,
           fontWeight: FontWeight.w500,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -80,7 +76,11 @@ class _DescriptionInputState extends State<DescriptionInput> {
           ),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(MEDIUM_CORNER)),
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              MEDIUM_CORNER,
+            ),
+          ),
           borderSide: BorderSide(
             color: BLACK,
             width: 1.0,

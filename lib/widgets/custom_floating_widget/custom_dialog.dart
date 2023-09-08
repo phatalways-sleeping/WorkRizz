@@ -33,8 +33,11 @@ class CustomDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(MEDIUM_CORNER)), //this right here
       child: Container(
-        width: context.mediaQuery.size.width * 0.8,
-        height: context.mediaQuery.size.height * 0.15,
+        constraints: BoxConstraints(
+          maxWidth: context.mediaQuery.size.width * 0.9,
+          minHeight: context.mediaQuery.size.height * 0.2,
+          maxHeight: context.mediaQuery.size.height * 0.4,
+        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(MEDIUM_CORNER),
           color: WHITE,
@@ -46,12 +49,16 @@ class CustomDialog extends StatelessWidget {
         padding: EdgeInsets.all(context.mediaQuery.size.width * RATIO_PADDING),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
               title,
               style: context.textTheme.titleLarge,
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
+            SizedBox(
+              height: context.mediaQuery.size.width * RATIO_SPACE,
+            ),
             if (body != const SizedBox.shrink()) ...[
               body,
               SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
@@ -66,6 +73,12 @@ class CustomDialog extends StatelessWidget {
                   style: ButtonStyle(
                     overlayColor: MaterialStatePropertyAll(
                       focusleftColor,
+                    ),
+                    fixedSize: MaterialStatePropertyAll(
+                      Size(
+                        context.mediaQuery.size.width * 0.3,
+                        context.mediaQuery.size.height * 0.03,
+                      ),
                     ),
                     splashFactory: InkSparkle.splashFactory,
                     animationDuration: const Duration(
@@ -98,6 +111,12 @@ class CustomDialog extends StatelessWidget {
                   style: ButtonStyle(
                     overlayColor: MaterialStatePropertyAll(
                       focusrightColor,
+                    ),
+                    fixedSize: MaterialStatePropertyAll(
+                      Size(
+                        context.mediaQuery.size.width * 0.3,
+                        context.mediaQuery.size.height * 0.03,
+                      ),
                     ),
                     splashFactory: InkSparkle.splashFactory,
                     animationDuration: const Duration(

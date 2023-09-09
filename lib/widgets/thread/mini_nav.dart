@@ -34,8 +34,11 @@ class MiniNavThread extends StatelessWidget {
             width: context.mediaQuery.size.width * RATIO_PADDING * 2,
           ),
           SvgPicture.string(
-            SvgAssets.tdot,
-          )
+            SvgAssets.add,
+          ),
+          SizedBox(
+            width: context.mediaQuery.size.width * RATIO_PADDING * 2,
+          ),
         ],
       ),
     );

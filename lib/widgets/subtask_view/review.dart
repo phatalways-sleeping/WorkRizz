@@ -64,7 +64,7 @@ class Review extends StatelessWidget {
                                   ),
                         )
                       : Text(
-                          '${(progress).toString()}%',
+                          '${(progress).toInt().toString()}%',
                           style: context.textTheme.bodyLarge?.copyWith(
                             color: BLACK,
                             fontSize: 33.0,

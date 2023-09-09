@@ -37,6 +37,7 @@ dependencies:
   file_picker: ^5.5.0
   bloc: ^8.1.2
   meta: ^1.9.1
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

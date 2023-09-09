@@ -5,6 +5,7 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
+import 'package:task_managing_application/screens/thread/thread_screen.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart'
     show SubtaskCreateBloc;
@@ -50,11 +51,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
-      home: BlocProvider(
+      home: ThreadScreen(),
+      /*  home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-      ),
+       ),*/ 
     );
   }
 }
@@ -127,6 +129,10 @@ class AppFlow extends StatelessWidget {
               child: const FileListScreen(),
             ),
           ),
+        /* if (state is Thread)
+          const MaterialPage(
+            child: ThreadScreen(),
+          ), */
         if (state is SubTaskCreate)
           MaterialPage(
             child: BlocProvider(

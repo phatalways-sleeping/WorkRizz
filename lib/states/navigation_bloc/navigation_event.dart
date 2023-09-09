@@ -96,6 +96,10 @@ final class NavigateToFileList extends NavigationEvent {
   List<Object> get props => [...super.props, if (projectName != null) projectName!];
 }
 
+/* final class NavigateToThread extends NavigationEvent {
+  const NavigateToThread();
+} */
+
 final class NavigateToSubTaskCreate extends NavigationEvent {
   const NavigateToSubTaskCreate(
     this.ofTaskId,

@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
+import 'package:task_managing_application/screens/pdf_report_viewer/pdf_report_viewer_screen.dart';
 import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
 import 'package:task_managing_application/states/states.dart';
@@ -131,6 +131,12 @@ class AppFlow extends StatelessWidget {
                 context.read<ApplicationRepository>(),
               ),
               child: const SubTaskScreen(),
+            ),
+          ),
+        if (state is PDFReportViewer)
+          MaterialPage(
+            child: PDFReportViewerScreen(
+              file: state.file,
             ),
           ),
         if (state is ChangePassword)

@@ -38,6 +38,9 @@ dependencies:
   bloc: ^8.1.2
   meta: ^1.9.1
   cached_network_image: ^3.2.3
+  pdf: ^3.10.4
+  open_file: ^3.3.2
+  flutter_pdfview: ^1.3.1
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +53,12 @@ flutter:
     - assets/images/background.jpg
     - assets/images/avt.svg
     - assets/images/avt.jpg
+    - assets/fonts/Montserrat/Montserrat-Regular.ttf
+    - assets/fonts/Montserrat/Montserrat-Bold.ttf
+    - assets/fonts/Montserrat/Montserrat-Italic.ttf
+    - assets/fonts/Montserrat/Montserrat-BoldItalic.ttf
+
+
     
   fonts:
   - family: Roboto

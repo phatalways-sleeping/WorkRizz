@@ -26,7 +26,9 @@ class MiniNav extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              context.read<NavigationBloc>().add(NavigateToFileList(projectName));
+              context
+                  .read<NavigationBloc>()
+                  .add(NavigateToFileList(projectName));
             },
             child: SvgPicture.string(
               SvgAssets.file,
@@ -62,9 +64,12 @@ class MiniNav extends StatelessWidget {
         SizedBox(
           width: context.mediaQuery.size.width * RATIO_PADDING * 2,
         ),
-        SvgPicture.string(
-          SvgAssets.tdot,
-        )
+        ExportReportButton(
+          projectId:
+              (context.read<TasklistBloc>().state as TasklistSubscription)
+                  .project!
+                  .id,
+        ),
       ],
     );
   }

@@ -1,32 +1,12 @@
 import 'dart:io';
 
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/material.dart';
-// import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
-// import 'package:task_managing_application/firebase_options.dart';
-// import 'package:task_managing_application/repositories/application_repository.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/firebase_options.dart';
-import 'package:task_managing_application/models/exceptions/download_exception.dart';
-import 'package:task_managing_application/repositories/application_repository.dart';
-import 'package:uuid/v8.dart';
-import 'package:external_path/external_path.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:task_managing_application/apis/pdf/pdf_api.dart';
 // import 'project/project_data.dart';
 
 const String path = 'lib/assets/models/';
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  try {
-    await ApplicationRepository.repository.downloadFile('files/TestDoc.txt');
-  } catch (e) {
-    print((e as FileDownloadException).message);
-  }
-
   // ApplicationRepository.repository.userId =
   //     "20230831-0517-8230-a202-0089f860b83a";
 
@@ -94,7 +74,13 @@ Future<void> main() async {
   //       .set(schedule.toJson());
   // }
 
-  // runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+
+  PdfAPI.buildReport('20230831-0508-8d53-a880-b370f9865591').then(
+    (value) => PdfAPI.openFile(value),
+  );
+
+  runApp(const MyApp());
 
   // await generateIds(amount: 3, name: 'project_invitation');
 
@@ -183,78 +169,17 @@ Future<void> main() async {
 //   }
 // }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  List<String> exPath = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    getPath();
-
-    getPublicDirectoryPath();
-  }
-
-  // Get storage directory paths
-  // Like internal and external (SD card) storage path
-  Future<void> getPath() async {
-    List<String> paths;
-    // getExternalStorageDirectories() will return list containing internal storage directory path
-    // And external storage (SD card) directory path (if exists)
-    paths = await ExternalPath.getExternalStorageDirectories();
-
-    setState(() {
-      exPath = paths; // [/storage/emulated/0, /storage/B3AE-4D28]
-    });
-  }
-
-  // To get public storage directory path like Downloads, Picture, Movie etc.
-  // Use below code
-  Future<void> getPublicDirectoryPath() async {
-    String path;
-
-    path = await ExternalPath.getExternalStoragePublicDirectory(
-        ExternalPath.DIRECTORY_DOWNLOADS);
-
-    setState(() {
-      print(path); // /storage/emulated/0/Download
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-        home: Scaffold(
-          body: InkWell(
-            onTap: () async {
-              ApplicationRepository.repository.downloadFile('files/Books.pdf').then((value) => print(value));
-            },
-            child: const Center(
-              child: Text("Hello World"),
-            ),
-          ),
-        ),
-      );
-}
-
-Future<void> generateIds({
-  required int amount,
-  required String name,
-}) async {
-  final ids = List.generate(
-    amount,
-    (index) => const UuidV8().generate(),
-  );
-
-  final File newFile = File("$path/$name/${name}_ids.txt");
-
-  for (var element in ids) {
-    await newFile.writeAsString('$element\n', mode: FileMode.append);
+  Widget build(BuildContext context) {
+    return const PDFView(
+      filePath: '/storage/emulated/0/Download/Ordinary_Coffee_House.pdf',
+      enableSwipe: true,
+      swipeHorizontal: true,
+      autoSpacing: false,
+      pageFling: false,
+    );
   }
 }

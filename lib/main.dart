@@ -25,6 +25,25 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // ApplicationRepository.repository.userId =
+  //     "20230831-0517-8230-a202-0089f860b83a";
+
+  // ApplicationRepository.repository.userImageUrl = "avatars/avatar_1.jpg";
+
+  // ApplicationRepository.repository.userEmailAddress = "matwil@gmail.com";
+
+  // ApplicationRepository.repository.username = "Mathew Wilson";
+
+  ApplicationRepository.repository.userId =
+      "20230831-0517-8130-8211-a9c1dfa3e677";
+
+  ApplicationRepository.repository.userImageUrl = "avatars/avatar_2.jpg";
+
+  ApplicationRepository.repository.userEmailAddress = "jane@example.com";
+
+  ApplicationRepository.repository.username = "Jane Smith";
+
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,

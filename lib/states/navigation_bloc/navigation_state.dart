@@ -19,9 +19,9 @@ final class ProjectsList extends NavigationState {
 final class FileList extends NavigationState {
   const FileList();
 }
-/* final class Thread extends NavigationState {
+final class Thread extends NavigationState {
   const Thread();
-} */
+}
 
 final class Authentication extends NavigationState {
   const Authentication();

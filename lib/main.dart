@@ -39,12 +39,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
-      home: ThreadScreen(),
-      /*  home: BlocProvider(
+      //home: ThreadScreen(),
+      home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-       ),*/ 
+       ), 
     );
   }
 }
@@ -117,10 +117,10 @@ class AppFlow extends StatelessWidget {
               child: const FileListScreen(),
             ),
           ),
-        /* if (state is Thread)
+        if (state is Thread)
           const MaterialPage(
             child: ThreadScreen(),
-          ), */
+          ),
         if (state is SubTaskCreate)
           MaterialPage(
             child: BlocProvider(

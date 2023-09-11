@@ -9,7 +9,7 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc(this._applicationRepository) : super(const Splash()) {
+  NavigationBloc(this._applicationRepository) : super(const Thread()) {
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
     on<NavigateToAuthentication>(_navigateToAuthentication);

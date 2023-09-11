@@ -110,3 +110,12 @@ final class NavigateToSubTaskCreate extends NavigationEvent {
   @override
   List<Object> get props => [...super.props, ofTaskId];
 }
+
+final class NavigateToPDFReportViewer extends NavigationEvent {
+  const NavigateToPDFReportViewer(this.file);
+
+  final File file;
+
+  @override
+  List<Object> get props => [...super.props, file];
+}

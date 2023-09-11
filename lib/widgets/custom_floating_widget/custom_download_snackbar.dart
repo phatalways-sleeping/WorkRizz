@@ -5,10 +5,13 @@ import 'package:task_managing_application/widgets/custom_util_components/custom_
 
 SnackBar customDownloadSnackBar({
   required BuildContext context,
+  String? message,
+  Duration? duration,
 }) {
   return SnackBar(
     backgroundColor: WHITE,
     elevation: 0.0,
+    duration: duration ?? const Duration(seconds: 4),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(MEDIUM_CORNER),
       side: const BorderSide(
@@ -23,17 +26,17 @@ SnackBar customDownloadSnackBar({
         color: BLACK,
         fontSize: 16.0,
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Downloading...",
+            message?? "Downloading...",
             textAlign: TextAlign.center,
           ),
-          SizedBox(
+          const SizedBox(
             width: 40.0,
           ),
-          CustomCircularProgressIndicator(
+          const CustomCircularProgressIndicator(
             color: GREEN,
           ),
         ],

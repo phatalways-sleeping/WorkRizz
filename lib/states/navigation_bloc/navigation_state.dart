@@ -70,3 +70,12 @@ final class Redirect extends NavigationState {
 final class SubTaskCreate extends NavigationState {
   const SubTaskCreate();
 }
+
+final class PDFReportViewer extends NavigationState {
+  const PDFReportViewer(this.file);
+
+  final File file;
+
+  @override
+  List<Object> get props => [...super.props, file];
+}

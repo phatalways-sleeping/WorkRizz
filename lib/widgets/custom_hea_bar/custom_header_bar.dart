@@ -69,7 +69,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                       style: context.textTheme.displayMedium?.copyWith(
                         color: context.colorScheme.onSecondary,
                         fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         overflow: TextOverflow.fade,
                       ),
                       child: upperChild,
@@ -109,7 +109,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                           style: context.textTheme.displayMedium?.copyWith(
                             color: context.colorScheme.onSecondary,
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             overflow: TextOverflow.fade,
                           ),
                           child: upperChild,
@@ -125,7 +125,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                       style: context.textTheme.displayLarge?.copyWith(
                         color: context.colorScheme.onSecondary,
                         fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                       child: bottomChild,
                     ),

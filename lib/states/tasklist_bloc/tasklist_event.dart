@@ -56,20 +56,17 @@ final class TasklistMarkSubTaskAsUncompleted extends TasklistEvent {
     required this.taskId,
     required this.subTaskId,
     required this.assigneeImageUrl,
-    required this.isTaskCompleted,
   });
 
   final String taskId;
   final String subTaskId;
   final String assigneeImageUrl;
-  final bool isTaskCompleted;
 
   @override
   List<Object> get props => [
         taskId,
         subTaskId,
         assigneeImageUrl,
-        isTaskCompleted,
       ];
 }
 

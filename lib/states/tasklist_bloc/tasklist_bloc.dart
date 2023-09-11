@@ -11,7 +11,7 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
     on<TasklistSubscribeToFirestore>((event, emit) async {
       await emit.forEach(
         _applicationRepository.projectOnViewStream(),
-        onData: (project) => TasklistSubscription(project: project),
+        onData: streamTransformation,
         onError: (error, stackTrace) => TasklistError(error.toString()),
       );
     });
@@ -33,21 +33,29 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
       emit((state as TasklistSubscription).copyWith(currentPage: event.page));
     });
     on<TasklistMarkSubTaskAsCompleted>((event, emit) async {
+      emit(TasklistSubscriptionLoading.from(state as TasklistSubscription));
       await _applicationRepository.markSubTaskCompleted(
         taskId: event.taskId,
         subTaskId: event.subTaskId,
-        assigneeImageUrl: event.assigneeImageUrl,
       );
     });
     on<TasklistMarkSubTaskAsUncompleted>((event, emit) async {
+      emit(TasklistSubscriptionLoading.from(state as TasklistSubscription));
       await _applicationRepository.markSubTaskUnCompleted(
         taskId: event.taskId,
         subTaskId: event.subTaskId,
-        assigneeImageUrl: event.assigneeImageUrl,
       );
     });
     on<TasklistCreateNewTask>((event, emit) async {
       if (event.name == null) {
+        emit(
+          TasklistSubscription.from(
+            state as TasklistSubscriptionAndOpenTaskCreateDialog,
+          ),
+        );
+        return;
+      }
+      if(event.name!.isEmpty) {
         emit(
           TasklistSubscription.from(
             state as TasklistSubscriptionAndOpenTaskCreateDialog,
@@ -63,6 +71,28 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
       emit(TasklistSubscriptionAndOpenTaskCreateDialog.from(
           state as TasklistSubscription));
     });
+  }
+
+  TasklistState streamTransformation(Project project) {
+    project.taskSmallInformations
+        .sort((a, b) => a.name.compareTo(b.name));
+    if (state is TasklistSubscriptionLoading) {
+      return TasklistSubscription(
+        project: project,
+        currentPage: (state as TasklistSubscriptionLoading).currentPage,
+      );
+    }
+    if (state is TasklistSubscriptionAndOpenTaskCreateDialog) {
+      return TasklistSubscriptionAndOpenTaskCreateDialog(
+        project: project,
+        currentPage:
+            (state as TasklistSubscriptionAndOpenTaskCreateDialog).currentPage,
+      );
+    }
+    return TasklistSubscription(
+      project: project,
+      currentPage: state.currentPage,
+    );
   }
 
   final ApplicationRepository _applicationRepository;
@@ -101,7 +131,4 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
     }
     return imageList;
   }
-
-  Stream<Task> subTaskSmallInformationStream(String taskId) =>
-      _applicationRepository.taskStream(taskId);
 }

@@ -50,6 +50,31 @@ final class TasklistSubscription extends TasklistState {
   }
 }
 
+final class TasklistSubscriptionLoading extends TasklistSubscription {
+  const TasklistSubscriptionLoading({
+    required super.project,
+    super.currentPage = 0,
+  });
+
+  factory TasklistSubscriptionLoading.from(
+          TasklistSubscription state) =>
+      TasklistSubscriptionLoading(
+        project: state.project,
+        currentPage: state.currentPage,
+      );
+
+  @override
+  TasklistSubscriptionLoading copyWith({
+    Project? project,
+    int? currentPage,
+  }) {
+    return TasklistSubscriptionLoading(
+      project: project ?? this.project,
+      currentPage: currentPage ?? this.currentPage,
+    );
+  }
+}
+
 final class TasklistSubscriptionAndOpenTaskCreateDialog
     extends TasklistSubscription {
   const TasklistSubscriptionAndOpenTaskCreateDialog({

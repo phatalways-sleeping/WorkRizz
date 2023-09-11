@@ -29,6 +29,4 @@ final class ReadSubTask extends Read {
       FirebaseFirestoreConfigs.subTasksCollection.doc(id).snapshots().map(
           (event) =>
               SubTaskModel.fromJson(event.data()! as Map<String, dynamic>));
-
-
 }

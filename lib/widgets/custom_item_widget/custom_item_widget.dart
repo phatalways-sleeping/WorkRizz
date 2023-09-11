@@ -1,53 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/widgets/tasklist/tasklist_view.dart';
 
 // ignore: must_be_immutable
-class CustomItemWidget extends StatefulWidget {
-  CustomItemWidget(
-      {super.key,
-      required this.isDone,
-      this.isFixed = true,
-      required this.name,
-      required this.subtext,
-      required this.firstChild,
-      required this.secondChild,
-      required this.controller});
-
-  bool isDone;
+class CustomItemWidget extends StatelessWidget {
+  const CustomItemWidget({
+    super.key,
+    this.isFixed = true,
+    required this.isDone,
+    required this.name,
+    required this.subtext,
+    required this.firstChild,
+    required this.secondChild,
+    required this.onPressed,
+  });
   final bool isFixed;
+  final bool isDone;
   final String name;
   final String subtext;
   final Widget secondChild;
   final Widget firstChild;
-  final SubTaskController controller;
-
-  @override
-  // ignore: no_logic_in_create_state
-  State<CustomItemWidget> createState() => _CustomItemWidgetState(controller);
-}
-
-class _CustomItemWidgetState extends State<CustomItemWidget> {
-  bool isDone = false;
-
-  void changeColor(bool? value) {
-    if (widget.isFixed) {
-      return;
-    }
-    setState(() {
-      widget.isDone = value!;
-      isDone = widget.isDone;
-    });
-  }
-
-  _CustomItemWidgetState(SubTaskController controller) {
-    controller.changeColor = changeColor;
-  }
+  final void Function(BuildContext) onPressed;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () => onPressed(context),
       style: ButtonStyle(
         shape: MaterialStatePropertyAll(
           RoundedRectangleBorder(
@@ -59,7 +36,8 @@ class _CustomItemWidgetState extends State<CustomItemWidget> {
           ),
         ),
         backgroundColor: MaterialStateProperty.resolveWith(
-            (states) => isDone ? GREEN : WHITE),
+          (states) => isDone ? GREEN : WHITE,
+        ),
         elevation: MaterialStateProperty.resolveWith(
           (states) => states.isPressed ? 4.0 : 0.0,
         ),
@@ -82,24 +60,25 @@ class _CustomItemWidgetState extends State<CustomItemWidget> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          widget.firstChild,
+          firstChild,
           SizedBox(width: MediaQuery.of(context).size.width * RATIO_SPACE),
           FittedBox(
             fit: BoxFit.fitWidth,
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.55,
               child: Text(
-                widget.name,
+                name,
                 style: context.textTheme.bodyLarge?.copyWith(
                   fontSize: 14.0,
                 ),
               ),
             ),
           ),
-          widget.secondChild,
-          SizedBox(width: MediaQuery.of(context).size.width * RATIO_SPACE),
+          const Spacer(),
+          secondChild,
+          const Spacer(),
           Text(
-            widget.subtext,
+            subtext,
             style: context.textTheme.bodyLarge?.copyWith(
               fontSize: 14.0,
             ),

@@ -11,12 +11,17 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
     required this.upperChild,
     required this.bottomChild,
     this.atHomePage = true,
+    this.hideAvatar = false,
+    this.trailing,
     this.onPressed,
-  }) : assert(atHomePage || onPressed != null);
+  })  : assert(atHomePage || onPressed != null),
+        assert(!hideAvatar || trailing != null);
 
   final bool atHomePage;
+  final bool hideAvatar;
   final Widget upperChild;
   final Widget bottomChild;
+  final Widget? trailing;
   final void Function(BuildContext context)? onPressed;
 
   @override
@@ -49,7 +54,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
             FittedBox(
@@ -64,7 +69,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                       style: context.textTheme.displayMedium?.copyWith(
                         color: context.colorScheme.onSecondary,
                         fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         overflow: TextOverflow.fade,
                       ),
                       child: upperChild,
@@ -104,7 +109,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                           style: context.textTheme.displayMedium?.copyWith(
                             color: context.colorScheme.onSecondary,
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             overflow: TextOverflow.fade,
                           ),
                           child: upperChild,
@@ -119,7 +124,7 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
                     child: DefaultTextStyle.merge(
                       style: context.textTheme.displayLarge?.copyWith(
                         color: context.colorScheme.onSecondary,
-                        fontSize: 23.0,
+                        fontSize: 20.0,
                         fontWeight: FontWeight.w600,
                       ),
                       child: bottomChild,
@@ -129,20 +134,28 @@ class CustomHeaderBar extends SliverPersistentHeaderDelegate {
               ),
             ),
             const Spacer(),
-            BlocProvider(
-              create: (context) =>
-                  AvatarBloc(context.read<ApplicationRepository>()),
-              child: AvatarWidgetWithBadge(
-                onTap: (context) {
-                  if (context.read<NavigationBloc>().state
-                      is! UserProjectInvitation) {
-                    context.read<NavigationBloc>().mapCurrentStateToEventThenEmit(
-                          context.read<NavigationBloc>().state,
-                        );
-                  }
-                },
+            if (!hideAvatar)
+              BlocProvider(
+                create: (context) =>
+                    AvatarBloc(context.read<ApplicationRepository>()),
+                child: AvatarWidgetWithBadge(
+                  onTap: (context) {
+                    if (context.read<NavigationBloc>().state
+                        is! UserProjectInvitation) {
+                      context
+                          .read<NavigationBloc>()
+                          .mapCurrentStateToEventThenEmit(
+                            context.read<NavigationBloc>().state,
+                          );
+                    }
+                  },
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.only(top: 14.0),
+                child: trailing ?? const SizedBox(),
               ),
-            ),
           ],
         ),
       ),

@@ -19,13 +19,12 @@ final class ProjectsList extends NavigationState {
 final class FileList extends NavigationState {
   const FileList();
 }
+final class Thread extends NavigationState {
+  const Thread();
+}
 
 final class Authentication extends NavigationState {
   const Authentication();
-}
-
-final class TestComponents extends NavigationState {
-  const TestComponents();
 }
 
 final class ChangePassword extends NavigationState {
@@ -64,6 +63,19 @@ final class UserProjectInvitation extends NavigationState {
   const UserProjectInvitation();
 }
 
+final class Redirect extends NavigationState {
+  const Redirect();
+}
+
 final class SubTaskCreate extends NavigationState {
   const SubTaskCreate();
+}
+
+final class PDFReportViewer extends NavigationState {
+  const PDFReportViewer(this.file);
+
+  final File file;
+
+  @override
+  List<Object> get props => [...super.props, file];
 }

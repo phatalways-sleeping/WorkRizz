@@ -55,6 +55,16 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
     activitiesCompleted: json['activitiesCompleted'] as int? ?? 0,
     totalActivities: json['totalActivities'] as int? ?? 0,
     totalFileLinks: json['totalFileLinks'] as int? ?? 0,
+    taskSmallInformations: (json['taskSmallInformations'] as List<dynamic>?)
+            ?.map(
+                (e) => TaskSmallInformation.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
+    filesSmallInformations: (json['filesSmallInformations'] as List<dynamic>?)
+            ?.map((e) =>
+                FilesSmallInformation.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        const [],
   );
 }
 
@@ -80,6 +90,10 @@ Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
       'activitiesCompleted': instance.activitiesCompleted,
       'totalActivities': instance.totalActivities,
       'totalFileLinks': instance.totalFileLinks,
+      'taskSmallInformations':
+          instance.taskSmallInformations.map((e) => e.toJson()).toList(),
+      'filesSmallInformations':
+          instance.filesSmallInformations.map((e) => e.toJson()).toList(),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

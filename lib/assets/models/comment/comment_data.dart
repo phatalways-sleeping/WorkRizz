@@ -7,7 +7,7 @@ final CommentModel comment1 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment2 = CommentModel(
@@ -17,7 +17,7 @@ final CommentModel comment2 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment3 = CommentModel(
@@ -27,7 +27,7 @@ final CommentModel comment3 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment4 = CommentModel(
@@ -37,7 +37,7 @@ final CommentModel comment4 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment5 = CommentModel(
@@ -47,7 +47,7 @@ final CommentModel comment5 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment6 = CommentModel(
@@ -57,7 +57,7 @@ final CommentModel comment6 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment7 = CommentModel(
@@ -67,7 +67,7 @@ final CommentModel comment7 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment8 = CommentModel(
@@ -77,7 +77,7 @@ final CommentModel comment8 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment9 = CommentModel(
@@ -87,7 +87,7 @@ final CommentModel comment9 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment10 = CommentModel(
@@ -97,7 +97,7 @@ final CommentModel comment10 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment11 = CommentModel(
@@ -107,7 +107,7 @@ final CommentModel comment11 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final CommentModel comment12 = CommentModel(
@@ -117,7 +117,7 @@ final CommentModel comment12 = CommentModel(
   date: DateTime.now(),
   solved: false,
   isReplied: false,
-  replyCommentId: '',
+  repliedToUsername: '',
 );
 
 final commentList = [

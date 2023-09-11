@@ -2,26 +2,34 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/apis/apis.dart';
 import 'package:task_managing_application/assets/config/config.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
+import 'package:task_managing_application/models/file/file_model.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
+import 'package:task_managing_application/models/project/files_small_info.dart';
 import 'package:task_managing_application/models/project_invitation/project_invitation.dart';
-import 'package:task_managing_application/models/task/sub_task_small_info.dart';
+import 'package:task_managing_application/models/project/sub_task_small_info.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
 import 'package:uuid/v8.dart';
 
 class ApplicationRepository {
-  ApplicationRepository._({
-    this.latestAuthenticatedEmail,
-  });
+  ApplicationRepository._();
 
-  static void initializeRepo({String? latestAuthenticatedEmail}) {
-    _instance = ApplicationRepository._(
-      latestAuthenticatedEmail: latestAuthenticatedEmail,
-    );
+  static void initializeRepo({
+    UserDataModel? userAccount,
+  }) {
+    _instance = ApplicationRepository._();
+    if (userAccount != null) {
+      _instance.userId = userAccount.id;
+      _instance.userEmailAddress = userAccount.email;
+      _instance.userImageUrl = userAccount.imageUrl;
+      _instance.username = userAccount.username;
+    }
   }
 
   static ApplicationRepository _instance = ApplicationRepository._();
@@ -31,14 +39,16 @@ class ApplicationRepository {
       const EmailPasswordAuthenticationAPI();
   final StorageAPI _storageAPI = const CloudFirestoreStorageAPI();
 
-  String? latestAuthenticatedEmail;
   late String userId;
   late String userEmailAddress;
   late String userImageUrl;
   late String username;
 
   late String projectIdOnView;
+  late String projectOnViewName;
+  late bool isLeaderOfProjectOnView;
   late String subTaskIdOnView;
+  late String taskIdOnView;
 
   Future<void> login(String email, String password) async {
     await _authenticationAPI.login(email, password).then((value) async {
@@ -50,6 +60,13 @@ class ApplicationRepository {
       username = userDataModel.username;
       await _storageAPI.updateUserActivity(userId, true, DateTime.now());
     });
+
+    await SharedPreferences.getInstance().then((value) {
+      value.setString('userEmailAddress', email);
+      value.setString('userImageUrl', userImageUrl);
+      value.setString('username', username);
+      value.setString('userId', userId);
+    });
   }
 
   Future<void> signUp(String username, String email, String password,
@@ -60,7 +77,7 @@ class ApplicationRepository {
       password,
       confirmPassword,
     );
-    final randomAvatar = AVATARS[Random(123).nextInt(AVATARS.length)];
+    final randomAvatar = AVATARS[Random().nextInt(AVATARS.length)];
 
     userId = const UuidV8().generate();
     userImageUrl = randomAvatar;
@@ -85,6 +102,12 @@ class ApplicationRepository {
 
     await _storageAPI.createNewUser(newUser);
     await _storageAPI.createNewUserActivity(userActivity);
+    await SharedPreferences.getInstance().then((value) {
+      value.setString('userEmailAddress', email);
+      value.setString('userImageUrl', userImageUrl);
+      value.setString('username', username);
+      value.setString('userId', userId);
+    });
   }
 
   Future<void> forgotPassword(String email) {
@@ -100,9 +123,18 @@ class ApplicationRepository {
   }
 
   Future<void> logout() async {
-    userId = "";
-    userImageUrl = "";
     await _storageAPI.updateUserActivity(userId, false, DateTime.now());
+    await SharedPreferences.getInstance().then((value) {
+      value.setString('userEmailAddress', "");
+      value.setString('userImageUrl', "");
+      value.setString('username', "");
+      value.setString('userId', "");
+      userId = "";
+      userEmailAddress = "";
+      userImageUrl = "";
+      username = "";
+    });
+
     return _authenticationAPI.logout();
   }
 
@@ -118,14 +150,16 @@ class ApplicationRepository {
   Stream<Project> projectOnViewStream() =>
       _storageAPI.projectStream(projectIdOnView);
   Stream<Task> taskStream(String taskId) => _storageAPI.taskStream(taskId);
-  Stream<SubTaskModel> subTaskStream(String subTaskId) =>
-      _storageAPI.subTaskModelStream(subTaskId);
+  Stream<SubTaskModel> subTaskStream({String? subTaskId}) =>
+      _storageAPI.subTaskModelStream(subTaskId ?? subTaskIdOnView);
   Stream<List<String>> get projectInvitationsStreamInUser => _storageAPI
       .userStreamByIdInUser(userId)
       .map((event) => event.projectInvitations);
   Stream<ProjectInvitationModel> projectInvitationStream(
           String projectInvitationId) =>
       _storageAPI.projectInvitationStream(projectInvitationId);
+  Stream<CommentModel> commentStream(String commentId) =>
+      _storageAPI.commentStream(commentId);
   // Future
   Future<String> currentUserImageUrl() async => await _storageAPI
       .userStreamByIdInUser(userId)
@@ -215,24 +249,27 @@ class ApplicationRepository {
   }
 
   // Projects Screen
-  Project createDefaultProjectSetup() {
-    final newProject = Project(
-      id: const UuidV8().generate(),
-      name: "",
-      tasks: const [],
-      tags: const [],
-      startDate: DateTime.now(),
-      endDate: DateTime.now(),
-      leader: userId,
-      creatorId: userId,
-      leaderImageUrl: userImageUrl,
-      assignees: const [],
-      assigneeImageUrls: const [],
-      mostActiveMemebers: const [],
-      thread: const UuidV8().generate(),
-    );
-    return newProject;
-  }
+  Project createDefaultProjectSetup() => Project(
+        id: const UuidV8().generate(),
+        name: "",
+        tasks: const [],
+        tags: const [],
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        leader: userId,
+        creatorId: userId,
+        leaderImageUrl: userImageUrl,
+        assignees: const [],
+        assigneeImageUrls: const [],
+        mostActiveMemebers: const [],
+        taskSmallInformations: const [],
+        isCompleted: false,
+        tasksCompleted: 0,
+        activitiesCompleted: 0,
+        totalActivities: 0,
+        totalFileLinks: 0,
+        thread: const UuidV8().generate(),
+      );
 
   Future<void> createNewProject({
     required Project newSetupProject,
@@ -427,7 +464,6 @@ class ApplicationRepository {
   Future<void> markSubTaskCompleted({
     required String subTaskId,
     required String taskId,
-    required String assigneeImageUrl,
   }) async {
     await Future.wait<void>(
       [
@@ -439,21 +475,44 @@ class ApplicationRepository {
 
     final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
 
+    final assigneeImageUrl = await _storageAPI
+        .userStreamByIdInUser(subTask.assignee)
+        .first
+        .then((value) => value.imageUrl);
+
     final subTaskInformation = SubTaskSmallInformation(
       id: subTaskId,
       name: subTask.name,
-      isCompleted: false,
+      isCompleted: true,
       points: subTask.points,
       assigneeImageUrl: assigneeImageUrl,
     );
 
-    await _storageAPI.removeSubTaskSmallInformationsInTask(taskId, [
-      subTaskInformation,
-    ]);
+    final taskSmallInformations = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.taskSmallInformations);
 
-    await _storageAPI.updateSubTaskSmallInformationsInTask(taskId, [
-      subTaskInformation.copyWith(
-        isCompleted: true,
+    final taskSmallInformation = taskSmallInformations.firstWhere(
+      (element) => element.id == taskId,
+    );
+
+    final newTaskInformation = taskSmallInformation.copyWith(
+      subTaskSmallInformations: [
+        ...taskSmallInformation.subTaskSmallInformations
+            .where((element) => element.id != subTaskId),
+        subTaskInformation,
+      ],
+    );
+
+    // Update the task small information in project
+    await Future.wait<void>([
+      _storageAPI.removeTaskSmallInformationsInProject(projectIdOnView, [
+        taskSmallInformation,
+      ]),
+      _storageAPI.updateTaskSmallInformationsInProject(
+        projectIdOnView,
+        [newTaskInformation],
       ),
     ]);
 
@@ -470,25 +529,50 @@ class ApplicationRepository {
   Future<void> markSubTaskUnCompleted({
     required String subTaskId,
     required String taskId,
-    required String assigneeImageUrl,
   }) async {
     final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+
+    final assigneeImageUrl = await _storageAPI
+        .userStreamByIdInUser(subTask.assignee)
+        .first
+        .then((value) => value.imageUrl);
 
     final subTaskInformation = SubTaskSmallInformation(
       id: subTaskId,
       name: subTask.name,
-      isCompleted: true,
+      isCompleted: false,
       points: subTask.points,
       assigneeImageUrl: assigneeImageUrl,
     );
-    await _storageAPI.removeSubTaskSmallInformationsInTask(taskId, [
-      subTaskInformation,
-    ]);
-    await _storageAPI.updateSubTaskSmallInformationsInTask(taskId, [
-      subTaskInformation.copyWith(
-        isCompleted: false,
+
+    final taskSmallInformations = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.taskSmallInformations);
+
+    final taskSmallInformation = taskSmallInformations.firstWhere(
+      (element) => element.id == taskId,
+    );
+
+    final newTaskInformation = taskSmallInformation.copyWith(
+      subTaskSmallInformations: [
+        ...taskSmallInformation.subTaskSmallInformations
+            .where((element) => element.id != subTaskId),
+        subTaskInformation,
+      ],
+    );
+
+    // Update the task small information in project
+    await Future.wait<void>([
+      _storageAPI.removeTaskSmallInformationsInProject(projectIdOnView, [
+        taskSmallInformation,
+      ]),
+      _storageAPI.updateTaskSmallInformationsInProject(
+        projectIdOnView,
+        [newTaskInformation],
       ),
     ]);
+
     await Future.wait<void>(
       [
         _storageAPI.updateSubTasksCompletedInTask(taskId, -1),
@@ -508,20 +592,59 @@ class ApplicationRepository {
   }
 
   // Task / Create New Task
+  Future<List<File>> pickFiles() async {
+    return await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: [
+        "pdf",
+        "docx",
+        "csv",
+        "pptx",
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'mp4',
+        'mov',
+        'avi',
+        'mp3',
+        'txt',
+      ],
+    ).then((value) {
+      if (value != null) {
+        return value.paths.map((path) => File(path!)).toList();
+      } else {
+        return <File>[];
+      }
+    }).onError((error, stackTrace) {
+      return <File>[];
+    });
+  }
+
   Future<void> createNewSubTask({
-    required String projectId,
-    required String taskId,
-    required bool needToUpdateTaskCompletion,
     required SubTaskModel newSubTask,
     required List<File> files,
   }) async {
-    final fileUrls = files.map((e) => "files/${e.path}").toList();
-    newSubTask.copyWith(
-      files: fileUrls,
+    final fileModels = files
+        .map(
+          (e) => FileModel(
+            ownerId: userId,
+            fileName: e.path.split('/').last,
+            uploadDate: DateTime.now(),
+            ownerImageUrl: userImageUrl,
+            ownerName: username,
+          ),
+        )
+        .toList();
+
+    newSubTask = newSubTask.copyWith(
+      files: fileModels,
     );
+
     for (var file in files.map(
       (e) => {
-        "path": "files/${e.path}",
+        "path": "files/${e.path.split('/').last}",
         "data": e,
       },
     )) {
@@ -529,86 +652,394 @@ class ApplicationRepository {
           .child(file["path"] as String)
           .putFile(file["data"] as File);
     }
-    final assigneeId = await _storageAPI
-        .userStreamByEmailInUser(newSubTask.assignee)
-        .first
-        .then((value) => value.id);
+
+    final assigneeImageUrl =
+        await _storageAPI.userStreamByIdInUser(newSubTask.assignee).first.then(
+              (value) => value.imageUrl,
+            );
 
     final subTaskSmallInformation = SubTaskSmallInformation(
       id: newSubTask.id,
       name: newSubTask.name,
       isCompleted: false,
       points: newSubTask.points,
-      assigneeImageUrl: await _storageAPI
-          .userStreamByIdInUser(newSubTask.assignee)
-          .first
-          .then(
-            (value) => value.imageUrl,
-          ),
+      assigneeImageUrl: assigneeImageUrl,
     );
+
+    final taskSmallInformations = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.taskSmallInformations);
+
+    final taskSmallInformation = taskSmallInformations.firstWhere(
+      (element) => element.id == taskIdOnView,
+    );
+
+    final newTaskInformation = taskSmallInformation.copyWith(
+      subTaskSmallInformations: [
+        ...taskSmallInformation.subTaskSmallInformations,
+        subTaskSmallInformation,
+      ],
+    );
+
+    // Update the task small information in project
+    await Future.wait<void>([
+      _storageAPI.removeTaskSmallInformationsInProject(projectIdOnView, [
+        taskSmallInformation,
+      ]),
+      _storageAPI.updateTaskSmallInformationsInProject(
+        projectIdOnView,
+        [newTaskInformation],
+      ),
+    ]);
+
+    final currentProject =
+        await _storageAPI.projectStream(projectIdOnView).first;
+
+    final currentFilesSmallInformation = currentProject.filesSmallInformations
+        .firstWhere((element) => element.taskId == taskIdOnView);
+
+    final newFilesSmallInformation =
+        currentFilesSmallInformation.copyWith(files: fileModels);
+
+    // Update the files small information in project
+    await Future.wait<void>([
+      _storageAPI.removeFilesSmallInformationsInProject(projectIdOnView, [
+        currentFilesSmallInformation,
+      ]),
+      _storageAPI.updateFilesSmallInformationsInProject(
+        projectIdOnView,
+        [newFilesSmallInformation],
+      ),
+    ]);
+
+    // Increase total files links in project
+    await _storageAPI.updateTotalFileLinksInProject(
+      projectIdOnView,
+      fileModels.length,
+    );
+
+    final needToUpdateTaskCompletion = await _storageAPI
+        .taskStream(taskIdOnView)
+        .first
+        .then((value) => value.isCompleted);
     await Future.wait<void>(
       [
         _storageAPI.createNewSubTask(
           newSubTask,
         ),
-        _storageAPI.updateSubTaskSmallInformationsInTask(
-          taskId,
-          [
-            subTaskSmallInformation,
-          ],
-        ),
-        _storageAPI.updateSubTasksInTask(taskId, [newSubTask.id]),
-        _storageAPI.updatePointsInTask(taskId, newSubTask.points),
-        _storageAPI.updateTotalActivitiesInProject(projectId, 1),
-        _storageAPI.updateSubTasksInUser(assigneeId, [newSubTask.id]),
+        _storageAPI.updateSubTasksInTask(taskIdOnView, [newSubTask.id]),
+        _storageAPI.updatePointsInTask(taskIdOnView, newSubTask.points),
+        _storageAPI.updateTotalActivitiesInProject(projectIdOnView, 1),
+        _storageAPI.updateSubTasksInUser(newSubTask.assignee, [newSubTask.id]),
         if (needToUpdateTaskCompletion) ...[
-          _storageAPI.updateIsCompletedInTask(taskId, false),
-          _storageAPI.updateTasksCompletedInProject(projectId, -1),
+          _storageAPI.updateIsCompletedInTask(taskIdOnView, false),
+          _storageAPI.updateTasksCompletedInProject(projectIdOnView, -1),
         ],
       ],
     );
   }
 
   Future<void> removeSubTask({
-    required String projectId,
-    required String taskId,
     required String subTaskId,
-    required bool needToUpdateTaskCompletion,
   }) async {
     final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
-    final subTaskInformation = await _storageAPI.taskStream(taskId).first.then(
-          (value) => value.subTaskSmallInformations.where(
-            (element) => element.id == subTaskId,
-          ),
-        );
-    final subTaskSmallInformationTrue = SubTaskSmallInformation(
-      id: subTaskId,
-      name: subTask.name,
-      isCompleted: true,
-      points: subTask.points,
-      assigneeImageUrl: subTaskInformation.first.assigneeImageUrl,
+
+    final taskSmallInformations = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.taskSmallInformations);
+
+    final taskSmallInformation = taskSmallInformations.firstWhere(
+      (element) => element.id == taskIdOnView,
     );
-    final subTaskSmallInformationFalse = SubTaskSmallInformation(
-      id: subTaskId,
-      name: subTask.name,
-      isCompleted: false,
-      points: subTask.points,
-      assigneeImageUrl: subTaskInformation.first.assigneeImageUrl,
+
+    final newTaskInformation = taskSmallInformation.copyWith(
+      subTaskSmallInformations: [
+        ...taskSmallInformation.subTaskSmallInformations
+            .where((element) => element.id != subTaskId),
+      ],
+    );
+
+    // Update the task small information in project
+    await Future.wait<void>([
+      _storageAPI.removeTaskSmallInformationsInProject(projectIdOnView, [
+        taskSmallInformation,
+      ]),
+      _storageAPI.updateTaskSmallInformationsInProject(
+        projectIdOnView,
+        [newTaskInformation],
+      ),
+    ]);
+
+    final needToUpdateTaskCompletion = await _storageAPI
+        .taskStream(taskIdOnView)
+        .first
+        .then((value) => value.subTasksCompleted == value.subTasks.length - 1);
+
+    await Future.wait<void>(
+      [
+        _storageAPI.updateTotalActivitiesInProject(projectIdOnView, -1),
+        _storageAPI.removeSubTasksInTask(taskIdOnView, [subTaskId]),
+        _storageAPI.updatePointsInTask(taskIdOnView, -subTask.points),
+        if (needToUpdateTaskCompletion) ...[
+          _storageAPI.updateIsCompletedInTask(taskIdOnView, true),
+          _storageAPI.updateTasksCompletedInProject(projectIdOnView, 1),
+        ],
+      ],
+    );
+
+    // Remove all the file model related to the sub task in storage and decrease the total file links in project
+    await Future.wait<void>(
+      [
+        for (var file in subTask.files)
+          FirebaseFirestoreConfigs.storageRef.child(file.fileName).delete(),
+        _storageAPI.updateTotalFileLinksInProject(
+          projectIdOnView,
+          -subTask.files.length,
+        ),
+      ],
+    );
+
+    // Remove all the file model of this sub task in the FilesSmallInformation in project
+    final currentProject =
+        await _storageAPI.projectStream(projectIdOnView).first;
+
+    final currentFilesSmallInformation = currentProject.filesSmallInformations
+        .firstWhere((element) => element.taskId == taskIdOnView);
+
+    final newFilesSmallInformation = currentFilesSmallInformation.copyWith(
+      files: [
+        ...currentFilesSmallInformation.files
+            .where((element) => !subTask.files.contains(element)),
+      ],
+    );
+
+    // Update the files small information in project
+    await Future.wait<void>([
+      _storageAPI.removeFilesSmallInformationsInProject(projectIdOnView, [
+        currentFilesSmallInformation,
+      ]),
+      _storageAPI.updateFilesSmallInformationsInProject(
+        projectIdOnView,
+        [newFilesSmallInformation],
+      ),
+    ]);
+  }
+
+  Future<void> updateFilesWithoutOverridePermissionToSubTask({
+    required List<File> files,
+  }) async {
+    final fileModels = files
+        .map(
+          (e) => FileModel(
+            ownerId: userId,
+            fileName: e.path.split('/').last,
+            uploadDate: DateTime.now(),
+            ownerImageUrl: userImageUrl,
+            ownerName: username,
+          ),
+        )
+        .toList();
+
+    final currentFileModels = await _storageAPI
+        .subTaskModelStream(subTaskIdOnView)
+        .first
+        .then((value) => value.files);
+
+    final needToUpdateFileModels = fileModels
+        .where((element) => !currentFileModels.contains(element))
+        .toList();
+
+    final needToUpdateFiles = files
+        .where((element) => needToUpdateFileModels
+            .map((e) => e.fileName)
+            .contains('files/${element.path.split('/').last}'))
+        .toList();
+
+    for (var file in needToUpdateFiles.map(
+      (e) => {
+        "path": "files/${e.path.split('/').last}",
+        "data": e,
+      },
+    )) {
+      await FirebaseFirestoreConfigs.storageRef
+          .child(file["path"] as String)
+          .putFile(file["data"] as File);
+    }
+
+    final currentFilesSmallInformation = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.filesSmallInformations
+            .firstWhere((element) => element.taskId == taskIdOnView));
+
+    final newFilesSmallInformation = currentFilesSmallInformation.copyWith(
+      files: [
+        ...currentFilesSmallInformation.files,
+        ...needToUpdateFileModels,
+      ],
+    );
+
+    // Update the files small information in project
+    await Future.wait<void>([
+      _storageAPI.removeFilesSmallInformationsInProject(projectIdOnView, [
+        currentFilesSmallInformation,
+      ]),
+      _storageAPI.updateFilesSmallInformationsInProject(
+        projectIdOnView,
+        [newFilesSmallInformation],
+      ),
+    ]);
+
+    // Increase total files links in project
+    await _storageAPI.updateTotalFileLinksInProject(
+      projectIdOnView,
+      needToUpdateFileModels.length,
     );
 
     await Future.wait<void>(
       [
-        _storageAPI.removeSubTaskSmallInformationsInTask(taskId, [
-          subTaskSmallInformationTrue,
-          subTaskSmallInformationFalse,
-        ]),
-        _storageAPI.updateTotalActivitiesInProject(projectId, -1),
-        _storageAPI.removeSubTasksInTask(taskId, [subTaskId]),
-        _storageAPI.updatePointsInTask(taskId, -subTask.points),
-        if (needToUpdateTaskCompletion) ...[
-          _storageAPI.updateIsCompletedInTask(taskId, true),
-          _storageAPI.updateTasksCompletedInProject(projectId, 1),
-        ],
+        _storageAPI.updateFilesInSubTask(
+          subTaskIdOnView,
+          needToUpdateFileModels,
+        ),
+      ],
+    );
+  }
+
+  Future<void> updateFilesWithOverridePermissionToSubTask({
+    required List<File> files,
+  }) async {
+    final fileModels = files.map(
+      (e) => FileModel(
+        ownerId: userId,
+        fileName: e.path.split('/').last,
+        uploadDate: DateTime.now(),
+        ownerImageUrl: userImageUrl,
+        ownerName: username,
+      ),
+    );
+
+    for (var file in files.map(
+      (e) => {
+        "path": "files/${e.path.split('/').last}",
+        "data": e,
+      },
+    )) {
+      await FirebaseFirestoreConfigs.storageRef
+          .child(file["path"] as String)
+          .putFile(file["data"] as File);
+    }
+
+    // Get the current files in sub task
+    final currentFileModels = await _storageAPI
+        .subTaskModelStream(subTaskIdOnView)
+        .first
+        .then((value) => value.files);
+
+    // Remove all the files have the same name as the new files
+    final fileUrls = files.map((e) => 'files/${e.path.split('/').last}');
+    final needToRemoveFileModels = currentFileModels
+        .where(
+          (element) => fileUrls.contains(
+            element.fileName,
+          ),
+        )
+        .toList();
+
+    // Remove the files from storage and decrease the total file links in project
+    await Future.wait<void>(
+      [
+        for (var file in needToRemoveFileModels)
+          FirebaseFirestoreConfigs.storageRef.child(file.fileName).delete(),
+        _storageAPI.updateTotalFileLinksInProject(
+          projectIdOnView,
+          -needToRemoveFileModels.length,
+        ),
+      ],
+    );
+
+    final newFileModels = [
+      ...currentFileModels
+          .where(
+            (element) => !needToRemoveFileModels.contains(element),
+          )
+          .toList(),
+      ...fileModels,
+    ];
+
+    // Remove and Update the files model in sub task, increase the total file links in project
+    await Future.wait<void>(
+      [
+        _storageAPI.removeFilesInSubTask(
+          subTaskIdOnView,
+          needToRemoveFileModels,
+        ),
+        _storageAPI.updateFilesInSubTask(
+          subTaskIdOnView,
+          newFileModels,
+        ),
+        _storageAPI.updateTotalFileLinksInProject(
+          projectIdOnView,
+          newFileModels.length,
+        ),
+      ],
+    );
+
+    final currentFilesSmallInformation =
+        await _storageAPI.projectStream(projectIdOnView).first.then(
+              (value) => value.filesSmallInformations.firstWhere(
+                (element) => element.taskId == taskIdOnView,
+              ),
+            );
+
+    final newFilesSmallInformation = currentFilesSmallInformation.copyWith(
+      files: newFileModels,
+    );
+
+    // Update the files small information in project
+    await Future.wait<void>([
+      _storageAPI.removeFilesSmallInformationsInProject(projectIdOnView, [
+        currentFilesSmallInformation,
+      ]),
+      _storageAPI.updateFilesSmallInformationsInProject(
+        projectIdOnView,
+        [newFilesSmallInformation],
+      ),
+    ]);
+  }
+
+  Future<void> removeFilesFromSubTask({
+    required List<String> fileUrls,
+  }) async {
+    // Remove file from storage and decrease the total file links in project
+    await Future.wait<void>(
+      [
+        for (var fileUrl in fileUrls)
+          FirebaseFirestoreConfigs.storageRef.child(fileUrl).delete(),
+        _storageAPI.updateTotalFileLinksInProject(
+          projectIdOnView,
+          -fileUrls.length,
+        ),
+      ],
+    );
+
+    // Remove the files from sub task
+    final removedFileModels =
+        await _storageAPI.subTaskModelStream(subTaskIdOnView).first.then(
+              (value) => value.files
+                  .where(
+                    (element) => fileUrls.contains(element.fileName),
+                  )
+                  .toList(),
+            );
+    await Future.wait<void>(
+      [
+        _storageAPI.removeFilesInSubTask(
+          subTaskIdOnView,
+          removedFileModels,
+        ),
       ],
     );
   }
@@ -634,6 +1065,16 @@ class ApplicationRepository {
             newTask.id,
           ],
         ),
+        _storageAPI.updateFilesSmallInformationsInProject(
+          projectIdOnView,
+          [
+            FilesSmallInformation(
+              taskId: newTask.id,
+              taskName: newTask.name,
+              files: const [],
+            ),
+          ],
+        )
       ],
     );
   }
@@ -642,7 +1083,36 @@ class ApplicationRepository {
     required String taskId,
     required String taskName,
   }) async {
-    await Future.wait<void>([_storageAPI.updateNameInTask(taskId, taskName)]);
+    await Future.wait<void>(
+      [
+        _storageAPI.updateNameInTask(
+          taskId,
+          taskName,
+        ),
+      ],
+    );
+
+    // Update task name in FilesInformation in project
+    final currentProject =
+        await _storageAPI.projectStream(projectIdOnView).first;
+    
+    final currentFilesSmallInformation = currentProject.filesSmallInformations
+        .firstWhere((element) => element.taskId == taskId);
+
+    final newFilesSmallInformation = currentFilesSmallInformation.copyWith(
+      taskName: taskName,
+    );
+
+    // Update the files small information in project
+    await Future.wait<void>([
+      _storageAPI.removeFilesSmallInformationsInProject(projectIdOnView, [
+        currentFilesSmallInformation,
+      ]),
+      _storageAPI.updateFilesSmallInformationsInProject(
+        projectIdOnView,
+        [newFilesSmallInformation],
+      ),
+    ]);
   }
 
   // Add a person: find by email
@@ -693,22 +1163,20 @@ class ApplicationRepository {
   }
 
   Future<void> createNewComment({
-    required String ofWhichSubTaskId,
     required String comment,
-    required String commenter,
   }) async {
     final commentModel = CommentModel(
       id: const UuidV8().generate(),
       comment: comment,
-      commenter: commenter,
+      commenter: userId,
       date: DateTime.now(),
       solved: false,
       isReplied: false,
-      replyCommentId: '',
+      repliedToUsername: username,
     );
     await Future.wait<void>([
       _storageAPI.createNewComment(commentModel),
-      _storageAPI.updateCommentsInSubTask(ofWhichSubTaskId, [commentModel.id]),
+      _storageAPI.updateCommentsInSubTask(subTaskIdOnView, [commentModel.id]),
     ]);
   }
 
@@ -726,13 +1194,115 @@ class ApplicationRepository {
 
   Future<void> repliedToComment({
     required String repliedCommentId,
-    required String replyingCommentId,
+    required String repliedToUsername,
+    required String message,
   }) async {
-    await _storageAPI.updateIsRepliedInComment(repliedCommentId, true);
-    await _storageAPI.updateReplyCommentIdInComment(
-      repliedCommentId,
-      replyingCommentId,
+    final commentModel = CommentModel(
+      id: const UuidV8().generate(),
+      comment: message,
+      commenter: userId,
+      date: DateTime.now(),
+      solved: false,
+      isReplied: true,
+      repliedToUsername: repliedToUsername,
     );
+
+    debugPrint(commentModel.toString());
+    await Future.wait<void>(
+      [
+        _storageAPI.updateIsRepliedInComment(repliedCommentId, false),
+        _storageAPI.createNewComment(commentModel),
+        _storageAPI.updateCommentsInSubTask(subTaskIdOnView, [commentModel.id]),
+      ],
+    );
+  }
+
+  Future<void> removeCommentOutOfSubTask({required String commentId}) async {
+    await Future.wait<void>([
+      _storageAPI.removeCommentsInSubTask(subTaskIdOnView, [commentId]),
+      _storageAPI.deleteComment(commentId),
+    ]);
+  }
+
+  Future<void> updateRemainingOfSubTask({
+    required String description,
+    required DateTime dueDate,
+    required int points,
+    required int grade,
+    required double progress,
+    required String leaderComment,
+    required int oldPoints,
+    required bool isCompleted,
+  }) async {
+    if (oldPoints != points) {
+      final taskSmallInformations = await _storageAPI
+          .projectStream(projectIdOnView)
+          .first
+          .then((value) => value.taskSmallInformations);
+
+      final taskSmallInformation = taskSmallInformations.firstWhere(
+        (element) => element.id == taskIdOnView,
+      );
+
+      final subTaskSmallInformation = taskSmallInformation
+          .subTaskSmallInformations
+          .firstWhere((element) => element.id == subTaskIdOnView);
+
+      final newSubTaskSmallInformation = subTaskSmallInformation.copyWith(
+        points: points,
+      );
+
+      final newTaskSmallInformation = taskSmallInformation.copyWith(
+        subTaskSmallInformations: [
+          ...taskSmallInformation.subTaskSmallInformations
+              .where((element) => element.id != subTaskIdOnView),
+          newSubTaskSmallInformation,
+        ],
+      );
+
+      await Future.wait<void>([
+        _storageAPI.updatePointsInSubTask(subTaskIdOnView, points),
+        _storageAPI.updatePointsInTask(taskIdOnView, points - oldPoints),
+        _storageAPI.removeTaskSmallInformationsInProject(projectIdOnView, [
+          taskSmallInformation,
+        ]),
+        _storageAPI.updateTaskSmallInformationsInProject(
+          projectIdOnView,
+          [newTaskSmallInformation],
+        ),
+      ]);
+    }
+    final subTaskCompleted = await _storageAPI
+        .subTaskModelStream(subTaskIdOnView)
+        .first
+        .then((value) => value.isCompleted);
+
+    await Future.wait<void>(
+      [
+        _storageAPI.updateDescriptionInSubTask(subTaskIdOnView, description),
+        _storageAPI.updateDueDateInSubTask(subTaskIdOnView, dueDate),
+        _storageAPI.updateGradeInSubTask(subTaskIdOnView, grade),
+        _storageAPI.updateProgressInSubTask(subTaskIdOnView, progress),
+        _storageAPI.updateLeaderCommentInSubTask(
+          subTaskIdOnView,
+          leaderComment,
+        ),
+        if (isCompleted && !subTaskCompleted)
+          markSubTaskCompleted(
+            subTaskId: subTaskIdOnView,
+            taskId: taskIdOnView,
+          )
+        else if (!isCompleted && subTaskCompleted)
+          markSubTaskUnCompleted(
+            subTaskId: subTaskIdOnView,
+            taskId: taskIdOnView,
+          )
+      ],
+    ).onError((error, stackTrace) {
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      return [];
+    });
   }
   // Task / View files
 
@@ -775,14 +1345,14 @@ class ApplicationRepository {
       assert(file != null);
       final fileTypeString = file!.path.split(".").last;
       final fileType = fileTypeString == "pdf"
-          ? FileType.pdf
+          ? FileTypeMode.pdf
           : fileTypeString == "docx"
-              ? FileType.doc
+              ? FileTypeMode.doc
               : fileTypeString == "csv"
-                  ? FileType.csv
+                  ? FileTypeMode.csv
                   : fileTypeString == "pptx"
-                      ? FileType.ppt
-                      : FileType.other;
+                      ? FileTypeMode.ppt
+                      : FileTypeMode.other;
 
       final newMessage = FileMessageModel(
         id: const UuidV8().generate(),
@@ -801,7 +1371,6 @@ class ApplicationRepository {
     }
   }
 
-  Future<File> downloadFile(String fileUrl) async => await _storageAPI.fileFromStorage(fileUrl);
-
-  Future<File> downloadImage(String imageUrl) async => await _storageAPI.imageFileFromStorage(imageUrl);
+  Future<File> downloadFile(String fileUrl) async =>
+      await _storageAPI.downloadFile(fileUrl);
 }

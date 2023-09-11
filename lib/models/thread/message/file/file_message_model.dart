@@ -5,7 +5,7 @@ import 'package:task_managing_application/models/thread/message/base/message_mod
 
 part 'file_message_model.g.dart';
 
-enum FileType {
+enum FileTypeMode {
   pdf,
   txt,
   csv,
@@ -45,7 +45,7 @@ class FileMessageModel extends MessageModel {
   @JsonKey(required: true)
   final String fileName;
   @JsonKey(required: true)
-  final FileType fileType;
+  final FileTypeMode fileType;
 
   @override
   List<Object> get props => [
@@ -62,7 +62,7 @@ class FileMessageModel extends MessageModel {
     DateTime? time,
     String? fileUrl,
     String? fileName,
-    FileType? fileType,
+    FileTypeMode? fileType,
   }) {
     return FileMessageModel(
       reference: reference ?? this.reference,

@@ -1,6 +1,6 @@
 // Generate instances of FileMessageModel
 import 'package:task_managing_application/models/models.dart'
-    show FileMessageModel, FileType, ImageMessageModel, TextMessageModel;
+    show FileMessageModel, FileTypeMode, ImageMessageModel, TextMessageModel;
 
 final fileMessage1 = FileMessageModel(
   id: '20230831-1221-8a41-9240-a5f34671da42',
@@ -8,7 +8,7 @@ final fileMessage1 = FileMessageModel(
   time: DateTime.now(),
   fileUrl: 'files/Books.pdf',
   fileName: 'Books.pdf',
-  fileType: FileType.pdf,
+  fileType: FileTypeMode.pdf,
 );
 
 final fileMessage2 = FileMessageModel(
@@ -17,7 +17,7 @@ final fileMessage2 = FileMessageModel(
   time: DateTime.now(),
   fileUrl: 'files/Work_And_Energy.txt',
   fileName: 'Work_And_Energy.txt',
-  fileType: FileType.txt,
+  fileType: FileTypeMode.txt,
 );
 
 final fileMessage3 = FileMessageModel(
@@ -26,7 +26,7 @@ final fileMessage3 = FileMessageModel(
   time: DateTime.now(),
   fileUrl: 'files/income.csv',
   fileName: 'income.csv',
-  fileType: FileType.csv,
+  fileType: FileTypeMode.csv,
 );
 
 // Generate instances of ImageMessageModel

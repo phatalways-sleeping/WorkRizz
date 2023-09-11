@@ -7,7 +7,7 @@ class ListSubTask extends StatelessWidget {
     required this.tasks,
   });
 
-  final List<String> tasks;
+  final List<TaskSmallInformation> tasks;
 
   @override
   Widget build(BuildContext context) {
@@ -61,45 +61,13 @@ class ListSubTask extends StatelessWidget {
                 margin: EdgeInsets.symmetric(
                     horizontal:
                         context.mediaQuery.size.width * RATIO_PADDING + 5.0),
-                child: SubTask(
-                  taskId: tasks[index],
+                child: SubTaskWidget(
+                  task: tasks[index],
                   currentPage: index + 1,
                   totalPage: tasks.length,
                 ),
               ),
             ),
-            // SizedBox(
-            //   height: context.mediaQuery.size.height * RATIO_MARGIN,
-            // ),
-            // ElevatedButton(
-            //   onPressed: () {},
-            //   style: const ButtonStyle(
-            //     overlayColor: MaterialStatePropertyAll(
-            //       PURPLE,
-            //     ),
-            //     splashFactory: InkSparkle.splashFactory,
-            //     animationDuration: Duration(
-            //       seconds: 2,
-            //     ),
-            //     tapTargetSize: MaterialTapTargetSize.padded,
-            //     shape: MaterialStatePropertyAll(
-            //       RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.horizontal(
-            //           left: Radius.circular(MEDIUM_CORNER),
-            //         ),
-            //         // no right borderd
-            //         side: BorderSide.none,
-            //       ),
-            //     ),
-            //     backgroundColor: MaterialStatePropertyAll(
-            //       PINK,
-            //     ),
-            //   ),
-            //   child: SvgPicture.string(SvgAssets.add),
-            // ),
-            // SizedBox(
-            //   height: context.mediaQuery.size.height * 0.2,
-            // ),
           ],
         ),
       ),

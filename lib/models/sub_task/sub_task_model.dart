@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:task_managing_application/models/base/base.dart';
+import 'package:task_managing_application/models/file/file_model.dart';
 import 'package:task_managing_application/models/json_converters/json_converters.dart';
 
 part 'sub_task_model.g.dart';
@@ -59,7 +60,7 @@ class SubTaskModel extends Base {
   @JsonKey(defaultValue: 0)
   final int points;
   @JsonKey(defaultValue: [])
-  final List<String> files;
+  final List<FileModel> files;
   @JsonKey(defaultValue: [])
   final List<String> comments;
   @JsonKey(defaultValue: 0)
@@ -94,7 +95,7 @@ class SubTaskModel extends Base {
     DateTime? dueDate,
     bool? isCompleted,
     int? points,
-    List<String>? files,
+    List<FileModel>? files,
     List<String>? comments,
     double? progress,
     int? grade,

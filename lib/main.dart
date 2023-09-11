@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
-import 'package:task_managing_application/screens/authentication/authentication_screen.dart';
-import 'package:task_managing_application/screens/base/base_screen.dart';
-import 'package:task_managing_application/screens/project_invitation/project_invitation_screen.dart';
-import 'package:task_managing_application/screens/subtask_view/subtask_create_screen.dart';
-import 'package:task_managing_application/screens/subtask_view/subtask_view_screen.dart';
-import 'package:task_managing_application/screens/tasklist/tasklist_screen.dart';
+import 'package:task_managing_application/screens/pdf_report_viewer/pdf_report_viewer_screen.dart';
+import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
 import 'package:task_managing_application/screens/project/project_screen.dart';
 import 'package:task_managing_application/screens/splash/splash_screen.dart';
@@ -15,10 +11,12 @@ import 'package:task_managing_application/screens/homepage/homepage_screen.dart'
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
+import 'package:task_managing_application/screens/thread/thread_screen.dart';
 import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/states/tasklist_bloc/tasklist_bloc.dart';
-import 'package:task_managing_application/states/user_project_invitation/user_project_invitation_bloc.dart';
-import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
+import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart'
+    show SubtaskCreateBloc;
+import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_bloc.dart'
+    show SubtaskViewBloc;
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -27,25 +25,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // ApplicationRepository.repository.userId =
-  //     "20230831-0517-8230-a202-0089f860b83a";
-
-  // ApplicationRepository.repository.userImageUrl = "avatars/avatar_1.jpg";
-
-  // ApplicationRepository.repository.userEmailAddress = "matwil@gmail.com";
-
-  // ApplicationRepository.repository.username = "Mathew Wilson";
-
-  ApplicationRepository.repository.userId =
-      "20230831-0517-8130-8211-a9c1dfa3e677";
-
-  ApplicationRepository.repository.userImageUrl = "avatars/avatar_2.jpg";
-
-  ApplicationRepository.repository.userEmailAddress = "jane@example.com";
-
-  ApplicationRepository.repository.username = "Jane Smith";
-
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,
@@ -66,11 +45,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
+      //home: ThreadScreen(),
       home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-      ),
+       ), 
     );
   }
 }
@@ -96,27 +76,12 @@ class AppFlow extends StatelessWidget {
               child: const SplashScreen(),
             ),
           ),
-        if (state is TestComponents)
-          const MaterialPage(
-            child: BaseScreen(
-              hideFloatingActionButton: true,
-              child: CustomScrollView(
-                slivers: [
-                  Center(
-                    child: TaskTag(
-                      color: PINK,
-                      name: "2",
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
         if (state is Authentication)
           MaterialPage(
             child: BlocProvider(
               create: (context) =>
-                  AuthenticationBloc(context.read<ApplicationRepository>()),
+                  AuthenticationBloc(context.read<ApplicationRepository>())
+                    ..add(const AuthenticationClearEvent()),
               child: const AuthenticationScreen(),
             ),
           ),
@@ -136,6 +101,10 @@ class AppFlow extends StatelessWidget {
               child: const ProjectInvitationScreen(),
             ),
           ),
+        if (state is Redirect)
+          const MaterialPage(
+            child: RedirectScreen(),
+          ),
         if (state is TaskList)
           MaterialPage(
             child: BlocProvider(
@@ -145,9 +114,43 @@ class AppFlow extends StatelessWidget {
               child: const TaskListScreen(),
             ),
           ),
+        if (state is FileList)
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => FilelistBloc(
+                context.read<ApplicationRepository>(),
+              )..add(const FilelistSubscibeToStreamEvent()),
+              child: const FileListScreen(),
+            ),
+          ),
+        if (state is Thread)
+          const MaterialPage(
+            child: ThreadScreen(),
+          ),
         if (state is SubTaskCreate)
-          const MaterialPage(child: SubTaskCreateScreen()),
-        if (state is SubTaskDetail) const MaterialPage(child: SubTaskScreen()),
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => SubtaskCreateBloc(
+                context.read<ApplicationRepository>(),
+              ),
+              child: const SubTaskCreateScreen(),
+            ),
+          ),
+        if (state is SubTaskDetail)
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => SubtaskViewBloc(
+                context.read<ApplicationRepository>(),
+              ),
+              child: const SubTaskScreen(),
+            ),
+          ),
+        if (state is PDFReportViewer)
+          MaterialPage(
+            child: PDFReportViewerScreen(
+              file: state.file,
+            ),
+          ),
         if (state is ChangePassword)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Home)
@@ -168,9 +171,5 @@ class AppFlow extends StatelessWidget {
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Settings)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
-        if (state is FileList)
-          const MaterialPage(
-            child: FileListScreen(),
-          ),
       ];
 }

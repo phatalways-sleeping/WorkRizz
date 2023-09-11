@@ -29,6 +29,13 @@ final class UserProjectInvitationSuccess extends UserProjectInvitationState {
   });
 }
 
+final class UserProjectInvitationSuccessConfirmLogout
+    extends UserProjectInvitationState {
+  const UserProjectInvitationSuccessConfirmLogout({
+    required super.projectInvitation,
+  });
+}
+
 final class UserProjectInvitationFailure extends UserProjectInvitationState {
   const UserProjectInvitationFailure(this.message);
 

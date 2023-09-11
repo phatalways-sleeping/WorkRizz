@@ -20,7 +20,7 @@ FileMessageModel _$FileMessageModelFromJson(Map<String, dynamic> json) {
     time: const DateTimeSerializer().fromJson(json['time'] as String),
     fileUrl: json['fileUrl'] as String,
     fileName: json['fileName'] as String,
-    fileType: $enumDecode(_$FileTypeEnumMap, json['fileType']),
+    fileType: $enumDecode(_$FileTypeModeEnumMap, json['fileType']),
   );
 }
 
@@ -34,7 +34,7 @@ Map<String, dynamic> _$FileMessageModelToJson(FileMessageModel instance) =>
       'time': const DateTimeSerializer().toJson(instance.time),
       'fileUrl': instance.fileUrl,
       'fileName': instance.fileName,
-      'fileType': _$FileTypeEnumMap[instance.fileType]!,
+      'fileType': _$FileTypeModeEnumMap[instance.fileType]!,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(
@@ -43,14 +43,14 @@ Value? _$JsonConverterFromJson<Json, Value>(
 ) =>
     json == null ? null : fromJson(json as Json);
 
-const _$FileTypeEnumMap = {
-  FileType.pdf: 'pdf',
-  FileType.txt: 'txt',
-  FileType.csv: 'csv',
-  FileType.doc: 'doc',
-  FileType.xls: 'xls',
-  FileType.ppt: 'ppt',
-  FileType.other: 'other',
+const _$FileTypeModeEnumMap = {
+  FileTypeMode.pdf: 'pdf',
+  FileTypeMode.txt: 'txt',
+  FileTypeMode.csv: 'csv',
+  FileTypeMode.doc: 'doc',
+  FileTypeMode.xls: 'xls',
+  FileTypeMode.ppt: 'ppt',
+  FileTypeMode.other: 'other',
 };
 
 Json? _$JsonConverterToJson<Json, Value>(

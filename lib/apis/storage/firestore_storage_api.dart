@@ -111,39 +111,38 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Stream<MessageModel> messageStream(String id) =>
       ReadMessage.messageStreamById(id);
   @override
-  Future<File> imageFileFromStorage(String path) async {
-    // using dio and path_provider
-    final dir = await getTemporaryDirectory();
-    final file = File("${dir.path}/${path.split('/').last}");
-    final dio = Dio();
-    final downloadPath =
-        await FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
+  Future<File> downloadFile(String path) async {
     try {
-      await dio.download(downloadPath, file.path);
+      final Dio dio = Dio();
+      final fileUrl = await FirebaseFirestoreConfigs.storageRef
+          .child(path)
+          .getDownloadURL();
+      // Send a GET request to the file URL.
+      final Response response = await dio.get(
+        fileUrl,
+        options: Options(
+          responseType: ResponseType
+              .bytes, // Ensure that the response is treated as bytes.
+        ),
+      );
+      String filePath = '/storage/emulated/0/Download/${path.split('/').last}';
+      // Write the downloaded bytes to the file.
+      File file = File(filePath);
+      await file.writeAsBytes(response.data);
       return file;
     } catch (e) {
-      rethrow;
-    }
-  }
-  @override
-  Future<File> fileFromStorage(String path) async {
-    // using dio and path_provider
-    final dir = await getTemporaryDirectory();
-    final file = File("${dir.path}/${path.split('/').last}");
-    final dio = Dio();
-    final downloadPath =
-        await FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
-    try {
-      await dio.download(downloadPath, file.path);
-      return file;
-    } catch (e) {
-      rethrow;
+      if (e is DioException) {
+        throw DioDownloadException.from(e);
+      } else if (e is FirebaseException) {
+        throw FirebaseDownloadException.from(e);
+      }
+      throw FileDownloadException.from(e as FileSystemException);
     }
   }
 
   // - CommentModel
   @override
-  Future<CommentModel> commentFuture(String id) => ReadComment.commentById(id);
+  Stream<CommentModel> commentStream(String id) => ReadComment.commentById(id);
   // UPDATE
   // - UserDataModel
   @override
@@ -293,6 +292,22 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> updateThreadInProject(String id, String thread) =>
       UpdateProject.updateThread(id, thread);
+  @override
+  Future<void> updateTaskSmallInformationsInProject(
+          String id, List<TaskSmallInformation> latestVersion) =>
+      UpdateProject.updateTaskSmallInformations(id, latestVersion);
+  @override
+  Future<void> removeTaskSmallInformationsInProject(
+          String id, List<TaskSmallInformation> removedItems) =>
+      UpdateProject.removeTaskSmallInformations(id, removedItems);
+  @override
+  Future<void> updateFilesSmallInformationsInProject(
+          String id, List<FilesSmallInformation> latestVersion) =>
+      UpdateProject.updateFileSmallInformations(id, latestVersion);
+  @override
+  Future<void> removeFilesSmallInformationsInProject(
+          String id, List<FilesSmallInformation> removedItems) =>
+      UpdateProject.removeFileSmallInformations(id, removedItems);
   // - ProjectInvitationModel
   @override
   Future<void> updateProjectInvitationInProjectInvitation(
@@ -321,14 +336,6 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<void> updateTaskInTask(String id, Task task) =>
       UpdateTask.updateTask(id, task);
-  @override
-  Future<void> updateSubTaskSmallInformationsInTask(
-          String id, List<SubTaskSmallInformation> latestVersion) =>
-      UpdateTask.updateSubTaskSmallInformations(id, latestVersion);
-  @override
-  Future<void> removeSubTaskSmallInformationsInTask(
-          String id, List<SubTaskSmallInformation> removedItems) =>
-      UpdateTask.removeSubTaskSmallInformations(id, removedItems);
   @override
   Future<void> updateSubTasksCompletedInTask(String id, int increase) =>
       UpdateTask.updateSubTasksCompleted(id, increase);
@@ -367,10 +374,10 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> removeCommentsInSubTask(String id, List<String> removedItems) =>
       UpdateSubTask.removeComments(id, removedItems);
   @override
-  Future<void> updateFilesInSubTask(String id, List<String> latestVersion) =>
+  Future<void> updateFilesInSubTask(String id, List<FileModel> latestVersion) =>
       UpdateSubTask.updateFiles(id, latestVersion);
   @override
-  Future<void> removeFilesInSubTask(String id, List<String> removedItems) =>
+  Future<void> removeFilesInSubTask(String id, List<FileModel> removedItems) =>
       UpdateSubTask.removeFiles(id, removedItems);
   @override
   Future<void> updateSubTaskInSubTask(String id, SubTaskModel subTaskModel) =>
@@ -407,9 +414,9 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Future<void> updateIsRepliedInComment(String id, bool isReplied) =>
       UpdateComment.updateIsRepliedInComment(id, isReplied);
   @override
-  Future<void> updateReplyCommentIdInComment(
-          String id, String replyCommentId) =>
-      UpdateComment.updateReplyCommentIdInComment(id, replyCommentId);
+  Future<void> updateRepliedToUsernameInComment(
+          String id, String repliedToUsername) =>
+      UpdateComment.updateRepliedToUsernameInComment(id, repliedToUsername);
   // DELETE
   // - UserDataModel
   @override

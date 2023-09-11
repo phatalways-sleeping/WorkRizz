@@ -9,13 +9,50 @@ class ProjectTagWidget extends StatelessWidget {
     super.key,
     required this.tag,
     required this.color,
+    this.forProjectView = true,
   });
 
   final Tag tag;
   final Color color;
+  final bool forProjectView;
 
   @override
   Widget build(BuildContext context) {
+    if (!forProjectView) {
+      return Container(
+        constraints: const BoxConstraints(
+          minHeight: 20,
+          
+        ),
+        margin: EdgeInsets.only(
+          left: context.mediaQuery.size.width * RATIO_PADDING * 1.2,
+          right: 5.0,
+          top: 5.0,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.mediaQuery.size.width * RATIO_PADDING,
+          vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.01,
+        ),
+        alignment: Alignment.center,
+        decoration: ShapeDecoration(
+          color: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+        child: DefaultTextStyle.merge(
+          style: context.textTheme.bodyMedium,
+          child: Text(
+            tag.title,
+            style: TextStyle(
+              color: context.colorScheme.onSecondary,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      );
+    }
     return BlocBuilder<ProjectItemBloc, ProjectItemState>(
       builder: (context, state) {
         return Container(
@@ -27,7 +64,7 @@ class ProjectTagWidget extends StatelessWidget {
             top: 5.0,
           ),
           padding: EdgeInsets.symmetric(
-            horizontal: context.mediaQuery.size.width * RATIO_PADDING,
+            horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.5,
             vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.01,
           ),
           alignment: Alignment.center,
@@ -51,7 +88,7 @@ class ProjectTagWidget extends StatelessWidget {
                             state.filterColor == Colors.white))
                     ? context.colorScheme.onSecondary
                     : context.colorScheme.onPrimary,
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w400,
               ),
             ),

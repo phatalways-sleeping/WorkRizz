@@ -1,6 +1,7 @@
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/states/navigation_bloc/navigation_bloc.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
@@ -88,14 +89,15 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
           child: ElevatedButton(
             onPressed: () => context.read<NavigationBloc>().add(
                   NavigateToTask(
-                    widget.projectId,
+                    projectId: widget.projectId,
+                    leaderId: state.leader,
+                    projectName: state.name,
                   ),
                 ),
             style: ButtonStyle(
               padding: MaterialStatePropertyAll(
                 EdgeInsets.symmetric(
-                  horizontal:
-                      context.mediaQuery.size.width * RATIO_PADDING,
+                  horizontal: context.mediaQuery.size.width * RATIO_PADDING,
                   vertical:
                       context.mediaQuery.size.height * RATIO_PADDING * 0.6,
                 ),
@@ -146,20 +148,26 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    DefaultTextStyle.merge(
-                      style: context.textTheme.bodyLarge,
-                      child: BlocSelector<ProjectItemBloc, ProjectItemState,
-                          String>(
-                        selector: (state) => state.name!,
-                        builder: (context, state) {
-                          return Text(
-                            state,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          );
-                        },
+                    FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: SizedBox(
+                        width: context.mediaQuery.size.width * 0.75,
+                        child: DefaultTextStyle.merge(
+                          style: context.textTheme.bodyLarge,
+                          child: BlocSelector<ProjectItemBloc, ProjectItemState,
+                              String>(
+                            selector: (state) => state.name!,
+                            builder: (context, state) {
+                              return Text(
+                                state,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
                     const Spacer(),
@@ -176,29 +184,35 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FutureBuilder(
-                      future: state.tagsList,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return SizedBox(
-                            width: 25.0,
-                            child: Icon(
-                              Icons.error,
-                              color: context.colorScheme.error,
-                            ),
-                          );
-                        }
-                        if (snapshot.hasData) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: snapshot.data!,
-                          );
-                        }
-                        return const CustomCircularProgressIndicator(
-                          size: 25.0,
-                        );
-                      },
+                    FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: SizedBox(
+                        width: context.mediaQuery.size.width * 0.65,
+                        child: FutureBuilder(
+                          future: state.tagsList,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return SizedBox(
+                                width: 25.0,
+                                child: Icon(
+                                  Icons.error,
+                                  color: context.colorScheme.error,
+                                ),
+                              );
+                            }
+                            if (snapshot.hasData) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: snapshot.data!,
+                              );
+                            }
+                            return const CustomCircularProgressIndicator(
+                              size: 25.0,
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     const Spacer(),
                     FutureBuilder(
@@ -285,9 +299,13 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                       ),
                     ),
                     const Spacer(),
-                    const Icon(
-                      Icons.message_rounded,
-                      size: 25.0,
+                    SvgPicture.string(
+                      SvgAssets.chat,
+                      width: 25.0,
+                      colorFilter: const ColorFilter.mode(
+                        Colors.black,
+                        BlendMode.srcATop,
+                      ),
                     ),
                     const SizedBox(
                       width: 5.0,

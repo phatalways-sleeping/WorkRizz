@@ -1,7 +1,5 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:async';
-
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -12,19 +10,34 @@ part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   NavigationBloc(this._applicationRepository) : super(const Home()) {
-    on<NavigateToTestComponents>(_onNavigateToTestComponents);
+    //on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
     on<NavigateToAuthentication>(_navigateToAuthentication);
     on<NavigateToProjectsList>(_onNavigateToProjectsList);
     on<NavigateToTask>((event, emit) {
-      _applicationRepository.projectIdOnView = event.projectId;
+      if (event.projectId != null) {
+        _applicationRepository.projectIdOnView = event.projectId!;
+        _applicationRepository.isLeaderOfProjectOnView =
+            event.leaderId! == _applicationRepository.userId;
+        if (event.projectName != null) {
+          _applicationRepository.projectOnViewName = event.projectName!;
+        }
+      }
       emit(const TaskList());
     });
     on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
-    on<NavigateToSubTaskDetail>(_onNavigateToSubTaskDetail);
+    on<NavigateToSubTaskDetail>((event, emit) {
+      if (event.subTaskId != null) {
+        _applicationRepository.subTaskIdOnView = event.subTaskId!;
+      }
+      if (event.taskId != null) {
+        _applicationRepository.taskIdOnView = event.taskId!;
+      }
+      emit(const SubTaskDetail());
+    });
     on<NavigateToSplash>((event, emit) async {
       await _applicationRepository.logout();
       emit(const Splash());
@@ -32,8 +45,21 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToUserProjectInvitation>((event, emit) {
       emit(const UserProjectInvitation());
     });
+    on<NavigateToRedirect>((event, emit) {
+      emit(const Redirect());
+    });
     on<NavigateToSubTaskCreate>((event, emit) {
+      _applicationRepository.taskIdOnView = event.ofTaskId;
       emit(const SubTaskCreate());
+    });
+    on<NavigateToFileList>((event, emit) {
+      if (event.projectName != null) {
+        _applicationRepository.projectOnViewName = event.projectName!;
+      }
+      emit(const FileList());
+    });
+    on<NavigateToPDFReportViewer>((event, emit) async {
+      emit(PDFReportViewer(event.file));
     });
   }
 
@@ -48,32 +74,31 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   void mapCurrentStateToEventThenEmit(NavigationState state) {
     if (state is ProjectsList) {
       eventToNavigateBack = const NavigateToProjectsList();
-    } else if (state is TaskList) {
-      eventToNavigateBack = NavigateToTask(_applicationRepository.projectIdOnView);
+    } else if (state is TaskList || state is PDFReportViewer) {
+      eventToNavigateBack = NavigateToTask(
+        projectId: _applicationRepository.projectIdOnView,
+        leaderId: _applicationRepository.isLeaderOfProjectOnView
+            ? _applicationRepository.userId
+            : '',
+        projectName: null,
+      );
     } else if (state is SubTaskDetail) {
-      eventToNavigateBack = const NavigateToSubTaskDetail();
+      eventToNavigateBack = const NavigateToSubTaskDetail(null, null);
     } else if (state is Home) {
       eventToNavigateBack = const NavigateToHome();
     } else if (state is Settings) {
       eventToNavigateBack = const NavigateToSettings();
     } else if (state is Assistant) {
       eventToNavigateBack = const NavigateToAssistant();
-    } else if (state is TestComponents) {
-      eventToNavigateBack = const NavigateToTestComponents();
     } else if (state is Splash) {
       eventToNavigateBack = const NavigateToSplash();
+    } else if (state is FileList) {
+      eventToNavigateBack = const NavigateToFileList(null);
     } else {
       throw Exception('Unknown state: $state');
     }
 
     add(const NavigateToUserProjectInvitation());
-  }
-
-  Future<void> _onNavigateToTestComponents(
-    NavigateToTestComponents event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const TestComponents());
   }
 
   Future<void> _onNavigateToChangePassword(
@@ -123,12 +148,5 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) async {
     emit(const Authentication());
-  }
-
-  Future<void> _onNavigateToSubTaskDetail(
-    NavigateToSubTaskDetail event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const SubTaskDetail());
   }
 }

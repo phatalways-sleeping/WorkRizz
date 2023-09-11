@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_managing_application/apis/storage/update/crud_update.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
 import 'package:task_managing_application/models/models.dart' show Tag;
+import 'package:task_managing_application/models/project/files_small_info.dart';
+import 'package:task_managing_application/models/project/task_small_info.dart';
 
 final class UpdateProject extends Update {
   const UpdateProject._() : super();
@@ -120,5 +122,31 @@ final class UpdateProject extends Update {
   static Future<void> updateThread(String id, String thread) =>
       FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
         "thread": thread,
+      });
+
+  static Future<void> updateTaskSmallInformations(String id, List<TaskSmallInformation> latestVersion) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "taskSmallInformations": FieldValue.arrayUnion(
+          latestVersion.map((e) => e.toJson()).toList(),
+        ),
+      });
+
+  static Future<void> removeTaskSmallInformations(String id, List<TaskSmallInformation> removedItems) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "taskSmallInformations": FieldValue.arrayRemove(
+            removedItems.map((e) => e.toJson()).toList()),
+      });
+
+  static Future<void> updateFileSmallInformations(String id, List<FilesSmallInformation> latestVersion) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "filesSmallInformations": FieldValue.arrayUnion(
+          latestVersion.map((e) => e.toJson()).toList(),
+        ),
+      });
+  
+  static Future<void> removeFileSmallInformations(String id, List<FilesSmallInformation> removedItems) =>
+      FirebaseFirestoreConfigs.projectsCollection.doc(id).update({
+        "filesSmallInformations": FieldValue.arrayRemove(
+            removedItems.map((e) => e.toJson()).toList()),
       });
 }

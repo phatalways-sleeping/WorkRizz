@@ -1372,8 +1372,5 @@ class ApplicationRepository {
   }
 
   Future<File> downloadFile(String fileUrl) async =>
-      await _storageAPI.fileFromStorage(fileUrl);
-
-  Future<File> downloadImage(String imageUrl) async =>
-      await _storageAPI.imageFileFromStorage(imageUrl);
+      await _storageAPI.downloadFile(fileUrl);
 }

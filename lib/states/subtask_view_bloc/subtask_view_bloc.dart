@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:task_managing_application/models/exceptions/download_exception.dart';
 import 'package:task_managing_application/models/file/file_model.dart';
 import 'package:task_managing_application/models/sub_task/comment/comment_model.dart';
 import 'package:task_managing_application/models/user_data/user_activity_model.dart';
@@ -221,12 +222,48 @@ class SubtaskViewBloc extends Bloc<SubtaskViewEvent, SubtaskViewState> {
           .updateFilesWithoutOverridePermissionToSubTask(files: event.files);
     });
     on<SubTaskDeleteAttachmentEvent>((event, emit) async {
-      emit(SubTaskViewSuccessPendingToUpdateFiles.from(
-          state as SubtaskViewSuccess));
-      await _applicationRepository
-          .removeFilesFromSubTask(fileUrls: [event.attachment]);
+      emit(
+        SubTaskViewSuccessPendingToUpdateFiles.from(
+          state as SubtaskViewSuccess,
+        ),
+      );
+      await _applicationRepository.removeFilesFromSubTask(
+        fileUrls: [event.attachment],
+      );
     });
-    on<SubTaskDownloadAttachmentEvent>((event, emit) async {});
+    on<SubTaskDownloadAttachmentEvent>((event, emit) async {
+      try {
+        emit(
+          SubtaskViewDownloading.from(
+            state as SubtaskViewSuccess,
+          ),
+        );
+        final file =
+            await _applicationRepository.downloadFile(event.attachment);
+        emit(
+          SubtaskViewDownloadSuccess.from(
+            state as SubtaskViewSuccess,
+            file,
+          ),
+        );
+      } on DownloadException catch (e) {
+        if (e is FileDownloadException) {
+          emit(
+            SubtaskViewDownloadFail.from(
+              state as SubtaskViewSuccess,
+              'File downloading failed',
+            ),
+          );
+        } else {
+          emit(
+            SubtaskViewDownloadFail.from(
+              state as SubtaskViewSuccess,
+              'Something went wrong. Please try again',
+            ),
+          );
+        }
+      }
+    });
     on<SubTaskRequestInputSubTaskCommentEvent>((event, emit) {
       emit(SubTaskViewSuccessRequestComment.from(state as SubtaskViewSuccess));
     });

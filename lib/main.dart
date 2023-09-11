@@ -19,18 +19,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final currentUser = await FirebaseAuth.instance.authStateChanges().first;
-
-  if (currentUser != null) {
-    final email = currentUser.email!;
-
-    final userAccount =
-        await ApplicationRepository.repository.userStreamByEmail(email).first;
-    ApplicationRepository.initializeRepo(
-      userAccount: userAccount,
-    );
-  }
-
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,

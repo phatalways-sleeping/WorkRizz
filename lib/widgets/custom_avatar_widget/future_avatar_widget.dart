@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_config.dart';
@@ -19,54 +20,63 @@ class FutureAvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      splashFactory: InkSplash.splashFactory,
-      onTap: () => onTap(context),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(
-          context.mediaQuery.size.height * radiusRatio,
-        ),
-        child: Image.network(
-          imageUrl,
-          height: context.mediaQuery.size.height * avatarRatio,
-          width: context.mediaQuery.size.height * avatarRatio,
-          fit: BoxFit.cover,
-          filterQuality: FilterQuality.high,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Shimmer(
-                  linearGradient: shimmer_gradient,
-                  child: ShimmerLoading(
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black,
+    return FutureBuilder(
+      future: precacheImage(
+        CachedNetworkImageProvider(imageUrl),
+        context,
+      ),
+      builder: (context, snapshot) {
+        return InkWell(
+          splashColor: Colors.transparent,
+          splashFactory: InkSplash.splashFactory,
+          onTap: () => onTap(context),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(
+              context.mediaQuery.size.height * radiusRatio,
+            ),
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.high,
+              errorWidget: (context, url, error) => Shimmer(
+                linearGradient: shimmer_gradient,
+                child: ShimmerLoading(
+                  child: Container(
+                    height: context.mediaQuery.size.height * avatarRatio,
+                    width: context.mediaQuery.size.height * avatarRatio,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(
+                        context.mediaQuery.size.height * radiusRatio,
                       ),
                     ),
                   ),
                 ),
               ),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return Center(
-              child: Icon(
-                Icons.error_outline_rounded,
-                size: 20.0,
-                color: context.colorScheme.error,
+              progressIndicatorBuilder: (context, url, progress) =>
+                  CircularProgressIndicator(
+                value: progress.progress,
+                color: ORANGE,
               ),
-            );
-          },
-        ),
-      ),
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  height: context.mediaQuery.size.height * avatarRatio,
+                  width: context.mediaQuery.size.height * avatarRatio,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      context.mediaQuery.size.height * radiusRatio,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -111,33 +111,32 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   Stream<MessageModel> messageStream(String id) =>
       ReadMessage.messageStreamById(id);
   @override
-  Future<File> imageFileFromStorage(String path) async {
-    // using dio and path_provider
-    final dir = await getTemporaryDirectory();
-    final file = File("${dir.path}/${path.split('/').last}");
-    final dio = Dio();
-    final downloadPath =
-        await FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
+  Future<File> downloadFile(String path) async {
     try {
-      await dio.download(downloadPath, file.path);
+      final Dio dio = Dio();
+      final fileUrl = await FirebaseFirestoreConfigs.storageRef
+          .child(path)
+          .getDownloadURL();
+      // Send a GET request to the file URL.
+      final Response response = await dio.get(
+        fileUrl,
+        options: Options(
+          responseType: ResponseType
+              .bytes, // Ensure that the response is treated as bytes.
+        ),
+      );
+      String filePath = '/storage/emulated/0/Download/${path.split('/').last}';
+      // Write the downloaded bytes to the file.
+      File file = File(filePath);
+      await file.writeAsBytes(response.data);
       return file;
     } catch (e) {
-      rethrow;
-    }
-  }
-  @override
-  Future<File> fileFromStorage(String path) async {
-    // using dio and path_provider
-    final dir = await getTemporaryDirectory();
-    final file = File("${dir.path}/${path.split('/').last}");
-    final dio = Dio();
-    final downloadPath =
-        await FirebaseFirestoreConfigs.storageRef.child(path).getDownloadURL();
-    try {
-      await dio.download(downloadPath, file.path);
-      return file;
-    } catch (e) {
-      rethrow;
+      if (e is DioException) {
+        throw DioDownloadException.from(e);
+      } else if (e is FirebaseException) {
+        throw FirebaseDownloadException.from(e);
+      }
+      throw FileDownloadException.from(e as FileSystemException);
     }
   }
 

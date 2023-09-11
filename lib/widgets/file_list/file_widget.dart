@@ -54,7 +54,7 @@ class FileWidget extends StatelessWidget {
       ),
       onPressed: () => context.read<FilelistBloc>().add(
             FilelistDownloadFileEvent(
-              fileName,
+              'files/$fileName',
             ),
           ),
       child: Dismissible(

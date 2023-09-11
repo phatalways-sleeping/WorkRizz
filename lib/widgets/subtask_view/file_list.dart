@@ -79,7 +79,7 @@ class FileList extends StatelessWidget {
               child: InkWell(
                 onTap: () => context.read<SubtaskViewBloc>().add(
                       SubTaskDownloadAttachmentEvent(
-                        files[index],
+                        'files/${files[index]}',
                       ),
                     ),
                 child: Row(
@@ -114,7 +114,7 @@ class FileList extends StatelessWidget {
                       splashRadius: 10.0,
                       onPressed: () => context.read<SubtaskViewBloc>().add(
                             SubTaskDeleteAttachmentEvent(
-                              files[index],
+                              'files/${files[index]}',
                             ),
                           ),
                       icon: const Icon(

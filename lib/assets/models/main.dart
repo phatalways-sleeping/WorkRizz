@@ -7,10 +7,8 @@ import 'dart:io';
 // import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
-import 'package:task_managing_application/assets/models/project/project_data.dart';
-import 'package:task_managing_application/assets/models/sub_task/sub_task_data.dart';
 import 'package:task_managing_application/firebase_options.dart';
+import 'package:task_managing_application/models/exceptions/download_exception.dart';
 import 'package:task_managing_application/repositories/application_repository.dart';
 import 'package:uuid/v8.dart';
 import 'package:external_path/external_path.dart';
@@ -22,6 +20,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  try {
+    await ApplicationRepository.repository.downloadFile('files/TestDoc.txt');
+  } catch (e) {
+    print((e as FileDownloadException).message);
+  }
 
   // ApplicationRepository.repository.userId =
   //     "20230831-0517-8230-a202-0089f860b83a";
@@ -66,11 +70,11 @@ Future<void> main() async {
   //       .set(task.toJson());
   // }
 
-  for (var subTask in subTaskList) {
-    await FirebaseFirestoreConfigs.subTasksCollection
-        .doc(subTask.id)
-        .set(subTask.toJson());
-  }
+  // for (var subTask in subTaskList) {
+  //   await FirebaseFirestoreConfigs.subTasksCollection
+  //       .doc(subTask.id)
+  //       .set(subTask.toJson());
+  // }
 
   // for (var comment in commentList) {
   //   await FirebaseFirestoreConfigs.subTaskCommentsCollection
@@ -78,11 +82,11 @@ Future<void> main() async {
   //       .set(comment.toJson());
   // }
 
-  for (var project in projectList) {
-    await FirebaseFirestoreConfigs.projectsCollection
-        .doc(project.id)
-        .set(project.toJson());
-  }
+  // for (var project in projectList) {
+  //   await FirebaseFirestoreConfigs.projectsCollection
+  //       .doc(project.id)
+  //       .set(project.toJson());
+  // }
 
   // for (var schedule in scheduleList) {
   //   await FirebaseFirestoreConfigs.personalScheduleCollection

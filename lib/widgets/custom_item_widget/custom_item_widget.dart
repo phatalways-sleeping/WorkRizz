@@ -76,7 +76,7 @@ class CustomItemWidget extends StatelessWidget {
           ),
           const Spacer(),
           secondChild,
-          SizedBox(width: MediaQuery.of(context).size.width * RATIO_SPACE),
+          const Spacer(),
           Text(
             subtext,
             style: context.textTheme.bodyLarge?.copyWith(

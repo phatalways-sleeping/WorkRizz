@@ -97,12 +97,14 @@ class SubtaskCreateBloc extends Bloc<SubtaskCreateEvent, SubtaskCreateState> {
       final files = await _applicationRepository.pickFiles().onError(
             (error, stackTrace) => [],
           );
-      emit(usedState.copyWith(
-        attachments: [
-          if (usedState.attachments != null) ...usedState.attachments!,
-          ...files,
-        ],
-      ));
+      emit(
+        usedState.copyWith(
+          attachments: [
+            if (usedState.attachments != null) ...usedState.attachments!,
+            ...files,
+          ],
+        ),
+      );
     });
 
     on<SubTaskRemoveAttachmentEvent>((event, emit) async {
@@ -222,7 +224,7 @@ class SubtaskCreateBloc extends Bloc<SubtaskCreateEvent, SubtaskCreateState> {
           name: usedState.subTaskName!,
           description: usedState.description!,
           assignee: usedState.assignedTo!,
-          dueDate: usedState.dueDate?? DateTime.now(),
+          dueDate: usedState.dueDate ?? DateTime.now(),
           isCompleted: false,
           points: usedState.points!,
           files: const [],
@@ -233,10 +235,12 @@ class SubtaskCreateBloc extends Bloc<SubtaskCreateEvent, SubtaskCreateState> {
         );
         final files = usedState.attachments ?? [];
         emit(const SubtaskCreateLoading());
-        await _applicationRepository.createNewSubTask(
-          newSubTask: subTask,
-          files: files,
-        ).then((value) => debugPrint('Subtask created successfully'));
+        await _applicationRepository
+            .createNewSubTask(
+              newSubTask: subTask,
+              files: files,
+            )
+            .then((value) => debugPrint('Subtask created successfully'));
       },
     );
   }

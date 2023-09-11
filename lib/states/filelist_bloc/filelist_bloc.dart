@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:task_managing_application/models/exceptions/download_exception.dart';
 import 'package:task_managing_application/models/project/files_small_info.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 
@@ -8,24 +11,51 @@ part 'filelist_state.dart';
 
 class FilelistBloc extends Bloc<FilelistEvent, FilelistState> {
   FilelistBloc(this._applicationRepository) : super(const FilelistInitial()) {
-    on<FilelistSubscibeToStreamEvent>((event, emit) async {
-      await emit.forEach(
-        _applicationRepository.projectOnViewStream().map(
-              (event) => event.filesSmallInformations,
-            ),
-        onData: (files) => FilelistSuccess(
-          files: files,
-        ),
-        onError: (error, stackTrace) => FilelistFailureLoading(
-          message: error.toString(),
-        ),
-      );
-    });
-    on<FilelistDownloadFileEvent>((event, emit) async {
-      emit(FilelistDownloading.from(filelistSuccess: state as FilelistSuccess));
+    on<FilelistSubscibeToStreamEvent>(
+      (event, emit) async {
+        await emit.forEach(
+          _applicationRepository.projectOnViewStream().map(
+                (event) => event.filesSmallInformations,
+              ),
+          onData: (files) => FilelistSuccess(
+            files: files,
+          ),
+          onError: (error, stackTrace) => FilelistFailureLoading(
+            message: error.toString(),
+          ),
+        );
+      },
+    );
 
-      // final path = await _applicationRepository.downloadFile(event.path);
-    });
+    on<FilelistDownloadFileEvent>(
+      (event, emit) async {
+        try {
+          emit(FilelistDownloading.from(
+              filelistSuccess: state as FilelistSuccess));
+
+          final file = await _applicationRepository.downloadFile(event.path);
+
+          emit(FilelistDownloadingSuccess.from(
+              filelistSuccess: state as FilelistSuccess, file: file));
+        } on DownloadException catch (e) {
+          if (e is FileDownloadException) {
+            emit(
+              FilelistDownloadingFail.from(
+                filelistSuccess: state as FilelistSuccess,
+                message: 'File downloading failed',
+              ),
+            );
+          } else {
+            emit(
+              FilelistDownloadingFail.from(
+                filelistSuccess: state as FilelistSuccess,
+                message: 'Something went wrong. Please try again',
+              ),
+            );
+          }
+        }
+      },
+    );
 
     on<FilelistRemoveFileEvent>((event, emit) async {
       emit(FilelistDownloading.from(filelistSuccess: state as FilelistSuccess));

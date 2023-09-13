@@ -9,7 +9,7 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc(this._applicationRepository) : super(const Thread()) {
+  NavigationBloc(this._applicationRepository) : super(const Splash()) {
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
     on<NavigateToAuthentication>(_navigateToAuthentication);
@@ -59,6 +59,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     });
     on<NavigateToPDFReportViewer>((event, emit) async {
       emit(PDFReportViewer(event.file));
+    });
+    on<NavigateToThread>((event, emit) {
+      if (event.threadId != null) {
+        _applicationRepository.threadIdOnView = event.threadId!;
+      }
+      emit(const Thread());
     });
   }
 

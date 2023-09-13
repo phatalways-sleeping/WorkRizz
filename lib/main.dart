@@ -12,6 +12,7 @@ import 'package:task_managing_application/states/subtask_create_bloc/subtask_cre
 import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_bloc.dart'
     show SubtaskViewBloc;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:task_managing_application/states/thread_bloc/thread_bloc.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-       ), 
+      ),
     );
   }
 }
@@ -118,8 +119,13 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is Thread)
-          const MaterialPage(
-            child: ThreadScreen(),
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => ThreadBloc(
+                context.read<ApplicationRepository>(),
+              )..add(const ThreadSubscribeEvent()),
+              child: const ThreadScreen(),
+            ),
           ),
         if (state is SubTaskCreate)
           MaterialPage(

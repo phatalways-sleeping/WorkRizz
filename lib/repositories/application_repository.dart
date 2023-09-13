@@ -45,6 +45,7 @@ class ApplicationRepository {
   late String username;
 
   late String projectIdOnView;
+  late String threadIdOnView;
   late String projectOnViewName;
   late bool isLeaderOfProjectOnView;
   late String subTaskIdOnView;
@@ -160,6 +161,10 @@ class ApplicationRepository {
       _storageAPI.projectInvitationStream(projectInvitationId);
   Stream<CommentModel> commentStream(String commentId) =>
       _storageAPI.commentStream(commentId);
+  Stream<ThreadModel> threadStream() =>
+      _storageAPI.threadStream(threadIdOnView);
+  Future<MessageModel> messageStream(String messageId) =>
+      _storageAPI.messageStream(messageId).first;
   // Future
   Future<String> currentUserImageUrl() async => await _storageAPI
       .userStreamByIdInUser(userId)
@@ -1095,7 +1100,7 @@ class ApplicationRepository {
     // Update task name in FilesInformation in project
     final currentProject =
         await _storageAPI.projectStream(projectIdOnView).first;
-    
+
     final currentFilesSmallInformation = currentProject.filesSmallInformations
         .firstWhere((element) => element.taskId == taskId);
 

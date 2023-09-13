@@ -1,0 +1,245 @@
+[33mcommit 20fedc36290aef2673aafbce4070121f33ab97a7[m[33m ([m[1;36mHEAD -> [m[1;32mfe_messagepage[m[33m, [m[1;31morigin/fe_messagepage[m[33m)[m
+Author: vinhhn2210 <nhuvinh2210@mail.com>
+Date:   Wed Sep 13 23:15:29 2023 +0700
+
+    Squashed commit of the following:
+    
+    commit 7542609990e38886f91b32a7b2629e434804fa32
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 12 19:28:09 2023 +0700
+    
+        merge master
+    
+    commit 1d4553aa2ee59aca81311c0ebca456a8ac509862
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 12 06:11:27 2023 +0700
+    
+        + update main function
+    
+    commit 75f0f9b0bcc48c35dc47bd12f016f8807f8b6735
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 12 05:36:45 2023 +0700
+    
+        update project tag
+    
+    commit aee4208f9893e1dc844f46a9f8dbcf6aed004faa
+    Merge: 930ec7c ba01b04
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 12 04:06:44 2023 +0700
+    
+        Merge branch 'master' into fe_homepage
+    
+    commit ba01b04d5dc8af6b703b4d41cd080c1ac0a02412
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 12 02:39:46 2023 +0700
+    
+        add screen to main
+    
+    commit 7002cfb0c39c6260e1f7f8b6aca763ebf67f279f
+    Merge: 9065680 4d4e239
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 12 01:39:11 2023 +0700
+    
+        Merge branch 'master' into fe_thread
+    
+    commit 4d4e2394f2fe93d710b40fa43bf4589cd911dfdc
+    Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+    Date:   Tue Sep 12 01:23:16 2023 +0700
+    
+        style(common): remove redundant import
+    
+    commit 9f8e3a7844b3c73e150b2afdf7d89ea60dde0824
+    Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+    Date:   Tue Sep 12 01:21:57 2023 +0700
+    
+        feat(ui+logic): pdf api and ui
+    
+    commit 90656809c32887aaa71e58e3cc827821b837a3b5
+    Merge: 52acb62 3403edb
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 12 00:49:12 2023 +0700
+    
+        Merge branch 'master' into fe_thread
+    
+    commit 3403edb695b2446aa4d8976abedf34180120628f
+    Merge: d5b18ce 2da6455
+    Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+    Date:   Mon Sep 11 10:37:06 2023 +0700
+    
+        Merge branch 'be_logic_repo'
+    
+    commit 2da64556c93766c75656f0ac687f23c122a8f0a8
+    Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+    Date:   Mon Sep 11 10:36:49 2023 +0700
+    
+        feat(repo): add file download feature
+    
+    commit d5b18cecc35850b327ba81c08aa6a2dc51f8bfb4
+    Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+    Date:   Sat Sep 9 21:20:31 2023 +0700
+    
+        feat(ui): add cache_network_image
+    
+    commit 52acb622ee5810de6c8932331a0fd68151e071b8
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Sat Sep 9 19:59:15 2023 +0700
+    
+        fix ui
+    
+    commit aecab37353b630abf78b6683af41d1c6e3aa5229
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Sat Sep 9 19:37:24 2023 +0700
+    
+        + thread ui
+    
+    commit 930ec7cb1c6aa22e54f8b6f26732dde39cb3b5c9
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Wed Sep 6 20:35:08 2023 +0700
+    
+        add draggle widget
+    
+    commit 636e06078f12600aed2132c56cb330eb50954dca
+    Merge: ab556a1 51dbf8f
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Wed Sep 6 19:25:59 2023 +0700
+    
+        merge origin
+    
+    commit ab556a1f777b7c046378010ebdafe0ad6ff86a54
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Wed Sep 6 19:23:31 2023 +0700
+    
+        dradraggable add
+    
+    commit 5001946fcfdb9c553f06b6e982398a3bfd305ca4
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Wed Sep 6 15:42:05 2023 +0700
+    
+        change container to basescreen
+    
+    commit 38433454991012fd23d7047af9ce062e9e850a17
+    Merge: e13fa22 a0a371c
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Wed Sep 6 15:33:38 2023 +0700
+    
+        merge from master
+    
+    commit e13fa224046f7b7ae538fb14506bb9f5f117f935
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Wed Sep 6 14:31:51 2023 +0700
+    
+        bug cannot scroll (basescreen error)
+    
+    commit d21f09361579f7f378e59f639dba2c561cf41d7f
+    Merge: 672aa61 278d1ee
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Wed Sep 6 13:08:03 2023 +0700
+    
+        Merge branch 'fe_homepage' of github.com:phatalways-sleeping/task_managing_application into fe_homepage
+    
+    commit 672aa6189af916d866a9215866ad99fbb5628eb7
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Wed Sep 6 13:07:44 2023 +0700
+    
+        fix ui, theme consistency
+    
+    commit 278d1ee2f0e48bf921d60d18a44ce07d99b99083
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Wed Sep 6 01:18:53 2023 +0700
+    
+        add homepage screen
+    
+    commit a817e447d2f6cc16142bf3cd82a03c09a7d97c44
+    Merge: b5fe8c1 3f3518d
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Tue Sep 5 23:58:47 2023 +0700
+    
+        Merge branch 'fe_homepage' of github.com:phatalways-sleeping/task_managing_application into fe_homepage
+    
+    commit 3f3518d5e1fdab029444c8ccdc33f31017a25401
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 5 23:47:53 2023 +0700
+    
+        homepage
+    
+    commit b5fe8c1164dcc9ee11437f40156fb0868c66e0d7
+    Merge: 275e9b8 67f141d
+    Author: ntnblune <michealbradcute@gmail.com>
+    Date:   Tue Sep 5 23:16:44 2023 +0700
+    
+        Merge remote-tracking branch 'origin/master' into fe_homepage
+    
+    commit 275e9b874e1e4cf201b763efee5f7b5d04760a05
+    Author: vinhhn2210 <nhuvinh2210@mail.com>
+    Date:   Tue Sep 5 19:10:34 2023 +0700
+    
+        update homepage
+
+[33mcommit bb4787fb58a4c24fa23eb75ae41e0ebe07df0966[m
+Author: vinhhn2210 <nhuvinh2210@mail.com>
+Date:   Wed Sep 13 23:08:56 2023 +0700
+
+    + message ui
+
+[33mcommit 4c4bfeef373aba1012a036c8f02e5cee85d680ca[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Sat Sep 9 05:53:54 2023 +0700
+
+    feat(bloc + repo): add bloc to file list
+
+[33mcommit fdb29b27c06b100222f43d7b9b17a9d791aa0544[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Fri Sep 8 18:00:16 2023 +0700
+
+    build(common): update pubspec.lock
+
+[33mcommit 17d7d31f01b94450d463206fd69a0c8973852f2c[m
+Merge: 51dbf8f beb4bdf
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Fri Sep 8 17:59:18 2023 +0700
+
+    Merge branch 'be_logic_repo'
+
+[33mcommit beb4bdf48bf68d519ca7c22619698afa8d1b03ae[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Fri Sep 8 17:54:54 2023 +0700
+
+    fix(auth): handle persist state
+
+[33mcommit b3c7a342b6cf4090d1da69e8e0a84c2b510203bc[m[33m ([m[1;31morigin/be_logic_repo[m[33m)[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Fri Sep 8 12:14:11 2023 +0700
+
+    feat(ui + bloc + repo): refactor models and handle logic api + bloc in task view / subtask view
+
+[33mcommit 776ced31a86082930332aeec7f4f6acc547aca25[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Fri Sep 8 05:18:43 2023 +0700
+
+    feat(bloc + repo): done mark / unmark sub task complete logic and sub task leader modification
+
+[33mcommit f62d29103ae1686f84e09befe0dabf78fffedfb0[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Thu Sep 7 18:25:06 2023 +0700
+
+    feat(bloc + repo): handle add/ remove files, add / reply / remove comments
+
+[33mcommit 90e09bb9f7d8dd40875438d0f550fbd43a0d23be[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Thu Sep 7 06:16:39 2023 +0700
+
+    feat(bloc): integrate bloc into sub task view, not handle event yet
+
+[33mcommit 2efbbc4593d7fb9dc6a735ffa581791bb75b2b7c[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Thu Sep 7 01:32:29 2023 +0700
+
+    feat(bloc): completed bloc and api calls for create sub task
+
+[33mcommit 2ab5956b35e6ab1d15be9f933bd01866f3998c47[m
+Author: phat-always-sleeping <tkphat21@apcs.fitus.edu.vn>
+Date:   Wed Sep 6 18:03:46 2023 +0700
+
+    feat(bloc): add bloc to create sub task
+
+[33mcommit 51dbf8f88a2eb2e2b9d11543976d212a97e72eb9

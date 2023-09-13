@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:task_managing_application/assets/assets.dart';
 import 'dart:async';
 import 'dart:math';
 import 'schedule_dbms.dart';
+
 class ScheduleProgress extends StatefulWidget {
+  const ScheduleProgress({
+    super.key,
+  });
   @override
-  _ScheduleProgressState createState() => _ScheduleProgressState();
+  State<ScheduleProgress> createState() => _ScheduleProgressState();
 }
 
 class _ScheduleProgressState extends State<ScheduleProgress> {
   @override
   void initState() {
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {});
     });
     super.initState();
   }
-  
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 300,
+    return SizedBox(
+      width: context.mediaQuery.size.width * 0.7,
+      height: context.mediaQuery.size.width * 0.7,
       child: Transform.rotate(
         angle: -pi / 2,
         child: CustomPaint(
@@ -48,18 +52,19 @@ class SchedulePainter extends CustomPainter {
     // ignore: unused_local_variable
     var outerCircleRadius = radius;
     var innerCircleRadius = radius;
-    
-    Rect myRect = Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: radius - 14);
 
-    var fillBrush = Paint()..color = Color(0xFF444974);
+    Rect myRect = Rect.fromCircle(
+        center: Offset(size.width / 2, size.height / 2), radius: radius - 14);
+
+    var fillBrush = Paint()..color = const Color(0xFF444974);
 
     // ignore: unused_local_variable
     var outlineBrush = Paint()
-      ..color = Color(0xFFEAECFF)
+      ..color = const Color(0xFFEAECFF)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 16;
 
-    var centerFillBrush = Paint()..color = Color(0xFFEAECFF);
+    var centerFillBrush = Paint()..color = const Color(0xFFEAECFF);
 
     var secHandBrush = Paint()
       ..color = Colors.orange[300]!
@@ -68,21 +73,21 @@ class SchedulePainter extends CustomPainter {
       ..strokeWidth = 5;
 
     var minHandBrush = Paint()
-      ..shader = RadialGradient(colors: [Color(0xFF748EF6), Color(0xFF77DDFF)])
+      ..shader = const RadialGradient(colors: [Color(0xFF748EF6), Color(0xFF77DDFF)])
           .createShader(Rect.fromCircle(center: center, radius: radius))
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 8;
 
     var hourHandBrush = Paint()
-      ..shader = RadialGradient(colors: [Color(0xFFEA74AB), Color(0xFFC279FB)])
+      ..shader = const RadialGradient(colors: [Color(0xFFEA74AB), Color(0xFFC279FB)])
           .createShader(Rect.fromCircle(center: center, radius: radius))
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 12;
 
     var dashBrush = Paint()
-      ..color = Color(0xFFEAECFF)
+      ..color = const Color(0xFFEAECFF)
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 2;
@@ -96,7 +101,7 @@ class SchedulePainter extends CustomPainter {
         ..strokeWidth = 4
         ..style = PaintingStyle.fill
         ..strokeCap = StrokeCap.round;
-      
+
       startAngle += sweepAngle;
       canvas.drawArc(myRect, startAngle, sweepAngle, true, paintcolor);
     }
@@ -120,7 +125,7 @@ class SchedulePainter extends CustomPainter {
     canvas.drawCircle(center, 16, centerFillBrush);
 
     for (double i = 0; i < 12; i += 1) {
-      var x1 = centerX + (innerCircleRadius - 55)* cos(i * 30 * pi / 180);
+      var x1 = centerX + (innerCircleRadius - 55) * cos(i * 30 * pi / 180);
       var y1 = centerX + (innerCircleRadius - 55) * sin(i * 30 * pi / 180);
 
       var x2 = centerX + (innerCircleRadius - 45) * cos(i * 30 * pi / 180);

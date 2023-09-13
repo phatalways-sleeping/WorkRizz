@@ -28,57 +28,7 @@ class _ScheduleTitleState extends State<ScheduleTitle> {
             'Schedule',
             style: context.textTheme.titleLarge,
           ),
-          // SizedBox(
-          //     width: MediaQuery.of(context).size.width * RATIO_PADDING),
-          // IconButton(
-          //   icon: Icon(
-          //       _icon,
-          //       color: Color(0xFF000000),
-          //       size: 30,
-          //     ),
-          //     onPressed: () {
-          //       setState(() {
-          //         if (_icon == Icons.wb_sunny_outlined) {
-          //           _icon = Icons.dark_mode_outlined;
-          //         } else {
-          //           _icon = Icons.wb_sunny_outlined;
-          //         }
-          //       });
-          //     },
-          // ),
-          // IconButton(
-          //   icon: Icon(
-          //       _icon2,
-          //       color: Color(0xFF000000),
-          //       size: 30,
-          //     ),
-          //     onPressed: () {
-          //       setState(() {
-          //         if (_icon == Icons.wb_sunny_outlined) {
-          //           _icon = Icons.dark_mode_outlined;
-          //         } else {
-          //           _icon = Icons.wb_sunny_outlined;
-          //         }
-          //       });
-          //     },
-          // ),
-          // const Spacer(),
           FlutterSwitch(
-            // thumbIcon: MaterialStateProperty.resolveWith<Icon?>(
-            //   (Set<MaterialState> states) {
-            //     if (states.contains(MaterialState.selected)) {
-            //       return const Icon(Icons.wb_sunny_outlined);
-            //     }
-            //     return const Icon(Icons.dark_mode_rounded);
-            //   },
-            // ),
-            // thumbIcon: MaterialStateProperty.resolveWith<Icon?>(
-            //     (Set<MaterialState> states) {
-            //   if (states.contains(MaterialState.disabled)) {
-            //     return const Icon(Icons.close);
-            //   }
-            //   return null; // All other states will use the default thumbIcon.
-            // }),
             borderRadius: ROUND_CORNER,
             switchBorder: Border.all(
               color: BLACK,

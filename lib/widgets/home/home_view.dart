@@ -7,7 +7,7 @@ import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_b
 import 'schedule_progress.dart';
 import 'date_widget.dart';
 import 'schedule_title.dart';
-import 'remain_task.dart';
+import 'remain_task_list.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -39,10 +39,9 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return BaseScreen(
       hideNavigationBar: false,
-      hideFloatingActionButton: false,
+      hideFloatingActionButton: true,
       child: CustomScrollView(
-        // turn off scroll
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverPersistentHeader(
             pinned: true,
@@ -57,56 +56,28 @@ class _HomeViewState extends State<HomeView> {
           SliverToBoxAdapter(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  child: const DateCapsule(),
-                ),
+                const DateCapsule(),
                 const ScheduleTitle(),
-                Container(
-                  alignment: Alignment.center,
-                  child: ScheduleProgress(),
-                ),
-                SizedBox(
-                  height: context.mediaQuery.size.width * RATIO_SPACE,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal:
-                          context.mediaQuery.size.width * RATIO_PADDING),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Remaining',
-                        style: context.textTheme.titleLarge,
-                      ),
-                      SizedBox(width: context.mediaQuery.size.width * 0.4),
-                      InkWell(
-                        onTap: () {},
-                        child: Text(
-                          'View all...',
-                          style: context.textTheme.titleSmall?.copyWith(
-                            decoration: TextDecoration.underline,
-                            shadows: [
-                              const Shadow(color: PURPLE, offset: Offset(0, -3))
-                            ],
-                            color: Colors.transparent,
-                            decorationColor: PURPLE,
-                            decorationThickness: 1.5,
-                          ),
-                        ),
-                      )
-                    ],
+                const ScheduleProgress(),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: context.mediaQuery.size.width * RATIO_PADDING,
+                      bottom:
+                          context.mediaQuery.size.width * RATIO_PADDING,
+                    ),
+                    child: Text(
+                      'Remaining',
+                      style: context.textTheme.titleLarge,
+                    ),
                   ),
                 ),
+                const RemainTasksList(),
               ],
             ),
-          ),
-          const SliverFillRemaining(
-            child: RemainTasksList(),
           ),
         ],
       ),

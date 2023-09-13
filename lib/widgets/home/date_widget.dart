@@ -7,8 +7,7 @@ class DateCapsule extends StatefulWidget {
   const DateCapsule({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _DateCapsuleState createState() => _DateCapsuleState();
+  State<DateCapsule> createState() => _DateCapsuleState();
 }
 
 class _DateCapsuleState extends State<DateCapsule> {
@@ -31,7 +30,6 @@ class _DateCapsuleState extends State<DateCapsule> {
   }
 
   Widget horizontalCapsuleListView(BuildContext context) {
-    print(currentDateTime.toString());
     return SizedBox(
       height: context.mediaQuery.size.height * 0.1,
       child: ListView.builder(
@@ -48,8 +46,6 @@ class _DateCapsuleState extends State<DateCapsule> {
   }
 
   Widget capsuleView(int index, BuildContext context) {
-    print(currentDateTime.toString() + '\n');
-    print(index);
     return Padding(
         padding: EdgeInsets.symmetric(
             horizontal: context.mediaQuery.size.width * RATIO_PADDING),
@@ -65,27 +61,7 @@ class _DateCapsuleState extends State<DateCapsule> {
                 color: (currentMonthList[index].day != currentDateTime.day)
                     ? WHITE
                     : BLACK,
-                // gradient: LinearGradient(
-                //     colors: (currentMonthList[index].day != currentDateTime.day)
-                //         ? [
-                //             Colors.white.withOpacity(1),
-                //             Colors.white.withOpacity(1),
-                //             Colors.white.withOpacity(1)
-                //           ]
-                //         : [BLACK, BLACK, BLACK],
-                //     begin: const FractionalOffset(0.0, 0.0),
-                //     end: const FractionalOffset(0.0, 1.0),
-                //     stops: const [0.0, 0.5, 1.0],
-                //     tileMode: TileMode.clamp),
                 borderRadius: BorderRadius.circular(ROUND_CORNER),
-                // boxShadow: const [
-                //   BoxShadow(
-                //     //offset: Offset(4, 4),
-                //     //blurRadius: 4,
-                //     //spreadRadius: 2,
-                //     color: Colors.black12,
-                //   )
-                // ]
                 ),
             child: Center(
               child: Column(
@@ -117,7 +93,6 @@ class _DateCapsuleState extends State<DateCapsule> {
   }
 
   Widget horizontalMonthListView(BuildContext context) {
-    print(currentDateTime.toString());
     return Container(
       height: 50,
       child: ListView.builder(
@@ -147,8 +122,6 @@ class _DateCapsuleState extends State<DateCapsule> {
               currentMonthList = currentMonthList.toSet().toList();
               scrollController = ScrollController(
                   initialScrollOffset: 70.0 * currentDateTime.day);
-
-              //if (currentDateTime.day > lastDayOfMonth())
             });
           },
           child: Center(
@@ -161,17 +134,6 @@ class _DateCapsuleState extends State<DateCapsule> {
                       color:
                           (mindex + 1 != currentDateTime.month) ? GREY : BLACK),
                 ),
-                /*  Text(
-                date_util.DateUtils
-                    .weekdays[currentMonthList[index].weekday - 1],
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color:
-                        (currentMonthList[index].day != currentDateTime.day)
-                            ? Color(0xFF465876)
-                            : Colors.white),
-              ) */
               ],
             ),
           ),

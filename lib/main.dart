@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
+import 'package:task_managing_application/screens/message/message_screen.dart';
 import 'package:task_managing_application/screens/pdf_report_viewer/pdf_report_viewer_screen.dart';
 import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
@@ -19,7 +20,7 @@ import 'package:task_managing_application/states/subtask_create_bloc/subtask_cre
 import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_bloc.dart'
     show SubtaskViewBloc;
 import 'package:firebase_core/firebase_core.dart';
-import 'package:task_managing_application/states/thread_bloc/thread_bloc.dart';
+import 'package:task_managing_application/widgets/message/message_widget.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -27,25 +28,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // ApplicationRepository.repository.userId =
-  //     "20230831-0517-8230-a202-0089f860b83a";
-
-  // ApplicationRepository.repository.userImageUrl = "avatars/avatar_1.jpg";
-
-  // ApplicationRepository.repository.userEmailAddress = "matwil@gmail.com";
-
-  // ApplicationRepository.repository.username = "Mathew Wilson";
-
-  ApplicationRepository.repository.userId =
-      "20230831-0517-8130-8211-a9c1dfa3e677";
-
-  ApplicationRepository.repository.userImageUrl = "avatars/avatar_2.jpg";
-
-  ApplicationRepository.repository.userEmailAddress = "jane@example.com";
-
-  ApplicationRepository.repository.username = "Jane Smith";
-
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,
@@ -71,7 +53,7 @@ class MyApp extends StatelessWidget {
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-      ),
+       ), 
     );
   }
 }
@@ -151,7 +133,7 @@ class AppFlow extends StatelessWidget {
                 context.read<ApplicationRepository>(),
               )..add(const ThreadSubscribeEvent()),
               child: const ThreadScreen(),
-            ),
+            ), 
           ),
         if (state is SubTaskCreate)
           MaterialPage(

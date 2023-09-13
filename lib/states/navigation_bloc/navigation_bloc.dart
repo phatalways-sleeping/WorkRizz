@@ -9,7 +9,8 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc(this._applicationRepository) : super(const Splash()) {
+  NavigationBloc(this._applicationRepository) : super(const Home()) {
+    //on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>((event, emit) {
       emit(const Home());

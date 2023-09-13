@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
+import 'package:task_managing_application/screens/message/message_screen.dart';
 import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
 import 'package:task_managing_application/states/states.dart';
@@ -11,6 +12,7 @@ import 'package:task_managing_application/states/subtask_create_bloc/subtask_cre
 import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_bloc.dart'
     show SubtaskViewBloc;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:task_managing_application/widgets/message/message_widget.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -50,11 +52,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
-      home: BlocProvider(
+      home: MessageScreen(),
+      /* home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-      ),
+      ), */
     );
   }
 }

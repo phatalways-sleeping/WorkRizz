@@ -7,8 +7,9 @@ import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
 import 'package:task_managing_application/screens/project/project_screen.dart';
 import 'package:task_managing_application/screens/splash/splash_screen.dart';
-import 'package:task_managing_application/screens/homepage/homepage_screen.dart';
+import 'package:task_managing_application/screens/home/home_screen.dart';
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
+import 'package:task_managing_application/states/home_bloc/home_bloc.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
 import 'package:task_managing_application/screens/thread/thread_screen.dart';
@@ -177,10 +178,17 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is ChangePassword)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+          MaterialPage(
+            child: ErrorWidget(
+              'Temporarily unavailable',
+            ),
+          ),
         if (state is Home)
-          const MaterialPage(
-            child: HomePageScreen(),
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => HomeBloc()..add(const HomeSubscribeEvent()),
+              child: const HomeScreen(),
+            ),
           ),
         if (state is Assistant)
           const MaterialPage(
@@ -193,8 +201,12 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is Profile)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+          MaterialPage(
+            child: ErrorWidget('Temporarily unavailable'),
+          ),
         if (state is Settings)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+          MaterialPage(
+            child: ErrorWidget('Temporarily unavailable'),
+          ),
       ];
 }

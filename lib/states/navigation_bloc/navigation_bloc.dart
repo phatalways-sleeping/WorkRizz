@@ -11,7 +11,9 @@ part 'navigation_state.dart';
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   NavigationBloc(this._applicationRepository) : super(const Splash()) {
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
-    on<NavigateToHome>(_onNavigateToHome);
+    on<NavigateToHome>((event, emit) {
+      emit(const Home());
+    });
     on<NavigateToAuthentication>(_navigateToAuthentication);
     on<NavigateToProjectsList>(_onNavigateToProjectsList);
     on<NavigateToTask>((event, emit) {
@@ -112,14 +114,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   ) async {
     emit(const ChangePassword());
   }
-
-  Future<void> _onNavigateToHome(
-    NavigateToHome event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const Home());
-  }
-
+  
   Future<void> _onNavigateToProfile(
     NavigateToProfile event,
     Emitter<NavigationState> emit,

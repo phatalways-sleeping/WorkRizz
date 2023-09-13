@@ -9,14 +9,14 @@ import 'date_widget.dart';
 import 'schedule_title.dart';
 import 'remain_task.dart';
 
-class HomePageView extends StatefulWidget {
-  const HomePageView({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<HomePageView> createState() => _HomePageViewState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomePageViewState extends State<HomePageView> {
+class _HomeViewState extends State<HomeView> {
   late final ScrollController _scrollController = ScrollController()
     ..addListener(() {});
 
@@ -37,13 +37,9 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //hideNavigationBar: false,
-      // margin: const EdgeInsets.only(top: 30),
-      // color: Colors.white,
-      // alignment: Alignment.center,
-      //hideFloatingActionButton: false,
-      // hideNavigationBar: true,
+    return BaseScreen(
+      hideNavigationBar: false,
+      hideFloatingActionButton: false,
       child: CustomScrollView(
         // turn off scroll
         physics: const NeverScrollableScrollPhysics(),
@@ -53,7 +49,8 @@ class _HomePageViewState extends State<HomePageView> {
             delegate: CustomHeaderBar(
               upperChild: const Text("Hello Any"),
               bottomChild: Text(
-                  "Today's ${convertWeekdayToString(DateTime.now().weekday)}"),
+                "Today's ${convertWeekdayToString(DateTime.now().weekday)}",
+              ),
               onPressed: (context) {},
             ),
           ),
@@ -66,9 +63,6 @@ class _HomePageViewState extends State<HomePageView> {
                   alignment: Alignment.center,
                   child: const DateCapsule(),
                 ),
-                // SizedBox(
-                //   height: context.mediaQuery.size.width * RATIO_SPACE,
-                // ),
                 const ScheduleTitle(),
                 Container(
                   alignment: Alignment.center,
@@ -89,7 +83,7 @@ class _HomePageViewState extends State<HomePageView> {
                         'Remaining',
                         style: context.textTheme.titleLarge,
                       ),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.4),
+                      SizedBox(width: context.mediaQuery.size.width * 0.4),
                       InkWell(
                         onTap: () {},
                         child: Text(
@@ -106,13 +100,14 @@ class _HomePageViewState extends State<HomePageView> {
                         ),
                       )
                     ],
-                    //Text(name, style: TextStyle(color: Color(0xFF001833), fontSize: 16,),),
                   ),
                 ),
               ],
             ),
           ),
-          const SliverFillRemaining(child: RemainTasksList()),
+          const SliverFillRemaining(
+            child: RemainTasksList(),
+          ),
         ],
       ),
     );

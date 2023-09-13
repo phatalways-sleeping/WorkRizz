@@ -13,9 +13,9 @@ class ThreadView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      //hideFloatingActionButton: false,
-      //hideNavigationBar: true,
+    return BaseScreen(
+      hideFloatingActionButton: false,
+      hideNavigationBar: true,
       child: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
@@ -51,7 +51,8 @@ class ThreadView extends StatelessWidget {
                 MiniNavThread(totalNotes: 1),
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Thread()),
+                  child: Thread(),
+                ),
               ],
             ),
           ),

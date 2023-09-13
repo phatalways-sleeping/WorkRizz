@@ -94,11 +94,48 @@ class FileListView extends StatelessWidget {
                     );
                   }
                   if (state is FilelistDownloading) {
-                    context.scaffoldMessenger.showSnackBar(
-                      customDownloadSnackBar(
-                        context: context,
-                      ),
-                    ).close;
+                    context.scaffoldMessenger
+                        .showSnackBar(
+                          customDownloadSnackBar(
+                            context: context,
+                          ),
+                        )
+                        .close;
+                  }
+                  if (state is FilelistDownloadingSuccess) {
+                    context.scaffoldMessenger
+                        .showSnackBar(
+                          customDownloadStateSnackBar(
+                            context: context,
+                            successful: true,
+                          ),
+                        )
+                        .closed
+                        .then(
+                      (value) {
+                        context.read<FilelistBloc>().add(
+                              const FilelistSubscibeToStreamEvent(),
+                            );
+                      },
+                    );
+                  }
+                  if (state is FilelistDownloadingFail) {
+                    context.scaffoldMessenger
+                        .showSnackBar(
+                          customDownloadStateSnackBar(
+                            context: context,
+                            successful: false,
+                            message: state.message,
+                          ),
+                        )
+                        .closed
+                        .then(
+                      (value) {
+                        context.read<FilelistBloc>().add(
+                              const FilelistSubscibeToStreamEvent(),
+                            );
+                      },
+                    );
                   }
                 },
                 builder: (context, state) {

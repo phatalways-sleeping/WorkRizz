@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:firebase_storage/firebase_storage.dart' show FirebaseException;
 import 'package:task_managing_application/apis/storage/crud.dart';
 import 'package:task_managing_application/assets/config/firebase_firestore_configs.dart';
+import 'package:task_managing_application/models/exceptions/download_exception.dart';
 import 'package:task_managing_application/models/file/file_model.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/models/personal_schedule/personal_schedule_model.dart';
@@ -68,8 +69,7 @@ sealed class StorageAPI {
   Stream<ThreadModel> threadStream(String id);
   // - MessageModel
   Stream<MessageModel> messageStream(String id);
-  Future<File> imageFileFromStorage(String path);
-  Future<File> fileFromStorage(String path);
+  Future<File> downloadFile(String path);
   // - CommentModel
   Stream<CommentModel> commentStream(String id);
 

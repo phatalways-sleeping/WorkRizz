@@ -522,7 +522,8 @@ final class SubTaskViewSuccessRequestConfirmChange extends SubtaskViewSuccess {
   List<Object> get props => [...super.props, oldPoints, markAsCompleted];
 }
 
-final class SubTaskLoadingSubTaskCompletion extends SubTaskViewSuccessRequestConfirmChange {
+final class SubTaskLoadingSubTaskCompletion
+    extends SubTaskViewSuccessRequestConfirmChange {
   const SubTaskLoadingSubTaskCompletion({
     required super.name,
     required super.description,
@@ -587,6 +588,198 @@ final class SubTaskLoadingSubTaskCompletion extends SubTaskViewSuccessRequestCon
       leaderComment: leaderComment ?? super.leaderComment,
       oldPoints: oldPoints ?? super.oldPoints,
       markAsCompleted: markAsCompleted ?? super.markAsCompleted,
+    );
+  }
+}
+
+final class SubtaskViewDownloading extends SubtaskViewSuccess {
+  const SubtaskViewDownloading({
+    required super.name,
+    required super.description,
+    required super.assignee,
+    required super.dueDate,
+    required super.isCompleted,
+    required super.points,
+    required super.files,
+    required super.comments,
+    required super.progress,
+    required super.grade,
+    required super.leaderComment,
+  });
+
+  factory SubtaskViewDownloading.from(SubtaskViewSuccess state) =>
+      SubtaskViewDownloading(
+        name: state.name,
+        description: state.description,
+        assignee: state.assignee,
+        dueDate: state.dueDate,
+        isCompleted: state.isCompleted,
+        points: state.points,
+        files: state.files,
+        comments: state.comments,
+        progress: state.progress,
+        grade: state.grade,
+        leaderComment: state.leaderComment,
+      );
+
+  @override
+  SubtaskViewDownloading copyWith({
+    String? name,
+    String? description,
+    String? assignee,
+    DateTime? dueDate,
+    bool? isCompleted,
+    int? points,
+    List<FileModel>? files,
+    List<String>? comments,
+    double? progress,
+    int? grade,
+    String? leaderComment,
+  }) {
+    return SubtaskViewDownloading(
+      name: name ?? super.name,
+      description: description ?? super.description,
+      assignee: assignee ?? super.assignee,
+      dueDate: dueDate ?? super.dueDate,
+      isCompleted: isCompleted ?? super.isCompleted,
+      points: points ?? super.points,
+      files: files ?? super.files,
+      comments: comments ?? super.comments,
+      progress: progress ?? super.progress,
+      grade: grade ?? super.grade,
+      leaderComment: leaderComment ?? super.leaderComment,
+    );
+  }
+}
+
+final class SubtaskViewDownloadSuccess extends SubtaskViewSuccess {
+  const SubtaskViewDownloadSuccess({
+    required super.name,
+    required super.description,
+    required super.assignee,
+    required super.dueDate,
+    required super.isCompleted,
+    required super.points,
+    required super.files,
+    required super.comments,
+    required super.progress,
+    required super.grade,
+    required super.leaderComment,
+    required this.file,
+  });
+
+  factory SubtaskViewDownloadSuccess.from(SubtaskViewSuccess state, File file) =>
+      SubtaskViewDownloadSuccess(
+        name: state.name,
+        description: state.description,
+        assignee: state.assignee,
+        dueDate: state.dueDate,
+        isCompleted: state.isCompleted,
+        points: state.points,
+        files: state.files,
+        comments: state.comments,
+        progress: state.progress,
+        grade: state.grade,
+        leaderComment: state.leaderComment,
+        file: file,
+      );
+
+  final File file;
+
+  @override
+  SubtaskViewDownloadSuccess copyWith({
+    String? name,
+    String? description,
+    String? assignee,
+    DateTime? dueDate,
+    bool? isCompleted,
+    int? points,
+    List<FileModel>? files,
+    List<String>? comments,
+    double? progress,
+    int? grade,
+    String? leaderComment,
+    File? file,
+  }) {
+    return SubtaskViewDownloadSuccess(
+      name: name ?? super.name,
+      description: description ?? super.description,
+      assignee: assignee ?? super.assignee,
+      dueDate: dueDate ?? super.dueDate,
+      isCompleted: isCompleted ?? super.isCompleted,
+      points: points ?? super.points,
+      files: files ?? super.files,
+      comments: comments ?? super.comments,
+      progress: progress ?? super.progress,
+      grade: grade ?? super.grade,
+      leaderComment: leaderComment ?? super.leaderComment,
+      file: file ?? this.file,
+    );
+  }
+}
+
+final class SubtaskViewDownloadFail extends SubtaskViewSuccess {
+  const SubtaskViewDownloadFail({
+    required super.name,
+    required super.description,
+    required super.assignee,
+    required super.dueDate,
+    required super.isCompleted,
+    required super.points,
+    required super.files,
+    required super.comments,
+    required super.progress,
+    required super.grade,
+    required super.leaderComment,
+    required this.message,
+  });
+
+  factory SubtaskViewDownloadFail.from(SubtaskViewSuccess state, String message) =>
+      SubtaskViewDownloadFail(
+        name: state.name,
+        description: state.description,
+        assignee: state.assignee,
+        dueDate: state.dueDate,
+        isCompleted: state.isCompleted,
+        points: state.points,
+        files: state.files,
+        comments: state.comments,
+        progress: state.progress,
+        grade: state.grade,
+        leaderComment: state.leaderComment,
+        message: message,
+      );
+
+  final String message;
+
+  @override
+  SubtaskViewDownloadFail copyWith({
+    String? name,
+    String? description,
+    String? assignee,
+    DateTime? dueDate,
+    bool? isCompleted,
+    int? points,
+    List<FileModel>? files,
+    List<String>? comments,
+    double? progress,
+    int? grade,
+    String? leaderComment,
+    String? message,
+  }) {
+    return SubtaskViewDownloadFail(
+      name: name ?? super.name,
+      description: description ?? super.description,
+      assignee: assignee ?? super.assignee,
+      dueDate: dueDate ?? super.dueDate,
+      isCompleted: isCompleted ?? super.isCompleted,
+      points: points ?? super.points,
+      files: files ?? super.files,
+      comments: comments ?? super.comments,
+      progress: progress ?? super.progress,
+      grade: grade ?? super.grade,
+      leaderComment: leaderComment ?? super.leaderComment,
+      message: message ?? this.message,
     );
   }
 }

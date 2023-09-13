@@ -142,10 +142,12 @@ class MessageManagement{
     for (int i = 0; i < users.length; i++){
       for (int j = 0; j < users[i].messages.length; j++){
         returnList.add(users[i].messages[j]);
+
       }
     }
     return returnList;
   }
+
 
   List <UserStructure> getUser(){
     return users;
@@ -175,4 +177,5 @@ class MessageManagement{
     }
     return false;
   }
+
 }

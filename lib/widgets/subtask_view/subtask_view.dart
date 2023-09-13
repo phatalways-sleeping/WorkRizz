@@ -6,6 +6,7 @@ import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/future_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_confirm_change_dialog.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_download_snackbar.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_snackbar.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_subtask_completion.dart';
@@ -122,6 +123,48 @@ class _SubTaskViewState extends State<SubTaskView> {
                 ),
               ],
             ),
+          );
+        } else if (state is SubtaskViewDownloadSuccess) {
+          context.scaffoldMessenger
+              .showSnackBar(customDownloadStateSnackBar(
+                  context: context, successful: true))
+              .closed
+              .then(
+            (value) {
+              context.read<SubtaskViewBloc>().add(
+                    const SubTaskSubscribeEvent(),
+                  );
+            },
+          );
+        } else if (state is SubtaskViewDownloadFail) {
+          context.scaffoldMessenger
+              .showSnackBar(customDownloadStateSnackBar(
+                context: context,
+                successful: false,
+                message: state.message,
+              ))
+              .closed
+              .then(
+            (value) {
+              context.read<SubtaskViewBloc>().add(
+                    const SubTaskSubscribeEvent(),
+                  );
+            },
+          );
+        } else if (state is SubtaskViewDownloading) {
+          context.scaffoldMessenger
+              .showSnackBar(
+                customDownloadSnackBar(
+                  context: context,
+                ),
+              )
+              .closed
+              .then(
+            (value) {
+              context.read<SubtaskViewBloc>().add(
+                    const SubTaskSubscribeEvent(),
+                  );
+            },
           );
         }
       },

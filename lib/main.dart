@@ -1,11 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
 import 'package:task_managing_application/screens/message/message_screen.dart';
+import 'package:task_managing_application/screens/pdf_report_viewer/pdf_report_viewer_screen.dart';
 import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
+import 'package:task_managing_application/screens/project/project_screen.dart';
+import 'package:task_managing_application/screens/splash/splash_screen.dart';
+import 'package:task_managing_application/screens/homepage/homepage_screen.dart';
+import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
+import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
+import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
+import 'package:task_managing_application/screens/thread/thread_screen.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart'
     show SubtaskCreateBloc;
@@ -20,17 +27,24 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final currentUser = await FirebaseAuth.instance.authStateChanges().first;
 
-  if (currentUser != null) {
-    final email = currentUser.email!;
+  // ApplicationRepository.repository.userId =
+  //     "20230831-0517-8230-a202-0089f860b83a";
 
-    final userAccount =
-        await ApplicationRepository.repository.userStreamByEmail(email).first;
-    ApplicationRepository.initializeRepo(
-      userAccount: userAccount,
-    );
-  }
+  // ApplicationRepository.repository.userImageUrl = "avatars/avatar_1.jpg";
+
+  // ApplicationRepository.repository.userEmailAddress = "matwil@gmail.com";
+
+  // ApplicationRepository.repository.username = "Mathew Wilson";
+
+  ApplicationRepository.repository.userId =
+      "20230831-0517-8130-8211-a9c1dfa3e677";
+
+  ApplicationRepository.repository.userImageUrl = "avatars/avatar_2.jpg";
+
+  ApplicationRepository.repository.userEmailAddress = "jane@example.com";
+
+  ApplicationRepository.repository.username = "Jane Smith";
 
   runApp(
     RepositoryProvider(
@@ -52,12 +66,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
-      home: MessageScreen(),
-      /* home: BlocProvider(
+      home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
         child: const AppFlow(),
-      ), */
+       ), 
     );
   }
 }
@@ -130,6 +143,10 @@ class AppFlow extends StatelessWidget {
               child: const FileListScreen(),
             ),
           ),
+        if (state is Thread)
+          const MaterialPage(
+            child: ThreadScreen(),
+          ),
         if (state is SubTaskCreate)
           MaterialPage(
             child: BlocProvider(
@@ -148,18 +165,17 @@ class AppFlow extends StatelessWidget {
               child: const SubTaskScreen(),
             ),
           ),
+        if (state is PDFReportViewer)
+          MaterialPage(
+            child: PDFReportViewerScreen(
+              file: state.file,
+            ),
+          ),
         if (state is ChangePassword)
           MaterialPage(child: ErrorWidget('Temporarily unavailable')),
         if (state is Home)
-          MaterialPage(
-            child: BaseScreen(
-              hideFloatingActionButton: true,
-              child: Container(
-                height: 700,
-                color: Colors.pink,
-                width: double.infinity,
-              ),
-            ),
+          const MaterialPage(
+            child: HomePageScreen(),
           ),
         if (state is Assistant)
           const MaterialPage(

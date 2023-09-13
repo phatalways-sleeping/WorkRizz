@@ -59,6 +59,78 @@ final class FilelistDownloading extends FilelistSuccess {
   }
 }
 
+final class FilelistDownloadingSuccess extends FilelistSuccess {
+  const FilelistDownloadingSuccess({
+    required super.files,
+    required this.file,
+  });
+
+  factory FilelistDownloadingSuccess.from({
+    required FilelistSuccess filelistSuccess,
+    required File file,
+  }) {
+    return FilelistDownloadingSuccess(
+      files: filelistSuccess.files,
+      file: file,
+    );
+  }
+
+  final File file;
+
+  @override
+  FilelistDownloadingSuccess copyWith({
+    List<FilesSmallInformation>? files,
+    File? file,
+  }) {
+    return FilelistDownloadingSuccess(
+      files: files ?? this.files,
+      file: file ?? this.file,
+    );
+  }
+
+  @override
+  List<Object> get props => [
+        file,
+        files,
+      ];
+}
+
+final class FilelistDownloadingFail extends FilelistSuccess {
+  const FilelistDownloadingFail({
+    required super.files,
+    required this.message,
+  });
+
+  factory FilelistDownloadingFail.from({
+    required FilelistSuccess filelistSuccess,
+    required String message,
+  }) {
+    return FilelistDownloadingFail(
+      files: filelistSuccess.files,
+      message: message,
+    );
+  }
+
+  final String message;
+
+  @override
+  FilelistDownloadingFail copyWith({
+    List<FilesSmallInformation>? files,
+    String? message,
+  }) {
+    return FilelistDownloadingFail(
+      files: files ?? this.files,
+      message: message ?? this.message,
+    );
+  }
+
+  @override
+  List<Object> get props => [
+        message,
+        files,
+      ];
+}
+
 sealed class FilelistFailure extends FilelistState {
   const FilelistFailure({
     required this.message,

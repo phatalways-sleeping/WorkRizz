@@ -24,6 +24,7 @@ class _MessageState extends State<Message> {
 
   var messageManagement = MessageManagement();
   List<MessageStructure> Message = [];
+
   List<UserStructure> User = [];
   @override
   void initState() {
@@ -33,11 +34,13 @@ class _MessageState extends State<Message> {
     super.initState();
   }
 
+
   Widget CategoryScroll(int userIndex, BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     Color color = COLOR_WHEEL[
         Random().nextInt(COLOR_WHEEL.length)]; /*random a color in color wheel*/
+
     if (userIndex >= User.length) return Container();
     Message = User[userIndex].getMessages();
     return Align(
@@ -77,7 +80,7 @@ class _MessageState extends State<Message> {
       )
     );
     
-    
+ 
   }
 
   Widget MessageScroll(int index, BuildContext context, Color color) {
@@ -93,11 +96,13 @@ class _MessageState extends State<Message> {
         });
       },
       child: Container(
+
          margin: EdgeInsets.only(
             left: width * RATIO_PADDING * 3,
             right: width * RATIO_PADDING * 3,
             top: width * RATIO_PADDING,
           ), 
+
         child: Dismissible(
           key: UniqueKey(),
           direction: DismissDirection.endToStart,
@@ -137,6 +142,7 @@ class _MessageState extends State<Message> {
             });
           },
           child: Container(
+
             alignment: (Message[index].isSender()?Alignment.topRight:Alignment.topLeft),
             decoration: BoxDecoration(
               color: (Message[index].isSender()?GREEN:WHITE),
@@ -148,6 +154,7 @@ class _MessageState extends State<Message> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 if (Message[index].type == 'text')
                   Text(
                     '${Message[index].content}',
@@ -183,6 +190,7 @@ class _MessageState extends State<Message> {
                       ),
                     ],
                   ),
+
               ],
             ),
           ),
@@ -201,10 +209,10 @@ class _MessageState extends State<Message> {
       physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
       itemCount: User.length,
+
       itemBuilder: (BuildContext context, int index) {
         return CategoryScroll(index, context);
       },
     );
   }
-
-}
+  }

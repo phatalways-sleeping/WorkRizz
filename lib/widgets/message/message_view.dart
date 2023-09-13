@@ -26,6 +26,7 @@ class _MessageViewState extends State<MessageView> {
       //hideFloatingActionButton: false,
       //hideNavigationBar: true,
       body: CustomScrollView(
+
         slivers: [
           SliverPersistentHeader(
             floating: true,
@@ -66,6 +67,7 @@ class _MessageViewState extends State<MessageView> {
           ),
         ],
       ),
+
     bottomNavigationBar: Container(
      height: screenHeight * 0.07,
      child: Stack(
@@ -122,6 +124,7 @@ class _MessageViewState extends State<MessageView> {
         ],
       ),
     ),
+
     );
   }
 }

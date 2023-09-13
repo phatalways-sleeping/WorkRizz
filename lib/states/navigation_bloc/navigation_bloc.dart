@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -8,7 +9,8 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc(this._applicationRepository) : super(const Splash()) {
+  NavigationBloc(this._applicationRepository) : super(const Home()) {
+    //on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>(_onNavigateToHome);
     on<NavigateToAuthentication>(_navigateToAuthentication);
@@ -28,10 +30,10 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
     on<NavigateToSubTaskDetail>((event, emit) {
-      if(event.subTaskId != null) {
+      if (event.subTaskId != null) {
         _applicationRepository.subTaskIdOnView = event.subTaskId!;
       }
-      if(event.taskId != null) {
+      if (event.taskId != null) {
         _applicationRepository.taskIdOnView = event.taskId!;
       }
       emit(const SubTaskDetail());
@@ -51,10 +53,13 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       emit(const SubTaskCreate());
     });
     on<NavigateToFileList>((event, emit) {
-      if(event.projectName != null) {
+      if (event.projectName != null) {
         _applicationRepository.projectOnViewName = event.projectName!;
       }
       emit(const FileList());
+    });
+    on<NavigateToPDFReportViewer>((event, emit) async {
+      emit(PDFReportViewer(event.file));
     });
   }
 
@@ -69,7 +74,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   void mapCurrentStateToEventThenEmit(NavigationState state) {
     if (state is ProjectsList) {
       eventToNavigateBack = const NavigateToProjectsList();
-    } else if (state is TaskList) {
+    } else if (state is TaskList || state is PDFReportViewer) {
       eventToNavigateBack = NavigateToTask(
         projectId: _applicationRepository.projectIdOnView,
         leaderId: _applicationRepository.isLeaderOfProjectOnView

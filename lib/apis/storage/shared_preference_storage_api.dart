@@ -580,12 +580,7 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
   }
   
   @override
-  Future<File> fileFromStorage(String path) {
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<File> imageFileFromStorage(String path) {
+  Future<File> downloadFile(String path) {
     throw UnimplementedError();
   }
   

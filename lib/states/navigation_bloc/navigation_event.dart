@@ -108,10 +108,6 @@ final class NavigateToThread extends NavigationEvent {
   List<Object> get props => [...super.props, if (threadId != null) threadId!];
 }
 
-/* final class NavigateToThread extends NavigationEvent {
-  const NavigateToThread();
-} */
-
 final class NavigateToSubTaskCreate extends NavigationEvent {
   const NavigateToSubTaskCreate(
     this.ofTaskId,
@@ -130,4 +126,13 @@ final class NavigateToPDFReportViewer extends NavigationEvent {
 
   @override
   List<Object> get props => [...super.props, file];
+}
+
+final class NavigateToMessage extends NavigationEvent {
+  const NavigateToMessage(this.threadId);
+
+  final String threadId;
+
+  @override
+  List<Object> get props => [...super.props, threadId];
 }

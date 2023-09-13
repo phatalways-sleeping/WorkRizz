@@ -1313,7 +1313,6 @@ class ApplicationRepository {
 
   // Thread / View thread
   Future<void> addNewMessage({
-    required String threadId,
     required String message,
     required bool isTextMessage,
     required bool isImageMessage,
@@ -1330,7 +1329,7 @@ class ApplicationRepository {
 
       await Future.wait<void>([
         _storageAPI.createNewMessage(newMessage),
-        _storageAPI.updateMessagesInThread(threadId, [newMessage.id]),
+        _storageAPI.updateMessagesInThread(threadIdOnView, [newMessage.id]),
       ]);
     } else if (isImageMessage) {
       assert(image != null);
@@ -1343,7 +1342,7 @@ class ApplicationRepository {
 
       await Future.wait<void>([
         _storageAPI.createNewMessage(newMessage),
-        _storageAPI.updateMessagesInThread(threadId, [newMessage.id]),
+        _storageAPI.updateMessagesInThread(threadIdOnView, [newMessage.id]),
         _storageAPI.updateImageToStorage(image: image),
       ]);
     } else {
@@ -1370,7 +1369,7 @@ class ApplicationRepository {
 
       await Future.wait<void>([
         _storageAPI.createNewMessage(newMessage),
-        _storageAPI.updateMessagesInThread(threadId, [newMessage.id]),
+        _storageAPI.updateMessagesInThread(threadIdOnView, [newMessage.id]),
         _storageAPI.updateFileToStorage(file: file),
       ]);
     }

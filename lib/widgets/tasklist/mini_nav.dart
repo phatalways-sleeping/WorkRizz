@@ -55,7 +55,7 @@ class MiniNav extends StatelessWidget {
         ),
         InkWell(
           onTap: () => context.read<NavigationBloc>().add(
-                NavigateToThread(
+                NavigateToMessage(
                   threadId,
                 ),
               ),

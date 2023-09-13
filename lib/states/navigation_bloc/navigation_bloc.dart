@@ -9,8 +9,7 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc(this._applicationRepository) : super(const Home()) {
-    //on<NavigateToTestComponents>(_onNavigateToTestComponents);
+  NavigationBloc(this._applicationRepository) : super(const Splash()) {
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
     on<NavigateToHome>((event, emit) {
       emit(const Home());
@@ -69,6 +68,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       }
       emit(const Thread());
     });
+    on<NavigateToMessage>((event, emit) {
+      _applicationRepository.threadIdOnView = event.threadId;
+      emit(Message(
+        event.threadId,
+      ));
+    });
   }
 
   final ApplicationRepository _applicationRepository;
@@ -115,7 +120,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   ) async {
     emit(const ChangePassword());
   }
-  
+
   Future<void> _onNavigateToProfile(
     NavigateToProfile event,
     Emitter<NavigationState> emit,

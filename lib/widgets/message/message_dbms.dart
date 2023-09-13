@@ -22,12 +22,18 @@ class MessageStructure{
     required this.date,
   });
   bool isSender(){
-    if (user == "Vinh") return true;
-    else return false;
+    if (user == "Vinh") {
+      return true;
+    } else {
+      return false;
+    }
   }
   bool isSame(MessageStructure message){
-    if (message.messageID == messageID && message.content == content) return true;
-    else return false;
+    if (message.messageID == messageID && message.content == content) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
@@ -173,6 +179,5 @@ class MessageManagement{
       users.last.addMessage(newMess);
       return true;
     }
-    return false;
   }
 }

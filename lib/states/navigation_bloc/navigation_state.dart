@@ -23,9 +23,6 @@ final class Thread extends NavigationState {
   const Thread();
 }
 
-final class Thread extends NavigationState {
-  const Thread();
-}
 
 final class Authentication extends NavigationState {
   const Authentication();
@@ -82,4 +79,13 @@ final class PDFReportViewer extends NavigationState {
 
   @override
   List<Object> get props => [...super.props, file];
+}
+
+final class Message extends NavigationState {
+  const Message(this.threadId);
+
+  final String threadId;
+
+  @override
+  List<Object> get props => [...super.props, threadId];
 }

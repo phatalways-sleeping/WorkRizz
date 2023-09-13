@@ -10,7 +10,8 @@ final class ReadMessage extends Read {
           .doc(id)
           .snapshots()
           .map((event) {
-        final json = event as Map<String, dynamic>;
+        
+        final json = event.data() as Map<String, dynamic>;
         if (json.containsKey("text")) {
           return TextMessageModel.fromJson(json);
         } else if (json.containsKey("imageUrl")) {

@@ -8,6 +8,7 @@ import 'package:task_managing_application/screens/file_list/filelist_screen.dart
 import 'package:task_managing_application/screens/home/home_screen.dart';
 import 'package:task_managing_application/states/home_bloc/home_bloc.dart';
 import 'package:task_managing_application/screens/thread/thread_screen.dart';
+import 'package:task_managing_application/states/message_bloc/message_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart'
     show SubtaskCreateBloc;
@@ -16,6 +17,7 @@ import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_
 import 'package:firebase_core/firebase_core.dart';
 import 'package:task_managing_application/states/thread_bloc/thread_bloc.dart';
 import 'firebase_options.dart';
+import 'screens/message/message_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,6 +111,15 @@ class AppFlow extends StatelessWidget {
                 context.read<ApplicationRepository>(),
               ),
               child: const TaskListScreen(),
+            ),
+          ),
+        if(state is Message) 
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => MessageBloc(
+                context.read<ApplicationRepository>(),
+              )..add(const MessageSubscribeToFirestore()),
+              child: const MessageScreen(),
             ),
           ),
         if (state is FileList)

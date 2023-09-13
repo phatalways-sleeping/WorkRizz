@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/states/tasklist_bloc/tasklist_bloc.dart';
 import 'package:task_managing_application/widgets/tasklist/tasklist_view.dart';
 
 class TaskListScreen extends StatefulWidget {

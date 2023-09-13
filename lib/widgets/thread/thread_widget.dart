@@ -1,8 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:task_managing_application/assets/fonts/base_font.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_dialog.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';

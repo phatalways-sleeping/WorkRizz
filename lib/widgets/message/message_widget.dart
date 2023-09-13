@@ -8,7 +8,6 @@ import 'package:task_managing_application/widgets/custom_floating_widget/custom_
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'message_dbms.dart';
 import 'package:task_managing_application/assets/assets.dart';
-
 class Message extends StatefulWidget {
   const Message({super.key});
 
@@ -30,12 +29,13 @@ class _MessageState extends State<Message> {
   void initState() {
     messageManagement = MessageManagement();
     User = messageManagement.getUser();
+  @override
+  void initState() {
+    Message = messageManagement.getMessages();
     scrollController = ScrollController(initialScrollOffset: 0.0);
     super.initState();
   }
-
-
-  Widget CategoryScroll(int userIndex, BuildContext context) {
+  Widget CategoryScroll(int index, BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     Color color = COLOR_WHEEL[
@@ -79,8 +79,33 @@ class _MessageState extends State<Message> {
         ],
       )
     );
-    
- 
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            margin: EdgeInsets.only(left: width * RATIO_PADDING),
+            child: Row(
+              children: [
+                TaskTag(color: color, name: "$index"),
+                SizedBox(width: width * RATIO_PADDING),
+                Text("Message $index", style: context.textTheme.titleSmall),
+              ],
+            )),
+        // SizedBox(height: width * RATIO_SPACE),
+        ListView.builder(
+          controller: scrollController,
+          scrollDirection: Axis.vertical,
+          physics: const ClampingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: 3,
+          itemBuilder: (BuildContext context, int index) {
+            return MessageScroll(index, context, color);
+          },
+        ),
+        SizedBox(height: width * RATIO_SPACE * 2),
+      ],
+    );
   }
 
   Widget MessageScroll(int index, BuildContext context, Color color) {
@@ -96,13 +121,11 @@ class _MessageState extends State<Message> {
         });
       },
       child: Container(
-
          margin: EdgeInsets.only(
             left: width * RATIO_PADDING * 3,
             right: width * RATIO_PADDING * 3,
             top: width * RATIO_PADDING,
           ), 
-
         child: Dismissible(
           key: UniqueKey(),
           direction: DismissDirection.endToStart,
@@ -142,7 +165,6 @@ class _MessageState extends State<Message> {
             });
           },
           child: Container(
-
             alignment: (Message[index].isSender()?Alignment.topRight:Alignment.topLeft),
             decoration: BoxDecoration(
               color: (Message[index].isSender()?GREEN:WHITE),
@@ -154,7 +176,6 @@ class _MessageState extends State<Message> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 if (Message[index].type == 'text')
                   Text(
                     '${Message[index].content}',
@@ -190,7 +211,47 @@ class _MessageState extends State<Message> {
                       ),
                     ],
                   ),
-
+                Text(
+                  '${Message[index].name}',
+                  style: context.textTheme.titleMedium,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    /* SvgPicture.string(
+                      SvgAssets.message,
+                      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                    ), */
+                    SizedBox(
+                      width: width * RATIO_SPACE,
+                    ),
+                
+                    //const Spacer(),
+                    const CustomAvatarWidget(
+                      imageUrl: 'assets/images/avt.jpg',
+                      size: 20,
+                    ),
+                    SizedBox(
+                      width: width * RATIO_SPACE,
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          style: context.textTheme.bodySmall, //apply style to all
+                          children: [
+                            TextSpan(text: 'Started by '),
+                            TextSpan(text: '${Message[index].user}', style: TextStyle(color: Message[index].color)),
+                          ]
+                        )
+                    ),
+                    SizedBox(
+                      width: width * RATIO_SPACE,
+                    ),
+                    Text(
+                        '${-Message[index].date.difference(DateTime.now()).inMinutes} min ago',
+                        style: context.textTheme.bodyMedium),
+                  ],
+                ),
               ],
             ),
           ),
@@ -209,7 +270,6 @@ class _MessageState extends State<Message> {
       physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
       itemCount: User.length,
-
       itemBuilder: (BuildContext context, int index) {
         return CategoryScroll(index, context);
       },

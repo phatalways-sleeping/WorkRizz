@@ -23,6 +23,10 @@ final class Thread extends NavigationState {
   const Thread();
 }
 
+final class Thread extends NavigationState {
+  const Thread();
+}
+
 final class Authentication extends NavigationState {
   const Authentication();
 }

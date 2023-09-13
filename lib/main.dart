@@ -8,8 +8,9 @@ import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
 import 'package:task_managing_application/screens/project/project_screen.dart';
 import 'package:task_managing_application/screens/splash/splash_screen.dart';
-import 'package:task_managing_application/screens/homepage/homepage_screen.dart';
+import 'package:task_managing_application/screens/home/home_screen.dart';
 import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
+import 'package:task_managing_application/states/home_bloc/home_bloc.dart';
 import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
 import 'package:task_managing_application/screens/thread/thread_screen.dart';
@@ -27,25 +28,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // ApplicationRepository.repository.userId =
-  //     "20230831-0517-8230-a202-0089f860b83a";
-
-  // ApplicationRepository.repository.userImageUrl = "avatars/avatar_1.jpg";
-
-  // ApplicationRepository.repository.userEmailAddress = "matwil@gmail.com";
-
-  // ApplicationRepository.repository.username = "Mathew Wilson";
-
-  ApplicationRepository.repository.userId =
-      "20230831-0517-8130-8211-a9c1dfa3e677";
-
-  ApplicationRepository.repository.userImageUrl = "avatars/avatar_2.jpg";
-
-  ApplicationRepository.repository.userEmailAddress = "jane@example.com";
-
-  ApplicationRepository.repository.username = "Jane Smith";
-
   runApp(
     RepositoryProvider(
       create: (context) => ApplicationRepository.repository,
@@ -66,6 +48,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Task Managing Application',
       theme: LightTheme.theme,
+      //home: ThreadScreen(),
       home: BlocProvider(
         create: (context) =>
             NavigationBloc(context.read<ApplicationRepository>()),
@@ -144,8 +127,13 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is Thread)
-          const MaterialPage(
-            child: ThreadScreen(),
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => ThreadBloc(
+                context.read<ApplicationRepository>(),
+              )..add(const ThreadSubscribeEvent()),
+              child: const ThreadScreen(),
+            ), 
           ),
         if (state is SubTaskCreate)
           MaterialPage(
@@ -172,10 +160,17 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is ChangePassword)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+          MaterialPage(
+            child: ErrorWidget(
+              'Temporarily unavailable',
+            ),
+          ),
         if (state is Home)
-          const MaterialPage(
-            child: HomePageScreen(),
+          MaterialPage(
+            child: BlocProvider(
+              create: (context) => HomeBloc()..add(const HomeSubscribeEvent()),
+              child: const HomeScreen(),
+            ),
           ),
         if (state is Assistant)
           const MaterialPage(
@@ -188,8 +183,12 @@ class AppFlow extends StatelessWidget {
             ),
           ),
         if (state is Profile)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+          MaterialPage(
+            child: ErrorWidget('Temporarily unavailable'),
+          ),
         if (state is Settings)
-          MaterialPage(child: ErrorWidget('Temporarily unavailable')),
+          MaterialPage(
+            child: ErrorWidget('Temporarily unavailable'),
+          ),
       ];
 }

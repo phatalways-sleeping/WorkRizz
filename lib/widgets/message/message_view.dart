@@ -9,24 +9,15 @@ import 'package:task_managing_application/widgets/message/mini_nav.dart';
 import 'message_widget.dart';
 import 'typing_widget.dart';
 
-class MessageView extends StatefulWidget {
+
+class MessageView extends StatelessWidget {
   const MessageView({super.key});
 
   @override
-  _MessageViewState createState() => _MessageViewState();
-}
-
-class _MessageViewState extends State<MessageView> {
-  @override
   Widget build(BuildContext context) {
-    String inputMessage = "";
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      //hideFloatingActionButton: false,
-      //hideNavigationBar: true,
-      body: CustomScrollView(
-
+    return BaseScreen(
+      hideFloatingActionButton: true,
+      child: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
             floating: true,
@@ -54,6 +45,32 @@ class _MessageViewState extends State<MessageView> {
                   ),
                 ),
                 onPressed: (context) {}),
+              upperChild: const Icon(Icons.arrow_back_ios_new_outlined,
+                  color: BLACK, size: 20.0),
+              bottomChild: Container(
+                margin: EdgeInsets.only(
+                    top: context.mediaQuery.size.width * RATIO_PADDING),
+                child: Row(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.all(
+                            context.mediaQuery.size.width * RATIO_PADDING),
+                        decoration: BoxDecoration(
+                          color: ORANGE,
+                          borderRadius: BorderRadius.circular(MEDIUM_CORNER),
+                        ),
+                        child: SvgPicture.string(
+                          SvgAssets.chat,
+                          width: 24,
+                        )),
+                    SizedBox(
+                        width: context.mediaQuery.size.width * RATIO_PADDING),
+                    const Text("Messages"),
+                  ],
+                ),
+              ),
+              onPressed: (context) {},
+            ),
           ),
           const SliverToBoxAdapter(
             child: Column(
@@ -61,13 +78,13 @@ class _MessageViewState extends State<MessageView> {
                 MiniNavMessage(totalNotes: 1),
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Message()),
+                  child: Message(),
+                ),
               ],
             ),
           ),
         ],
       ),
-
     bottomNavigationBar: Container(
      height: screenHeight * 0.07,
      child: Stack(
@@ -123,8 +140,6 @@ class _MessageViewState extends State<MessageView> {
           ),
         ],
       ),
-    ),
-
     );
   }
 }

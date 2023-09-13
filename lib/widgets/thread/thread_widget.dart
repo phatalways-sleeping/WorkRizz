@@ -12,7 +12,7 @@ class Thread extends StatefulWidget {
   const Thread({super.key});
 
   @override
-  _ThreadState createState() => _ThreadState();
+  State<Thread> createState() => _ThreadState();
 }
 
 class _ThreadState extends State<Thread> {

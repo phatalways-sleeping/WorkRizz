@@ -12,7 +12,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   NavigationBloc(this._applicationRepository) : super(const Home()) {
     //on<NavigateToTestComponents>(_onNavigateToTestComponents);
     on<NavigateToChangePassword>(_onNavigateToChangePassword);
-    on<NavigateToHome>(_onNavigateToHome);
+    on<NavigateToHome>((event, emit) {
+      emit(const Home());
+    });
     on<NavigateToAuthentication>(_navigateToAuthentication);
     on<NavigateToProjectsList>(_onNavigateToProjectsList);
     on<NavigateToTask>((event, emit) {
@@ -61,6 +63,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToPDFReportViewer>((event, emit) async {
       emit(PDFReportViewer(event.file));
     });
+    on<NavigateToThread>((event, emit) {
+      if (event.threadId != null) {
+        _applicationRepository.threadIdOnView = event.threadId!;
+      }
+      emit(const Thread());
+    });
   }
 
   final ApplicationRepository _applicationRepository;
@@ -107,14 +115,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   ) async {
     emit(const ChangePassword());
   }
-
-  Future<void> _onNavigateToHome(
-    NavigateToHome event,
-    Emitter<NavigationState> emit,
-  ) async {
-    emit(const Home());
-  }
-
+  
   Future<void> _onNavigateToProfile(
     NavigateToProfile event,
     Emitter<NavigationState> emit,

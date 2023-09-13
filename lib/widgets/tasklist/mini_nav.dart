@@ -7,12 +7,14 @@ class MiniNav extends StatelessWidget {
     required this.totalNotes,
     required this.totalUnreadMessages,
     required this.projectName,
+    required this.threadId,
   });
 
   final int totalFiles;
   final int totalNotes;
   final int totalUnreadMessages;
   final String projectName;
+  final String threadId;
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +53,21 @@ class MiniNav extends StatelessWidget {
         SizedBox(
           width: context.mediaQuery.size.width * RATIO_PADDING * 2,
         ),
-        Badge(
-          backgroundColor: PURPLE,
-          label: Text(
-            totalUnreadMessages.toString(),
-            style: context.textTheme.bodySmall,
-          ),
-          child: SvgPicture.string(
-            SvgAssets.chat,
+        InkWell(
+          onTap: () => context.read<NavigationBloc>().add(
+                NavigateToThread(
+                  threadId,
+                ),
+              ),
+          child: Badge(
+            backgroundColor: PURPLE,
+            label: Text(
+              totalUnreadMessages.toString(),
+              style: context.textTheme.bodySmall,
+            ),
+            child: SvgPicture.string(
+              SvgAssets.chat,
+            ),
           ),
         ),
         SizedBox(

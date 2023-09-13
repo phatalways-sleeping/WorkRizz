@@ -93,7 +93,19 @@ final class NavigateToFileList extends NavigationEvent {
   final String? projectName;
 
   @override
-  List<Object> get props => [...super.props, if (projectName != null) projectName!];
+  List<Object> get props =>
+      [...super.props, if (projectName != null) projectName!];
+}
+
+final class NavigateToThread extends NavigationEvent {
+  const NavigateToThread(
+    this.threadId,
+  );
+
+  final String? threadId;
+
+  @override
+  List<Object> get props => [...super.props, if (threadId != null) threadId!];
 }
 
 /* final class NavigateToThread extends NavigationEvent {

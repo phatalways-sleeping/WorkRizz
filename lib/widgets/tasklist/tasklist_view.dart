@@ -183,6 +183,7 @@ class TaskListView extends StatelessWidget {
                                 totalNotes: state.project!.totalFileLinks,
                                 totalUnreadMessages: 2,
                                 projectName: state.project!.name,
+                                threadId: state.project!.thread,
                               )
                             ],
                           ),

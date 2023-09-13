@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/repositories/repositories.dart';
-import 'package:task_managing_application/screens/message/message_screen.dart';
 import 'package:task_managing_application/screens/pdf_report_viewer/pdf_report_viewer_screen.dart';
 import 'package:task_managing_application/screens/screens.dart';
 import 'package:task_managing_application/screens/file_list/filelist_screen.dart';
-import 'package:task_managing_application/screens/project/project_screen.dart';
-import 'package:task_managing_application/screens/splash/splash_screen.dart';
 import 'package:task_managing_application/screens/home/home_screen.dart';
-import 'package:task_managing_application/states/authentication_bloc/authentication_bloc.dart';
 import 'package:task_managing_application/states/home_bloc/home_bloc.dart';
-import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
-import 'package:task_managing_application/states/splash_cubit/splash_cubit.dart';
 import 'package:task_managing_application/screens/thread/thread_screen.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/states/subtask_create_bloc/subtask_create_bloc.dart'
@@ -21,7 +15,6 @@ import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_
     show SubtaskViewBloc;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:task_managing_application/states/thread_bloc/thread_bloc.dart';
-import 'package:task_managing_application/widgets/message/message_widget.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {

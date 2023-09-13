@@ -20,6 +20,7 @@ import 'package:task_managing_application/states/subtask_create_bloc/subtask_cre
 import 'package:task_managing_application/states/subtask_view_bloc/subtask_view_bloc.dart'
     show SubtaskViewBloc;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:task_managing_application/states/thread_bloc/thread_bloc.dart';
 import 'package:task_managing_application/widgets/message/message_widget.dart';
 import 'firebase_options.dart';
 

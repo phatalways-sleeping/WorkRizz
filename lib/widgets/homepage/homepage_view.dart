@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/config/config.dart';
 import 'package:task_managing_application/assets/extensions/build_context_extensions.dart';
 import 'package:task_managing_application/assets/utils/functions.dart';
-import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'schedule_progress.dart';
 import 'date_widget.dart';

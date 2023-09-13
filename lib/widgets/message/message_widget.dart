@@ -5,9 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_managing_application/assets/fonts/base_font.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_dialog.dart';
-import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'message_dbms.dart';
 import 'package:task_managing_application/assets/assets.dart';
+
 class Message extends StatefulWidget {
   const Message({super.key});
 
@@ -23,24 +23,20 @@ class _MessageState extends State<Message> {
 
   var messageManagement = MessageManagement();
   List<MessageStructure> Message = [];
-
   List<UserStructure> User = [];
   @override
   void initState() {
     messageManagement = MessageManagement();
     User = messageManagement.getUser();
-  @override
-  void initState() {
-    Message = messageManagement.getMessages();
     scrollController = ScrollController(initialScrollOffset: 0.0);
     super.initState();
   }
-  Widget CategoryScroll(int index, BuildContext context) {
+
+  Widget CategoryScroll(int userIndex, BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     Color color = COLOR_WHEEL[
         Random().nextInt(COLOR_WHEEL.length)]; /*random a color in color wheel*/
-
     if (userIndex >= User.length) return Container();
     Message = User[userIndex].getMessages();
     return Align(
@@ -79,33 +75,8 @@ class _MessageState extends State<Message> {
         ],
       )
     );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-            margin: EdgeInsets.only(left: width * RATIO_PADDING),
-            child: Row(
-              children: [
-                TaskTag(color: color, name: "$index"),
-                SizedBox(width: width * RATIO_PADDING),
-                Text("Message $index", style: context.textTheme.titleSmall),
-              ],
-            )),
-        // SizedBox(height: width * RATIO_SPACE),
-        ListView.builder(
-          controller: scrollController,
-          scrollDirection: Axis.vertical,
-          physics: const ClampingScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: 3,
-          itemBuilder: (BuildContext context, int index) {
-            return MessageScroll(index, context, color);
-          },
-        ),
-        SizedBox(height: width * RATIO_SPACE * 2),
-      ],
-    );
+    
+    
   }
 
   Widget MessageScroll(int index, BuildContext context, Color color) {
@@ -211,47 +182,6 @@ class _MessageState extends State<Message> {
                       ),
                     ],
                   ),
-                Text(
-                  '${Message[index].name}',
-                  style: context.textTheme.titleMedium,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    /* SvgPicture.string(
-                      SvgAssets.message,
-                      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-                    ), */
-                    SizedBox(
-                      width: width * RATIO_SPACE,
-                    ),
-                
-                    //const Spacer(),
-                    const CustomAvatarWidget(
-                      imageUrl: 'assets/images/avt.jpg',
-                      size: 20,
-                    ),
-                    SizedBox(
-                      width: width * RATIO_SPACE,
-                    ),
-                    RichText(
-                      text: TextSpan(
-                          style: context.textTheme.bodySmall, //apply style to all
-                          children: [
-                            TextSpan(text: 'Started by '),
-                            TextSpan(text: '${Message[index].user}', style: TextStyle(color: Message[index].color)),
-                          ]
-                        )
-                    ),
-                    SizedBox(
-                      width: width * RATIO_SPACE,
-                    ),
-                    Text(
-                        '${-Message[index].date.difference(DateTime.now()).inMinutes} min ago',
-                        style: context.textTheme.bodyMedium),
-                  ],
-                ),
               ],
             ),
           ),
@@ -275,4 +205,4 @@ class _MessageState extends State<Message> {
       },
     );
   }
-  }
+}

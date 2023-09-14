@@ -55,23 +55,6 @@ class _HomeViewState extends State<HomeView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 DateCapsule(),
-                // const ScheduleTitle(),
-                // const ScheduleProgress(),
-                // Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: Padding(
-                //     padding: EdgeInsets.only(
-                //       left: context.mediaQuery.size.width * RATIO_PADDING,
-                //       bottom:
-                //           context.mediaQuery.size.width * RATIO_PADDING,
-                //     ),
-                //     child: Text(
-                //       'Remaining',
-                //       style: context.textTheme.titleLarge,
-                //     ),
-                //   ),
-                // ),
-                // const RemainTasksList(),
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Activity(),

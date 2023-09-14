@@ -1060,7 +1060,7 @@ class ApplicationRepository {
                 (element) => element.taskId == taskIdOnView,
               ),
             );
-    
+
     final newFilesSmallInformation = currentFilesSmallInformation.copyWith(
       files: [
         ...currentFilesSmallInformation.files
@@ -1077,7 +1077,6 @@ class ApplicationRepository {
         [newFilesSmallInformation],
       ),
     ]);
-
   }
 
   // Task / Add new category
@@ -1243,7 +1242,6 @@ class ApplicationRepository {
       repliedToUsername: repliedToUsername,
     );
 
-    debugPrint(commentModel.toString());
     await Future.wait<void>(
       [
         _storageAPI.updateIsRepliedInComment(repliedCommentId, false),
@@ -1339,6 +1337,194 @@ class ApplicationRepository {
       debugPrint(stackTrace.toString());
       return [];
     });
+  }
+
+  Future<void> deleteSubTask({
+    required String subTaskId,
+  }) async {
+    // Remove all the files in storage
+    // then remove all comments in sub task and in comments collection
+    // and reduce the total file links in project
+    // remove sub task in assignee
+    final subTask = await _storageAPI.subTaskModelStream(subTaskId).first;
+
+    await Future.wait<void>(
+      [
+        for (var file in subTask.files)
+          FirebaseFirestoreConfigs.storageRef
+              .child('files/${file.fileName}')
+              .delete(),
+        _storageAPI.removeCommentsInSubTask(subTaskId, subTask.comments),
+        for (var commentId in subTask.comments)
+          _storageAPI.deleteComment(commentId),
+        _storageAPI.updateTotalFileLinksInProject(
+          projectIdOnView,
+          -subTask.files.length,
+        ),
+        _storageAPI.removeSubTasksInUser(subTask.assignee, [subTaskId]),
+      ],
+    );
+
+    // Remove subtask id in task
+    // decrease points of task
+    await Future.wait<void>(
+      [
+        _storageAPI.removeSubTasksInTask(taskIdOnView, [subTaskId]),
+        _storageAPI.updatePointsInTask(taskIdOnView, -subTask.points),
+      ],
+    );
+
+    // check if this sub task is completed,
+    // then decrease sub task completed in task
+    // and decrease activities completed in project
+    // then decrease total activities in project
+    await Future.wait<void>(
+      [
+        if (subTask.isCompleted) ...[
+          _storageAPI.updateSubTasksCompletedInTask(taskIdOnView, -1),
+          _storageAPI.updateActivitiesCompletedInProject(projectIdOnView, -1),
+        ],
+        _storageAPI.updateTotalActivitiesInProject(projectIdOnView, -1),
+      ],
+    );
+
+    // Check if the task is empty and mark completed
+    // then mark task incomplete and decrease tasks completed in project
+    final task = await _storageAPI.taskStream(taskIdOnView).first;
+    if (task.subTasks.isEmpty && task.isCompleted) {
+      await Future.wait<void>([
+        _storageAPI.updateIsCompletedInTask(taskIdOnView, false),
+        _storageAPI.updateTasksCompletedInProject(projectIdOnView, -1),
+      ]);
+    }
+
+    // update task small information in project
+    final taskSmallInformations = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.taskSmallInformations);
+
+    final taskSmallInformation = taskSmallInformations.firstWhere(
+      (element) => element.id == taskIdOnView,
+    );
+
+    final newTaskSmallInformation = taskSmallInformation.copyWith(
+      subTaskSmallInformations: [
+        ...taskSmallInformation.subTaskSmallInformations
+            .where((element) => element.id != subTaskId),
+      ],
+    );
+
+    await Future.wait<void>([
+      _storageAPI.removeTaskSmallInformationsInProject(projectIdOnView, [
+        taskSmallInformation,
+      ]),
+      _storageAPI.updateTaskSmallInformationsInProject(
+        projectIdOnView,
+        [newTaskSmallInformation],
+      ),
+    ]);
+
+    // Update file small information in project
+    final fileSmallInformation = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.filesSmallInformations
+            .firstWhere((element) => element.taskId == taskIdOnView));
+
+    final newFileSmallInformation = fileSmallInformation.copyWith(
+      files: [
+        ...fileSmallInformation.files
+            .where((element) => !subTask.files.contains(element)),
+      ],
+    );
+
+    await Future.wait<void>([
+      _storageAPI.removeFilesSmallInformationsInProject(projectIdOnView, [
+        fileSmallInformation,
+      ]),
+      _storageAPI.updateFilesSmallInformationsInProject(
+        projectIdOnView,
+        [newFileSmallInformation],
+      ),
+    ]);
+
+    // Remove sub task
+    await _storageAPI.deleteSubTask(subTaskId);
+  }
+
+  Future<void> deleteTask({
+    required String taskId,
+  }) async {
+    // delete all sub tasks in task
+    final task = await _storageAPI.taskStream(taskId).first;
+
+    await Future.wait<void>(
+      [
+        for (var subTaskId in task.subTasks)
+          deleteSubTask(
+            subTaskId: subTaskId,
+          ),
+      ],
+    );
+
+    // Delete task in project
+    await _storageAPI.removeTasksInProject(projectIdOnView, [taskId]);
+
+
+    // Update task small information in project
+    final taskSmallInformations = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.taskSmallInformations);
+
+    final taskSmallInformation = taskSmallInformations.firstWhere(
+      (element) => element.id == taskId,
+    );
+
+    await Future.wait<void>([
+      _storageAPI.removeTaskSmallInformationsInProject(projectIdOnView, [
+        taskSmallInformation,
+      ]),
+    ]);
+
+    // Update file small information in project
+    final fileSmallInformation = await _storageAPI
+        .projectStream(projectIdOnView)
+        .first
+        .then((value) => value.filesSmallInformations
+            .firstWhere((element) => element.taskId == taskId));
+
+    await Future.wait<void>([
+      _storageAPI.removeFilesSmallInformationsInProject(projectIdOnView, [
+        fileSmallInformation,
+      ]),
+    ]);
+
+    // Delete task
+    await _storageAPI.deleteTask(taskId);
+  }
+
+  Future<void> deleteProject({
+    required String projectId,
+  }) async {
+    // Delete all tasks in project
+    final project = await _storageAPI.projectStream(projectId).first;
+
+    await Future.wait<void>(
+      [
+        for (var taskId in project.tasks)
+          deleteTask(
+            taskId: taskId,
+          ),
+      ],
+    );
+
+    // Delete project in user
+    await _storageAPI.removeProjectsInUser(userId, [projectId]);
+
+    // Delete project
+    await _storageAPI.deleteProject(projectId);
   }
   // Task / View files
 

@@ -60,6 +60,7 @@ sealed class StorageAPI {
   // - Task
   Future<String> taskNameInTask(String id);
   Future<String> projectIdInTask(String id);
+  Future<Task> projectIdInTaskBySubTaskId(String id);
   Stream<Task> taskStream(String id);
   // - SubTask
   Future<String> assigneeOfSubTask(String id);

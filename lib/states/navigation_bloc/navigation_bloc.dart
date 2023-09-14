@@ -30,6 +30,19 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateToAssistant>(_onNavigateToAssistant);
     on<NavigateToProfile>(_onNavigateToProfile);
     on<NavigateToSettings>(_onNavigateToSettings);
+    on<NavigateToSubTaskDetailFromHome>((event, emit) async {
+      final taskModel =
+          await _applicationRepository.projectIdOfSubTask(event.subTaskId);
+      final projectModel =
+          await _applicationRepository.projectStream(taskModel.project).first;
+      _applicationRepository.subTaskIdOnView = event.subTaskId;
+      _applicationRepository.taskIdOnView = taskModel.id;
+      _applicationRepository.projectIdOnView = taskModel.project;
+      _applicationRepository.projectOnViewName = projectModel.name;
+      _applicationRepository.isLeaderOfProjectOnView =
+          projectModel.leader == _applicationRepository.userId;
+      emit(const SubTaskDetailFromHome());
+    });
     on<NavigateToSubTaskDetail>((event, emit) {
       if (event.subTaskId != null) {
         _applicationRepository.subTaskIdOnView = event.subTaskId!;

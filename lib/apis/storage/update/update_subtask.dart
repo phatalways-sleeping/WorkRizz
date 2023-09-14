@@ -64,12 +64,14 @@ final class UpdateSubTask extends Update {
 
   static Future<void> updateFiles(String id, List<FileModel> latestVersion) =>
       FirebaseFirestoreConfigs.subTasksCollection.doc(id).update({
-        "files": FieldValue.arrayUnion(latestVersion),
+        "files": FieldValue.arrayUnion(
+            latestVersion.map((e) => e.toJson()).toList()),
       });
 
   static Future<void> removeFiles(String id, List<FileModel> removedItems) =>
       FirebaseFirestoreConfigs.subTasksCollection.doc(id).update({
-        "files": FieldValue.arrayRemove(removedItems),
+        "files": FieldValue.arrayRemove(
+            removedItems.map((e) => e.toJson()).toList()),
       });
 
   static Future<void> updateSubTask(String id, SubTaskModel subTaskModel) =>

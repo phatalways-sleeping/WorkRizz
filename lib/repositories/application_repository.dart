@@ -521,6 +521,8 @@ class ApplicationRepository {
       ),
     ]);
 
+    debugPrint("Subtask completed");
+
     final task = await _storageAPI.taskStream(taskId).first;
 
     if (task.subTasksCompleted == task.subTasks.length) {
@@ -1026,7 +1028,7 @@ class ApplicationRepository {
         _storageAPI.updateTotalFileLinksInProject(
           projectIdOnView,
           -fileUrls.length,
-        ),
+        )
       ],
     );
 
@@ -1035,10 +1037,13 @@ class ApplicationRepository {
         await _storageAPI.subTaskModelStream(subTaskIdOnView).first.then(
               (value) => value.files
                   .where(
-                    (element) => fileUrls.contains(element.fileName),
+                    (element) => fileUrls
+                        .map((e) => e.split('/').last)
+                        .contains(element.fileName),
                   )
                   .toList(),
             );
+
     await Future.wait<void>(
       [
         _storageAPI.removeFilesInSubTask(
@@ -1047,6 +1052,32 @@ class ApplicationRepository {
         ),
       ],
     );
+
+    // Update the files small information in project
+    final currentFilesSmallInformation =
+        await _storageAPI.projectStream(projectIdOnView).first.then(
+              (value) => value.filesSmallInformations.firstWhere(
+                (element) => element.taskId == taskIdOnView,
+              ),
+            );
+    
+    final newFilesSmallInformation = currentFilesSmallInformation.copyWith(
+      files: [
+        ...currentFilesSmallInformation.files
+            .where((element) => !removedFileModels.contains(element)),
+      ],
+    );
+
+    await Future.wait<void>([
+      _storageAPI.removeFilesSmallInformationsInProject(projectIdOnView, [
+        currentFilesSmallInformation,
+      ]),
+      _storageAPI.updateFilesSmallInformationsInProject(
+        projectIdOnView,
+        [newFilesSmallInformation],
+      ),
+    ]);
+
   }
 
   // Task / Add new category
@@ -1377,4 +1408,46 @@ class ApplicationRepository {
 
   Future<File> downloadFile(String fileUrl) async =>
       await _storageAPI.downloadFile(fileUrl);
+
+  // Home
+  Future<Task> projectIdOfSubTask(String subTaskId) async =>
+      await _storageAPI.projectIdInTaskBySubTaskId(subTaskId);
+
+  Future<Map<String, List<Stream<SubTaskModel>>>> subTasksForEachProject(
+      List<String> subTaskIds) async {
+    final subTasksMap = <String, List<Stream<SubTaskModel>>>{};
+    await Future.wait<void>(
+      [
+        for (var subTask in subTaskIds)
+          projectIdOfSubTask(subTask).then(
+            (value) => subTasksMap[value.project] = [
+              ...subTasksMap[value.project] ?? [],
+              _storageAPI.subTaskModelStream(subTask),
+            ],
+          )
+      ],
+    );
+
+    return subTasksMap;
+  }
+
+  Future<int> tagsCountOfProject(String projectId) async => await _storageAPI
+          .projectStream(projectId)
+          .first
+          .then(
+            (value) => value.tags.length,
+          )
+          .onError((error, stackTrace) {
+        debugPrint(projectId);
+        return 0;
+      });
+
+  Future<String> projectNameOfProject(String projectId) async =>
+      await _storageAPI
+          .projectStream(projectId)
+          .first
+          .then(
+            (value) => value.name,
+          )
+          .onError((error, stackTrace) => "");
 }

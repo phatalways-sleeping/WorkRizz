@@ -23,7 +23,6 @@ final class Thread extends NavigationState {
   const Thread();
 }
 
-
 final class Authentication extends NavigationState {
   const Authentication();
 }
@@ -54,6 +53,10 @@ final class TaskList extends NavigationState {
 
 final class SubTaskDetail extends NavigationState {
   const SubTaskDetail();
+}
+
+final class SubTaskDetailFromHome extends SubTaskDetail {
+  const SubTaskDetailFromHome();
 }
 
 final class ProjectDetail extends NavigationState {

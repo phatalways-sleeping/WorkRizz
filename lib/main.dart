@@ -173,7 +173,9 @@ class AppFlow extends StatelessWidget {
         if (state is Home)
           MaterialPage(
             child: BlocProvider(
-              create: (context) => HomeBloc()..add(const HomeSubscribeEvent()),
+              create: (context) => HomeBloc(
+                context.read<ApplicationRepository>(),
+              )..add(const HomeSubscribeEvent()),
               child: const HomeScreen(),
             ),
           ),

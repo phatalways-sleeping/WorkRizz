@@ -92,7 +92,19 @@ final class CloudFirestoreStorageAPI extends StorageAPI {
   @override
   Future<String> projectIdInTask(String id) => ReadTask.projectIdBelongTo(id);
   @override
+  Future<Task> projectIdInTaskBySubTaskId(String id) async =>
+      await FirebaseFirestoreConfigs.tasksCollection
+          .where(
+            'subTasks',
+            arrayContains: id,
+          )
+          .limit(1)
+          .get()
+          .then((value) =>
+              Task.fromJson(value.docs.first.data()! as Map<String, dynamic>));
+  @override
   Stream<Task> taskStream(String id) => ReadTask.taskStreamById(id);
+
   // - SubTask
   @override
   Future<String> assigneeOfSubTask(String id) =>

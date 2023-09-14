@@ -11,4 +11,16 @@ final class HomeSubscribeEvent extends HomeEvent {
   const HomeSubscribeEvent();
 }
 
+final class HomeMarkSubTaskCompleteEvent extends HomeEvent {
+  const HomeMarkSubTaskCompleteEvent({
+    required this.subTaskId,
+  });
 
+  final String subTaskId;
+
+  @override
+  List<Object> get props => [
+        ...super.props,
+        subTaskId,
+      ];
+}

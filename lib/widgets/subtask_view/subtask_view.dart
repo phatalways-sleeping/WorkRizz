@@ -310,8 +310,13 @@ class _SubTaskViewState extends State<SubTaskView> {
                               .read<SubtaskViewBloc>()
                               .add(
                                   const SubTaskConfirmChangePermissionsEvent()),
-                          onDecline: (context) =>
-                              context.read<NavigationBloc>().add(
+                          onDecline: (context) => context
+                                  .read<NavigationBloc>()
+                                  .state is SubTaskDetailFromHome
+                              ? context.read<NavigationBloc>().add(
+                                    const NavigateToHome(),
+                                  )
+                              : context.read<NavigationBloc>().add(
                                     const NavigateToTask(
                                       projectId: null,
                                       leaderId: null,
@@ -321,22 +326,32 @@ class _SubTaskViewState extends State<SubTaskView> {
                           onError: (context) {},
                           context: context,
                         ).then(
-                          (value) => context.read<NavigationBloc>().add(
-                                const NavigateToTask(
-                                  projectId: null,
-                                  leaderId: null,
-                                  projectName: null,
-                                ),
-                              ),
+                          (value) => context.read<NavigationBloc>().state
+                                  is SubTaskDetailFromHome
+                              ? context.read<NavigationBloc>().add(
+                                    const NavigateToHome(),
+                                  )
+                              : context.read<NavigationBloc>().add(
+                                    const NavigateToTask(
+                                      projectId: null,
+                                      leaderId: null,
+                                      projectName: null,
+                                    ),
+                                  ),
                         );
                       } else {
-                        context.read<NavigationBloc>().add(
-                              const NavigateToTask(
-                                projectId: null,
-                                leaderId: null,
-                                projectName: null,
-                              ),
-                            );
+                        context.read<NavigationBloc>().state
+                                is SubTaskDetailFromHome
+                            ? context.read<NavigationBloc>().add(
+                                  const NavigateToHome(),
+                                )
+                            : context.read<NavigationBloc>().add(
+                                  const NavigateToTask(
+                                    projectId: null,
+                                    leaderId: null,
+                                    projectName: null,
+                                  ),
+                                );
                       }
                     },
                   ),

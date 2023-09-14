@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 
 class NameInput extends StatefulWidget {

@@ -12,6 +12,7 @@ class CustomInputField extends StatelessWidget {
     required this.keyboardType,
     this.textAlign = TextAlign.justify,
     this.obscureText = false,
+    this.showLabel = true,
   });
 
   final String label;
@@ -20,6 +21,7 @@ class CustomInputField extends StatelessWidget {
   final TextInputType keyboardType;
   final TextAlign textAlign;
   final bool obscureText;
+  final bool showLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,9 @@ class CustomInputField extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        floatingLabelBehavior: showLabel
+            ? FloatingLabelBehavior.auto
+            : FloatingLabelBehavior.never,
         floatingLabelStyle: context.textTheme.bodyLarge?.copyWith(
           color: context.colorScheme.onSurface,
           fontSize: 14,

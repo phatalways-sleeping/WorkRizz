@@ -19,6 +19,14 @@ const Map<String, Color> COLOR_WHEEL2 = {
   ".csv": GREEN,
 };
 
+Color getColor(String fileName) {
+  String s = fileName.substring(fileName.lastIndexOf('.'));
+  if (COLOR_WHEEL2.containsKey(s)) {
+    return COLOR_WHEEL2[s]!;
+  } else {
+    return GREY;
+  }
+}
 
 class FileListWidget extends StatelessWidget {
   const FileListWidget({
@@ -27,17 +35,6 @@ class FileListWidget extends StatelessWidget {
   });
 
   final List<FilesSmallInformation> files;
-
-
-
-  Color getColor(String fileName) {
-    String s = fileName.substring(fileName.lastIndexOf('.'));
-    if (COLOR_WHEEL2.containsKey(s)) {
-      return COLOR_WHEEL2[s]!;
-    } else {
-      return GREY;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

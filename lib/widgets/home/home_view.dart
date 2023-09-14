@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/assets/config/config.dart';
-import 'package:task_managing_application/assets/extensions/build_context_extensions.dart';
 import 'package:task_managing_application/assets/utils/functions.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
-import 'schedule_progress.dart';
+import 'package:task_managing_application/widgets/home/list_task.dart';
 import 'date_widget.dart';
-import 'schedule_title.dart';
-import 'remain_task_list.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -53,29 +49,33 @@ class _HomeViewState extends State<HomeView> {
               onPressed: (context) {},
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const DateCapsule(),
-                const ScheduleTitle(),
-                const ScheduleProgress(),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: context.mediaQuery.size.width * RATIO_PADDING,
-                      bottom:
-                          context.mediaQuery.size.width * RATIO_PADDING,
-                    ),
-                    child: Text(
-                      'Remaining',
-                      style: context.textTheme.titleLarge,
-                    ),
-                  ),
+                DateCapsule(),
+                // const ScheduleTitle(),
+                // const ScheduleProgress(),
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: Padding(
+                //     padding: EdgeInsets.only(
+                //       left: context.mediaQuery.size.width * RATIO_PADDING,
+                //       bottom:
+                //           context.mediaQuery.size.width * RATIO_PADDING,
+                //     ),
+                //     child: Text(
+                //       'Remaining',
+                //       style: context.textTheme.titleLarge,
+                //     ),
+                //   ),
+                // ),
+                // const RemainTasksList(),
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Activity(),
                 ),
-                const RemainTasksList(),
               ],
             ),
           ),

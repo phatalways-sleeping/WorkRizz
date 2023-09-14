@@ -4,6 +4,7 @@ import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/models/models.dart';
 import 'package:task_managing_application/states/message_bloc/message_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
+import 'package:task_managing_application/widgets/file_list/filelist_widget.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_box.dart';
 
 class MessageWidget extends StatelessWidget {
@@ -32,7 +33,7 @@ class MessageWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(MEDIUM_CORNER),
         border: Border.all(
           color: BLACK,
-          width: 0.5,
+          width: BORDER_WIDTH,
         ),
         color: context.read<MessageBloc>().isSender(message.sender)
             ? GREEN
@@ -53,12 +54,12 @@ class MessageWidget extends StatelessWidget {
             ),
           if (message is FileMessageModel)
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 SvgPicture.string(
                   SvgAssets.file,
-                  colorFilter: const ColorFilter.mode(
-                    GREEN,
+                  colorFilter: ColorFilter.mode(
+                    getColor((message as FileMessageModel).fileName),
                     BlendMode.srcIn,
                   ),
                 ),
@@ -74,6 +75,10 @@ class MessageWidget extends StatelessWidget {
                       style: context.textTheme.titleSmall,
                     ),
                   ),
+                ),
+                const Spacer(),
+                SvgPicture.string(
+                  SvgAssets.download,
                 ),
               ],
             ),
@@ -106,3 +111,4 @@ class MessageWidget extends StatelessWidget {
     );
   }
 }
+

@@ -45,33 +45,42 @@ class _MessageKeyboardWidgetState extends State<MessageKeyboardWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            IconButton(
+            ElevatedButton(
               onPressed: () {},
-              icon: const Icon(
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: BLACK,
+              ),
+              child: const Icon(
                 Icons.add,
-                color: GREEN,
+                color: WHITE,
                 size: 24.0,
               ),
             ),
             const SizedBox(width: 8.0),
             Expanded(
               child: CustomInputField(
-                label: "Message",
+                label: "Type a message",
                 controller: controller,
+                showLabel: false,
                 keyboardType: TextInputType.text,
               ),
             ),
             const SizedBox(width: 8.0),
-            IconButton(
+            ElevatedButton(
               onPressed: () {
                 context.read<MessageBloc>().add(
                       SendTextMessage(controller.text),
                     );
                 controller.clear();
               },
-              icon: const Icon(
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: BLACK,
+              ),
+              child: const Icon(
                 Icons.send,
-                color: GREEN,
+                color: WHITE,
                 size: 24.0,
               ),
             ),

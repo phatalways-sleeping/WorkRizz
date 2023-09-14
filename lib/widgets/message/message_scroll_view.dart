@@ -25,7 +25,8 @@ class _MessageScrollViewState extends State<MessageScrollView> {
   @override
   void initState() {
     scrollController = ScrollController();
-
+    // scrollController.animateTo(scrollController.position.maxScrollExtent,
+    //     duration: const Duration(milliseconds: 500), curve: Curves.bounceInOut);
     super.initState();
   }
 
@@ -108,6 +109,7 @@ class _MessageScrollViewState extends State<MessageScrollView> {
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   FutureBuilder(
                                     future: context
@@ -202,7 +204,7 @@ class _MessageScrollViewState extends State<MessageScrollView> {
                                       if (snapshot.hasData) {
                                         return Text(
                                           snapshot.data as String,
-                                          style: context.textTheme.titleMedium,
+                                          style: context.textTheme.labelMedium,
                                         );
                                       }
                                       return const SizedBox.shrink();
@@ -224,6 +226,7 @@ class _MessageScrollViewState extends State<MessageScrollView> {
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   FutureBuilder(
                                     future: context
@@ -233,7 +236,7 @@ class _MessageScrollViewState extends State<MessageScrollView> {
                                       if (snapshot.hasData) {
                                         return Text(
                                           snapshot.data as String,
-                                          style: context.textTheme.titleMedium,
+                                          style: context.textTheme.labelMedium,
                                         );
                                       }
                                       return const SizedBox.shrink();

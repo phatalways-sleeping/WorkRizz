@@ -25,86 +25,86 @@ class FileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(
-          EdgeInsets.symmetric(
-            vertical: context.mediaQuery.size.width * RATIO_PADDING * 1.5,
-            horizontal: context.mediaQuery.size.width * RATIO_PADDING * 1.8,
-          ),
-        ),
-        backgroundColor: MaterialStateProperty.all(
-          WHITE,
-        ),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            side: const BorderSide(
-              color: BLACK,
-              width: 1.0,
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(MEDIUM_CORNER), color: BLACK),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: MediaQuery.of(context).size.width / 15,
             ),
-            borderRadius: BorderRadius.circular(MEDIUM_CORNER),
+            child: const Icon(Icons.delete, color: WHITE),
           ),
         ),
-        splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
-        overlayColor: MaterialStatePropertyAll(
-          color.withOpacity(0.1),
-        ),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        visualDensity: VisualDensity.compact,
       ),
-      onPressed: () => context.read<FilelistBloc>().add(
-            FilelistDownloadFileEvent(
-              'files/$fileName',
-            ),
-          ),
-      child: Dismissible(
-        key: UniqueKey(),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(MEDIUM_CORNER), color: BLACK),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.only(
-                right: MediaQuery.of(context).size.width / 15,
-              ),
-              child: const Icon(Icons.delete, color: WHITE),
-            ),
-          ),
-        ),
-        confirmDismiss: (direction) {
-          return showDialog<bool>(
-            context: context,
-            builder: (context) => CustomDialog(
-              title: "Remove this File",
-              leftText: "No",
-              rightText: "Yes",
-              leftColor: PURPLE,
-              rightColor: PINK,
-              focusleftColor: PALE,
-              focusrightColor: GREEN,
-              onLeftPressed: (context) {
-                Navigator.of(context).pop(false);
-              },
-              onRightPressed: (context) {
-                Navigator.of(context).pop(true);
-              },
-            ),
-          ).then(
-            (value) {
-              if (value != null && value) {
-                context.read<FilelistBloc>().add(
-                      FilelistRemoveFileEvent(
-                        fileName,
-                      ),
-                    );
-              }
-              return null;
+      confirmDismiss: (direction) {
+        return showDialog<bool>(
+          context: context,
+          builder: (context) => CustomDialog(
+            title: "Remove this File",
+            leftText: "No",
+            rightText: "Yes",
+            leftColor: PURPLE,
+            rightColor: PINK,
+            focusleftColor: PALE,
+            focusrightColor: GREEN,
+            onLeftPressed: (context) {
+              Navigator.of(context).pop(false);
             },
-          );
-        },
-        onDismissed: (DismissDirection direction) {},
+            onRightPressed: (context) {
+              Navigator.of(context).pop(true);
+            },
+          ),
+        ).then(
+          (value) {
+            if (value != null && value) {
+              context.read<FilelistBloc>().add(
+                    FilelistRemoveFileEvent(
+                      fileName,
+                    ),
+                  );
+            }
+            return null;
+          },
+        );
+      },
+      onDismissed: (DismissDirection direction) {},
+      child: ElevatedButton(
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(
+              vertical: context.mediaQuery.size.width * RATIO_PADDING * 1.5,
+              horizontal: context.mediaQuery.size.width * RATIO_PADDING * 1.8,
+            ),
+          ),
+          backgroundColor: MaterialStateProperty.all(
+            WHITE,
+          ),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              side: const BorderSide(
+                color: BLACK,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(MEDIUM_CORNER),
+            ),
+          ),
+          splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
+          overlayColor: MaterialStatePropertyAll(
+            color.withOpacity(0.1),
+          ),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+        ),
+        onPressed: () => context.read<FilelistBloc>().add(
+              FilelistDownloadFileEvent(
+                'files/$fileName',
+              ),
+            ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,

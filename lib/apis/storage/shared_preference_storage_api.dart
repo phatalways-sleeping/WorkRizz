@@ -591,25 +591,21 @@ final class SharedPreferenceStorageAPI extends StorageAPI {
   
   @override
   Future<void> removeTaskSmallInformationsInProject(String id, List<TaskSmallInformation> removedItems) {
-    // TODO: implement removeTaskSmallInformationsInProject
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateTaskSmallInformationsInProject(String id, List<TaskSmallInformation> latestVersion) {
-    // TODO: implement updateTaskSmallInformationsInProject
     throw UnimplementedError();
   }
   
   @override
   Future<void> removeFilesSmallInformationsInProject(String id, List<FilesSmallInformation> removedItems) {
-    // TODO: implement removeFilesSmallInformationsInProject
     throw UnimplementedError();
   }
   
   @override
   Future<void> updateFilesSmallInformationsInProject(String id, List<FilesSmallInformation> latestVersion) {
-    // TODO: implement updateFilesSmallInformationsInProject
     throw UnimplementedError();
   }
   

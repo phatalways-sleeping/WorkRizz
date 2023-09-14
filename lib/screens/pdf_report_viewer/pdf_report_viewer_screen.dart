@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
-import 'package:task_managing_application/states/navigation_bloc/navigation_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/widgets.dart'
     show ProjectView;

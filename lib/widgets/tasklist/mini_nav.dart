@@ -24,7 +24,7 @@ class MiniNav extends StatelessWidget {
           backgroundColor: ORANGE,
           label: Text(
             totalFiles.toString(),
-            style: context.textTheme.bodySmall,
+            style: context.textTheme.labelMedium,
           ),
           child: InkWell(
             onTap: () {
@@ -44,7 +44,7 @@ class MiniNav extends StatelessWidget {
           backgroundColor: GREEN,
           label: Text(
             totalNotes.toString(),
-            style: context.textTheme.bodySmall,
+            style: context.textTheme.labelMedium,
           ),
           child: SvgPicture.string(
             SvgAssets.note,
@@ -63,7 +63,7 @@ class MiniNav extends StatelessWidget {
             backgroundColor: PURPLE,
             label: Text(
               totalUnreadMessages.toString(),
-              style: context.textTheme.bodySmall,
+              style: context.textTheme.labelMedium,
             ),
             child: SvgPicture.string(
               SvgAssets.chat,

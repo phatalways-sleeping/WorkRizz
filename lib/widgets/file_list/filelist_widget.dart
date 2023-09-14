@@ -1,10 +1,24 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/models/project/files_small_info.dart';
 import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/widgets/file_list/file_widget.dart';
+
+// ignore: constant_identifier_names
+const Map<String, Color> COLOR_WHEEL2 = {
+  ".doc": PURPLE,
+  ".docx": PURPLE,
+  ".pdf": PALE,
+  ".ppt": PALE,
+  ".pptx": PALE,
+  ".xls": GREEN,
+  ".xlsx": GREEN,
+  ".zip": PURPLE,
+  ".rar": PINK,
+  ".txt": ORANGE,
+  ".csv": GREEN,
+};
+
 
 class FileListWidget extends StatelessWidget {
   const FileListWidget({
@@ -13,6 +27,17 @@ class FileListWidget extends StatelessWidget {
   });
 
   final List<FilesSmallInformation> files;
+
+
+
+  Color getColor(String fileName) {
+    String s = fileName.substring(fileName.lastIndexOf('.'));
+    if (COLOR_WHEEL2.containsKey(s)) {
+      return COLOR_WHEEL2[s]!;
+    } else {
+      return GREY;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +53,8 @@ class FileListWidget extends StatelessWidget {
             Row(
               children: [
                 TaskTag(
-                  color: COLOR_WHEEL[Random().nextInt(
-                    COLOR_WHEEL.length,
-                  )],
-                  name: "${index + 1}",
+                  color: GREY,
+                  name: "${files[index].files.length}",
                 ),
                 SizedBox(
                   width: context.mediaQuery.size.width * RATIO_PADDING,
@@ -52,9 +75,8 @@ class FileListWidget extends StatelessWidget {
                 return FileWidget(
                   fileName: files[index].files[indexFiles].fileName,
                   ownerImageUrl: files[index].files[indexFiles].ownerImageUrl,
-                  color: COLOR_WHEEL[Random().nextInt(
-                    COLOR_WHEEL.length,
-                  )],
+                  color: // return color based on file name extension
+                      getColor(files[index].files[indexFiles].fileName),
                   index: indexFiles,
                   date: files[index].files[indexFiles].uploadDate,
                 );

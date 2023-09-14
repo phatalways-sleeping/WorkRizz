@@ -27,7 +27,7 @@ class FileListView extends StatelessWidget {
             delegate: CustomHeaderBar(
               atHomePage: false,
               upperChild: DefaultTextStyle.merge(
-                child: const Text("Files"),
+                child: const Text("Documents"),
                 style: context.textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
@@ -52,7 +52,7 @@ class FileListView extends StatelessWidget {
                         )),
                     SizedBox(
                         width: context.mediaQuery.size.width * RATIO_PADDING),
-                    const Text("Files"),
+                    const Text("All Files"),
                   ],
                 ),
               ),

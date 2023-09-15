@@ -1,49 +1,48 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/apis/pdf/pdf_api.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/widgets/custom_floating_widget/custom_download_snackbar.dart';
 
-class ExportReportOverlay extends StatefulWidget {
-  const ExportReportOverlay({
+class EditReportOverlay extends StatefulWidget {
+  const EditReportOverlay({
     super.key,
     required this.projectId,
+    required this.onEdited,
+    required this.removeOverlay,
   });
 
   final String projectId;
+  final Function() onEdited;
+  final Function() removeOverlay;
 
   @override
-  State<ExportReportOverlay> createState() => _ExportReportOverlayState();
+  State<EditReportOverlay> createState() => _EditReportOverlayState();
 }
 
-class _ExportReportOverlayState extends State<ExportReportOverlay> {
+class _EditReportOverlayState extends State<EditReportOverlay> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Align(
-        alignment: Alignment.topRight,
-        child: Container(
-          constraints: BoxConstraints.loose(
-            Size(
-              context.mediaQuery.size.width * 0.5,
-              context.mediaQuery.size.height * 0.06,
-            ),
+    return Align(
+      alignment: Alignment.topRight,
+      child: Container(
+        constraints: BoxConstraints.loose(
+          Size(
+            context.mediaQuery.size.width * 0.5,
+            context.mediaQuery.size.height * 0.06,
           ),
-          margin: EdgeInsets.only(
-            top: context.mediaQuery.size.height * 0.15,
-            right: context.mediaQuery.size.width * RATIO_PADDING + 16.0,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: CustomButton(
-            name: 'Export as PDF',
-            onPressed: (context) async => await PdfAPI.buildReport(
-              widget.projectId,
-            ),
-          ),
+        ),
+        margin: EdgeInsets.only(
+          top: context.mediaQuery.size.height * RATIO_MARGIN / 4,
+          right: context.mediaQuery.size.width * RATIO_PADDING + 16.0,
+        ),
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: CustomButton(
+          name: 'Edit Tasks',
+          onPressed: ()
+          {
+            widget.onEdited();
+            widget.removeOverlay();
+          },
         ),
       ),
     );
@@ -58,28 +57,12 @@ class CustomButton extends StatelessWidget {
   });
 
   final String name;
-  final Future<File> Function(BuildContext context) onPressed;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () async {
-        context.scaffoldMessenger.showSnackBar(
-          customDownloadSnackBar(
-            context: context,
-            message: 'Exporting...',
-            duration: const Duration(seconds: 15),
-          ),
-        );
-        await onPressed(context).then(
-          (value) {
-            context.scaffoldMessenger.removeCurrentSnackBar();
-            context
-                .read<NavigationBloc>()
-                .add(NavigateToPDFReportViewer(value));
-          },
-        );
-      },
+      onPressed: onPressed(),
       style: ButtonStyle(
         fixedSize: MaterialStatePropertyAll(
           Size(

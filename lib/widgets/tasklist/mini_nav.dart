@@ -8,6 +8,7 @@ class MiniNav extends StatelessWidget {
     required this.totalUnreadMessages,
     required this.projectName,
     required this.threadId,
+    required this.onEdited
   });
 
   final int totalFiles;
@@ -15,6 +16,7 @@ class MiniNav extends StatelessWidget {
   final int totalUnreadMessages;
   final String projectName;
   final String threadId;
+  final Function() onEdited;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +80,7 @@ class MiniNav extends StatelessWidget {
               (context.read<TasklistBloc>().state as TasklistSubscription)
                   .project!
                   .id,
+          onEdited: onEdited,
         ),
       ],
     );

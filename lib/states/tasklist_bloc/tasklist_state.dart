@@ -20,6 +20,12 @@ final class TasklistInitial extends TasklistState {
   const TasklistInitial();
 }
 
+final class TasklistEditing extends TasklistState {
+  const TasklistEditing(
+    // requir
+  );
+}
+
 final class TasklistLoading extends TasklistState {
   const TasklistLoading({
     required super.project,
@@ -56,8 +62,7 @@ final class TasklistSubscriptionLoading extends TasklistSubscription {
     super.currentPage = 0,
   });
 
-  factory TasklistSubscriptionLoading.from(
-          TasklistSubscription state) =>
+  factory TasklistSubscriptionLoading.from(TasklistSubscription state) =>
       TasklistSubscriptionLoading(
         project: state.project,
         currentPage: state.currentPage,

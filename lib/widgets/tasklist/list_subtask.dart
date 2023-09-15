@@ -5,7 +5,10 @@ class ListSubTask extends StatelessWidget {
   const ListSubTask({
     super.key,
     required this.tasks,
+    required this.editMode,
   });
+
+  final bool editMode;
 
   final List<TaskSmallInformation> tasks;
 
@@ -65,6 +68,7 @@ class ListSubTask extends StatelessWidget {
                   task: tasks[index],
                   currentPage: index + 1,
                   totalPage: tasks.length,
+                  editMode: editMode,
                 ),
               ),
             ),

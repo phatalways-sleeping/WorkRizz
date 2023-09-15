@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
+import 'package:task_managing_application/widgets/tasklist/delete_overlay.dart';
+import 'package:task_managing_application/widgets/tasklist/edit_overlay.dart';
 import 'package:task_managing_application/widgets/tasklist/export_report_overlay.dart';
 
 class ExportReportButton extends StatefulWidget {
   const ExportReportButton({
     super.key,
     required this.projectId,
+    this.isLeader = true,
+    required this.onEdited,
   });
-
+  final Function() onEdited;
   final String projectId;
+  final bool isLeader;
 
   @override
   State<ExportReportButton> createState() => _ExportReportButtonState();
@@ -29,8 +34,29 @@ class _ExportReportButtonState extends State<ExportReportButton> {
     }
     removeOverlay();
     _overlayEntry = OverlayEntry(
-      builder: (context) => ExportReportOverlay(
-        projectId: widget.projectId,
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: widget.isLeader
+            ? <Widget>[
+                ExportReportOverlay(
+                  projectId: widget.projectId,
+                ),
+                EditReportOverlay(
+                    projectId: widget.projectId,
+                    onEdited: widget.onEdited,
+                    removeOverlay: () {
+                      setState(() {
+                        removeOverlay();
+                        isOverlayVisible = false;
+                      });
+                    }),
+                DeleteReportOverlay(projectId: widget.projectId)
+              ]
+            : <Widget>[
+                ExportReportOverlay(
+                  projectId: widget.projectId,
+                ),
+              ],
       ),
     );
     Overlay.of(context).insert(_overlayEntry!);

@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:task_managing_application/apis/pdf/pdf_api.dart';
 import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/states/states.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_dialog.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_download_snackbar.dart';
 
-class ExportReportOverlay extends StatefulWidget {
-  const ExportReportOverlay({
+class DeleteReportOverlay extends StatefulWidget {
+  const DeleteReportOverlay({
     super.key,
     required this.projectId,
   });
@@ -15,35 +16,71 @@ class ExportReportOverlay extends StatefulWidget {
   final String projectId;
 
   @override
-  State<ExportReportOverlay> createState() => _ExportReportOverlayState();
+  State<DeleteReportOverlay> createState() => _DeleteReportOverlayState();
 }
 
-class _ExportReportOverlayState extends State<ExportReportOverlay> {
+class _DeleteReportOverlayState extends State<DeleteReportOverlay> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Align(
-        alignment: Alignment.topRight,
-        child: Container(
-          constraints: BoxConstraints.loose(
-            Size(
-              context.mediaQuery.size.width * 0.5,
-              context.mediaQuery.size.height * 0.06,
-            ),
+    return Align(
+      alignment: Alignment.topRight,
+      child: Container(
+        constraints: BoxConstraints.loose(
+          Size(
+            context.mediaQuery.size.width * 0.5,
+            context.mediaQuery.size.height * 0.06,
           ),
-          margin: EdgeInsets.only(
-            top: context.mediaQuery.size.height * 0.15,
-            right: context.mediaQuery.size.width * RATIO_PADDING + 16.0,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: CustomButton(
-            name: 'Export as PDF',
-            onPressed: (context) async => await PdfAPI.buildReport(
-              widget.projectId,
-            ),
-          ),
+        ),
+        margin: EdgeInsets.only(
+          top: context.mediaQuery.size.height * RATIO_MARGIN / 4,
+          right: context.mediaQuery.size.width * RATIO_PADDING + 16.0,
+        ),
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: CustomButton(
+          name: 'Delete Project',
+          onPressed: (context) {
+            return showDialog<bool>(
+              context: context,
+              builder: (context) => CustomDialog(
+                title: "Remove this Project",
+                leftText: "No",
+                rightText: "Yes",
+                leftColor: PURPLE,
+                rightColor: PINK,
+                focusleftColor: PALE,
+                focusrightColor: GREEN,
+                onLeftPressed: (context) {
+                  Navigator.of(context).pop(false);
+                },
+                onRightPressed: (context) {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            ).then(
+              /// sua khuc nay nha tui viet dai cho ko bug th
+              throw (context) async {
+                context.scaffoldMessenger.showSnackBar(
+                  customDownloadSnackBar(
+                    context: context,
+                    message: 'Deleteing...',
+                    duration: const Duration(seconds: 15),
+                  ),
+                );
+                await PdfAPI.buildReport(
+                  widget.projectId,
+                ).then(
+                  (value) {
+                    context.scaffoldMessenger.removeCurrentSnackBar();
+                    context
+                        .read<NavigationBloc>()
+                        .add(NavigateToPDFReportViewer(value));
+                  },
+                );
+              },
+            );
+          },
         ),
       ),
     );
@@ -67,7 +104,7 @@ class CustomButton extends StatelessWidget {
         context.scaffoldMessenger.showSnackBar(
           customDownloadSnackBar(
             context: context,
-            message: 'Exporting...',
+            message: 'Deleteing...',
             duration: const Duration(seconds: 15),
           ),
         );

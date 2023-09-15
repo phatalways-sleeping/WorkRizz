@@ -19,6 +19,19 @@ final class TasklistMarkProjectAsUncompleted extends TasklistEvent {
   const TasklistMarkProjectAsUncompleted();
 }
 
+final class TasklistEditProject extends TasklistEvent {
+  const TasklistEditProject({
+    required this.editMode,
+  });
+
+  final bool editMode;
+
+  @override
+  List<Object> get props => [
+        editMode,
+      ];
+}
+
 final class TasklistChangePage extends TasklistEvent {
   const TasklistChangePage({
     required this.page,
@@ -77,7 +90,7 @@ final class TasklistCreateNewTask extends TasklistEvent {
 
   @override
   List<Object> get props => [
-        if(name != null) name!,
+        if (name != null) name!,
       ];
 }
 

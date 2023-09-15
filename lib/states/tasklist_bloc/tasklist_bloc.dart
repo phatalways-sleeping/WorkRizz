@@ -29,6 +29,15 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
         (state as TasklistSubscription).project!.leader,
       );
     });
+    on<TasklistEditProject>((event, emit) async {
+      // emit((state as TasklistSubscription).copyWith(editMode: event.editMode));
+      // await _applicationRepository.editProject(
+      //   (state as TasklistSubscription).project!.id,
+      //   event.name,
+      //   event.description,
+      //   event.assignees,
+      // );
+    });
     on<TasklistChangePage>((event, emit) async {
       emit((state as TasklistSubscription).copyWith(currentPage: event.page));
     });
@@ -55,7 +64,7 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
         );
         return;
       }
-      if(event.name!.isEmpty) {
+      if (event.name!.isEmpty) {
         emit(
           TasklistSubscription.from(
             state as TasklistSubscriptionAndOpenTaskCreateDialog,
@@ -74,8 +83,7 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
   }
 
   TasklistState streamTransformation(Project project) {
-    project.taskSmallInformations
-        .sort((a, b) => a.name.compareTo(b.name));
+    project.taskSmallInformations.sort((a, b) => a.name.compareTo(b.name));
     if (state is TasklistSubscriptionLoading) {
       return TasklistSubscription(
         project: project,

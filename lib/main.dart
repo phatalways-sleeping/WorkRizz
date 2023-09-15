@@ -120,8 +120,8 @@ class AppFlow extends StatelessWidget {
               create: (context) => MessageBloc(
                 context.read<ApplicationRepository>(),
               )..add(const MessageSubscribeToFirestore()),
-              //child: const MessageScreen(),
-              child: const ChatbotScreen()
+              child: const MessageScreen(),
+              //child: const ChatbotScreen()
             ),
           ),
         if (state is FileList)
@@ -183,14 +183,9 @@ class AppFlow extends StatelessWidget {
           ),
         if (state is Assistant)
           const MaterialPage(
-            child: BaseScreen(
-              hideFloatingActionButton: true,
-              child: SizedBox(
-                height: 700,
-                width: double.infinity,
-              ),
+            child: const ChatbotScreen(),
             ),
-          ),
+
         if (state is Profile)
           MaterialPage(
             child: ErrorWidget('Temporarily unavailable'),

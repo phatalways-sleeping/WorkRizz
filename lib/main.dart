@@ -121,7 +121,6 @@ class AppFlow extends StatelessWidget {
                 context.read<ApplicationRepository>(),
               )..add(const MessageSubscribeToFirestore()),
               child: const MessageScreen(),
-              //child: const ChatbotScreen()
             ),
           ),
         if (state is FileList)
@@ -166,12 +165,12 @@ class AppFlow extends StatelessWidget {
               file: state.file,
             ),
           ),
-        if (state is ChangePassword)
-          MaterialPage(
-            child: ErrorWidget(
-              'Temporarily unavailable',
-            ),
-          ),
+        // if (state is ChangePassword)
+        //   MaterialPage(
+        //     child: ErrorWidget(
+        //       'Temporarily unavailable',
+        //     ),
+        //   ),
         if (state is Home)
           MaterialPage(
             child: BlocProvider(
@@ -183,7 +182,7 @@ class AppFlow extends StatelessWidget {
           ),
         if (state is Assistant)
           const MaterialPage(
-            child: const ChatbotScreen(),
+            child: ChatbotScreen(),
             ),
 
         if (state is Profile)

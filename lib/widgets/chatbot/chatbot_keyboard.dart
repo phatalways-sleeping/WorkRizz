@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/states/message_bloc/message_bloc.dart';
-import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/authentication/components.dart';
 
 class ChatbotKeyboardWidget extends StatefulWidget {

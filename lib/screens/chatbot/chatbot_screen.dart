@@ -10,7 +10,6 @@ class ChatbotScreen extends StatefulWidget {
 class _ChatbotScreenState extends State<ChatbotScreen> {
   @override
   void initState() {
-    //context.read<ChatbotBloc>().add(const ChatbotSubscribeToFirestore());
     super.initState();
   }
 

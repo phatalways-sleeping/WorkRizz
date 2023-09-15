@@ -36,14 +36,13 @@ class CustomNavigationBar extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(15),
         ),
-        alignment: Alignment.center,
         child: BlocBuilder<NavigationBloc, NavigationState>(
           builder: (context, state) {
             return Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   CustomRouteButton(
                     icon: SvgAssets.home,

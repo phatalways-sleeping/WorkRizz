@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_managing_application/models/thread/message/base/message_model.dart';
-import 'package:task_managing_application/models/user_data/user_activity_model.dart';
-import 'package:task_managing_application/states/message_bloc/message_bloc.dart';
-import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
-import 'package:task_managing_application/widgets/custom_avatar_widget/future_avatar_widget.dart';
-import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
-import 'package:task_managing_application/widgets/chatbot/chatbot_widget.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/widgets/shimmer/shimmer_avatar.dart';
-import 'package:task_managing_application/widgets/shimmer/shimmer_box.dart';
-import 'package:badges/badges.dart' as badges;
 
 class ChatbotScrollView extends StatefulWidget {
   final List messages;
@@ -26,10 +15,10 @@ class _ChatbotScrollViewState extends State<ChatbotScrollView> {
   @override
   void initState() {
     _scrollController = ScrollController();
-    
-    if (_scrollController.hasClients) _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    // scrollController.animateTo(scrollController.position.maxScrollExtent,
-    //     duration: const Duration(milliseconds: 500), curve: Curves.bounceInOut);
+
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
     super.initState();
   }
 
@@ -41,9 +30,9 @@ class _ChatbotScrollViewState extends State<ChatbotScrollView> {
 
   @override
   Widget build(BuildContext context) {
-    var w = MediaQuery.of(context).size.width;
-    if (_scrollController.hasClients) _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    //return Container();
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
     return ListView.separated(
         controller: _scrollController,
         reverse: false,
@@ -68,9 +57,7 @@ class _ChatbotScrollViewState extends State<ChatbotScrollView> {
                 color: BLACK,
                 width: BORDER_WIDTH,
               ),
-              color: widget.messages[index]['isUserMessage']
-                  ? GREEN
-                  : WHITE,
+              color: widget.messages[index]['isUserMessage'] ? GREEN : WHITE,
             ),
             padding: EdgeInsets.all(
               context.mediaQuery.size.width * RATIO_PADDING,
@@ -80,16 +67,16 @@ class _ChatbotScrollViewState extends State<ChatbotScrollView> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  Text(
-                    widget.messages[index]['message'].text.text[0],
-                    style: context.textTheme.titleMedium,
-                  ),
-
+                Text(
+                  widget.messages[index]['message'].text.text[0],
+                  style: context.textTheme.titleMedium,
+                ),
               ],
             ),
           );
         },
-        separatorBuilder: (_, i) => Padding(padding: EdgeInsets.only(top: 10)),
+        separatorBuilder: (context, i) =>
+            const Padding(padding: EdgeInsets.only(top: 10)),
         itemCount: widget.messages.length);
   }
 }

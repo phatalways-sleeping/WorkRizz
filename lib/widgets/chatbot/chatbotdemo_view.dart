@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:task_managing_application/assets/assets.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
-import 'package:task_managing_application/states/states.dart'
-    show NavigateToTask, NavigationBloc, ReadContext;
-import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
-import 'package:task_managing_application/widgets/message/message_keyboard.dart';
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'messages_demo.dart';
 class ChatbotView extends StatefulWidget {
@@ -24,8 +18,6 @@ class _ChatbotViewState extends State<ChatbotView> {
 
   @override
   void initState() {
-    //_scrollController = ScrollController();
-   // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     DialogFlowtter.fromFile().then((instance) => dialogFlowtter = instance);
     super.initState();
   }
@@ -35,39 +27,37 @@ class _ChatbotViewState extends State<ChatbotView> {
     return BaseScreen(
       hideFloatingActionButton: true,
       hideNavigationBar: true,
-      child: Container(
-        child: Column(
-          children: [
-            Expanded(child: MessagesScreen(messages: messages)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              color: Colors.deepPurple,
-              child: Row(
-                children: [
-                  Expanded(
-                      child: TextField(
-                    controller: _controller,
-                    style: TextStyle(color: Colors.white),
-                  )),
-                  IconButton(
-                      onPressed: () async{
-                        sendMessage(_controller.text);
-                        
-                        _controller.clear();
-                        
-                       /*  SchedulerBinding.instance?.addPostFrameCallback((_) {
-                          _scrollController.animateTo(
-                          _scrollController.position.minScrollExtent,
-                          duration: const Duration(milliseconds: 1),
-                          curve: Curves.fastOutSlowIn);
-                        }); */
-                      },
-                      icon: Icon(Icons.send))
-                ],
-              ),
-            )
-          ],
-        ),
+      child: Column(
+        children: [
+          Expanded(child: MessagesScreen(messages: messages)),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            color: Colors.deepPurple,
+            child: Row(
+              children: [
+                Expanded(
+                    child: TextField(
+                  controller: _controller,
+                  style: const TextStyle(color: Colors.white),
+                )),
+                IconButton(
+                    onPressed: () async{
+                      sendMessage(_controller.text);
+                      
+                      _controller.clear();
+                      
+                     /*  SchedulerBinding.instance?.addPostFrameCallback((_) {
+                        _scrollController.animateTo(
+                        _scrollController.position.minScrollExtent,
+                        duration: const Duration(milliseconds: 1),
+                        curve: Curves.fastOutSlowIn);
+                      }); */
+                    },
+                    icon: const Icon(Icons.send))
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

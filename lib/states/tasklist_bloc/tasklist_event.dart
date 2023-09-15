@@ -19,17 +19,12 @@ final class TasklistMarkProjectAsUncompleted extends TasklistEvent {
   const TasklistMarkProjectAsUncompleted();
 }
 
-final class TasklistEditProject extends TasklistEvent {
-  const TasklistEditProject({
-    required this.editMode,
-  });
+final class TasklistRequestEditProject extends TasklistEvent {
+  const TasklistRequestEditProject();
+}
 
-  final bool editMode;
-
-  @override
-  List<Object> get props => [
-        editMode,
-      ];
+final class TasklistCancelEditProject extends TasklistEvent {
+  const TasklistCancelEditProject();
 }
 
 final class TasklistChangePage extends TasklistEvent {
@@ -96,4 +91,35 @@ final class TasklistCreateNewTask extends TasklistEvent {
 
 final class TasklistOpenTaskCreateDialog extends TasklistEvent {
   const TasklistOpenTaskCreateDialog();
+}
+
+final class TasklistDeleteTask extends TasklistEvent {
+  const TasklistDeleteTask(this.taskId);
+
+  final String taskId;
+
+  @override
+  List<Object> get props => [
+        taskId,
+      ];
+}
+
+final class TasklistDeleteSubTask extends TasklistEvent {
+  const TasklistDeleteSubTask({
+    required this.taskId,
+    required this.subTaskId,
+  });
+
+  final String taskId;
+  final String subTaskId;
+
+  @override
+  List<Object> get props => [
+        taskId,
+        subTaskId,
+      ];
+}
+
+final class TasklistDeleteProject extends TasklistEvent {
+  const TasklistDeleteProject();
 }

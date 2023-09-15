@@ -11,7 +11,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
           SnackBar(
             backgroundColor: context.colorScheme.onPrimary,
             duration: const Duration(
-              seconds: 4,
+              seconds: 2,
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(MEDIUM_CORNER),
@@ -32,7 +32,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
             content: Container(
               constraints: BoxConstraints(
                 maxWidth: context.mediaQuery.size.width * 0.9,
-                maxHeight: context.mediaQuery.size.height * 0.1,
+                maxHeight: context.mediaQuery.size.height * 0.05,
               ),
               child: Center(
                 child: child ??
@@ -52,7 +52,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
                         ),
                         const CustomCircularProgressIndicator(
                           color: GREEN,
-                          size: 30.0,
+                          size: 20.0,
                         ),
                       ],
                     ),

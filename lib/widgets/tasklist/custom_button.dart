@@ -1,68 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-
-class EditReportOverlay extends StatefulWidget {
-  const EditReportOverlay({
-    super.key,
-    required this.projectId,
-    required this.onEdited,
-    required this.removeOverlay,
-  });
-
-  final String projectId;
-  final Function() onEdited;
-  final Function() removeOverlay;
-
-  @override
-  State<EditReportOverlay> createState() => _EditReportOverlayState();
-}
-
-class _EditReportOverlayState extends State<EditReportOverlay> {
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Container(
-        constraints: BoxConstraints.loose(
-          Size(
-            context.mediaQuery.size.width * 0.5,
-            context.mediaQuery.size.height * 0.06,
-          ),
-        ),
-        margin: EdgeInsets.only(
-          top: context.mediaQuery.size.height * RATIO_MARGIN / 4,
-          right: context.mediaQuery.size.width * RATIO_PADDING + 16.0,
-        ),
-        decoration: const BoxDecoration(
-          color: Colors.transparent,
-        ),
-        child: CustomButton(
-          name: 'Edit Tasks',
-          onPressed: ()
-          {
-            widget.onEdited();
-            widget.removeOverlay();
-          },
-        ),
-      ),
-    );
-  }
-}
+import 'package:task_managing_application/widgets/custom_floating_widget/custom_download_snackbar.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
     required this.name,
     required this.onPressed,
+    required this.message,
+    this.showSnackBar = true,
   });
 
   final String name;
-  final Function() onPressed;
+  final String message;
+  final bool showSnackBar;
+  final Future<void> Function(BuildContext context) onPressed;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed(),
+      onPressed: () async {
+        if (showSnackBar) {
+          context.scaffoldMessenger.showSnackBar(
+            customDownloadSnackBar(
+              context: context,
+              message: message,
+              duration: const Duration(seconds: 15),
+            ),
+          );
+        }
+        await onPressed(context);
+      },
       style: ButtonStyle(
         fixedSize: MaterialStatePropertyAll(
           Size(

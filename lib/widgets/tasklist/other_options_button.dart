@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/widgets/tasklist/delete_overlay.dart';
-import 'package:task_managing_application/widgets/tasklist/edit_overlay.dart';
 import 'package:task_managing_application/widgets/tasklist/export_report_overlay.dart';
 
-class ExportReportButton extends StatefulWidget {
-  const ExportReportButton({
+class OtherOptionsButton extends StatefulWidget {
+  const OtherOptionsButton({
     super.key,
     required this.projectId,
     this.isLeader = true,
-    required this.onEdited,
   });
-  final Function() onEdited;
   final String projectId;
   final bool isLeader;
 
   @override
-  State<ExportReportButton> createState() => _ExportReportButtonState();
+  State<OtherOptionsButton> createState() => _OtherOptionsButtonState();
 }
 
-class _ExportReportButtonState extends State<ExportReportButton> {
+class _OtherOptionsButtonState extends State<OtherOptionsButton> {
   OverlayEntry? _overlayEntry;
   bool isOverlayVisible = false;
 
@@ -36,27 +32,11 @@ class _ExportReportButtonState extends State<ExportReportButton> {
     _overlayEntry = OverlayEntry(
       builder: (context) => Column(
         mainAxisSize: MainAxisSize.min,
-        children: widget.isLeader
-            ? <Widget>[
-                ExportReportOverlay(
-                  projectId: widget.projectId,
-                ),
-                EditReportOverlay(
-                    projectId: widget.projectId,
-                    onEdited: widget.onEdited,
-                    removeOverlay: () {
-                      setState(() {
-                        removeOverlay();
-                        isOverlayVisible = false;
-                      });
-                    }),
-                DeleteReportOverlay(projectId: widget.projectId)
-              ]
-            : <Widget>[
-                ExportReportOverlay(
-                  projectId: widget.projectId,
-                ),
-              ],
+        children: <Widget>[
+          ExportReportOverlay(
+            projectId: widget.projectId,
+          ),
+        ],
       ),
     );
     Overlay.of(context).insert(_overlayEntry!);
@@ -96,15 +76,22 @@ class _ExportReportButtonState extends State<ExportReportButton> {
           ),
         ),
         splashFactory: NoSplash.splashFactory,
-        fixedSize: MaterialStatePropertyAll(
+        minimumSize: const MaterialStatePropertyAll(
           Size(
-            context.mediaQuery.size.width * RATIO_PADDING * 2,
-            context.mediaQuery.size.width * RATIO_PADDING * 2,
+            24.0,
+            24.0,
           ),
         ),
-        padding: const MaterialStatePropertyAll(
-          EdgeInsets.zero,
+        maximumSize: const MaterialStatePropertyAll(
+          Size(
+            24.0,
+            24.0,
+          ),
         ),
+        iconSize: MaterialStateProperty.all(
+          24.0,
+        ),
+        alignment: Alignment.centerRight,
         elevation: const MaterialStatePropertyAll<double>(0.0),
       ),
       icon: SvgPicture.string(

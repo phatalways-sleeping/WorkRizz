@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
 
-// ignore: must_be_immutable
 class CustomItemWidget extends StatelessWidget {
   const CustomItemWidget({
     super.key,
-    this.isFixed = true,
     required this.isDone,
     required this.name,
     required this.subtext,
     required this.firstChild,
     required this.secondChild,
     required this.onPressed,
+    this.hideFirstChild = false,
   });
-  final bool isFixed;
   final bool isDone;
+  final bool hideFirstChild;
   final String name;
   final String subtext;
   final Widget secondChild;
@@ -26,6 +25,12 @@ class CustomItemWidget extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => onPressed(context),
       style: ButtonStyle(
+        fixedSize: MaterialStatePropertyAll(
+          Size(
+            context.mediaQuery.size.width * 0.90,
+            context.mediaQuery.size.height * 0.08,
+          ),
+        ),
         shape: MaterialStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(MEDIUM_CORNER),
@@ -51,8 +56,8 @@ class CustomItemWidget extends StatelessWidget {
         tapTargetSize: MaterialTapTargetSize.padded,
         padding: MaterialStatePropertyAll(
           EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * RATIO_PADDING * 0.8,
-            vertical: MediaQuery.of(context).size.height * RATIO_PADDING * 0.4,
+            horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.8,
+            vertical: context.mediaQuery.size.height * RATIO_PADDING * 0.4,
           ),
         ),
       ),
@@ -60,12 +65,16 @@ class CustomItemWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          firstChild,
-          SizedBox(width: MediaQuery.of(context).size.width * RATIO_SPACE),
+          if (!hideFirstChild) ...[
+            firstChild,
+            SizedBox(width: context.mediaQuery.size.width * RATIO_SPACE * 0.5),
+          ],
           FittedBox(
             fit: BoxFit.fitWidth,
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.55,
+              width: hideFirstChild
+                  ? context.mediaQuery.size.width * 0.50
+                  : context.mediaQuery.size.width * 0.54,
               child: Text(
                 name,
                 style: context.textTheme.bodyLarge?.copyWith(
@@ -76,11 +85,17 @@ class CustomItemWidget extends StatelessWidget {
           ),
           const Spacer(),
           secondChild,
-          const Spacer(),
-          Text(
-            subtext,
-            style: context.textTheme.bodyLarge?.copyWith(
-              fontSize: 14.0,
+          SizedBox(width: context.mediaQuery.size.width * RATIO_SPACE * 0.5),
+          FittedBox(
+            fit: BoxFit.fitWidth,
+            child: SizedBox(
+              width: context.mediaQuery.size.width * 0.12,
+              child: Text(
+                subtext,
+                style: context.textTheme.bodyLarge?.copyWith(
+                  fontSize: 14.0,
+                ),
+              ),
             ),
           )
         ],

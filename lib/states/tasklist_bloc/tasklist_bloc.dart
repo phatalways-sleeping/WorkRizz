@@ -29,14 +29,42 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
         (state as TasklistSubscription).project!.leader,
       );
     });
-    on<TasklistEditProject>((event, emit) async {
-      // emit((state as TasklistSubscription).copyWith(editMode: event.editMode));
-      // await _applicationRepository.editProject(
-      //   (state as TasklistSubscription).project!.id,
-      //   event.name,
-      //   event.description,
-      //   event.assignees,
-      // );
+    on<TasklistRequestEditProject>((event, emit) async {
+      emit(TasklistSubscriptionEditable.from(state as TasklistSubscription));
+    });
+    on<TasklistCancelEditProject>((event, emit) async {
+      emit(TasklistSubscription(
+        project: state.project,
+        currentPage: state.currentPage,
+      ));
+    });
+    on<TasklistDeleteSubTask>((event, emit) async {
+      emit(TasklistSubscriptionLoading.from(
+        state as TasklistSubscription,
+        isEditing: true,
+      ));
+      await _applicationRepository.deleteSubTask(
+        // taskId: event.taskId,
+        subTaskId: event.subTaskId,
+      );
+    });
+    on<TasklistDeleteTask>((event, emit) async {
+      emit(TasklistSubscriptionLoading.from(
+        (state as TasklistSubscription).copyWith(
+          currentPage: state.currentPage - 1,
+        ),
+        isEditing: true,
+      ));
+      await _applicationRepository.deleteTask(
+        taskId: event.taskId,
+      );
+    });
+    on<TasklistDeleteProject>((event, emit) async {
+      final projectId = (state as TasklistSubscription).project!.id;
+      emit(const TasklistDeleteProjectState());
+      await _applicationRepository.deleteProject(
+        projectId: projectId,
+      );
     });
     on<TasklistChangePage>((event, emit) async {
       emit((state as TasklistSubscription).copyWith(currentPage: event.page));
@@ -49,7 +77,9 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
       );
     });
     on<TasklistMarkSubTaskAsUncompleted>((event, emit) async {
-      emit(TasklistSubscriptionLoading.from(state as TasklistSubscription));
+      emit(
+        TasklistSubscriptionLoading.from((state as TasklistSubscription)),
+      );
       await _applicationRepository.markSubTaskUnCompleted(
         taskId: event.taskId,
         subTaskId: event.subTaskId,
@@ -84,22 +114,36 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
 
   TasklistState streamTransformation(Project project) {
     project.taskSmallInformations.sort((a, b) => a.name.compareTo(b.name));
+    for (var element in project.taskSmallInformations) {
+      element.subTaskSmallInformations.sort((a, b) => a.name.compareTo(b.name));
+    }
     if (state is TasklistSubscriptionLoading) {
+      if ((state as TasklistSubscriptionLoading).isEditing) {
+        return TasklistSubscriptionEditable(
+          project: project,
+          currentPage: (state as TasklistSubscriptionLoading).currentPage,
+        );
+      }
       return TasklistSubscription(
         project: project,
         currentPage: (state as TasklistSubscriptionLoading).currentPage,
       );
     }
-    if (state is TasklistSubscriptionAndOpenTaskCreateDialog) {
-      return TasklistSubscriptionAndOpenTaskCreateDialog(
+    if (state is TasklistSubscriptionEditable) {
+      return TasklistSubscriptionEditable(
         project: project,
-        currentPage:
-            (state as TasklistSubscriptionAndOpenTaskCreateDialog).currentPage,
+        currentPage: state.currentPage,
       );
+    }
+    if (state is TasklistDeleteProjectState) {
+      return const TasklistDeleteProjectState();
     }
     return TasklistSubscription(
       project: project,
-      currentPage: state.currentPage,
+      currentPage: (state is TasklistSubscriptionAndOpenTaskCreateDialog &&
+              state.currentPage < 0)
+          ? 0
+          : state.currentPage,
     );
   }
 

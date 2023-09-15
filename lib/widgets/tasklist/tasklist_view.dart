@@ -8,12 +8,10 @@ import 'package:task_managing_application/models/project/sub_task_small_info.dar
 import 'package:task_managing_application/models/project/task_small_info.dart';
 import 'package:task_managing_application/screens/base/base_screen.dart';
 import 'package:task_managing_application/states/states.dart';
-import 'package:task_managing_application/states/tasklist_bloc/tasklist_bloc.dart';
 import 'package:task_managing_application/widgets/custom_avatar_widget/custom_avatar_widget.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_dialog.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_input_dialog.dart';
-import 'package:task_managing_application/widgets/custom_floating_widget/custom_subtask_completion.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
@@ -22,8 +20,9 @@ import 'package:task_managing_application/widgets/custom_tag/task_tag.dart';
 import 'package:task_managing_application/widgets/custom_util_components/custom_circular_progress.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_avatar.dart';
 import 'package:task_managing_application/widgets/shimmer/shimmer_box.dart';
-import 'package:task_managing_application/widgets/tasklist/export_report_button.dart';
-import 'package:task_managing_application/widgets/tasklist/item_widget.dart';
+import 'package:task_managing_application/widgets/tasklist/delete_project_button.dart';
+import 'package:task_managing_application/widgets/tasklist/edit_project_button.dart';
+import 'package:task_managing_application/widgets/tasklist/other_options_button.dart';
 import 'package:task_managing_application/widgets/tasklist/switch.dart';
 
 part 'date.dart';
@@ -33,12 +32,8 @@ part 'subtask_widget.dart';
 part 'list_tag.dart';
 part 'list_subtask.dart';
 
-// ignore: must_be_immutable
 class TaskListView extends StatelessWidget {
-  TaskListView({super.key});
-
-  bool editMode = false;
-  bool showCompleted = true;
+  const TaskListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +72,10 @@ class TaskListView extends StatelessWidget {
                   TasklistCreateNewTask(value),
                 ),
           );
-        } else if (state is TasklistSubscriptionLoading) {
-          createSubTaskCompletionSnackBar(context: context);
+        } else if (state is TasklistDeleteProjectState) {
+          context.read<NavigationBloc>().add(
+                const NavigateToProjectsList(),
+              );
         }
       },
       builder: (context, state) {
@@ -93,6 +90,9 @@ class TaskListView extends StatelessWidget {
           return const Center(
             child: CustomErrorIcon(),
           );
+        }
+        if (state is TasklistDeleteProjectState) {
+          return const SizedBox.shrink();
         }
         return BaseScreen(
           hideNavigationBar: true,
@@ -190,15 +190,6 @@ class TaskListView extends StatelessWidget {
                                 totalUnreadMessages: 2,
                                 projectName: state.project!.name,
                                 threadId: state.project!.thread,
-                                onEdited: () {
-                                  editMode = !editMode;
-                                  print(editMode);
-                                  // context.read<TasklistBloc>().add(
-                                  //       TasklistEditProject(
-                                  //         editMode: editMode,
-                                  //       ),
-                                  //     );
-                                },
                               )
                             ],
                           ),
@@ -263,7 +254,7 @@ class TaskListView extends StatelessWidget {
                                   );
                                 },
                               ),
-                              const SwitchButton()
+                              const SwitchButton(),
                             ],
                           ),
                         ],
@@ -293,8 +284,10 @@ class TaskListView extends StatelessWidget {
                               height:
                                   context.mediaQuery.size.width * RATIO_SPACE),
                           Progress(
-                            progress: state.project!.activitiesCompleted /
-                                state.project!.totalActivities,
+                            progress: (state.project!.totalActivities == 0)
+                                ? 0
+                                : (state.project!.activitiesCompleted /
+                                    state.project!.totalActivities),
                             tasksCompleted: state.project!.tasksCompleted,
                             totalTasks: state.project!.tasks.length,
                             activitiesCompleted:
@@ -313,7 +306,6 @@ class TaskListView extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: ListSubTask(
                         tasks: state.project!.taskSmallInformations,
-                        editMode: editMode,
                       ),
                     )
                   else
@@ -336,7 +328,8 @@ class TaskListView extends StatelessWidget {
                     ),
                 ],
               ),
-              if (state.project!.tasks.isNotEmpty)
+              if (state.project!.tasks.isNotEmpty &&
+                  context.watch<TasklistBloc>().state.currentPage >= 0)
                 Positioned(
                   bottom: 0,
                   left: 0,

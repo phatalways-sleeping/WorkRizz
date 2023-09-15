@@ -8,7 +8,6 @@ class MiniNav extends StatelessWidget {
     required this.totalUnreadMessages,
     required this.projectName,
     required this.threadId,
-    required this.onEdited
   });
 
   final int totalFiles;
@@ -16,11 +15,11 @@ class MiniNav extends StatelessWidget {
   final int totalUnreadMessages;
   final String projectName;
   final String threadId;
-  final Function() onEdited;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Badge(
           backgroundColor: ORANGE,
@@ -72,16 +71,20 @@ class MiniNav extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: context.mediaQuery.size.width * RATIO_PADDING * 2,
-        ),
-        ExportReportButton(
-          projectId:
-              (context.read<TasklistBloc>().state as TasklistSubscription)
-                  .project!
-                  .id,
-          onEdited: onEdited,
-        ),
+        const EditProjectButton(),
+        if (context.watch<TasklistBloc>().state
+            is! TasklistSubscriptionEditable) ...[
+          const SizedBox(
+            width: 10.0,
+          ),
+          OtherOptionsButton(
+            projectId:
+                (context.read<TasklistBloc>().state as TasklistSubscription)
+                    .project!
+                    .id,
+          )
+        ] else
+          const DeleteProjectButton(),
       ],
     );
   }

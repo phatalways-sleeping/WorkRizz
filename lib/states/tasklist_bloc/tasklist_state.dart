@@ -20,12 +20,6 @@ final class TasklistInitial extends TasklistState {
   const TasklistInitial();
 }
 
-final class TasklistEditing extends TasklistState {
-  const TasklistEditing(
-    // requir
-  );
-}
-
 final class TasklistLoading extends TasklistState {
   const TasklistLoading({
     required super.project,
@@ -56,28 +50,67 @@ final class TasklistSubscription extends TasklistState {
   }
 }
 
-final class TasklistSubscriptionLoading extends TasklistSubscription {
-  const TasklistSubscriptionLoading({
+final class TasklistSubscriptionEditable extends TasklistSubscription {
+  const TasklistSubscriptionEditable({
     required super.project,
     super.currentPage = 0,
   });
 
-  factory TasklistSubscriptionLoading.from(TasklistSubscription state) =>
+  factory TasklistSubscriptionEditable.from(TasklistSubscription state) =>
+      TasklistSubscriptionEditable(
+        project: state.project,
+        currentPage: state.currentPage,
+      );
+
+  @override
+  TasklistSubscriptionEditable copyWith({
+    Project? project,
+    int? currentPage,
+  }) {
+    return TasklistSubscriptionEditable(
+      project: project ?? this.project,
+      currentPage: currentPage ?? this.currentPage,
+    );
+  }
+}
+
+final class TasklistSubscriptionLoading extends TasklistSubscription {
+  const TasklistSubscriptionLoading({
+    required super.project,
+    super.currentPage = 0,
+    this.isEditing = false,
+  });
+
+  final bool isEditing;
+
+  factory TasklistSubscriptionLoading.from(
+    TasklistSubscription state, {
+    bool? isEditing,
+  }) =>
       TasklistSubscriptionLoading(
         project: state.project,
         currentPage: state.currentPage,
+        isEditing: isEditing ?? false,
       );
 
   @override
   TasklistSubscriptionLoading copyWith({
     Project? project,
     int? currentPage,
+    bool? isEditing,
   }) {
     return TasklistSubscriptionLoading(
       project: project ?? this.project,
       currentPage: currentPage ?? this.currentPage,
+      isEditing: isEditing ?? this.isEditing,
     );
   }
+
+  @override
+  List<Object> get props => [
+        ...super.props,
+        isEditing,
+      ];
 }
 
 final class TasklistSubscriptionAndOpenTaskCreateDialog
@@ -104,6 +137,13 @@ final class TasklistSubscriptionAndOpenTaskCreateDialog
       currentPage: currentPage ?? this.currentPage,
     );
   }
+}
+
+final class TasklistDeleteProjectState extends TasklistState {
+  const TasklistDeleteProjectState({
+    super.project,
+    super.currentPage = 0,
+  });
 }
 
 final class TasklistError extends TasklistState {

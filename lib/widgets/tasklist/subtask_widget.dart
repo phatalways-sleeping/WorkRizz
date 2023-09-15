@@ -6,13 +6,11 @@ class SubTaskWidget extends StatelessWidget {
     required this.task,
     required this.currentPage,
     required this.totalPage,
-    required this.editMode,
   });
 
   final TaskSmallInformation task;
   final int currentPage;
   final int totalPage;
-  final editMode;
 
   @override
   Widget build(BuildContext context) {
@@ -37,32 +35,77 @@ class SubTaskWidget extends StatelessWidget {
                 style: context.textTheme.titleMedium,
               ),
               const Spacer(),
-              if (editMode)
-              IconButton(
-                icon: const Icon(
-                  // delete icon
-                  Icons.delete_outline_rounded,
-                  color: BLACK,
-                ),
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (context) => CustomDialog(
-                    title: "Remove this Task",
-                    leftText: "No",
-                    rightText: "Yes",
-                    leftColor: PURPLE,
-                    rightColor: PINK,
-                    focusleftColor: PALE,
-                    focusrightColor: GREEN,
-                    onLeftPressed: (context) {
-                      Navigator.of(context).pop(false);
-                    },
-                    onRightPressed: (context) {
-                      Navigator.of(context).pop(true);
-                    },
+              if (context.watch<TasklistBloc>().state
+                  is TasklistSubscriptionEditable)
+                ElevatedButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                      EdgeInsets.zero,
+                    ),
+                    minimumSize: const MaterialStatePropertyAll(
+                      Size(
+                        60.0,
+                        24.0,
+                      ),
+                    ),
+                    maximumSize: const MaterialStatePropertyAll(
+                      Size(
+                        60.0,
+                        24.0,
+                      ),
+                    ),
+                    iconSize: MaterialStateProperty.all(
+                      24.0,
+                    ),
+                    backgroundColor: const MaterialStatePropertyAll(
+                      Colors.transparent,
+                    ),
+                    shadowColor: const MaterialStatePropertyAll(
+                      Colors.transparent,
+                    ),
+                    elevation: const MaterialStatePropertyAll(
+                      0.0,
+                    ),
+                    alignment: Alignment.centerRight,
                   ),
+                  child: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: BLACK,
+                  ),
+                  onPressed: () async {
+                    await showDialog<bool>(
+                      context: context,
+                      builder: (context) => CustomDialog(
+                        title: "Remove this Task",
+                        leftText: "No",
+                        rightText: "Yes",
+                        leftColor: PURPLE,
+                        rightColor: PINK,
+                        focusleftColor: PALE,
+                        focusrightColor: GREEN,
+                        onLeftPressed: (context) {
+                          Navigator.of(context).pop(false);
+                        },
+                        onRightPressed: (context) {
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                    ).then(
+                      (value) {
+                        if (value == null) {
+                          return;
+                        }
+                        if (value == true) {
+                          context.read<TasklistBloc>().add(
+                                TasklistDeleteTask(
+                                  task.id,
+                                ),
+                              );
+                        }
+                      },
+                    );
+                  },
                 ),
-              ),
             ],
           ),
           titleSpacing: 0.0,
@@ -75,7 +118,6 @@ class SubTaskWidget extends StatelessWidget {
           (index) => SubTaskInfo(
             subTaskSmallInformation: task.subTaskSmallInformations[index],
             taskId: task.id,
-            editMode: editMode,
           ),
         ),
         ElevatedButton(
@@ -138,147 +180,142 @@ class SubTaskInfo extends StatelessWidget {
     super.key,
     required this.subTaskSmallInformation,
     required this.taskId,
-    required this.editMode,
   });
 
   final SubTaskSmallInformation subTaskSmallInformation;
   final String taskId;
-  final bool editMode;
 
   @override
   Widget build(BuildContext context) {
-    if (editMode) {
-      return Container(
-        margin: EdgeInsets.symmetric(
-            vertical: context.mediaQuery.size.width * 0.01),
-        child: ItemWidget(
-          editMode: editMode,
-          onPressed: (context) => context.read<NavigationBloc>().add(
-                NavigateToSubTaskDetail(
-                  subTaskSmallInformation.id,
-                  taskId,
+    return Container(
+      margin:
+          EdgeInsets.symmetric(vertical: context.mediaQuery.size.width * 0.01),
+      width: context.mediaQuery.size.width,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: CustomItemWidget(
+              hideFirstChild: context.watch<TasklistBloc>().state
+                  is TasklistSubscriptionEditable,
+              onPressed: (context) => context.read<NavigationBloc>().add(
+                    NavigateToSubTaskDetail(
+                      subTaskSmallInformation.id,
+                      taskId,
+                    ),
+                  ),
+              firstChild: CheckboxWidget(
+                checkState: subTaskSmallInformation.isCompleted,
+                onChanged: (value, context) {
+                  if (value == null) {
+                    return;
+                  }
+                  if (value == true) {
+                    context.read<TasklistBloc>().add(
+                          TasklistMarkSubTaskAsCompleted(
+                            taskId: taskId,
+                            subTaskId: subTaskSmallInformation.id,
+                            assigneeImageUrl:
+                                subTaskSmallInformation.assigneeImageUrl,
+                          ),
+                        );
+                  } else {
+                    context.read<TasklistBloc>().add(
+                          TasklistMarkSubTaskAsUncompleted(
+                            taskId: taskId,
+                            subTaskId: subTaskSmallInformation.id,
+                            assigneeImageUrl:
+                                subTaskSmallInformation.assigneeImageUrl,
+                          ),
+                        );
+                  }
+                },
+              ),
+              isDone: subTaskSmallInformation.isCompleted,
+              name: subTaskSmallInformation.name,
+              subtext: '${subTaskSmallInformation.points}pt',
+              secondChild: FutureBuilder(
+                future: context
+                    .read<TasklistBloc>()
+                    .imageUrl(subTaskSmallInformation.assigneeImageUrl),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const ShimmerAvatar(
+                      radiusRatio: 0.06,
+                    );
+                  }
+                  if (!snapshot.hasData) {
+                    return const ShimmerAvatar(
+                      radiusRatio: 0.06,
+                    );
+                  }
+                  return CustomAvatarWidget(
+                    imageUrl: snapshot.data as String,
+                    size: context.mediaQuery.size.width * (RATIO_MARGIN + 0.01),
+                  );
+                },
+              ),
+            ),
+          ),
+          if (context.watch<TasklistBloc>().state
+              is TasklistSubscriptionEditable) ...[
+            SizedBox(
+              width: context.mediaQuery.size.width * RATIO_PADDING,
+            ),
+            InkWell(
+              child: Container(
+                width: context.mediaQuery.size.width * 0.08,
+                decoration: BoxDecoration(
+                  color: PALE,
+                  borderRadius: BorderRadius.circular(MEDIUM_CORNER),
+                  border: Border.all(
+                    color: BLACK,
+                    width: 1.0,
+                  ),
+                ),
+                child: const Icon(
+                  Icons.remove_outlined,
+                  color: BLACK,
                 ),
               ),
-          firstChild: CheckboxWidget(
-            checkState: subTaskSmallInformation.isCompleted,
-            onChanged: (value, context) {
-              if (value == null) {
-                return;
-              }
-              if (value == true) {
-                context.read<TasklistBloc>().add(
-                      TasklistMarkSubTaskAsCompleted(
-                        taskId: taskId,
-                        subTaskId: subTaskSmallInformation.id,
-                        assigneeImageUrl:
-                            subTaskSmallInformation.assigneeImageUrl,
-                      ),
-                    );
-              } else {
-                context.read<TasklistBloc>().add(
-                      TasklistMarkSubTaskAsUncompleted(
-                        taskId: taskId,
-                        subTaskId: subTaskSmallInformation.id,
-                        assigneeImageUrl:
-                            subTaskSmallInformation.assigneeImageUrl,
-                      ),
-                    );
-              }
-            },
-          ),
-          isFixed: false,
-          isDone: subTaskSmallInformation.isCompleted,
-          name: subTaskSmallInformation.name,
-          subtext: '${subTaskSmallInformation.points}pt',
-          secondChild: FutureBuilder(
-            future: context
-                .read<TasklistBloc>()
-                .imageUrl(subTaskSmallInformation.assigneeImageUrl),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const ShimmerAvatar(
-                  radiusRatio: 0.06,
+              onTap: () async {
+                await showDialog<bool>(
+                  context: context,
+                  builder: (context) => CustomDialog(
+                    title: "Remove this Subtask",
+                    leftText: "No",
+                    rightText: "Yes",
+                    leftColor: PURPLE,
+                    rightColor: PINK,
+                    focusleftColor: PALE,
+                    focusrightColor: GREEN,
+                    onLeftPressed: (context) {
+                      Navigator.of(context).pop(false);
+                    },
+                    onRightPressed: (context) {
+                      Navigator.of(context).pop(true);
+                    },
+                  ),
+                ).then(
+                  (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    if (value == true) {
+                      context.read<TasklistBloc>().add(
+                            TasklistDeleteSubTask(
+                              subTaskId: subTaskSmallInformation.id,
+                              taskId: taskId,
+                            ),
+                          );
+                    }
+                  },
                 );
-              }
-              if (!snapshot.hasData) {
-                return const ShimmerAvatar(
-                  radiusRatio: 0.06,
-                );
-              }
-              return CustomAvatarWidget(
-                imageUrl: snapshot.data as String,
-                size: context.mediaQuery.size.width * (RATIO_MARGIN + 0.01),
-              );
-            },
-          ),
-        ),
-
-      );
-    } else {
-      return Container(
-        margin: EdgeInsets.symmetric(
-            vertical: context.mediaQuery.size.width * 0.01),
-        child: CustomItemWidget(
-          onPressed: (context) => context.read<NavigationBloc>().add(
-                NavigateToSubTaskDetail(
-                  subTaskSmallInformation.id,
-                  taskId,
-                ),
-              ),
-          firstChild: CheckboxWidget(
-            checkState: subTaskSmallInformation.isCompleted,
-            onChanged: (value, context) {
-              if (value == null) {
-                return;
-              }
-              if (value == true) {
-                context.read<TasklistBloc>().add(
-                      TasklistMarkSubTaskAsCompleted(
-                        taskId: taskId,
-                        subTaskId: subTaskSmallInformation.id,
-                        assigneeImageUrl:
-                            subTaskSmallInformation.assigneeImageUrl,
-                      ),
-                    );
-              } else {
-                context.read<TasklistBloc>().add(
-                      TasklistMarkSubTaskAsUncompleted(
-                        taskId: taskId,
-                        subTaskId: subTaskSmallInformation.id,
-                        assigneeImageUrl:
-                            subTaskSmallInformation.assigneeImageUrl,
-                      ),
-                    );
-              }
-            },
-          ),
-          isFixed: false,
-          isDone: subTaskSmallInformation.isCompleted,
-          name: subTaskSmallInformation.name,
-          subtext: '${subTaskSmallInformation.points}pt',
-          secondChild: FutureBuilder(
-            future: context
-                .read<TasklistBloc>()
-                .imageUrl(subTaskSmallInformation.assigneeImageUrl),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const ShimmerAvatar(
-                  radiusRatio: 0.06,
-                );
-              }
-              if (!snapshot.hasData) {
-                return const ShimmerAvatar(
-                  radiusRatio: 0.06,
-                );
-              }
-              return CustomAvatarWidget(
-                imageUrl: snapshot.data as String,
-                size: context.mediaQuery.size.width * (RATIO_MARGIN + 0.01),
-              );
-            },
-          ),
-        ),
-      );
-    }
+              },
+            ),
+          ]
+        ],
+      ),
+    );
   }
 }

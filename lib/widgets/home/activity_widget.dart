@@ -186,7 +186,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
                                       Text(
                                         "${subTask.dueDate.difference(
                                               DateTime.now(),
-                                            ).inDays} days left",
+                                            ).inDays + 1} days left",
                                         style: context.textTheme.labelMedium
                                             ?.copyWith(
                                           color: BLACK,

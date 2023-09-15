@@ -243,7 +243,7 @@ final class PdfAPI {
                   ),
                 ),
                 Text(
-                  'Completion: ${(project.activitiesCompleted / project.totalActivities * 100).toInt()}%',
+                  'Completion: ${project.totalActivities == 0 ? 0 : (project.activitiesCompleted / project.totalActivities * 100).toInt()}%',
                   style: TextStyle(
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold,

@@ -1386,6 +1386,18 @@ class ApplicationRepository {
   Future<void> deleteTask({
     required String taskId,
   }) async {
+    // delete all sub tasks in task
+    final task = await _storageAPI.taskStream(taskId).first;
+
+    await Future.wait<void>(
+      [
+        for (var subTaskId in task.subTasks)
+          deleteSubTask(
+            subTaskId: subTaskId,
+          ),
+      ],
+    );
+
     // Update task small information in project
     final taskSmallInformations = await _storageAPI
         .projectStream(projectIdOnView)
@@ -1417,18 +1429,6 @@ class ApplicationRepository {
         fileSmallInformation,
       ]),
     ]);
-
-    // delete all sub tasks in task
-    final task = await _storageAPI.taskStream(taskId).first;
-
-    await Future.wait<void>(
-      [
-        for (var subTaskId in task.subTasks)
-          deleteSubTask(
-            subTaskId: subTaskId,
-          ),
-      ],
-    );
 
     // Delete task
     await _storageAPI.deleteTask(taskId);

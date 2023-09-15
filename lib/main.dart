@@ -120,7 +120,8 @@ class AppFlow extends StatelessWidget {
               create: (context) => MessageBloc(
                 context.read<ApplicationRepository>(),
               )..add(const MessageSubscribeToFirestore()),
-              child: const MessageScreen(),
+              //child: const MessageScreen(),
+              child: const ChatbotScreen()
             ),
           ),
         if (state is FileList)
@@ -177,7 +178,7 @@ class AppFlow extends StatelessWidget {
               create: (context) => HomeBloc(
                 context.read<ApplicationRepository>(),
               )..add(const HomeSubscribeEvent()),
-              child: const ChatbotScreen(),
+              child: const HomeScreen(),
             ),
           ),
         if (state is Assistant)

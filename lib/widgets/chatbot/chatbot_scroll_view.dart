@@ -44,7 +44,7 @@ class _ChatbotScrollViewState extends State<ChatbotScrollView> {
     //return Container();
     return ListView.separated(
         //controller: _scrollController,
-        //reverse: true,
+        reverse: true,
         itemBuilder: (context, index) {
           return Container(
             margin: widget.messages[index]['isUserMessage']

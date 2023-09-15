@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  dialog_flowtter: ^0.3.1
   cupertino_icons: ^1.0.2
   dots_indicator: ^3.0.0
   flow_builder: ^0.0.9
@@ -52,6 +52,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/dialog_flow_auth.json
     - assets/images/background.jpg
     - assets/images/avt.svg
     - assets/images/avt.jpg

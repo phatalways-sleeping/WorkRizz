@@ -18,6 +18,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:task_managing_application/states/thread_bloc/thread_bloc.dart';
 import 'firebase_options.dart';
 import 'screens/message/message_screen.dart';
+import 'screens/chatbot/chatbot_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -120,6 +121,7 @@ class AppFlow extends StatelessWidget {
                 context.read<ApplicationRepository>(),
               )..add(const MessageSubscribeToFirestore()),
               child: const MessageScreen(),
+              //child: const ChatbotScreen()
             ),
           ),
         if (state is FileList)
@@ -181,14 +183,9 @@ class AppFlow extends StatelessWidget {
           ),
         if (state is Assistant)
           const MaterialPage(
-            child: BaseScreen(
-              hideFloatingActionButton: true,
-              child: SizedBox(
-                height: 700,
-                width: double.infinity,
-              ),
+            child: const ChatbotScreen(),
             ),
-          ),
+
         if (state is Profile)
           MaterialPage(
             child: ErrorWidget('Temporarily unavailable'),

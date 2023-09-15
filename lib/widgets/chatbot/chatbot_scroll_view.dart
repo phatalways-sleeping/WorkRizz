@@ -21,11 +21,13 @@ class ChatbotScrollView extends StatefulWidget {
 }
 
 class _ChatbotScrollViewState extends State<ChatbotScrollView> {
-  //late final ScrollController scrollController;
+  late ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    //_scrollController = ScrollController();
+    _scrollController = ScrollController();
+    
+    if (_scrollController.hasClients) _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     // scrollController.animateTo(scrollController.position.maxScrollExtent,
     //     duration: const Duration(milliseconds: 500), curve: Curves.bounceInOut);
     super.initState();
@@ -40,11 +42,11 @@ class _ChatbotScrollViewState extends State<ChatbotScrollView> {
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
-    //_scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    if (_scrollController.hasClients) _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     //return Container();
     return ListView.separated(
-        //controller: _scrollController,
-        reverse: true,
+        controller: _scrollController,
+        reverse: false,
         itemBuilder: (context, index) {
           return Container(
             margin: widget.messages[index]['isUserMessage']

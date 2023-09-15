@@ -17,7 +17,7 @@ class ChatbotView extends StatefulWidget {
 }
 
 class _ChatbotViewState extends State<ChatbotView> {
-  late final ScrollController _scrollController;
+  //late ScrollController _scrollController = ScrollController();
   late DialogFlowtter dialogFlowtter;
   final TextEditingController _controller = TextEditingController();
   
@@ -27,7 +27,7 @@ class _ChatbotViewState extends State<ChatbotView> {
   @override
   void initState() {
     //_scrollController = ScrollController();
-    
+    //_scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     DialogFlowtter.fromFile().then((instance) => dialogFlowtter = instance);
     super.initState();
   }
@@ -43,7 +43,7 @@ class _ChatbotViewState extends State<ChatbotView> {
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(
-                height: context.mediaQuery.size.height * 0.10,
+                height: context.mediaQuery.size.height * 0.11,
                 child: CustomScrollView(
                   //controller: _scrollController,
                   slivers: [
@@ -81,7 +81,7 @@ class _ChatbotViewState extends State<ChatbotView> {
                                     RATIO_PADDING,
                               ),
                               const Text(
-                                "Chatbots",
+                                "Virtual Assistant",
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -103,8 +103,10 @@ class _ChatbotViewState extends State<ChatbotView> {
                   ],
                 ),
               ),
-              
-              Expanded(child: ChatbotScrollView(messages: messages,),),
+              SizedBox(
+                height: context.mediaQuery.size.height * 0.8,
+                child: Expanded(child: ChatbotScrollView(messages: messages,),),
+              ),
             ],
           ),
           Align( // keyboard
@@ -131,7 +133,9 @@ class _ChatbotViewState extends State<ChatbotView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      sendMessage('');
+                    },
                     style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(),
                       backgroundColor: BLACK,
@@ -149,13 +153,21 @@ class _ChatbotViewState extends State<ChatbotView> {
                       controller: _controller,
                       showLabel: false,
                       keyboardType: TextInputType.text,
+                      
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   ElevatedButton(
                     onPressed: () {
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
                       sendMessage(_controller.text);
                       _controller.clear();
+                      //_scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+
                     },
                     style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(),
@@ -181,13 +193,13 @@ class _ChatbotViewState extends State<ChatbotView> {
     } else {
       setState(() {
         addMessage(Message(text: DialogText(text: [text])), true);
+        //_scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       });
 
       DetectIntentResponse response = await dialogFlowtter.detectIntent(
           queryInput: QueryInput(text: TextInput(text: text)));
       if (response.message == null) return;
       setState(() {
-        
         addMessage(response.message!);
       });
     }

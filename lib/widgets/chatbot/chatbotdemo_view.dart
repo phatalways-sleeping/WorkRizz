@@ -16,7 +16,7 @@ class ChatbotView extends StatefulWidget {
 }
 
 class _ChatbotViewState extends State<ChatbotView> {
-  late final ScrollController _scrollController;
+  //late final ScrollController _scrollController;
   late DialogFlowtter dialogFlowtter;
   final TextEditingController _controller = TextEditingController();
   
@@ -24,8 +24,8 @@ class _ChatbotViewState extends State<ChatbotView> {
 
   @override
   void initState() {
-    _scrollController = ScrollController();
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    //_scrollController = ScrollController();
+   // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     DialogFlowtter.fromFile().then((instance) => dialogFlowtter = instance);
     super.initState();
   }
@@ -54,7 +54,7 @@ class _ChatbotViewState extends State<ChatbotView> {
                         sendMessage(_controller.text);
                         
                         _controller.clear();
-                        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                        
                        /*  SchedulerBinding.instance?.addPostFrameCallback((_) {
                           _scrollController.animateTo(
                           _scrollController.position.minScrollExtent,
@@ -83,7 +83,7 @@ class _ChatbotViewState extends State<ChatbotView> {
           queryInput: QueryInput(text: TextInput(text: text)));
       if (response.message == null) return;
       setState(() {
-         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+     
         addMessage(response.message!);
       });
     }

@@ -18,6 +18,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:task_managing_application/states/thread_bloc/thread_bloc.dart';
 import 'firebase_options.dart';
 import 'screens/message/message_screen.dart';
+import 'screens/chatbot/chatbot_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -176,7 +177,7 @@ class AppFlow extends StatelessWidget {
               create: (context) => HomeBloc(
                 context.read<ApplicationRepository>(),
               )..add(const HomeSubscribeEvent()),
-              child: const HomeScreen(),
+              child: const ChatbotScreen(),
             ),
           ),
         if (state is Assistant)

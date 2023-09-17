@@ -158,8 +158,10 @@ class _EmailDialog extends StatelessWidget {
       backgroundColor: Colors.black.withOpacity(0.4),
       body: Center(
         child: Container(
-          width: context.mediaQuery.size.width * 0.9,
-          height: context.mediaQuery.size.height * 0.2,
+          constraints: BoxConstraints(
+            maxHeight: context.mediaQuery.size.height * 0.4,
+            maxWidth: context.mediaQuery.size.width * 0.9,
+          ),
           padding: const EdgeInsets.symmetric(
             horizontal: 12,
             vertical: 12,
@@ -218,7 +220,13 @@ class _EmailDialog extends StatelessWidget {
                       context.colorScheme.primary,
                     ),
                     alignment: Alignment.center,
-                    fixedSize: MaterialStatePropertyAll(
+                    minimumSize: MaterialStatePropertyAll(
+                      Size(
+                        context.mediaQuery.size.width * 0.9,
+                        context.mediaQuery.size.height * 0.02,
+                      ),
+                    ),
+                    maximumSize: MaterialStatePropertyAll(
                       Size(
                         context.mediaQuery.size.width * 0.9,
                         context.mediaQuery.size.height * 0.05,

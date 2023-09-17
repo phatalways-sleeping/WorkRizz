@@ -49,8 +49,10 @@ class _CustomInputDialogState extends State<CustomInputDialog> {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(MEDIUM_CORNER)), //this right here
       child: Container(
-        width: context.mediaQuery.size.width * 0.9,
-        height: context.mediaQuery.size.height * 0.25,
+        constraints: BoxConstraints(
+          maxHeight: context.mediaQuery.size.height * 0.5,
+          maxWidth: context.mediaQuery.size.width * 0.9,
+        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(MEDIUM_CORNER),
           color: WHITE,
@@ -61,14 +63,17 @@ class _CustomInputDialogState extends State<CustomInputDialog> {
         ),
         padding: EdgeInsets.symmetric(
           horizontal: context.mediaQuery.size.width * RATIO_PADDING,
-          vertical: context.mediaQuery.size.height * 0.03,
+          vertical: context.mediaQuery.size.height * 0.01,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             DefaultTextStyle.merge(
               style: context.textTheme.titleLarge?.copyWith(
                 color: BLACK,
+                fontWeight: FontWeight.w600,
               ),
               child: widget.title,
             ),
@@ -80,15 +85,22 @@ class _CustomInputDialogState extends State<CustomInputDialog> {
             ),
             SizedBox(height: context.mediaQuery.size.width * RATIO_SPACE),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Spacer(),
                 ElevatedButton(
                   onPressed: () => widget.onLeftPressed(context, _controller),
                   style: ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(
+                    alignment: Alignment.center,
+                     minimumSize: MaterialStatePropertyAll(
                       Size(
-                        context.mediaQuery.size.width * 0.3,
-                        context.mediaQuery.size.height * 0.02,
+                        context.mediaQuery.size.width * 0.30,
+                        context.mediaQuery.size.height * 0.03 + 5,
+                      ),
+                    ),
+                    maximumSize: MaterialStatePropertyAll(
+                      Size(
+                        context.mediaQuery.size.width * 0.30,
+                        context.mediaQuery.size.height * 0.05,
                       ),
                     ),
                     overlayColor: MaterialStatePropertyAll(
@@ -119,14 +131,20 @@ class _CustomInputDialogState extends State<CustomInputDialog> {
                     child: widget.leftText,
                   ),
                 ),
-                SizedBox(width: context.mediaQuery.size.width * RATIO_SPACE),
                 ElevatedButton(
                   onPressed: () => widget.onRightPressed(context, _controller),
                   style: ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(
+                    alignment: Alignment.center,
+                     minimumSize: MaterialStatePropertyAll(
                       Size(
-                        context.mediaQuery.size.width * 0.3,
-                        context.mediaQuery.size.height * 0.02,
+                        context.mediaQuery.size.width * 0.30,
+                        context.mediaQuery.size.height * 0.03 + 5,
+                      ),
+                    ),
+                    maximumSize: MaterialStatePropertyAll(
+                      Size(
+                        context.mediaQuery.size.width * 0.30,
+                        context.mediaQuery.size.height * 0.05,
                       ),
                     ),
                     overlayColor: MaterialStatePropertyAll(
@@ -157,7 +175,6 @@ class _CustomInputDialogState extends State<CustomInputDialog> {
                     child: widget.rightText,
                   ),
                 ),
-                const Spacer(),
               ],
             )
           ],

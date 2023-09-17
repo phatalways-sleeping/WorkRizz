@@ -125,7 +125,7 @@ class _EmailDialog extends StatelessWidget {
       body: Center(
         child: Container(
           width: context.mediaQuery.size.width * 0.9,
-          height: context.mediaQuery.size.height * 0.25,
+          height: context.mediaQuery.size.height * 0.4,
           padding: const EdgeInsets.symmetric(
             horizontal: 12,
             vertical: 12,

@@ -21,7 +21,18 @@ class _MessageViewState extends State<MessageView> {
   @override
   void initState() {
     _scrollController = ScrollController();
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
     super.initState();
+  }
+
+  void changeView() {
+    setState(() {
+      if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
   }
 
   @override
@@ -37,7 +48,7 @@ class _MessageViewState extends State<MessageView> {
               SizedBox(
                 height: context.mediaQuery.size.height * 0.10,
                 child: CustomScrollView(
-                  controller: _scrollController,
+                  //controller: _scrollController,
                   slivers: [
                     SliverPersistentHeader(
                       floating: true,
@@ -90,6 +101,7 @@ class _MessageViewState extends State<MessageView> {
                                     projectName: null,
                                   ),
                                 ),
+                            
                       ),
                     ),
                   ],

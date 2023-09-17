@@ -125,7 +125,7 @@ class _EmailDialog extends StatelessWidget {
       body: Center(
         child: Container(
           width: context.mediaQuery.size.width * 0.9,
-          height: context.mediaQuery.size.height * 0.2,
+          height: context.mediaQuery.size.height * 0.25,
           padding: const EdgeInsets.symmetric(
             horizontal: 12,
             vertical: 12,
@@ -154,13 +154,17 @@ class _EmailDialog extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(
+                height: context.mediaQuery.size.height * 0.01,
+              ),
               CustomInputField(
                 label: "Email",
                 controller: _controller,
                 keyboardType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 7),
+              SizedBox(
+                height: context.mediaQuery.size.height * 0.01,
+              ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
@@ -184,7 +188,13 @@ class _EmailDialog extends StatelessWidget {
                       context.colorScheme.primary,
                     ),
                     alignment: Alignment.center,
-                    fixedSize: MaterialStatePropertyAll(
+                    minimumSize: MaterialStatePropertyAll(
+                      Size(
+                        context.mediaQuery.size.width * 0.9,
+                        context.mediaQuery.size.height * 0.02,
+                      ),
+                    ),
+                    maximumSize: MaterialStatePropertyAll(
                       Size(
                         context.mediaQuery.size.width * 0.9,
                         context.mediaQuery.size.height * 0.05,

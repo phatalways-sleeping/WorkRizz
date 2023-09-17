@@ -79,7 +79,7 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
               ),
             ),
             SizedBox(
-              height: context.mediaQuery.size.height * RATIO_PADDING * 0.8,
+              height: context.mediaQuery.size.height * RATIO_PADDING * 0.5,
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -92,8 +92,8 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
                     'Create new project',
                     style: TextStyle(
                       color: context.colorScheme.onSecondary,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -109,12 +109,22 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
                     backgroundColor: MaterialStatePropertyAll(
                       Colors.black,
                     ),
-                    fixedSize: MaterialStatePropertyAll(
+                    padding: MaterialStatePropertyAll(
+                      EdgeInsets.zero,
+                    ),
+                    minimumSize: MaterialStatePropertyAll(
                       Size(
-                        5.0,
-                        5.0,
+                        35.0,
+                        35.0,
                       ),
                     ),
+                    maximumSize: MaterialStatePropertyAll(
+                      Size(
+                        35.0,
+                        35.0,
+                      ),
+                    ),
+                    alignment: Alignment.center,
                   ),
                   child: const Icon(
                     Icons.format_paint_rounded,
@@ -143,12 +153,22 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
                     backgroundColor: MaterialStatePropertyAll(
                       Colors.black,
                     ),
-                    fixedSize: MaterialStatePropertyAll(
+                    padding: MaterialStatePropertyAll(
+                      EdgeInsets.zero,
+                    ),
+                    minimumSize: MaterialStatePropertyAll(
                       Size(
-                        5.0,
-                        5.0,
+                        35.0,
+                        35.0,
                       ),
                     ),
+                    maximumSize: MaterialStatePropertyAll(
+                      Size(
+                        35.0,
+                        35.0,
+                      ),
+                    ),
+                    alignment: Alignment.center,
                   ),
                   child: const Icon(
                     Icons.close_rounded,
@@ -159,7 +179,7 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
               ],
             ),
             SizedBox(
-              height: context.mediaQuery.size.height * RATIO_PADDING,
+              height: context.mediaQuery.size.height * RATIO_PADDING * 0.5,
             ),
             const NameInput(),
             SizedBox(
@@ -255,7 +275,13 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
                         context.colorScheme.primary,
                       ),
                       alignment: Alignment.center,
-                      fixedSize: MaterialStatePropertyAll(
+                      minimumSize: MaterialStatePropertyAll(
+                        Size(
+                          context.mediaQuery.size.width * 0.9,
+                          context.mediaQuery.size.height * 0.02,
+                        ),
+                      ),
+                      maximumSize: MaterialStatePropertyAll(
                         Size(
                           context.mediaQuery.size.width * 0.9,
                           context.mediaQuery.size.height * 0.05,
@@ -267,6 +293,7 @@ class _ProjectCreateWidgetState extends State<ProjectCreateWidget>
                       child: const Text(
                         'Done',
                         textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,

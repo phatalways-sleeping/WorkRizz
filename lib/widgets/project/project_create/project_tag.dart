@@ -15,7 +15,7 @@ class ProjectTagWidget extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(
         maxHeight: context.mediaQuery.size.height * 0.05,
-        maxWidth: context.mediaQuery.size.width * 0.2,
+        maxWidth: context.mediaQuery.size.width * 0.5,
       ),
       padding: EdgeInsets.symmetric(
         horizontal: context.mediaQuery.size.width * RATIO_PADDING,
@@ -45,7 +45,9 @@ class ProjectTagWidget extends StatelessWidget {
             color: context.colorScheme.onSecondary,
             fontSize: 12,
             fontWeight: FontWeight.w400,
+            
           ),
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

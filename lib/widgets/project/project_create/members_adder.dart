@@ -1,7 +1,6 @@
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:task_managing_application/assets/assets.dart';
-import 'package:task_managing_application/states/project_bloc/project_bloc.dart';
 import 'package:task_managing_application/states/states.dart';
 import 'package:task_managing_application/widgets/authentication/components.dart';
 import 'package:task_managing_application/widgets/custom_util_components/custom_circular_progress.dart';
@@ -71,7 +70,7 @@ class _MembersAdderState extends State<MembersAdder> {
                 else if (state.newProjectSetup.assigneeImageUrls.isEmpty &&
                     widget.role == MemberRole.common)
                   const SizedBox.shrink()
-                else
+                else ...[
                   FutureBuilder(
                     future: widget.role == MemberRole.common
                         ? context.read<ProjectBloc>().assigneeAvatars()
@@ -103,7 +102,8 @@ class _MembersAdderState extends State<MembersAdder> {
                       );
                     },
                   ),
-                const SizedBox(width: 8),
+                  const SizedBox(width: 8),
+                ],
                 InkWell(
                   onTap: () async {
                     await showDialog<String>(

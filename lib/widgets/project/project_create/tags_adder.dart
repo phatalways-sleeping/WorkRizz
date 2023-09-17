@@ -17,28 +17,32 @@ class TagsAdder extends StatefulWidget {
 class _TagsAdderState extends State<TagsAdder> {
   late final TextEditingController _controller = TextEditingController();
 
-  List<Row> _buildTags(List<Tag> tags) {
-    final List<Row> rows = List.empty(growable: true);
+  Widget _buildTags(List<Tag> tags) {
+    final List<Widget> lists = List.empty(growable: true);
 
-    int startIndex = 0;
-    while (startIndex < tags.length) {
-      int endIndex =
-          startIndex + 3 >= tags.length ? tags.length : startIndex + 3;
-      final List<ProjectTagWidget> tagsWidget = List.empty(growable: true);
-      while (startIndex < endIndex) {
-        tagsWidget.add(ProjectTagWidget(tag: tags[startIndex]));
-        startIndex += 1;
-      }
-      rows.add(
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: tagsWidget,
+    for (final tag in tags) {
+      lists.add(
+        ProjectTagWidget(
+          tag: tag,
+        ),
+      );
+      // spacing between tags
+      lists.add(
+        SizedBox(
+          width: context.mediaQuery.size.width * RATIO_PADDING * 0.3,
         ),
       );
     }
 
-    return rows;
+    return SizedBox(
+      width: context.mediaQuery.size.width * 0.85,
+      height: context.mediaQuery.size.height * 0.03,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        children: lists,
+      ),
+    );
   }
 
   @override
@@ -79,19 +83,10 @@ class _TagsAdderState extends State<TagsAdder> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: _buildTags(
-                    (state as ProjectUserCreateAndSubscribe)
-                        .newProjectSetup
-                        .tags,
-                  ),
+                _buildTags(
+                  (state as ProjectUserCreateAndSubscribe).newProjectSetup.tags,
                 ),
-                SizedBox(
-                  width: context.mediaQuery.size.width * RATIO_PADDING * 0.5,
-                ),
+                const Spacer(),
                 InkWell(
                   onTap: () async {
                     await showDialog<String>(

@@ -13,7 +13,8 @@ class DateCapsule extends StatefulWidget {
 class _DateCapsuleState extends State<DateCapsule> {
   double width = 0.0;
   double height = 0.0;
-  ScrollController? scrollController;
+  ScrollController? dayscrollController;
+  ScrollController? monthscrollController;
   List<DateTime> currentMonthList = List.empty();
   DateTime currentDateTime = DateTime.now();
   List<String> todos = <String>[];
@@ -24,8 +25,10 @@ class _DateCapsuleState extends State<DateCapsule> {
     currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
     currentMonthList.sort((a, b) => a.day.compareTo(b.day));
     currentMonthList = currentMonthList.toSet().toList();
-    scrollController =
-        ScrollController(initialScrollOffset: 50.0 * currentDateTime.day);
+    dayscrollController =
+        ScrollController(initialScrollOffset: 58.0 * currentDateTime.day);
+    monthscrollController =
+        ScrollController(initialScrollOffset: 58.0 * currentDateTime.month);
     super.initState();
   }
 
@@ -33,7 +36,7 @@ class _DateCapsuleState extends State<DateCapsule> {
     return SizedBox(
       height: context.mediaQuery.size.height * 0.1,
       child: ListView.builder(
-        controller: scrollController,
+        controller: dayscrollController,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
         shrinkWrap: true,
@@ -96,7 +99,7 @@ class _DateCapsuleState extends State<DateCapsule> {
     return Container(
       height: 50,
       child: ListView.builder(
-        controller: scrollController,
+        controller: monthscrollController,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
         shrinkWrap: true,
@@ -120,8 +123,8 @@ class _DateCapsuleState extends State<DateCapsule> {
                   date_util.DateUtils.daysInMonth(currentDateTime);
               currentMonthList.sort((a, b) => a.day.compareTo(b.day));
               currentMonthList = currentMonthList.toSet().toList();
-              scrollController = ScrollController(
-                  initialScrollOffset: 70.0 * currentDateTime.day);
+              dayscrollController = ScrollController(
+                  initialScrollOffset: 58.0 * currentDateTime.day);
             });
           },
           child: Center(

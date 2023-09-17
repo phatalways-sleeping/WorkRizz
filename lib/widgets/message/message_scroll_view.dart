@@ -20,11 +20,15 @@ class MessageScrollView extends StatefulWidget {
 }
 
 class _MessageScrollViewState extends State<MessageScrollView> {
-  late final ScrollController scrollController;
+  late ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
-    scrollController = ScrollController();
+     scrollController = ScrollController();
+
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    }
     // scrollController.animateTo(scrollController.position.maxScrollExtent,
     //     duration: const Duration(milliseconds: 500), curve: Curves.bounceInOut);
     super.initState();
@@ -32,18 +36,22 @@ class _MessageScrollViewState extends State<MessageScrollView> {
 
   @override
   void dispose() {
-    scrollController.dispose();
+    //scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    }
     return BlocBuilder<MessageBloc, MessageState>(
       builder: (context, state) {
         if (state is MessageInitial || state is MessageLoading) {
           return SizedBox(
             height: context.mediaQuery.size.height * 0.77,
             child: ListView.separated(
+              controller: scrollController,
               itemBuilder: (context, index) => ShimmerBox(
                 width: context.mediaQuery.size.width * 0.7,
                 height: 50.0,

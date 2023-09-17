@@ -69,10 +69,19 @@ class _MessageKeyboardWidgetState extends State<MessageKeyboardWidget> {
             const SizedBox(width: 8.0),
             ElevatedButton(
               onPressed: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
                 context.read<MessageBloc>().add(
                       SendTextMessage(controller.text),
                     );
+                
                 controller.clear();
+                setState(() {
+                  
+                });
               },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),

@@ -71,145 +71,172 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             projectIds.sort((a, b) => a.compareTo(b));
             final List<Stream<SubTaskModel>> subTasks =
                 subTasksForEachProject[projectIds[index]]!;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ProjectInfoWidget(
-                  projectId: projectIds[index],
-                ),
-                ListView.builder(
-                  controller: scrollController,
-                  scrollDirection: Axis.vertical,
-                  physics: const ClampingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: subTasks.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return StreamBuilder(
-                        stream: subTasks[index],
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError || !snapshot.hasData) {
-                            return const SizedBox.shrink();
-                          }
-                          final SubTaskModel subTask =
-                              snapshot.data as SubTaskModel;
-                          if (subTask.isCompleted) {
-                            return const SizedBox.shrink();
-                          }
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              left:
-                                  context.mediaQuery.size.width * RATIO_PADDING,
-                              right:
-                                  context.mediaQuery.size.width * RATIO_PADDING,
-                              top:
-                                  context.mediaQuery.size.width * RATIO_PADDING,
-                            ),
-                            child: ElevatedButton(
-                              onPressed: () =>
-                                  context.read<NavigationBloc>().add(
-                                        NavigateToSubTaskDetailFromHome(
-                                          subTask.id,
-                                        ),
+            return StreamBuilder(
+              stream: context
+                  .read<HomeBloc>()
+                  .isProjectCompleted(projectIds[index]),
+              builder: (context, snapshot) {
+                if (snapshot.hasError || !snapshot.hasData) {
+                  return const SizedBox.shrink();
+                }
+
+                final bool isCompleted = snapshot.data as bool;
+
+                if (isCompleted) {
+                  return const SizedBox.shrink();
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ProjectInfoWidget(
+                      projectId: projectIds[index],
+                    ),
+                    ListView.builder(
+                      controller: scrollController,
+                      scrollDirection: Axis.vertical,
+                      physics: const ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: subTasks.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return StreamBuilder(
+                            stream: subTasks[index],
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError || !snapshot.hasData) {
+                                return const SizedBox.shrink();
+                              }
+                              final SubTaskModel subTask =
+                                  snapshot.data as SubTaskModel;
+                              if (subTask.isCompleted) {
+                                return const SizedBox.shrink();
+                              }
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  left: context.mediaQuery.size.width *
+                                      RATIO_PADDING,
+                                  right: context.mediaQuery.size.width *
+                                      RATIO_PADDING,
+                                  top: context.mediaQuery.size.width *
+                                      RATIO_PADDING,
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: () =>
+                                      context.read<NavigationBloc>().add(
+                                            NavigateToSubTaskDetailFromHome(
+                                              subTask.id,
+                                            ),
+                                          ),
+                                  style: ButtonStyle(
+                                    padding: MaterialStateProperty.all(
+                                      EdgeInsets.all(
+                                        context.mediaQuery.size.width *
+                                            RATIO_PADDING,
                                       ),
-                              style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                  EdgeInsets.all(context.mediaQuery.size.width *
-                                      RATIO_PADDING),
-                                ),
-                                backgroundColor:
-                                    MaterialStateProperty.all(WHITE),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(MEDIUM_CORNER),
+                                    ),
+                                    backgroundColor:
+                                        MaterialStateProperty.all(WHITE),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            MEDIUM_CORNER),
+                                      ),
+                                    ),
+                                    side: const MaterialStatePropertyAll(
+                                      BorderSide(color: BLACK, width: 1),
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    overlayColor:
+                                        const MaterialStatePropertyAll(
+                                      GREEN,
+                                    ),
                                   ),
-                                ),
-                                side: const MaterialStatePropertyAll(
-                                  BorderSide(color: BLACK, width: 1),
-                                ),
-                                alignment: Alignment.centerLeft,
-                                overlayColor: const MaterialStatePropertyAll(
-                                  GREEN,
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    subTask.name,
-                                    style: context.textTheme.titleMedium,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      SizedBox(
-                                        width: context.mediaQuery.size.width *
-                                            RATIO_SPACE,
-                                      ),
-                                      CheckboxWidget(
-                                        onChanged: (isDone, context) =>
-                                            context.read<HomeBloc>().add(
-                                                  HomeMarkSubTaskCompleteEvent(
-                                                    subTaskId: subTask.id,
-                                                  ),
-                                                ),
-                                        checkState: subTask.isCompleted,
-                                      ),
-                                      SizedBox(
-                                        width: context.mediaQuery.size.width *
-                                            RATIO_SPACE,
-                                      ),
+                                        CrossAxisAlignment.start,
+                                    children: [
                                       Text(
-                                        '${subTask.points}pt',
-                                        style: context.textTheme.labelMedium
-                                            ?.copyWith(
-                                          color: BLACK,
-                                          fontSize: 14.0,
-                                        ),
+                                        subTask.name,
+                                        style: context.textTheme.titleMedium,
                                       ),
-                                      SizedBox(
-                                        width: context.mediaQuery.size.width *
-                                            RATIO_SPACE /
-                                            2,
-                                      ),
-                                      const Icon(Icons.lens,
-                                          size: 5, color: BLACK),
-                                      SizedBox(
-                                        width: context.mediaQuery.size.width *
-                                            RATIO_SPACE /
-                                            2,
-                                      ),
-                                      Text(
-                                        "${subTask.dueDate.difference(
-                                              DateTime.now(),
-                                            ).inDays + 1} days left",
-                                        style: context.textTheme.labelMedium
-                                            ?.copyWith(
-                                          color: BLACK,
-                                          fontSize: 14.0,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: context.mediaQuery.size.width *
-                                            RATIO_SPACE,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width:
+                                                context.mediaQuery.size.width *
+                                                    RATIO_SPACE,
+                                          ),
+                                          CheckboxWidget(
+                                            onChanged: (isDone, context) =>
+                                                context.read<HomeBloc>().add(
+                                                      HomeMarkSubTaskCompleteEvent(
+                                                        subTaskId: subTask.id,
+                                                      ),
+                                                    ),
+                                            checkState: subTask.isCompleted,
+                                          ),
+                                          SizedBox(
+                                            width:
+                                                context.mediaQuery.size.width *
+                                                    RATIO_SPACE,
+                                          ),
+                                          Text(
+                                            '${subTask.points}pt',
+                                            style: context.textTheme.labelMedium
+                                                ?.copyWith(
+                                              color: BLACK,
+                                              fontSize: 14.0,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width:
+                                                context.mediaQuery.size.width *
+                                                    RATIO_SPACE /
+                                                    2,
+                                          ),
+                                          const Icon(Icons.lens,
+                                              size: 5, color: BLACK),
+                                          SizedBox(
+                                            width:
+                                                context.mediaQuery.size.width *
+                                                    RATIO_SPACE /
+                                                    2,
+                                          ),
+                                          Text(
+                                            "${subTask.dueDate.difference(
+                                                  DateTime.now(),
+                                                ).inDays + 1} days left",
+                                            style: context.textTheme.labelMedium
+                                                ?.copyWith(
+                                              color: BLACK,
+                                              fontSize: 14.0,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width:
+                                                context.mediaQuery.size.width *
+                                                    RATIO_SPACE,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          );
-                        });
-                  },
-                ),
-                SizedBox(
-                  height: context.mediaQuery.size.width * RATIO_SPACE * 2,
-                ),
-              ],
+                                ),
+                              );
+                            });
+                      },
+                    ),
+                    SizedBox(
+                      height: context.mediaQuery.size.width * RATIO_SPACE * 2,
+                    ),
+                  ],
+                );
+              },
             );
           },
         );

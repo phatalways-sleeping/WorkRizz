@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_managing_application/repositories/application_repository.dart';
 
 part 'navigation_event.dart';
@@ -166,6 +167,14 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     NavigateToAuthentication event,
     Emitter<NavigationState> emit,
   ) async {
+    await SharedPreferences.getInstance().then(
+      (value) async {
+        if (value.containsKey('userId') &&
+            value.getString('userId')!.isNotEmpty) {
+          await _applicationRepository.logout();
+        }
+      },
+    );
     emit(const Authentication());
   }
 }

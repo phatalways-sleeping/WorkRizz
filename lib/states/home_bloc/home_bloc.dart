@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:task_managing_application/models/models.dart';
@@ -21,15 +23,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       );
     });
     on<HomeMarkSubTaskCompleteEvent>((event, emit) async {
-      final Task task = await _applicationRepository.projectIdOfSubTask(
-        event.subTaskId,
-      ).then((value) => value);
+      final Task task = await _applicationRepository
+          .projectIdOfSubTask(
+            event.subTaskId,
+          )
+          .then((value) => value);
 
       final String taskId = task.id;
       final String projectId = task.project;
 
       _applicationRepository.projectIdOnView = projectId;
-
 
       await _applicationRepository.markSubTaskCompleted(
         subTaskId: event.subTaskId,
@@ -40,8 +43,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final ApplicationRepository _applicationRepository;
 
-  Future<Map<String, List<Stream<SubTaskModel>>>> subTasksForEachProject() async =>
-      _applicationRepository
+  Future<Map<String, List<Stream<SubTaskModel>>>>
+      subTasksForEachProject() async => _applicationRepository
           .subTasksForEachProject((state as HomeSuccess).subTaskIds);
 
   Future<String> projectName(String projectId) async =>
@@ -49,4 +52,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<int> tagCount(String projectId) async =>
       _applicationRepository.tagsCountOfProject(projectId);
+
+  Stream<bool> isProjectCompleted(String projectId) => _applicationRepository
+      .projectStream(projectId)
+      .map((event) => event.isCompleted);
 }

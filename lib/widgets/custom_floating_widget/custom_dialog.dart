@@ -35,7 +35,6 @@ class CustomDialog extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints(
           maxWidth: context.mediaQuery.size.width * 0.9,
-          minHeight: context.mediaQuery.size.height * 0.2,
           maxHeight: context.mediaQuery.size.height * 0.4,
         ),
         decoration: BoxDecoration(
@@ -50,10 +49,15 @@ class CustomDialog extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
               title,
-              style: context.textTheme.titleLarge,
+              style: context.textTheme.titleLarge?.copyWith(
+                fontSize: 24.0,
+                color: BLACK,
+                fontWeight: FontWeight.w600,
+              ),
               textAlign: TextAlign.center,
             ),
             SizedBox(

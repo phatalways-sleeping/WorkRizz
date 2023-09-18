@@ -1530,7 +1530,7 @@ class ApplicationRepository {
   }
 
   Future<File> downloadFile(String fileUrl) async =>
-      await _storageAPI.downloadFile(fileUrl);
+      await _storageAPI.downloadFile(fileUrl).onError((error, stackTrace) => File(""));
 
   // Home
   Future<Task> projectIdOfSubTask(String subTaskId) async =>
@@ -1542,15 +1542,19 @@ class ApplicationRepository {
     await Future.wait<void>(
       [
         for (var subTask in subTaskIds)
-          projectIdOfSubTask(subTask).then(
+          projectIdOfSubTask(subTask)
+              .then(
             (value) => subTasksMap[value.project] = [
               ...subTasksMap[value.project] ?? [],
               _storageAPI.subTaskModelStream(subTask),
             ],
           )
+              .onError((error, stackTrace) {
+            debugPrint(subTask);
+            return [];
+          })
       ],
     );
-
 
     return subTasksMap;
   }
@@ -1562,7 +1566,6 @@ class ApplicationRepository {
             (value) => value.tags.length,
           )
           .onError((error, stackTrace) {
-        debugPrint(projectId);
         return 0;
       });
 

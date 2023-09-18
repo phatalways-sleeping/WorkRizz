@@ -24,7 +24,7 @@ class _MessageScrollViewState extends State<MessageScrollView> {
 
   @override
   void initState() {
-     scrollController = ScrollController();
+    // scrollController = ScrollController();
 
     if (scrollController.hasClients) {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
@@ -38,6 +38,14 @@ class _MessageScrollViewState extends State<MessageScrollView> {
   void dispose() {
     //scrollController.dispose();
     super.dispose();
+  }
+
+  void changeView() {
+    setState(() {
+      if (scrollController.hasClients) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      }
+    });
   }
 
   @override
@@ -86,10 +94,20 @@ class _MessageScrollViewState extends State<MessageScrollView> {
             ),
           );
         }
+        if (scrollController.hasClients) {
+         scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: Duration(microseconds: 100),
+          curve: Curves.fastOutSlowIn,
+        ); 
+
+        }
+     
         return SizedBox(
           height: context.mediaQuery.size.height * 0.77,
           child: ListView.builder(
             controller: scrollController,
+            reverse: false,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: (state as MessageSuccess).messageIds.length,

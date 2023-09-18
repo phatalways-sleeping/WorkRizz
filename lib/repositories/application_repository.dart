@@ -1529,7 +1529,8 @@ class ApplicationRepository {
                     e.data() as Map<String, dynamic>,
                   ),
                 )
-                .toList());
+                .toList())
+            .onError((error, stackTrace) => []);
 
     // Remove all invitations in user
     await Future.wait<void>(

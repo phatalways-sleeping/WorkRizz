@@ -163,6 +163,20 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         }
       },
     );
+    on<ProjectDeleteTag>(
+      (event, emit) {
+        final usedState = (state as ProjectUserCreateAndSubscribe);
+        emit(
+          usedState.copyWith(
+            newProjectSetup: usedState.newProjectSetup.copyWith(
+              tags: usedState.newProjectSetup.tags
+                  .where((element) => element != event.tag)
+                  .toList(),
+            ),
+          ),
+        );
+      },
+    );
     on<ProjectInputAssignee>(
       (event, emit) async {
         // get user by email

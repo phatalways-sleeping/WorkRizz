@@ -75,6 +75,14 @@ final class ProjectInputTag extends ProjectEvent {
   List<Object> get props => [...super.props, tag];
 }
 
+final class ProjectDeleteTag extends ProjectEvent {
+  const ProjectDeleteTag(this.tag);
+  final Tag tag;
+
+  @override
+  List<Object> get props => [...super.props, tag];
+}
+
 final class ProjectInputAssignee extends ProjectEvent {
   const ProjectInputAssignee(this.email, this.context);
 

@@ -619,7 +619,8 @@ class ApplicationRepository {
   }
 
   // Task / Create New Task
-  Future<void> addNewAssigneeToProject(String assigneeId) async {
+  Future<void> addNewAssigneeToProject(String assigneeEmail) async {
+    final assignee = await _storageAPI.userStreamByEmailInUser(assigneeEmail).first;
     final project = await _storageAPI.projectStream(projectIdOnView).first;
 
     final invitation = ProjectInvitationModel(
@@ -632,20 +633,20 @@ class ApplicationRepository {
       senderId: userId,
       senderImageUrl: userImageUrl,
       senderUsername: username,
-      receiverId: assigneeId,
+      receiverId: assignee.id,
     );
 
-    final assignee = await _storageAPI.userStreamByIdInUser(assigneeId).first;
+    
 
     await Future.wait<void>(
       [
-        _storageAPI.updateAssigneesInProject(projectIdOnView, [assigneeId]),
+        _storageAPI.updateAssigneesInProject(projectIdOnView, [assignee.id]),
         _storageAPI.updateAssigneeImageUrlsInProject(
           projectIdOnView,
           [assignee.imageUrl],
         ),
         _storageAPI.updateProjectInvitationsInUser(
-          assigneeId,
+          assignee.id,
           [invitation.id],
         ),
         _storageAPI.createNewProjectInvitation(invitation),

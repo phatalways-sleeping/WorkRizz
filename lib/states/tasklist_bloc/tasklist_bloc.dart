@@ -29,6 +29,11 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
         (state as TasklistSubscription).project!.leader,
       );
     });
+    on<TasklistAddNewAssignee>((event, emit) async {
+      await _applicationRepository.addNewAssigneeToProject(
+        event.assignee,
+      );
+    });
     on<TasklistRequestEditProject>((event, emit) async {
       emit(TasklistSubscriptionEditable.from(state as TasklistSubscription));
     });
@@ -152,12 +157,14 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
   Future<String> imageUrl(String path) async =>
       _applicationRepository.imageUrlOnStorageOf(path);
 
-  Future<List<String>> assigneeAvatars() async {
-    List<String> list = List.empty(growable: true);
+  Future<List<NetworkImage>> assigneeAvatars() async {
+    List<NetworkImage> list = List.empty(growable: true);
     for (var assignee
         in (state as TasklistSubscription).project!.assigneeImageUrls) {
       await imageUrl(assignee).then(
-        (value) => list.add(value),
+        (value) => list.add(
+          NetworkImage(value),
+        ),
       );
     }
     return list;

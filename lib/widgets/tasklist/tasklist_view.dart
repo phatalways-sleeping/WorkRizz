@@ -12,6 +12,7 @@ import 'package:task_managing_application/widgets/custom_avatar_widget/custom_av
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_dialog.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_error_icon.dart';
 import 'package:task_managing_application/widgets/custom_floating_widget/custom_input_dialog.dart';
+import 'package:task_managing_application/widgets/custom_floating_widget/email_dialog.dart';
 import 'package:task_managing_application/widgets/custom_hea_bar/custom_header_bar.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/checkbox_button.dart';
 import 'package:task_managing_application/widgets/custom_item_widget/custom_item_widget.dart';
@@ -32,8 +33,21 @@ part 'subtask_widget.dart';
 part 'list_tag.dart';
 part 'list_subtask.dart';
 
-class TaskListView extends StatelessWidget {
+class TaskListView extends StatefulWidget {
   const TaskListView({super.key});
+
+  @override
+  State<TaskListView> createState() => _TaskListViewState();
+}
+
+class _TaskListViewState extends State<TaskListView> {
+  late final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,22 +233,58 @@ class TaskListView extends StatelessWidget {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
-                                        for (var avatar
-                                            in snapshot.data as List<String>)
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              right: context
-                                                      .mediaQuery.size.width *
-                                                  0.01,
+                                        AvatarStack(
+                                          avatars: snapshot.data
+                                              as List<NetworkImage>,
+                                          width: context.mediaQuery.size.width *
+                                              0.2,
+                                          height:
+                                              context.mediaQuery.size.width *
+                                                  0.08,
+                                        ),
+                                        SizedBox(
+                                          width: context.mediaQuery.size.width *
+                                              RATIO_PADDING,
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            await showDialog<String>(
+                                              context: context,
+                                              builder: (context) => EmailDialog(
+                                                  controller: _controller),
+                                            ).then(
+                                              (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return;
+                                                }
+                                                context
+                                                    .read<TasklistBloc>()
+                                                    .add(
+                                                      TasklistAddNewAssignee(
+                                                        assignee: value,
+                                                      ),
+                                                    );
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 25.0,
+                                            height: 25.0,
+                                            decoration: const ShapeDecoration(
+                                              color: Colors.black,
+                                              shape: OvalBorder(),
                                             ),
-                                            child: CustomAvatarWidget(
-                                              imageUrl: avatar,
-                                              size: context
-                                                      .mediaQuery.size.width *
-                                                  (RATIO_MARGIN + 0.01),
+                                            child: const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 20.0,
                                             ),
                                           ),
+                                        ),
                                       ],
                                     );
                                   }

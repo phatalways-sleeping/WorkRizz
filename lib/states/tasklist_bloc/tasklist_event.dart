@@ -27,6 +27,19 @@ final class TasklistCancelEditProject extends TasklistEvent {
   const TasklistCancelEditProject();
 }
 
+final class TasklistAddNewAssignee extends TasklistEvent {
+  const TasklistAddNewAssignee({
+    required this.assignee,
+  });
+
+  final String assignee;
+
+  @override
+  List<Object> get props => [
+        assignee,
+      ];
+}
+
 final class TasklistChangePage extends TasklistEvent {
   const TasklistChangePage({
     required this.page,

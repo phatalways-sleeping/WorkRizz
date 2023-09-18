@@ -55,8 +55,10 @@ class _InvitationWidgetState extends State<InvitationWidget> {
         }
         if (state is InvitationLoading) {
           return Container(
-            width: context.mediaQuery.size.width * 0.9,
-            height: context.mediaQuery.size.height * 0.1,
+            constraints: BoxConstraints(
+              maxWidth: context.mediaQuery.size.width * 0.9,
+              maxHeight: context.mediaQuery.size.height * 0.15,
+            ),
             decoration: ShapeDecoration(
               color: context.colorScheme.primary,
               shape: RoundedRectangleBorder(
@@ -70,8 +72,10 @@ class _InvitationWidgetState extends State<InvitationWidget> {
         }
         if (state is InvitationFailure) {
           return Container(
-            width: context.mediaQuery.size.width * 0.9,
-            height: context.mediaQuery.size.height * 0.1,
+            constraints: BoxConstraints(
+              maxWidth: context.mediaQuery.size.width * 0.9,
+              maxHeight: context.mediaQuery.size.height * 0.15,
+            ),
             decoration: ShapeDecoration(
               color: context.colorScheme.primary,
               shape: RoundedRectangleBorder(
@@ -84,8 +88,10 @@ class _InvitationWidgetState extends State<InvitationWidget> {
           );
         }
         return Container(
-          width: context.mediaQuery.size.width * 0.9,
-          height: context.mediaQuery.size.height * 0.13,
+          constraints: BoxConstraints(
+            maxWidth: context.mediaQuery.size.width * 0.9,
+            maxHeight: context.mediaQuery.size.height * 0.15,
+          ),
           padding: const EdgeInsets.all(12),
           decoration: ShapeDecoration(
             shape: RoundedRectangleBorder(
@@ -144,6 +150,7 @@ class _InvitationWidgetState extends State<InvitationWidget> {
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

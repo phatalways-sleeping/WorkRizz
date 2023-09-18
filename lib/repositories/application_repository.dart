@@ -600,6 +600,40 @@ class ApplicationRepository {
   }
 
   // Task / Create New Task
+  Future<void> addNewAssigneeToProject(String assigneeId) async {
+    final project = await _storageAPI.projectStream(projectIdOnView).first;
+
+    final invitation = ProjectInvitationModel(
+      id: const UuidV8().generate(),
+      projectId: projectIdOnView,
+      projectName: projectOnViewName,
+      projectLeaderId: project.leader,
+      projectLeaderImageUrl: project.leaderImageUrl,
+      senderEmail: userEmailAddress,
+      senderId: userId,
+      senderImageUrl: userImageUrl,
+      senderUsername: username,
+      receiverId: assigneeId,
+    );
+
+    final assignee = await _storageAPI.userStreamByIdInUser(assigneeId).first;
+
+    await Future.wait<void>(
+      [
+        _storageAPI.updateAssigneesInProject(projectIdOnView, [assigneeId]),
+        _storageAPI.updateAssigneeImageUrlsInProject(
+          projectIdOnView,
+          [assignee.imageUrl],
+        ),
+        _storageAPI.updateProjectInvitationsInUser(
+          assigneeId,
+          [invitation.id],
+        ),
+        _storageAPI.createNewProjectInvitation(invitation),
+      ],
+    );
+  }
+
   Future<List<File>> pickFiles() async {
     return await FilePicker.platform.pickFiles(
       allowMultiple: true,
@@ -1457,12 +1491,11 @@ class ApplicationRepository {
         _storageAPI.updateOnGoingProjectsInUser(userId, -1),
         if (project.leader == userId)
           _storageAPI.updateLeaderProjectsInUser(userId, -1),
-        if(project.isCompleted)
+        if (project.isCompleted)
           _storageAPI.updateCompletedProjectsInUser(userId, -1),
       ],
     );
 
-    
     // Delete project
     await _storageAPI.deleteProject(projectId);
   }

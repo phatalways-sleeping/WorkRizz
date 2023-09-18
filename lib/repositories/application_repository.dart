@@ -229,17 +229,24 @@ class ApplicationRepository {
         .then((value) => value.subTasks)
         .onError((error, stackTrace) => []);
     final project = await _storageAPI.projectStream(invitation.projectId).first;
-    final List<String> subTasksInProjectFlattened = project
-        .taskSmallInformations
-        .map((e) => e.subTaskSmallInformations)
-        .expand((element) => element)
-        .map((e) => e.id)
-        .toList();
-    final subTasksToRemove = subTasksOfUser
-        .where((element) => subTasksInProjectFlattened.contains(element))
-        .toList();
+    final subTasksToRemove = <String, List<String>>{};
+    for (var task in project.taskSmallInformations) {
+      for (var subTask in task.subTaskSmallInformations) {
+        if (subTasksOfUser.contains(subTask.id)) {
+          if (subTasksToRemove.containsKey(task.id)) {
+            subTasksToRemove[task.id]!.add(subTask.id);
+          } else {
+            subTasksToRemove[task.id] = [subTask.id];
+          }
+        }
+      }
+    }
     await Future.wait<void>([
-      for (var subTask in subTasksToRemove) deleteSubTask(subTaskId: subTask),
+      for (var task in subTasksToRemove.keys) ...[
+        // delete each sub task
+        for (var subTask in subTasksToRemove[task]!)
+          deleteSubTask(taskId: task, subTaskId: subTask),
+      ],
     ]);
     await Future.wait<void>(
       [
@@ -620,7 +627,8 @@ class ApplicationRepository {
 
   // Task / Create New Task
   Future<void> addNewAssigneeToProject(String assigneeEmail) async {
-    final assignee = await _storageAPI.userStreamByEmailInUser(assigneeEmail).first;
+    final assignee =
+        await _storageAPI.userStreamByEmailInUser(assigneeEmail).first;
     final project = await _storageAPI.projectStream(projectIdOnView).first;
 
     final invitation = ProjectInvitationModel(
@@ -635,8 +643,6 @@ class ApplicationRepository {
       senderUsername: username,
       receiverId: assignee.id,
     );
-
-    
 
     await Future.wait<void>(
       [
@@ -1325,6 +1331,7 @@ class ApplicationRepository {
 
   Future<void> deleteSubTask({
     required String subTaskId,
+    required String taskId,
   }) async {
     // Remove all the files in storage
     // then remove all comments in sub task and in comments collection
@@ -1353,8 +1360,8 @@ class ApplicationRepository {
     // decrease points of task
     await Future.wait<void>(
       [
-        _storageAPI.removeSubTasksInTask(taskIdOnView, [subTaskId]),
-        _storageAPI.updatePointsInTask(taskIdOnView, -subTask.points),
+        _storageAPI.removeSubTasksInTask(taskId, [subTaskId]),
+        _storageAPI.updatePointsInTask(taskId, -subTask.points),
       ],
     );
 
@@ -1365,7 +1372,7 @@ class ApplicationRepository {
     await Future.wait<void>(
       [
         if (subTask.isCompleted) ...[
-          _storageAPI.updateSubTasksCompletedInTask(taskIdOnView, -1),
+          _storageAPI.updateSubTasksCompletedInTask(taskId, -1),
           _storageAPI.updateActivitiesCompletedInProject(projectIdOnView, -1),
         ],
         _storageAPI.updateTotalActivitiesInProject(projectIdOnView, -1),
@@ -1374,10 +1381,10 @@ class ApplicationRepository {
 
     // Check if the task is empty and mark completed
     // then mark task incomplete and decrease tasks completed in project
-    final task = await _storageAPI.taskStream(taskIdOnView).first;
+    final task = await _storageAPI.taskStream(taskId).first;
     if (task.subTasks.isEmpty && task.isCompleted) {
       await Future.wait<void>([
-        _storageAPI.updateIsCompletedInTask(taskIdOnView, false),
+        _storageAPI.updateIsCompletedInTask(taskId, false),
         _storageAPI.updateTasksCompletedInProject(projectIdOnView, -1),
       ]);
     }
@@ -1389,7 +1396,7 @@ class ApplicationRepository {
         .then((value) => value.taskSmallInformations);
 
     final taskSmallInformation = taskSmallInformations.firstWhere(
-      (element) => element.id == taskIdOnView,
+      (element) => element.id == taskId,
     );
 
     final newTaskSmallInformation = taskSmallInformation.copyWith(
@@ -1414,7 +1421,7 @@ class ApplicationRepository {
         .projectStream(projectIdOnView)
         .first
         .then((value) => value.filesSmallInformations
-            .firstWhere((element) => element.taskId == taskIdOnView));
+            .firstWhere((element) => element.taskId == taskId));
 
     final newFileSmallInformation = fileSmallInformation.copyWith(
       files: [
@@ -1448,6 +1455,7 @@ class ApplicationRepository {
         for (var subTaskId in task.subTasks)
           deleteSubTask(
             subTaskId: subTaskId,
+            taskId: taskId,
           ),
       ],
     );

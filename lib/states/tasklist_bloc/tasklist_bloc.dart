@@ -49,7 +49,7 @@ class TasklistBloc extends Bloc<TasklistEvent, TasklistState> {
         isEditing: true,
       ));
       await _applicationRepository.deleteSubTask(
-        // taskId: event.taskId,
+        taskId: event.taskId,
         subTaskId: event.subTaskId,
       );
     });

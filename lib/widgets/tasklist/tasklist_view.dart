@@ -334,15 +334,33 @@ class _TaskListViewState extends State<TaskListView> {
                               height:
                                   context.mediaQuery.size.width * RATIO_SPACE),
                           Progress(
-                            progress: (state.project!.totalActivities == 0)
+                            progress: (state.project!.taskSmallInformations
+                                        .fold(
+                                            0,
+                                            (previousValue, element) =>
+                                                previousValue +
+                                                element.subTaskSmallInformations
+                                                    .length) ==
+                                    0)
                                 ? 0
                                 : (state.project!.activitiesCompleted /
-                                    state.project!.totalActivities),
+                                    state.project!.taskSmallInformations.fold(
+                                        0,
+                                        (previousValue, element) =>
+                                            previousValue +
+                                            element.subTaskSmallInformations
+                                                .length)),
                             tasksCompleted: state.project!.tasksCompleted,
                             totalTasks: state.project!.tasks.length,
                             activitiesCompleted:
                                 state.project!.activitiesCompleted,
-                            totalActivities: state.project!.totalActivities,
+                            totalActivities:
+                                state.project!.taskSmallInformations.fold(
+                                    0,
+                                    (previousValue, element) =>
+                                        previousValue +
+                                        element
+                                            .subTaskSmallInformations.length),
                             mostActive: state.project!.mostActiveMemebers,
                           ),
                           SizedBox(

@@ -96,7 +96,7 @@ class _ChatbotViewState extends State<ChatbotView> {
               ),
             ),
             SizedBox(
-              height: context.mediaQuery.size.height * 0.8,
+              height: context.mediaQuery.size.height * 0.75,
               child: Expanded(child: ChatbotScrollView(messages: messages,),),
             ),
           ],

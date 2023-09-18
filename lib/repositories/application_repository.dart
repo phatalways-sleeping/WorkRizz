@@ -1457,9 +1457,12 @@ class ApplicationRepository {
         _storageAPI.updateOnGoingProjectsInUser(userId, -1),
         if (project.leader == userId)
           _storageAPI.updateLeaderProjectsInUser(userId, -1),
+        if(project.isCompleted)
+          _storageAPI.updateCompletedProjectsInUser(userId, -1),
       ],
     );
 
+    
     // Delete project
     await _storageAPI.deleteProject(projectId);
   }
@@ -1529,8 +1532,9 @@ class ApplicationRepository {
     }
   }
 
-  Future<File> downloadFile(String fileUrl) async =>
-      await _storageAPI.downloadFile(fileUrl).onError((error, stackTrace) => File(""));
+  Future<File> downloadFile(String fileUrl) async => await _storageAPI
+      .downloadFile(fileUrl)
+      .onError((error, stackTrace) => File(""));
 
   // Home
   Future<Task> projectIdOfSubTask(String subTaskId) async =>

@@ -222,6 +222,25 @@ class ApplicationRepository {
           .then((value) => value.imageUrl)
           .onError((error, stackTrace) => '');
     }
+    // Find and remove all sub tasks of the user relating to the project
+    final subTasksOfUser = await _storageAPI
+        .userStreamByIdInUser(userId)
+        .first
+        .then((value) => value.subTasks)
+        .onError((error, stackTrace) => []);
+    final project = await _storageAPI.projectStream(invitation.projectId).first;
+    final List<String> subTasksInProjectFlattened = project
+        .taskSmallInformations
+        .map((e) => e.subTaskSmallInformations)
+        .expand((element) => element)
+        .map((e) => e.id)
+        .toList();
+    final subTasksToRemove = subTasksOfUser
+        .where((element) => subTasksInProjectFlattened.contains(element))
+        .toList();
+    await Future.wait<void>([
+      for (var subTask in subTasksToRemove) deleteSubTask(subTaskId: subTask),
+    ]);
     await Future.wait<void>(
       [
         _storageAPI.removeProjectInvitationsInUser(userId, [invitation.id]),
@@ -1493,6 +1512,33 @@ class ApplicationRepository {
           _storageAPI.updateLeaderProjectsInUser(userId, -1),
         if (project.isCompleted)
           _storageAPI.updateCompletedProjectsInUser(userId, -1),
+      ],
+    );
+
+    // delete all invitations in project
+    final List<ProjectInvitationModel> invitations =
+        await FirebaseFirestoreConfigs.projectInvitationsCollection
+            .where(
+              "projectId",
+              isEqualTo: projectId,
+            )
+            .get()
+            .then((value) => value.docs
+                .map(
+                  (e) => ProjectInvitationModel.fromJson(
+                    e.data() as Map<String, dynamic>,
+                  ),
+                )
+                .toList());
+
+    // Remove all invitations in user
+    await Future.wait<void>(
+      [
+        for (var invitation in invitations)
+          _storageAPI.removeProjectInvitationsInUser(
+            invitation.receiverId,
+            [invitation.id],
+          ),
       ],
     );
 

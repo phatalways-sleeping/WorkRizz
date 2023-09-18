@@ -199,9 +199,12 @@ class _TaskListViewState extends State<TaskListView> {
                                 ],
                               ),
                               MiniNav(
-                                totalFiles: state.project!.totalFileLinks,
-                                totalNotes: state.project!.totalFileLinks,
-                                totalUnreadMessages: 2,
+                                totalFiles:
+                                    state.project!.filesSmallInformations.fold(
+                                  0,
+                                  (previousValue, element) =>
+                                      previousValue + element.files.length,
+                                ),
                                 projectName: state.project!.name,
                                 threadId: state.project!.thread,
                               )

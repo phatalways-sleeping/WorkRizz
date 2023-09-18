@@ -78,7 +78,7 @@ class FileWidget extends StatelessWidget {
           padding: MaterialStateProperty.all(
             EdgeInsets.symmetric(
               vertical: context.mediaQuery.size.width * RATIO_PADDING * 1.5,
-              horizontal: context.mediaQuery.size.width * RATIO_PADDING * 1.8,
+              horizontal: context.mediaQuery.size.width * RATIO_PADDING * 0.8,
             ),
           ),
           backgroundColor: MaterialStateProperty.all(
@@ -113,20 +113,16 @@ class FileWidget extends StatelessWidget {
               SvgAssets.file,
               colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
             ),
-            SizedBox(
-              width: context.mediaQuery.size.width * RATIO_SPACE,
-            ),
             FittedBox(
               fit: BoxFit.fitWidth,
               child: SizedBox(
-                width: context.mediaQuery.size.width * 0.4,
+                width: context.mediaQuery.size.width * 0.30,
                 child: Text(
                   fileName,
                   style: context.textTheme.titleSmall,
                 ),
               ),
             ),
-            const Spacer(),
             FutureBuilder(
               future: context.read<FilelistBloc>().ownerImageUrl(ownerImageUrl),
               builder: (context, snapshot) {
@@ -146,12 +142,12 @@ class FileWidget extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(
-              width: context.mediaQuery.size.width * RATIO_SPACE,
-            ),
             Text(
               '${-date.difference(DateTime.now()).inDays} days ago',
-              style: context.textTheme.bodyMedium,
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: BLACK,
+                fontSize: 12.0,
+              )
             ),
           ],
         ),

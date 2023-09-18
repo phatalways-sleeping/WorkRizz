@@ -4,15 +4,11 @@ class MiniNav extends StatelessWidget {
   const MiniNav({
     super.key,
     required this.totalFiles,
-    required this.totalNotes,
-    required this.totalUnreadMessages,
     required this.projectName,
     required this.threadId,
   });
 
   final int totalFiles;
-  final int totalNotes;
-  final int totalUnreadMessages;
   final String projectName;
   final String threadId;
 
@@ -41,15 +37,8 @@ class MiniNav extends StatelessWidget {
         SizedBox(
           width: context.mediaQuery.size.width * RATIO_PADDING * 2,
         ),
-        Badge(
-          backgroundColor: GREEN,
-          label: Text(
-            totalNotes.toString(),
-            style: context.textTheme.labelMedium,
-          ),
-          child: SvgPicture.string(
-            SvgAssets.note,
-          ),
+        SvgPicture.string(
+          SvgAssets.note,
         ),
         SizedBox(
           width: context.mediaQuery.size.width * RATIO_PADDING * 2,
@@ -60,15 +49,8 @@ class MiniNav extends StatelessWidget {
                   threadId,
                 ),
               ),
-          child: Badge(
-            backgroundColor: PURPLE,
-            label: Text(
-              totalUnreadMessages.toString(),
-              style: context.textTheme.labelMedium,
-            ),
-            child: SvgPicture.string(
-              SvgAssets.chat,
-            ),
+          child: SvgPicture.string(
+            SvgAssets.chat,
           ),
         ),
         const EditProjectButton(),

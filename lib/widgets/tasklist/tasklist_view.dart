@@ -356,7 +356,14 @@ class _TaskListViewState extends State<TaskListView> {
                             tasksCompleted: state.project!.tasksCompleted,
                             totalTasks: state.project!.tasks.length,
                             activitiesCompleted:
-                                state.project!.activitiesCompleted,
+                                state.project!.taskSmallInformations.fold(
+                              0,
+                              (previousValue, element) =>
+                                  previousValue +
+                                  element.subTaskSmallInformations
+                                      .where((element) => element.isCompleted)
+                                      .length,
+                            ),
                             totalActivities:
                                 state.project!.taskSmallInformations.fold(
                                     0,

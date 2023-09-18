@@ -17,9 +17,12 @@ class FilelistBloc extends Bloc<FilelistEvent, FilelistState> {
           _applicationRepository.projectOnViewStream().map(
                 (event) => event.filesSmallInformations,
               ),
-          onData: (files) => FilelistSuccess(
-            files: files,
-          ),
+          onData: (files) {
+            files.sort((a, b) => a.taskName.compareTo(b.taskName));
+            return FilelistSuccess(
+              files: files,
+            );
+          },
           onError: (error, stackTrace) => FilelistFailureLoading(
             message: error.toString(),
           ),

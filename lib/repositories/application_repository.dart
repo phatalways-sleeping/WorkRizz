@@ -975,8 +975,13 @@ class ApplicationRepository {
               ),
             );
 
-    final newFilesSmallInformation = currentFilesSmallInformation.copyWith(
-      files: newFileModels,
+
+    final newFilesSmallInformations = currentFilesSmallInformation.copyWith(
+      files: [
+        ...currentFilesSmallInformation.files
+            .where((element) => !needToRemoveFileModels.contains(element)),
+        ...fileModels,
+      ],
     );
 
     // Update the files small information in project
@@ -986,7 +991,7 @@ class ApplicationRepository {
       ]),
       _storageAPI.updateFilesSmallInformationsInProject(
         projectIdOnView,
-        [newFilesSmallInformation],
+        [newFilesSmallInformations],
       ),
     ]);
   }
